@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
 import { dashboardNav, marketingNav, siteConfig } from "@/lib/constants/site";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 type NavbarProps = {
   mode?: "marketing" | "dashboard";
@@ -25,8 +26,20 @@ function Brand() {
   );
 }
 
-export function Navbar({ mode = "marketing", userIdentity }: NavbarProps) {
+export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) {
   const navItems = mode === "dashboard" ? dashboardNav : marketingNav;
+  let marketingAuthHref = "/login";
+
+  if (mode === "marketing") {
+    const supabase = createServerSupabaseClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      marketingAuthHref = "/dashboard";
+    }
+  }
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-surface-graphite/95 backdrop-blur-sm">
@@ -44,9 +57,14 @@ export function Navbar({ mode = "marketing", userIdentity }: NavbarProps) {
           ))}
         </div>
         {mode === "marketing" ? (
-          <Link className="accent-button px-5 py-2.5 text-sm" href="/upgrade">
-            Alătură-te Acum
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link className="ghost-button px-5 py-2.5 text-sm" href={marketingAuthHref}>
+              Intră în cont
+            </Link>
+            <Link className="accent-button px-5 py-2.5 text-sm" href="/upgrade">
+              Alătură-te Acum
+            </Link>
+          </div>
         ) : (
           <div className="flex items-center gap-4">
             <div className="hidden text-right md:block">
