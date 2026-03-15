@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-crypto-dark text-slate-100 antialiased;
+  background-image:
+    radial-gradient(circle at top, rgba(105, 224, 143, 0.14), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(63, 201, 122, 0.08), transparent 18%),
+    linear-gradient(180deg, #0d1713 0%, #06110d 34%, #030806 100%);
+}
+
+a,
+button {
+  @apply transition-all duration-300;
+}
+
+*:focus-visible {
+  @apply outline-none ring-2 ring-accent-emerald ring-offset-2 ring-offset-crypto-dark;
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-emerald-gradient bg-clip-text text-transparent;
+  }
+
+  
+.card-hover {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-card;
+  }
+
+  .panel {
+  @apply rounded-2xl border bg-surface-graphite backdrop-blur-sm;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 18px 40px rgba(3, 8, 6, 0.42);
+}
+
+  .accent-button {
+    @apply inline-flex items-center justify-center rounded-xl bg-accent-emerald px-6 py-3 font-semibold text-crypto-dark shadow-glow hover:bg-accent-soft;
+  }
+
+  .ghost-button {
+    @apply inline-flex items-center justify-center rounded-xl border border-white/20 px-6 py-3 font-semibold text-white hover:border-accent-emerald hover:text-accent-emerald;
+  }
+
+  .grid-glow {
+    background-image:
+      linear-gradient(rgba(105, 224, 143, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(105, 224, 143, 0.045) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+}

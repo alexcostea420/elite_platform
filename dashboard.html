@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Armata de Traderi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'crypto-gold': '#F59E0B',
+                        'crypto-green': '#10B981',
+                        'crypto-dark': '#0A0E27',
+                        'crypto-navy': '#141B34',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .countdown-card {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-crypto-dark text-gray-100">
+    
+    <!-- Navigation -->
+    <nav class="bg-crypto-navy border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center max-w-7xl">
+            <div class="flex items-center space-x-2">
+                <svg class="w-8 h-8 text-crypto-gold" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                </svg>
+                <span class="text-xl font-bold gradient-text">Armata de Traderi</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="text-crypto-gold font-semibold">Dashboard</a>
+                <a href="#" class="hover:text-crypto-gold transition">Video-uri</a>
+                <a href="#" class="hover:text-crypto-gold transition">Analize</a>
+                <a href="#" class="hover:text-crypto-gold transition">Setări</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:block text-right">
+                    <div class="text-sm text-gray-400">Bine ai venit,</div>
+                    <div class="font-semibold">Mihai R.</div>
+                </div>
+                <div class="w-10 h-10 bg-crypto-gold rounded-full flex items-center justify-center font-bold text-crypto-dark">
+                    MR
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">
+                Bine ai venit înapoi, <span class="gradient-text">Mihai</span>! 👋
+            </h1>
+            <p class="text-gray-400">Ești în ziua 43 din călătoria ta de trading</p>
+        </div>
+
+        <!-- Countdown Card - PROMINENT -->
+        <div class="countdown-card rounded-2xl p-8 mb-8 text-center">
+            <div class="text-6xl mb-4">⏰</div>
+            <div class="text-5xl font-bold text-crypto-dark mb-2">47 zile rămase</div>
+            <p class="text-crypto-dark/80 text-lg font-semibold">din abonamentul tău Elite</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <a href="https://discord.com" target="_blank" class="bg-crypto-navy border border-gray-800 rounded-xl p-6 text-center card-hover group">
+                <div class="text-5xl mb-3">💬</div>
+                <h3 class="font-bold text-lg mb-2 group-hover:text-crypto-gold transition">Discord Elite</h3>
+                <p class="text-gray-400 text-sm">Accesează comunitatea</p>
+            </a>
+            
+            <a href="https://tradingview.com" target="_blank" class="bg-crypto-navy border border-gray-800 rounded-xl p-6 text-center card-hover group">
+                <div class="text-5xl mb-3">📊</div>
+                <h3 class="font-bold text-lg mb-2 group-hover:text-crypto-gold transition">Indicator ELITE</h3>
+                <p class="text-gray-400 text-sm">Deschide TradingView</p>
+            </a>
+            
+            <a href="#" class="bg-crypto-navy border border-gray-800 rounded-xl p-6 text-center card-hover group">
+                <div class="text-5xl mb-3">🎥</div>
+                <h3 class="font-bold text-lg mb-2 group-hover:text-crypto-gold transition">Biblioteca Video</h3>
+                <p class="text-gray-400 text-sm">100+ ore de conținut</p>
+            </a>
+            
+            <a href="#" class="bg-crypto-navy border border-gray-800 rounded-xl p-6 text-center card-hover group">
+                <div class="text-5xl mb-3">📈</div>
+                <h3 class="font-bold text-lg mb-2 group-hover:text-crypto-gold transition">Sesiuni Live</h3>
+                <p class="text-gray-400 text-sm">Următoarea: Luni 19:00</p>
+            </a>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-crypto-navy border border-gray-800 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-400">Video-uri Văzute</h3>
+                    <div class="text-2xl">🎬</div>
+                </div>
+                <div class="text-4xl font-bold text-crypto-gold mb-2">27 / 103</div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-crypto-gold h-2 rounded-full" style="width: 26%"></div>
+                </div>
+            </div>
+            
+            <div class="bg-crypto-navy border border-gray-800 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-400">Sesiuni Participare</h3>
+                    <div class="text-2xl">📡</div>
+                </div>
+                <div class="text-4xl font-bold text-crypto-green mb-2">8 / 12</div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-crypto-green h-2 rounded-full" style="width: 67%"></div>
+                </div>
+            </div>
+            
+            <div class="bg-crypto-navy border border-gray-800 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-400">Analize Citite</h3>
+                    <div class="text-2xl">📝</div>
+                </div>
+                <div class="text-4xl font-bold text-crypto-gold mb-2">6 / 6</div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-crypto-gold h-2 rounded-full" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- Latest Analysis -->
+            <div>
+                <h2 class="text-2xl font-bold mb-4 flex items-center">
+                    <span class="gradient-text">Analize Recente</span>
+                    <span class="ml-3 text-sm bg-crypto-gold text-crypto-dark px-2 py-1 rounded-full">Nou</span>
+                </h2>
+                <div class="space-y-4">
+                    
+                    <!-- Analysis Card 1 -->
+                    <div class="bg-crypto-navy border border-crypto-gold rounded-xl p-6 card-hover">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h3 class="font-bold text-lg mb-1">BTC/USDT - Analiza Săptămânii</h3>
+                                <p class="text-gray-400 text-sm">Publicat acum 2 ore</p>
+                            </div>
+                            <span class="bg-crypto-green/20 text-crypto-green px-3 py-1 rounded-full text-sm font-semibold">
+                                Bullish
+                            </span>
+                        </div>
+                        <p class="text-gray-300 mb-4">
+                            Bitcoin arată semne clare de consolidare în zona $65,000. Următorul target: $68,500...
+                        </p>
+                        <a href="#" class="text-crypto-gold hover:text-yellow-500 font-semibold inline-flex items-center">
+                            Citește analiza completă →
+                        </a>
+                    </div>
+                    
+                    <!-- Analysis Card 2 -->
+                    <div class="bg-crypto-navy border border-gray-800 rounded-xl p-6 card-hover">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h3 class="font-bold text-lg mb-1">ETH/USDT - Setup pentru Long</h3>
+                                <p class="text-gray-400 text-sm">Publicat acum 1 zi</p>
+                            </div>
+                            <span class="bg-crypto-green/20 text-crypto-green px-3 py-1 rounded-full text-sm font-semibold">
+                                Bullish
+                            </span>
+                        </div>
+                        <p class="text-gray-300 mb-4">
+                            Ethereum a spart rezistența de la $3,200. Urmează un posibil retest și continuare...
+                        </p>
+                        <a href="#" class="text-crypto-gold hover:text-yellow-500 font-semibold inline-flex items-center">
+                            Citește analiza completă →
+                        </a>
+                    </div>
+                    
+                    <!-- Analysis Card 3 -->
+                    <div class="bg-crypto-navy border border-gray-800 rounded-xl p-6 card-hover">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h3 class="font-bold text-lg mb-1">SOL/USDT - Atenție la Break</h3>
+                                <p class="text-gray-400 text-sm">Publicat acum 3 zile</p>
+                            </div>
+                            <span class="bg-yellow-500/20 text-yellow-500 px-3 py-1 rounded-full text-sm font-semibold">
+                                Neutral
+                            </span>
+                        </div>
+                        <p class="text-gray-300 mb-4">
+                            Solana în zonă critică. Un break peste $140 ar confirma continuarea bullish...
+                        </p>
+                        <a href="#" class="text-crypto-gold hover:text-yellow-500 font-semibold inline-flex items-center">
+                            Citește analiza completă →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest Videos & Events -->
+            <div>
+                <h2 class="text-2xl font-bold mb-4">
+                    <span class="gradient-text">Conținut Recent</span>
+                </h2>
+                
+                <!-- Next Live Session -->
+                <div class="bg-gradient-to-br from-crypto-gold/20 to-crypto-gold/5 border border-crypto-gold rounded-xl p-6 mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-crypto-gold rounded-full flex items-center justify-center mr-4 text-2xl">
+                            🔴
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Următoarea Sesiune Live</h3>
+                            <p class="text-gray-300">Luni, 8 Martie · 19:00 EET</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        <strong>Topic:</strong> Analiză de piață BTC/ETH + Strategii pentru săptămâna viitoare
+                    </p>
+                    <button class="bg-crypto-gold text-crypto-dark px-6 py-2 rounded-lg font-bold hover:bg-yellow-500 transition w-full">
+                        Setează Reminder
+                    </button>
+                </div>
+
+                <!-- Latest Videos -->
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg mb-3">📚 Video-uri Noi</h3>
+                    
+                    <div class="bg-crypto-navy border border-gray-800 rounded-xl p-4 flex items-center card-hover">
+                        <div class="w-24 h-16 bg-gradient-to-br from-crypto-gold to-crypto-gold/50 rounded-lg mr-4 flex items-center justify-center text-2xl">
+                            ▶️
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Cum să folosești Fibonacci Retracement</h4>
+                            <p class="text-gray-400 text-sm">15:32 · Publicat acum 2 zile</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-crypto-navy border border-gray-800 rounded-xl p-4 flex items-center card-hover">
+                        <div class="w-24 h-16 bg-gradient-to-br from-crypto-green to-crypto-green/50 rounded-lg mr-4 flex items-center justify-center text-2xl">
+                            ▶️
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Psihologia Trading-ului: Controlează Emoțiile</h4>
+                            <p class="text-gray-400 text-sm">22:18 · Publicat acum 5 zile</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-crypto-navy border border-gray-800 rounded-xl p-4 flex items-center card-hover">
+                        <div class="w-24 h-16 bg-gradient-to-br from-purple-500 to-purple-500/50 rounded-lg mr-4 flex items-center justify-center text-2xl">
+                            ▶️
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Setup-uri de Scalping pentru Începători</h4>
+                            <p class="text-gray-400 text-sm">18:45 · Publicat acum 1 săptămână</p>
+                        </div>
+                    </div>
+
+                    <a href="#" class="block text-center text-crypto-gold hover:text-yellow-500 font-semibold mt-4">
+                        Vezi toate video-urile →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Help -->
+        <div class="mt-12 bg-crypto-navy border border-gray-800 rounded-xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-4">Ai nevoie de ajutor? 💡</h3>
+            <p class="text-gray-300 mb-6">
+                Comunitatea noastră Discord este activă 24/7. Pune întrebări, schimbă idei și învață de la alți traderi.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://discord.com" target="_blank" class="bg-crypto-gold text-crypto-dark px-8 py-3 rounded-lg font-bold hover:bg-yellow-500 transition">
+                    Deschide Discord
+                </a>
+                <a href="#" class="border border-gray-600 px-8 py-3 rounded-lg font-bold hover:border-crypto-gold transition">
+                    Contactează Suportul
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-crypto-navy border-t border-gray-800 py-8 px-4 mt-12">
+        <div class="container mx-auto max-w-7xl text-center text-gray-400">
+            <p class="mb-2">© 2026 Armata de Traderi by Alex Costea</p>
+            <p class="text-sm">
+                <a href="#" class="hover:text-crypto-gold transition">Setări</a> · 
+                <a href="#" class="hover:text-crypto-gold transition">Ajutor</a> · 
+                <a href="#" class="hover:text-crypto-gold transition">Logout</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
