@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { getAbsoluteHostUrl, getHostRole, isMemberFacingPath } from "@/lib/utils/host-routing";
+
 function getSupabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -17,6 +19,45 @@ function getSupabaseConfig() {
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
   const { url, anonKey } = getSupabaseConfig();
+  const pathname = request.nextUrl.pathname;
+  const search = request.nextUrl.search;
+  const hostRole = getHostRole(request.nextUrl.hostname);
+
+  if (hostRole === "marketing") {
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(getAbsoluteHostUrl("admin", `${pathname}${search}`));
+    }
+
+    if (isMemberFacingPath(pathname)) {
+      return NextResponse.redirect(getAbsoluteHostUrl("app", `${pathname}${search}`));
+    }
+  }
+
+  if (hostRole === "app") {
+    if (pathname === "/") {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/dashboard";
+      redirectUrl.search = "";
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(getAbsoluteHostUrl("admin", `${pathname}${search}`));
+    }
+  }
+
+  if (hostRole === "admin") {
+    if (pathname === "/") {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/admin/videos";
+      redirectUrl.search = "";
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    if (pathname.startsWith("/dashboard") || pathname === "/upgrade") {
+      return NextResponse.redirect(getAbsoluteHostUrl("app", `${pathname}${search}`));
+    }
+  }
 
   const supabase = createServerClient(url, anonKey, {
     cookies: {
@@ -35,8 +76,6 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
-
   if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
@@ -46,7 +85,7 @@ export async function middleware(request: NextRequest) {
 
   if (user && (pathname === "/login" || pathname === "/signup")) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/dashboard";
+    redirectUrl.pathname = hostRole === "admin" ? "/admin/videos" : "/dashboard";
     redirectUrl.search = "";
     return NextResponse.redirect(redirectUrl);
   }
@@ -55,5 +94,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/signup"],
+  matcher: ["/", "/dashboard/:path*", "/admin/:path*", "/login", "/signup", "/upgrade"],
 };

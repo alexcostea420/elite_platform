@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 
 import { Container } from "@/components/ui/container";
 import { dashboardNav, marketingNav, siteConfig } from "@/lib/constants/site";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getAbsoluteHostUrl, getHostRole } from "@/lib/utils/host-routing";
 
 type NavbarProps = {
   mode?: "marketing" | "dashboard";
@@ -29,14 +31,20 @@ function Brand() {
 export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) {
   const navItems = mode === "dashboard" ? dashboardNav : marketingNav;
   let marketingAuthHref = "/login";
+  let marketingPrimaryHref = "/upgrade";
 
   if (mode === "marketing") {
     const supabase = createServerSupabaseClient();
+    const requestHeaders = headers();
+    const hostRole = getHostRole(requestHeaders.get("host") ?? "");
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (user) {
+    if (hostRole !== "local") {
+      marketingAuthHref = getAbsoluteHostUrl("app", user ? "/dashboard" : "/login");
+      marketingPrimaryHref = getAbsoluteHostUrl("app", "/upgrade");
+    } else if (user) {
       marketingAuthHref = "/dashboard";
     }
   }
@@ -61,7 +69,7 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
             <Link className="ghost-button px-5 py-2.5 text-sm" href={marketingAuthHref}>
               Intră în cont
             </Link>
-            <Link className="accent-button px-5 py-2.5 text-sm" href="/upgrade">
+            <Link className="accent-button px-5 py-2.5 text-sm" href={marketingPrimaryHref}>
               Alătură-te Acum
             </Link>
           </div>
