@@ -11,7 +11,7 @@ export function HeroSection() {
       <Container className="relative z-10">
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-6 inline-flex rounded-full border border-accent-emerald/30 bg-surface-graphite px-4 py-2">
-            <span className="font-semibold text-accent-emerald">🎯 300+ membri activi · 46+ Elite</span>
+            <span className="font-semibold text-accent-emerald">🎯 350+ membri activi · 50+ Elite</span>
           </div>
           <h1 className="text-5xl font-bold leading-tight text-white md:text-7xl">
             Învață să tranzacționezi
@@ -25,11 +25,11 @@ export function HeroSection() {
             <Link className="accent-button px-8 py-4 text-lg font-bold" href="#preturi">
               Începe Acum →
             </Link>
-            <a className="ghost-button px-8 py-4 text-lg font-bold" href={siteConfig.youtubeUrl} rel="noreferrer" target="_blank">
+            <a className="ghost-button px-8 py-4 text-lg font-bold" href="https://www.youtube.com/watch?v=nFL-FSF1ZR4" rel="noreferrer" target="_blank">
               🎥 Vezi pe YouTube
             </a>
           </div>
-          <p className="mt-8 text-sm text-slate-500">✨ Peste 46 membri Elite · Indicator TradingView inclus</p>
+          <p className="mt-8 text-sm text-slate-500">✨ Peste 50 membri Elite · Indicator TradingView inclus</p>
         </div>
       </Container>
     </section>

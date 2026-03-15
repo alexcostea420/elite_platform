@@ -2,8 +2,9 @@ export const siteConfig = {
   name: "Armata de Traderi",
   description: "Învață să tranzacționezi ca un profesionist",
   creator: "Alex Costea",
-  youtubeUrl: "https://youtube.com/@alexcostea",
-  discordUrl: "https://discord.com",
+  youtubeUrl: "https://www.youtube.com/@AlexCostea03",
+  xUrl: "https://x.com/AlexArk420",
+  discordUrl: "https://discord.gg/V8JPp794RA",
   tradingViewUrl: "https://tradingview.com"
 };
 
@@ -23,8 +24,8 @@ export const dashboardNav = [
 ];
 
 export const heroStats = [
-  { value: "300+", label: "Membri Activi", tone: "gold" },
-  { value: "46+", label: "Membri Elite", tone: "green" },
+  { value: "350+", label: "Membri Activi", tone: "gold" },
+  { value: "50+", label: "Membri Elite", tone: "green" },
   { value: "100+", label: "Video Educaționale", tone: "gold" },
   { value: "24/7", label: "Suport Discord", tone: "green" }
 ];
@@ -272,4 +273,3 @@ export const recentVideos = [
     tone: "emerald"
   }
 ];
-

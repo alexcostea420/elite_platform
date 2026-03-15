@@ -76,6 +76,25 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (hostRole === "admin" && pathname.startsWith("/admin")) {
+    if (!user) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/login";
+      redirectUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile?.role !== "admin") {
+      return NextResponse.redirect(getAbsoluteHostUrl("app", "/dashboard"));
+    }
+  }
+
   if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
