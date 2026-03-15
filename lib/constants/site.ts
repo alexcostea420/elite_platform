@@ -8,6 +8,19 @@ export const siteConfig = {
   tradingViewUrl: "https://tradingview.com"
 };
 
+type PricingPlan = {
+  name: string;
+  price: string;
+  details: string;
+  cta: string;
+  highlighted: boolean;
+  perks: string[];
+  period?: string;
+  savings?: string;
+  crypto?: string;
+  badge?: string;
+};
+
 export const marketingNav = [
   { href: "#despre", label: "Despre" },
   { href: "#beneficii", label: "Beneficii" },
@@ -63,12 +76,12 @@ export const benefits = [
   }
 ];
 
-export const pricingPlans = [
+export const pricingPlans: PricingPlan[] = [
   {
     name: "30 Zile",
-    price: "€33",
+    price: "$49",
     period: "/acces",
-    details: "(165 RON)",
+    details: "(plan lunar)",
     cta: "Selectează Planul",
     highlighted: false,
     perks: [
@@ -81,10 +94,8 @@ export const pricingPlans = [
   },
   {
     name: "3 Luni",
-    price: "€85",
-    details: "(425 RON)",
-    savings: "💰 Economisești 14%",
-    crypto: "🔐 Crypto: €80 USDT",
+    price: "$137",
+    details: "(crypto)",
     cta: "Selectează Planul",
     highlighted: true,
     badge: "CEL MAI POPULAR",
@@ -99,10 +110,8 @@ export const pricingPlans = [
   },
   {
     name: "12 Luni",
-    price: "€290",
-    details: "(1450 RON)",
-    savings: "💎 Economisești 27%",
-    crypto: "🔐 Crypto: €270 USDT",
+    price: "$497",
+    details: "(crypto)",
     cta: "Selectează Planul",
     highlighted: false,
     perks: [

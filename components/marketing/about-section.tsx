@@ -27,7 +27,7 @@ export function AboutSection() {
           <div>
             <SectionHeading align="left" title={<>Despre <span className="gradient-text">{siteConfig.creator}</span></>} />
             <p className="mt-6 text-lg leading-relaxed text-slate-300">
-              Trader experimentat cu peste 300 de membri în comunitate și zeci de membri Elite activi. Alex împărtășește strategii practice de trading crypto și oferă acces la indicatori exclusivi pentru TradingView.
+              Trader experimentat cu 350+ membri activi în comunitate și 50+ Elite. Alex împărtășește strategii practice de trading crypto și oferă acces la indicatori exclusivi pentru TradingView.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-slate-300">
               Cu sesiuni live de trading, analize săptămânale detaliate și o comunitate activă pe Discord, Armata de Traderi este locul unde învățarea devine execuție reală.
