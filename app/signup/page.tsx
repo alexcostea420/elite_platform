@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { signupAction } from "@/app/auth/actions";
+import { buildPageMetadata } from "@/lib/seo";
 
 type SignupPageProps = {
   searchParams?: {
@@ -11,6 +13,22 @@ type SignupPageProps = {
     message?: string;
   };
 };
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Creează Cont Trading Crypto | Intră în Comunitate",
+  description:
+    "Creează contul tău pentru comunitatea trading crypto din România și intră în platforma cu video-uri, resurse și acces la Elite.",
+  keywords: [
+    "signup trading crypto",
+    "comunitate crypto romania",
+    "cont traderi romania",
+    "platforma trading crypto",
+    "inregistrare elite trading",
+  ],
+  path: "/signup",
+  host: "app",
+  index: false,
+});
 
 export default function SignupPage({ searchParams }: SignupPageProps) {
   const error = searchParams?.error;

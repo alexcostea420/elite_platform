@@ -51,8 +51,24 @@ export function Footer({ compact = false }: FooterProps) {
               Comunitate de trading crypto condusă de {siteConfig.creator}. Învață, crește și profită alături de traderi care vor claritate, disciplină și execuție reală.
             </p>
             <div className="mt-4 flex gap-4 text-2xl">
-              <a className="text-slate-400 hover:text-accent-emerald" href={siteConfig.youtubeUrl}>📺</a>
-              <a className="text-slate-400 hover:text-accent-emerald" href={siteConfig.discordUrl}>💬</a>
+              <a
+                aria-label="Canal YouTube Armata de Traderi"
+                className="text-slate-400 hover:text-accent-emerald"
+                href={siteConfig.youtubeUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                📺
+              </a>
+              <a
+                aria-label="Comunitate Discord Armata de Traderi"
+                className="text-slate-400 hover:text-accent-emerald"
+                href={siteConfig.discordUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                💬
+              </a>
             </div>
           </div>
           <div>

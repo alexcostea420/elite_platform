@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
+import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 
 const comparisonRows = [
   {
@@ -33,9 +35,31 @@ const comparisonRows = [
   },
 ];
 
+export const metadata: Metadata = buildPageMetadata({
+  title: "Abonament Trading Crypto | Prețuri Elite România",
+  description:
+    "Vezi prețurile pentru abonamentul Elite Trading Crypto și alege planul potrivit pentru comunitatea crypto, analize live și educație trading.",
+  keywords: [
+    "abonament trading crypto",
+    "pret comunitate crypto",
+    "plan trading romania",
+    "discord elite trading",
+    "preturi elite trading",
+    "educatie trading crypto",
+  ],
+  path: "/upgrade",
+  host: "app",
+});
+
 export default function UpgradePage() {
+  const offerSchema = getUpgradeOfferSchema();
+
   return (
     <>
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(offerSchema) }}
+        type="application/ld+json"
+      />
       <Navbar mode="marketing" />
       <main className="pb-20 pt-28">
         <Container>

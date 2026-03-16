@@ -13,7 +13,7 @@ export function TestimonialsSection() {
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-emerald text-2xl">👤</div>
                 <div>
-                  <h4 className="font-bold text-white">{testimonial.name}</h4>
+                  <h3 className="font-bold text-white">{testimonial.name}</h3>
                   <p className="text-sm text-accent-emerald">{testimonial.meta}</p>
                 </div>
               </div>

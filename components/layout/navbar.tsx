@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 
 import { Container } from "@/components/ui/container";
 import { dashboardNav, marketingNav, siteConfig } from "@/lib/constants/site";
+import { MarketingDiscordButton } from "@/components/layout/marketing-discord-button";
 import { ProfileMenu } from "@/components/layout/profile-menu";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getAbsoluteHostUrl, getHostRole } from "@/lib/utils/host-routing";
@@ -60,7 +61,10 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
   }
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-surface-graphite/95 backdrop-blur-sm">
+    <nav
+      aria-label={mode === "marketing" ? "Navigare principală publică" : "Navigare principală cont"}
+      className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-surface-graphite/95 backdrop-blur-sm"
+    >
       <Container className={`py-4 ${mode === "marketing" ? "flex flex-col gap-3 md:flex-row md:items-center md:justify-between" : "flex items-center justify-between"}`}>
         <Brand href={brandHref} />
         <div className="hidden items-center gap-6 md:flex">
@@ -76,14 +80,7 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
         </div>
         {mode === "marketing" ? (
           <div className="grid w-full grid-cols-3 gap-2 md:flex md:w-auto md:items-center md:gap-3">
-            <a
-              className="ghost-button flex items-center justify-center px-3 py-2.5 text-center text-xs sm:text-sm md:px-5"
-              href={siteConfig.discordUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Discord
-            </a>
+            <MarketingDiscordButton href={siteConfig.discordUrl} />
             <Link className="ghost-button flex items-center justify-center px-3 py-2.5 text-center text-xs sm:text-sm md:px-5" href={marketingAuthHref}>
               Intră în cont
             </Link>

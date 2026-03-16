@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -5,6 +6,7 @@ import { createVideoAction, deleteVideoAction, updateVideoAction } from "@/app/a
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
@@ -19,6 +21,22 @@ type AdminVideosPageProps = {
     confirmDelete?: string;
   };
 };
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Admin Video-uri | Gestionare Comunitate Crypto",
+  description:
+    "Interfață administrativă pentru gestionarea video-urilor și statusurilor din platforma comunității crypto.",
+  keywords: [
+    "admin video trading",
+    "gestionare comunitate crypto",
+    "admin platforma traderi",
+    "video admin romania",
+    "elite platform admin",
+  ],
+  path: "/admin/videos",
+  host: "admin",
+  index: false,
+});
 
 type VideoRow = {
   id: string;

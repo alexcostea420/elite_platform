@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { loginAction } from "@/app/auth/actions";
+import { buildPageMetadata } from "@/lib/seo";
 
 type LoginPageProps = {
   searchParams?: {
@@ -12,6 +14,22 @@ type LoginPageProps = {
     next?: string;
   };
 };
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Login Elite Trading | Cont Comunitate Crypto",
+  description:
+    "Intră în contul tău Elite Trading pentru a accesa dashboard-ul, biblioteca video și comunitatea crypto din platformă.",
+  keywords: [
+    "login trading crypto",
+    "cont comunitate crypto",
+    "autentificare elite trading",
+    "dashboard traderi romania",
+    "platforma trading crypto",
+  ],
+  path: "/login",
+  host: "app",
+  index: false,
+});
 
 export default function LoginPage({ searchParams }: LoginPageProps) {
   const error = searchParams?.error;

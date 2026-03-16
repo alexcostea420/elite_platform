@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -96,10 +97,12 @@ export function ConnectDiscordCard({
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Status conectare</p>
             <div className="mt-3 flex items-center gap-3">
               {discordAvatar ? (
-                <img
-                  alt={discordUsername ?? "Discord avatar"}
-                  className="h-12 w-12 rounded-full border border-white/10 object-cover"
+                <Image
+                  alt={discordUsername ? `Avatar Discord pentru ${discordUsername}` : "Avatar Discord"}
+                  className="rounded-full border border-white/10 object-cover"
+                  height={48}
                   src={discordAvatar}
+                  width={48}
                 />
               ) : (
                 <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-slate-300">

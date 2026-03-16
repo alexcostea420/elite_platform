@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -12,6 +14,7 @@ import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { getDiscordRoleLabel, syncDiscordRole } from "@/lib/discord/server";
+import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
@@ -62,6 +65,22 @@ type DashboardPageProps = {
     discord_role?: string;
   };
 };
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Dashboard Elite Trading | Cont Membru Crypto",
+  description:
+    "Dashboard-ul tău pentru comunitatea crypto Elite: status abonament, video-uri recente și acces la resursele platformei.",
+  keywords: [
+    "dashboard elite trading",
+    "cont membru crypto",
+    "platforma traderi romania",
+    "biblioteca video crypto",
+    "comunitate traderi",
+  ],
+  path: "/dashboard",
+  host: "app",
+  index: false,
+});
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const supabase = createServerSupabaseClient();
@@ -171,9 +190,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   return (
                     <article key={video.id} className="panel overflow-hidden p-0">
                       <div className="relative aspect-video bg-crypto-ink">
-                        <img
-                          alt={video.title}
-                          className={`h-full w-full object-cover ${isLocked ? "opacity-45" : ""}`}
+                        <Image
+                          alt={`Thumbnail video trading crypto: ${video.title}`}
+                          className={`object-cover ${isLocked ? "opacity-45" : ""}`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
                           src={video.thumbnail_url || `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`}
                         />
                         <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-crypto-ink/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">

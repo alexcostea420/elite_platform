@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -5,6 +7,7 @@ import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { syncDiscordRole } from "@/lib/discord/server";
+import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
@@ -13,6 +16,22 @@ type DashboardVideosPageProps = {
     video?: string;
   };
 };
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Bibliotecă Video Trading | Resurse Membru Crypto",
+  description:
+    "Accesează biblioteca video de trading crypto din platformă și vezi materialele disponibile pentru nivelul tău de membru.",
+  keywords: [
+    "biblioteca video trading",
+    "resurse membru crypto",
+    "video trading crypto",
+    "educatie traderi romania",
+    "platforma elite crypto",
+  ],
+  path: "/dashboard/videos",
+  host: "app",
+  index: false,
+});
 
 type SubscriptionTier = "free" | "elite" | null;
 
@@ -221,9 +240,11 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                         className="panel overflow-hidden border-white/10 p-0 opacity-95"
                       >
                         <div className="relative aspect-video overflow-hidden bg-crypto-ink">
-                          <img
-                            alt={video.title}
-                            className="h-full w-full object-cover opacity-35"
+                          <Image
+                            alt={`Preview video premium trading crypto: ${video.title}`}
+                            className="object-cover opacity-35"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                             src={video.thumbnail_url || `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`}
                           />
                           <div className="absolute left-4 top-4 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">
@@ -269,9 +290,11 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                       href={`/dashboard/videos?video=${video.id}`}
                     >
                       <div className="relative aspect-video overflow-hidden bg-crypto-ink">
-                        <img
-                          alt={video.title}
-                          className="h-full w-full object-cover"
+                        <Image
+                          alt={`Thumbnail video educație trading crypto: ${video.title}`}
+                          className="object-cover"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                           src={video.thumbnail_url || `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`}
                         />
                         <div className="absolute left-4 top-4 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">

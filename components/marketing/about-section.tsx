@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { Container } from "@/components/ui/container";
@@ -49,9 +50,11 @@ export function AboutSection() {
                     type="button"
                   >
                     <div className="relative overflow-hidden rounded-[1.35rem] border border-white/10 bg-crypto-ink">
-                      <img
-                        alt={`Prezentare ${siteConfig.creator}`}
-                        className="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+                      <Image
+                        alt={`Prezentare video ${siteConfig.creator} pentru comunitate trading crypto din România`}
+                        className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         src="https://img.youtube.com/vi/nFL-FSF1ZR4/maxresdefault.jpg"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -64,9 +67,9 @@ export function AboutSection() {
                         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent-emerald">
                           Prezentare video
                         </p>
-                        <h3 className="mt-2 text-2xl font-bold text-white md:text-3xl">
+                        <p className="mt-2 text-2xl font-bold text-white md:text-3xl">
                           Vezi cine construiește comunitatea și cum lucrează
-                        </h3>
+                        </p>
                         <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-300 md:text-base">
                           O introducere directă în stilul de lucru, conținutul și standardul comunității Armata de Traderi.
                         </p>
