@@ -79,3 +79,14 @@
 - SKIPPED: Blog/article SEO work - no blog routes exist in this project.
 - SKIPPED: Generating placeholder OG image assets - explicitly avoided because no approved asset exists.
 - SKIPPED: Rewriting body copy heavily for keyword insertion - would risk visible content drift; keywords were concentrated in metadata and already-natural content zones.
+
+## /Users/alex/Desktop/elite_platform/app/opengraph-image.tsx
+- CHANGED: Added a generated OG image route using Next.js `ImageResponse` - provides a text-only, dark trading-themed fallback social image without external assets.
+- SKIPPED: Embedding a local logo - no reusable logo asset exists in `/public`.
+
+## /Users/alex/Desktop/elite_platform/app/upgrade/opengraph-image.tsx
+- CHANGED: Added a page-specific OG image variant for `/upgrade` - gives the commercial page a more relevant social preview.
+
+## /Users/alex/Desktop/elite_platform/lib/seo.ts
+- CHANGED: Added explicit fallback `openGraph.images` and `twitter.images` fields - keeps existing metadata logic intact while wiring in the generated OG images.
+- CHANGED: Corrected the OG image metadata URLs to the actual App Router metadata-image endpoints after local validation showed the `.png` form was not being served in this project.

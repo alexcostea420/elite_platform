@@ -31,6 +31,7 @@ export function buildPageMetadata({
   type = "website",
 }: BuildPageMetadataOptions): Metadata {
   const absoluteUrl = getAbsoluteRouteUrl(path, host);
+  const imageUrl = path === "/upgrade" ? "/upgrade/opengraph-image" : "/opengraph-image";
 
   return {
     title,
@@ -46,11 +47,20 @@ export function buildPageMetadata({
       type,
       locale: "ro_RO",
       siteName: siteConfig.name,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: path === "/upgrade" ? "Upgrade la Elite" : "Armata de Traderi",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [imageUrl],
     },
     robots: index
       ? {
