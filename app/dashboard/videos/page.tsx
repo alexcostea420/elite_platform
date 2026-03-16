@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { syncDiscordRole } from "@/lib/discord/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
@@ -89,7 +90,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier")
+    .select("full_name, subscription_tier, discord_user_id")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -97,6 +98,18 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
   const rawUserTier = profile?.subscription_tier;
   const userTier: SubscriptionTier =
     rawUserTier === "free" || rawUserTier === "elite" ? rawUserTier : null;
+
+  if (profile?.discord_user_id) {
+    try {
+      await syncDiscordRole({
+        profileId: user.id,
+        discordUserId: profile.discord_user_id,
+        subscriptionTier: userTier,
+      });
+    } catch {
+      // Biblioteca video rămâne accesibilă chiar dacă sincronizarea Discord e temporar indisponibilă.
+    }
+  }
 
   const { data: videos } = await supabase
     .from("videos")

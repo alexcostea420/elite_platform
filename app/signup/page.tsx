@@ -46,6 +46,32 @@ export default function SignupPage({ searchParams }: SignupPageProps) {
 
             <form action={signupAction} className="space-y-4">
               <div>
+                <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="full_name">
+                  Nume complet
+                </label>
+                <input
+                  className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
+                  id="full_name"
+                  name="full_name"
+                  placeholder="Numele tău complet"
+                  required
+                  type="text"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="discord_username">
+                  Username Discord
+                </label>
+                <input
+                  className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
+                  id="discord_username"
+                  name="discord_username"
+                  placeholder="exemplu: alexcostea"
+                  required
+                  type="text"
+                />
+              </div>
+              <div>
                 <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="email">
                   Email
                 </label>

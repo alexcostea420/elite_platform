@@ -4,7 +4,7 @@ export const siteConfig = {
   creator: "Alex Costea",
   youtubeUrl: "https://www.youtube.com/@AlexCostea03",
   xUrl: "https://x.com/AlexArk420",
-  discordUrl: "https://discord.gg/V8JPp794RA",
+  discordUrl: "https://discord.gg/ecNNcV5GD9",
   tradingViewUrl: "https://tradingview.com"
 };
 

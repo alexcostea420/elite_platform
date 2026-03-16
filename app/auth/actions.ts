@@ -2,10 +2,26 @@
 
 import { redirect } from "next/navigation";
 
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 function getTrimmedValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
+}
+
+async function upsertProfile(userId: string, fullName: string, discordUsername: string) {
+  const supabase = createServiceRoleSupabaseClient();
+  const { error } = await supabase
+    .from("profiles")
+    .upsert(
+      {
+        id: userId,
+        full_name: fullName,
+        discord_username: discordUsername,
+      },
+      { onConflict: "id" },
+    );
+
+  return error;
 }
 
 export async function loginAction(formData: FormData) {
@@ -28,11 +44,13 @@ export async function loginAction(formData: FormData) {
 }
 
 export async function signupAction(formData: FormData) {
+  const fullName = getTrimmedValue(formData, "full_name");
+  const discordUsername = getTrimmedValue(formData, "discord_username");
   const email = getTrimmedValue(formData, "email");
   const password = getTrimmedValue(formData, "password");
 
-  if (!email || !password) {
-    redirect(`/signup?error=${encodeURIComponent("Completează email-ul și parola.")}`);
+  if (!fullName || !discordUsername || !email || !password) {
+    redirect(`/signup?error=${encodeURIComponent("Completează toate câmpurile obligatorii.")}`);
   }
 
   const supabase = createServerSupabaseClient();
@@ -43,6 +61,18 @@ export async function signupAction(formData: FormData) {
 
   if (error) {
     redirect(`/signup?error=${encodeURIComponent(error.message)}`);
+  }
+
+  if (data.user) {
+    const profileError = await upsertProfile(data.user.id, fullName, discordUsername);
+
+    if (profileError) {
+      redirect(
+        `/login?message=${encodeURIComponent(
+          "Contul a fost creat, dar profilul nu a fost complet salvat. Verifică dacă există coloanele full_name și discord_username în profiles.",
+        )}`,
+      );
+    }
   }
 
   if (data.user && data.session) {

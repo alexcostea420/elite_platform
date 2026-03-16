@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { ConnectDiscordCard } from "@/components/dashboard/connect-discord-card";
 import { QuickLinks } from "@/components/dashboard/quick-links";
 import { RecentAnalyses } from "@/components/dashboard/recent-analyses";
 import { RecentContent } from "@/components/dashboard/recent-content";
@@ -10,6 +11,7 @@ import { SubscriptionCard } from "@/components/dashboard/subscription-card";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { getDiscordRoleLabel, syncDiscordRole } from "@/lib/discord/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
@@ -53,7 +55,15 @@ function getStatusLabel(subscriptionStatus: SubscriptionStatus) {
   }
 }
 
-export default async function DashboardPage() {
+type DashboardPageProps = {
+  searchParams?: {
+    discord?: string;
+    discord_error?: string;
+    discord_role?: string;
+  };
+};
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const supabase = createServerSupabaseClient();
   const {
     data: { user },
@@ -65,7 +75,9 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, subscription_status, subscription_expires_at")
+    .select(
+      "full_name, subscription_tier, subscription_status, subscription_expires_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
+    )
     .eq("id", user.id)
     .maybeSingle();
 
@@ -73,6 +85,19 @@ export default async function DashboardPage() {
   const isEliteUser = profile?.subscription_tier === "elite";
   const membershipLabel = getMembershipLabel(profile?.subscription_tier ?? null);
   const statusLabel = getStatusLabel(profile?.subscription_status ?? null);
+  const desiredDiscordRole = getDiscordRoleLabel(profile?.subscription_tier ?? null);
+
+  if (profile?.discord_user_id) {
+    try {
+      await syncDiscordRole({
+        profileId: user.id,
+        discordUserId: profile.discord_user_id,
+        subscriptionTier: profile?.subscription_tier ?? null,
+      });
+    } catch {
+      // Dashboard access should not fail because Discord sync is unavailable.
+    }
+  }
 
   const { data: latestVideos } = await supabase
     .from("videos")
@@ -285,19 +310,37 @@ export default async function DashboardPage() {
               </section>
             </>
           )}
-          <section className="panel mt-12 px-6 py-8 text-center md:px-8" id="setari">
-            <h3 className="text-2xl font-bold text-white">Ai nevoie de ajutor? 💡</h3>
-            <p className="mx-auto mt-4 max-w-2xl text-slate-300">
-              Comunitatea noastră Discord este activă 24/7. Pune întrebări, schimbă idei și învață de la alți traderi.
-            </p>
-            <div className="mt-6 flex flex-col justify-center gap-4 sm:flex-row">
-              <a className="accent-button" href="https://discord.com" rel="noreferrer" target="_blank">
-                Deschide Discord
-              </a>
-              <a className="ghost-button" href="#">
-                Contactează Suportul
-              </a>
-            </div>
+          <section className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]" id="setari">
+            <ConnectDiscordCard
+              discordAvatar={profile?.discord_avatar ?? null}
+              discordConnectedAt={profile?.discord_connected_at ?? null}
+              discordRoleLabel={desiredDiscordRole}
+              discordRoleSyncedAt={profile?.discord_role_synced_at ?? null}
+              discordUsername={profile?.discord_username ?? null}
+              isConnected={Boolean(profile?.discord_user_id)}
+              notice={
+                searchParams?.discord_error
+                  ? searchParams.discord_error
+                  : searchParams?.discord === "connected"
+                    ? `Discord a fost conectat și rolul ${searchParams.discord_role ?? desiredDiscordRole} a fost sincronizat.`
+                    : null
+              }
+              noticeTone={searchParams?.discord_error ? "error" : searchParams?.discord === "connected" ? "success" : null}
+            />
+            <section className="panel px-6 py-8 text-center md:px-8">
+              <h3 className="text-2xl font-bold text-white">Ai nevoie de ajutor? 💡</h3>
+              <p className="mx-auto mt-4 max-w-2xl text-slate-300">
+                Comunitatea noastră Discord este activă 24/7. Pune întrebări, schimbă idei și învață de la alți traderi.
+              </p>
+              <div className="mt-6 flex flex-col justify-center gap-4 sm:flex-row">
+                <a className="accent-button" href="https://discord.com" rel="noreferrer" target="_blank">
+                  Deschide Discord
+                </a>
+                <a className="ghost-button" href="#">
+                  Contactează Suportul
+                </a>
+              </div>
+            </section>
           </section>
         </Container>
       </main>
