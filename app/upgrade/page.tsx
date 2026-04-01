@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
+import { BotSmartCta } from "@/components/upgrade/bot-smart-cta";
 
 const comparisonRows = [
   {
@@ -177,22 +178,97 @@ export default function UpgradePage() {
           <section className="mb-10" id="bot">
             <div className="mb-6 text-center">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                Addon
+                AI Trading Bot
               </p>
-              <h2 className="text-3xl font-bold text-white">AI Trading Bot</h2>
+              <h2 className="text-3xl font-bold text-white">Lasă botul să tradeuiasca pentru tine</h2>
               <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-                Lasă botul să tradeuiasca pentru tine. Strategii ML validate pe date reale, execuție automată pe Hyperliquid.
+                Strategii ML validate pe date reale, execuție automată pe Hyperliquid. Fără emoții, fără ezitare.
               </p>
+              <div className="mx-auto mt-5 flex flex-wrap items-center justify-center gap-3 text-sm text-slate-300">
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">20 Strategii ML</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">9 Assets</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Executie 24/7</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Alerte Telegram</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Dashboard Live</span>
+              </div>
             </div>
-            <div className="mx-auto grid max-w-3xl gap-8 md:grid-cols-2">
+
+            <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
+              {/* Bot standalone */}
               <article className="panel card-hover p-8">
                 <div className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  Non-Elite
+                  Bot Separat
                 </div>
                 <h3 className="text-2xl font-bold text-white">Bot AI Trading</h3>
                 <div className="mb-6 mt-3">
                   <span className="text-5xl font-bold text-accent-emerald">$49</span>
-                  <span className="text-slate-400">/lună</span>
+                  <span className="text-slate-400">/luna</span>
+                </div>
+                <ul className="space-y-3">
+                  {botFeatures.map((feat) => (
+                    <li key={feat} className="flex items-start gap-2 text-slate-300">
+                      <span className="text-crypto-green">✓</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <BotSmartCta />
+                <Link
+                  className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
+                  href="/upgrade/pay?plan=bot_monthly"
+                >
+                  Plateste cu crypto
+                </Link>
+                <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
+              </article>
+
+              {/* BEST VALUE: Elite + Bot Bundle */}
+              <article className="relative rounded-[1.5rem] border-2 border-accent-emerald bg-surface-graphite p-8 shadow-glow card-hover md:scale-105">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">
+                  BEST VALUE
+                </div>
+                <div className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-accent-emerald">
+                  Elite + Bot Bundle
+                </div>
+                <h3 className="text-2xl font-bold text-white">Tot ce ai nevoie</h3>
+                <div className="mb-4 mt-3">
+                  <span className="text-2xl font-bold text-slate-500 line-through">$98</span>
+                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$59</span>
+                  <span className="text-slate-400">/luna</span>
+                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisesti $468/an</div>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-slate-300">
+                    <span className="text-accent-emerald">★</span>
+                    <span className="font-semibold text-accent-emerald">Acces Elite complet</span>
+                  </li>
+                  {botFeatures.map((feat) => (
+                    <li key={feat} className="flex items-start gap-2 text-slate-300">
+                      <span className="text-crypto-green">✓</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-accent-emerald py-3 text-lg font-bold text-crypto-dark hover:bg-accent-soft"
+                  href="/upgrade/pay?plan=elite_bot_bundle"
+                >
+                  Activeaza Bundle-ul
+                </Link>
+                <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
+              </article>
+
+              {/* Bot for Elite members */}
+              <article className="panel card-hover p-8">
+                <div className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-accent-emerald">
+                  Pret Membru Elite
+                </div>
+                <h3 className="text-2xl font-bold text-white">Bot AI Trading</h3>
+                <div className="mb-6 mt-3">
+                  <span className="text-2xl font-bold text-slate-500 line-through">$49</span>
+                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$29</span>
+                  <span className="text-slate-400">/luna</span>
+                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisesti $240/an</div>
                 </div>
                 <ul className="space-y-3">
                   {botFeatures.map((feat) => (
@@ -204,43 +280,24 @@ export default function UpgradePage() {
                 </ul>
                 <Link
                   className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
-                  href="/upgrade/pay?plan=bot_monthly"
-                >
-                  Plătește cu crypto
-                </Link>
-                <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
-              </article>
-
-              <article className="relative rounded-[1.5rem] border-2 border-accent-emerald bg-surface-graphite p-8 shadow-glow card-hover">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">
-                  PREȚ ELITE
-                </div>
-                <div className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-accent-emerald">
-                  Membri Elite
-                </div>
-                <h3 className="text-2xl font-bold text-white">Bot AI Trading</h3>
-                <div className="mb-6 mt-3">
-                  <span className="text-2xl font-bold text-slate-500 line-through">$49</span>
-                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$29</span>
-                  <span className="text-slate-400">/lună</span>
-                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisești $20/lună</div>
-                </div>
-                <ul className="space-y-3">
-                  {botFeatures.map((feat) => (
-                    <li key={feat} className="flex items-start gap-2 text-slate-300">
-                      <span className="text-crypto-green">✓</span>
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-accent-emerald py-3 font-bold text-crypto-dark hover:bg-accent-soft"
                   href="/upgrade/pay?plan=bot_monthly_elite"
                 >
-                  Plătește cu crypto
+                  Plateste cu crypto
                 </Link>
-                <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
+                <div className="mt-3 text-center text-sm text-slate-500">Deja membru Elite? Alege acest plan.</div>
               </article>
+            </div>
+
+            {/* BONUS section for Elite members */}
+            <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-6 text-center">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-accent-emerald">
+                Bonus pentru membrii Elite
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-300">
+                <span className="rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-4 py-2">BTC Risk Dashboard</span>
+                <span className="rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-4 py-2">Market Score in timp real</span>
+                <span className="rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-4 py-2">Alerte de regim (Bull/Bear/Chop)</span>
+              </div>
             </div>
           </section>
 

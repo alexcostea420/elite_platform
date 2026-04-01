@@ -105,6 +105,7 @@ export const pricingPlans: PricingPlan[] = [
       "Sesiuni live de trading",
       "Video educaționale",
       "Analize săptămânale",
+      "Dashboard-uri exclusive: BTC Risk Score, Market Score",
       "Suport prioritar"
     ]
   },
@@ -120,6 +121,7 @@ export const pricingPlans: PricingPlan[] = [
       "Sesiuni live de trading",
       "Video educaționale",
       "Analize săptămânale",
+      "Dashboard-uri exclusive: BTC Risk Score, Market Score",
       "Suport prioritar VIP"
     ]
   }

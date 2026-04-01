@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
@@ -26,15 +28,26 @@ export function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <button className={`mt-8 w-full rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`} type="button">
+              <Link className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`} href="/upgrade">
                 {plan.cta}
-              </button>
+              </Link>
               {plan.crypto ? <div className="mt-4 text-center text-sm text-slate-400">{plan.crypto}</div> : null}
             </article>
           ))}
         </div>
-        <div className="mt-12 space-y-4 text-center">
-          <p className="text-slate-400">Plăți securizate prin Stripe sau Crypto (USDT)</p>
+        <div className="mx-auto mt-10 max-w-2xl rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-5 text-center">
+          <p className="text-sm font-semibold text-accent-emerald">
+            AI Trading Bot disponibil pentru membrii Elite la $29/luna
+          </p>
+          <p className="mt-2 text-xs text-slate-400">
+            20 Strategii ML, 9 Assets, Executie 24/7, Dashboard Live
+          </p>
+          <Link className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent-emerald hover:text-accent-soft" href="/upgrade#bot">
+            Afla mai multe &rarr;
+          </Link>
+        </div>
+        <div className="mt-8 space-y-4 text-center">
+          <p className="text-slate-400">Plati securizate prin Crypto (USDT)</p>
           <div className="flex items-center justify-center gap-4 text-3xl">
             <span>💳</span>
             <span>🔐</span>
