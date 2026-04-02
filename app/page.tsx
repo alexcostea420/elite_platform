@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
-import { AboutSection } from "@/components/marketing/about-section";
-import { BenefitsSection } from "@/components/marketing/benefits-section";
-import { CtaSection } from "@/components/marketing/cta-section";
-import { FaqSection } from "@/components/marketing/faq-section";
 import { HeroSection } from "@/components/marketing/hero-section";
-import { PricingSection } from "@/components/marketing/pricing-section";
 import { StatsSection } from "@/components/marketing/stats-section";
-import { TestimonialsSection } from "@/components/marketing/testimonials-section";
+
+const AboutSection = dynamic(() => import("@/components/marketing/about-section").then(m => m.AboutSection));
+const BenefitsSection = dynamic(() => import("@/components/marketing/benefits-section").then(m => m.BenefitsSection));
+const CtaSection = dynamic(() => import("@/components/marketing/cta-section").then(m => m.CtaSection));
+const FaqSection = dynamic(() => import("@/components/marketing/faq-section").then(m => m.FaqSection));
+const PricingSection = dynamic(() => import("@/components/marketing/pricing-section").then(m => m.PricingSection));
+const TestimonialsSection = dynamic(() => import("@/components/marketing/testimonials-section").then(m => m.TestimonialsSection));
 import {
   buildPageMetadata,
   getHomepageFaqSchema,

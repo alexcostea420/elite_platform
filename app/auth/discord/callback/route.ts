@@ -30,15 +30,19 @@ export async function GET(request: NextRequest) {
   const expectedState = request.cookies.get("discord_oauth_state")?.value;
 
   if (oauthError) {
-    return redirectWithDiscordState(request, {
+    const response = redirectWithDiscordState(request, {
       discord_error: "Conectarea la Discord a fost anulată sau respinsă.",
     });
+    response.cookies.delete("discord_oauth_state");
+    return response;
   }
 
   if (!code || !state || !expectedState || state !== expectedState) {
-    return redirectWithDiscordState(request, {
+    const response = redirectWithDiscordState(request, {
       discord_error: "Sesiunea de conectare Discord nu a fost validă. Încearcă din nou.",
     });
+    response.cookies.delete("discord_oauth_state");
+    return response;
   }
 
   const supabase = createServerSupabaseClient();

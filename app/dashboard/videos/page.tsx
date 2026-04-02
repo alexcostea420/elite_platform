@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { VideoTemplateThumbnail } from "@/components/ui/video-thumbnail";
 import { syncDiscordRole } from "@/lib/discord/server";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -107,34 +107,36 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
     redirect("/login?next=/dashboard/videos");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, subscription_tier, discord_user_id")
-    .eq("id", user.id)
-    .maybeSingle();
+  const [{ data: profile }, { data: videos }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("full_name, subscription_tier, discord_user_id, discord_role_synced_at")
+      .eq("id", user.id)
+      .maybeSingle(),
+    supabase
+      .from("videos")
+      .select("id, youtube_id, title, description, category, tier_required, duration_seconds, thumbnail_url, upload_date")
+      .eq("is_published", true)
+      .order("upload_date", { ascending: false }),
+  ]);
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const rawUserTier = profile?.subscription_tier;
   const userTier: SubscriptionTier =
     rawUserTier === "free" || rawUserTier === "elite" ? rawUserTier : null;
 
+  // Fire-and-forget Discord sync with 15-minute cooldown
   if (profile?.discord_user_id) {
-    try {
-      await syncDiscordRole({
+    const lastSyncedAt = profile.discord_role_synced_at ? new Date(profile.discord_role_synced_at).getTime() : 0;
+    const fifteenMinutesAgo = Date.now() - 15 * 60 * 1000;
+    if (lastSyncedAt < fifteenMinutesAgo) {
+      syncDiscordRole({
         profileId: user.id,
         discordUserId: profile.discord_user_id,
         subscriptionTier: userTier,
-      });
-    } catch {
-      // Biblioteca video rămâne accesibilă chiar dacă sincronizarea Discord e temporar indisponibilă.
+      }).catch(() => {});
     }
   }
-
-  const { data: videos } = await supabase
-    .from("videos")
-    .select("id, youtube_id, title, description, category, tier_required, duration_seconds, thumbnail_url, upload_date")
-    .eq("is_published", true)
-    .order("upload_date", { ascending: false });
 
   const visibleVideos: VideoRow[] = videos ?? [];
   const accessibleVideos = visibleVideos.filter((video) => canAccessVideo(userTier, video.tier_required));
@@ -239,14 +241,8 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                         aria-label={`Video premium blocat: ${video.title}`}
                         className="panel overflow-hidden border-white/10 p-0 opacity-95"
                       >
-                        <div className="relative aspect-video overflow-hidden bg-crypto-ink">
-                          <Image
-                            alt={`Preview video premium trading crypto: ${video.title}`}
-                            className="object-cover opacity-35"
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                            src={video.thumbnail_url || `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`}
-                          />
+                        <div className="relative overflow-hidden bg-crypto-ink">
+                          <VideoTemplateThumbnail className="opacity-40" date={video.upload_date} tag={video.category} />
                           <div className="absolute left-4 top-4 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">
                             Elite
                           </div>
@@ -289,14 +285,8 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                       className={`panel card-hover overflow-hidden p-0 ${isSelected ? "border-accent-emerald shadow-glow" : ""}`}
                       href={`/dashboard/videos?video=${video.id}`}
                     >
-                      <div className="relative aspect-video overflow-hidden bg-crypto-ink">
-                        <Image
-                          alt={`Thumbnail video educație trading crypto: ${video.title}`}
-                          className="object-cover"
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          src={video.thumbnail_url || `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`}
-                        />
+                      <div className="relative overflow-hidden bg-crypto-ink">
+                        <VideoTemplateThumbnail date={video.upload_date} tag={video.category} />
                         <div className="absolute left-4 top-4 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">
                           {tierLabel[video.tier_required]}
                         </div>

@@ -30,6 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ro">
+      <head>
+        {/* Plausible Analytics — privacy-first, no cookies, GDPR compliant. Set NEXT_PUBLIC_PLAUSIBLE_DOMAIN to activate. */}
+        {process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.js"
+          />
+        )}
+      </head>
       <body className={`${inter.variable} ${orbitron.variable} font-sans`}>{children}</body>
     </html>
   );

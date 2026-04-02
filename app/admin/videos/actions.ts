@@ -63,6 +63,30 @@ async function requireAdmin() {
   return user;
 }
 
+function validateVideoPayload(payload: VideoPayload): string | null {
+  if (!payload.title || payload.title.length > 200) {
+    return "Titlul este obligatoriu și nu poate depăși 200 caractere.";
+  }
+
+  if (!payload.youtube_id || !/^[a-zA-Z0-9_-]{6,15}$/.test(payload.youtube_id)) {
+    return "YouTube ID-ul trebuie să fie un identificator valid (6-15 caractere alfanumerice).";
+  }
+
+  if (!payload.category || payload.category.length > 100) {
+    return "Categoria este obligatorie și nu poate depăși 100 caractere.";
+  }
+
+  if (payload.thumbnail_url && !/^https:\/\/.+/.test(payload.thumbnail_url)) {
+    return "URL-ul thumbnail trebuie să fie un link HTTPS valid.";
+  }
+
+  if (payload.description && payload.description.length > 5000) {
+    return "Descrierea nu poate depăși 5000 caractere.";
+  }
+
+  return null;
+}
+
 function getVideoPayload(formData: FormData): VideoPayload {
   return {
     youtube_id: getTrimmedValue(formData, "youtube_id"),
@@ -80,12 +104,18 @@ export async function createVideoAction(formData: FormData) {
   await requireAdmin();
 
   const payload = getVideoPayload(formData);
+  const validationError = validateVideoPayload(payload);
+  if (validationError) {
+    redirect(`/admin/videos?error=${encodeURIComponent(validationError)}`);
+  }
+
   const supabase = createServiceRoleSupabaseClient();
 
   const { error } = await supabase.from("videos").insert(payload);
 
   if (error) {
-    redirect(`/admin/videos?error=${encodeURIComponent(error.message)}`);
+    console.error("Video create error:", error);
+    redirect(`/admin/videos?error=${encodeURIComponent("Nu s-a putut adăuga video-ul. Verifică datele și încearcă din nou.")}`);
   }
 
   revalidatePath("/admin/videos");
@@ -102,12 +132,18 @@ export async function updateVideoAction(formData: FormData) {
   }
 
   const payload = getVideoPayload(formData);
+  const validationError = validateVideoPayload(payload);
+  if (validationError) {
+    redirect(`/admin/videos?error=${encodeURIComponent(validationError)}`);
+  }
+
   const supabase = createServiceRoleSupabaseClient();
 
   const { error } = await supabase.from("videos").update(payload).eq("id", videoId);
 
   if (error) {
-    redirect(`/admin/videos?error=${encodeURIComponent(error.message)}`);
+    console.error("Video update error:", error);
+    redirect(`/admin/videos?error=${encodeURIComponent("Nu s-a putut actualiza video-ul. Încearcă din nou.")}`);
   }
 
   revalidatePath("/admin/videos");
@@ -127,7 +163,8 @@ export async function deleteVideoAction(formData: FormData) {
   const { error } = await supabase.from("videos").delete().eq("id", videoId);
 
   if (error) {
-    redirect(`/admin/videos?error=${encodeURIComponent(error.message)}`);
+    console.error("Video delete error:", error);
+    redirect(`/admin/videos?error=${encodeURIComponent("Nu s-a putut șterge video-ul. Încearcă din nou.")}`);
   }
 
   revalidatePath("/admin/videos");

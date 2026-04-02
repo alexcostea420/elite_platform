@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -13,6 +12,7 @@ import { SubscriptionCard } from "@/components/dashboard/subscription-card";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { VideoTemplateThumbnail } from "@/components/ui/video-thumbnail";
 import { getDiscordRoleLabel, syncDiscordRole } from "@/lib/discord/server";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -28,6 +28,7 @@ type VideoPreview = {
   tier_required: Exclude<SubscriptionTier, null>;
   thumbnail_url: string | null;
   youtube_id: string;
+  upload_date: string;
 };
 
 const tierLabel: Record<Exclude<SubscriptionTier, null>, string> = {
@@ -92,13 +93,21 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     redirect("/login?next=/dashboard");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select(
-      "full_name, subscription_tier, subscription_status, subscription_expires_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
-    )
-    .eq("id", user.id)
-    .maybeSingle();
+  const [{ data: profile }, { data: latestVideos }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select(
+        "full_name, subscription_tier, subscription_status, subscription_expires_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
+      )
+      .eq("id", user.id)
+      .maybeSingle(),
+    supabase
+      .from("videos")
+      .select("id, title, category, tier_required, thumbnail_url, youtube_id, upload_date")
+      .eq("is_published", true)
+      .order("upload_date", { ascending: false })
+      .limit(3),
+  ]);
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isEliteUser = profile?.subscription_tier === "elite";
@@ -106,24 +115,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const statusLabel = getStatusLabel(profile?.subscription_status ?? null);
   const desiredDiscordRole = getDiscordRoleLabel(profile?.subscription_tier ?? null);
 
+  // Fire-and-forget Discord sync with 15-minute cooldown
   if (profile?.discord_user_id) {
-    try {
-      await syncDiscordRole({
+    const lastSyncedAt = profile.discord_role_synced_at ? new Date(profile.discord_role_synced_at).getTime() : 0;
+    const fifteenMinutesAgo = Date.now() - 15 * 60 * 1000;
+    if (lastSyncedAt < fifteenMinutesAgo) {
+      syncDiscordRole({
         profileId: user.id,
         discordUserId: profile.discord_user_id,
         subscriptionTier: profile?.subscription_tier ?? null,
-      });
-    } catch {
-      // Dashboard access should not fail because Discord sync is unavailable.
+      }).catch(() => {});
     }
   }
-
-  const { data: latestVideos } = await supabase
-    .from("videos")
-    .select("id, title, category, tier_required, thumbnail_url, youtube_id")
-    .eq("is_published", true)
-    .order("upload_date", { ascending: false })
-    .limit(3);
 
   const featuredVideos: VideoPreview[] = latestVideos ?? [];
 
@@ -189,13 +192,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
                   return (
                     <article key={video.id} className="panel overflow-hidden p-0">
-                      <div className="relative aspect-video bg-crypto-ink">
-                        <Image
-                          alt={`Thumbnail video trading crypto: ${video.title}`}
-                          className={`object-cover ${isLocked ? "opacity-45" : ""}`}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                          src={video.thumbnail_url || `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`}
+                      <div className="relative bg-crypto-ink">
+                        <VideoTemplateThumbnail
+                          className={isLocked ? "opacity-45" : ""}
+                          date={video.upload_date}
+                          tag={video.category}
                         />
                         <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-crypto-ink/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
                           {video.tier_required === "elite" ? "Elite" : "Free"}

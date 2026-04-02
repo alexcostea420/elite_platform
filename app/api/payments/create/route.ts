@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createPaymentRequest } from "@/lib/payments/server";
 import { type PlanDuration, type PaymentChain, CHAIN_CONFIG } from "@/lib/payments/config";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { checkRateLimit } from "@/lib/utils/rate-limit";
 
 const validDurations: PlanDuration[] = ["30_days", "90_days", "365_days", "bot_monthly", "bot_monthly_elite"];
 const validChains = Object.keys(CHAIN_CONFIG) as PaymentChain[];
@@ -16,6 +17,11 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: "Neautentificat." }, { status: 401 });
+    }
+
+    const { allowed } = checkRateLimit(`create:${user.id}`, 10, 60_000);
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many requests." }, { status: 429 });
     }
 
     const body = await request.json().catch(() => null);

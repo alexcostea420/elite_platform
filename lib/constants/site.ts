@@ -32,8 +32,11 @@ export const marketingNav = [
 export const dashboardNav = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/videos", label: "Video-uri" },
-  { href: "#analize", label: "Analize" },
-  { href: "#setari", label: "Setări" }
+  { href: "/dashboard/indicators", label: "Indicatori" },
+  { href: "/dashboard/risk-score", label: "Risk Score" },
+  { href: "/dashboard/should-i-trade", label: "Trade?" },
+  { href: "/dashboard/signals", label: "Bot" },
+  { href: "/dashboard/performance", label: "Performanță" },
 ];
 
 export const heroStats = [
@@ -193,28 +196,28 @@ export const footerLinks = {
 
 export const quickLinks = [
   {
-    icon: "💬",
-    title: "Discord Elite",
-    description: "Accesează comunitatea",
-    href: siteConfig.discordUrl
+    icon: "🎯",
+    title: "Risk Score",
+    description: "Scor risc BTC live",
+    href: "/dashboard/risk-score"
+  },
+  {
+    icon: "⚡",
+    title: "Should I Trade?",
+    description: "Decizia zilei",
+    href: "/dashboard/should-i-trade"
+  },
+  {
+    icon: "🤖",
+    title: "Semnale ML",
+    description: "Strategii active",
+    href: "/dashboard/signals"
   },
   {
     icon: "📊",
-    title: "Indicator ELITE",
-    description: "Deschide TradingView",
-    href: siteConfig.tradingViewUrl
-  },
-  {
-    icon: "🎥",
-    title: "Biblioteca Video",
-    description: "100+ ore de conținut",
-    href: "/dashboard/videos"
-  },
-  {
-    icon: "📈",
-    title: "Sesiuni Live",
-    description: "Următoarea: Luni 19:00",
-    href: "#analize"
+    title: "Performanță",
+    description: "Equity & risk",
+    href: "/dashboard/performance"
   }
 ];
 

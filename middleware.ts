@@ -72,9 +72,20 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch {
+    // If Supabase is unreachable, allow public pages through but block protected ones.
+    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/login";
+      redirectUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+    return response;
+  }
 
   if (hostRole === "admin" && pathname.startsWith("/admin")) {
     if (!user) {
@@ -84,15 +95,30 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(redirectUrl);
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .maybeSingle();
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
 
-    if (profile?.role !== "admin") {
+      if (profile?.role !== "admin") {
+        return NextResponse.redirect(getAbsoluteHostUrl("app", "/dashboard"));
+      }
+    } catch {
       return NextResponse.redirect(getAbsoluteHostUrl("app", "/dashboard"));
     }
+  }
+
+  // /bots is public, but /bots/subscribe, /bots/dashboard, /bots/admin need auth
+  const botProtectedPaths = ["/bots/subscribe", "/bots/dashboard", "/bots/admin"];
+  const isBotProtected = botProtectedPaths.some((p) => pathname.startsWith(p));
+
+  if (!user && isBotProtected) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/login";
+    redirectUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 
   if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
@@ -113,5 +139,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard/:path*", "/admin/:path*", "/login", "/signup", "/upgrade"],
+  matcher: ["/", "/dashboard/:path*", "/admin/:path*", "/bots/:path*", "/invite/:path*", "/login", "/signup", "/upgrade"],
 };

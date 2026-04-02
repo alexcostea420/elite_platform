@@ -241,7 +241,9 @@ export async function syncDiscordRole({
     await joinDiscordGuild(discordUserId, userAccessToken);
   }
 
-  await addDiscordRole(discordUserId, desiredRoleId);
-  await removeDiscordRole(discordUserId, roleToRemove);
+  await Promise.all([
+    addDiscordRole(discordUserId, desiredRoleId),
+    removeDiscordRole(discordUserId, roleToRemove),
+  ]);
   await markDiscordRoleSynced(profileId);
 }
