@@ -151,6 +151,39 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             subscriptionStatus={profile?.subscription_status ?? null}
             subscriptionTier={profile?.subscription_tier ?? null}
           />
+          {/* Expiry warning */}
+          {profile?.subscription_expires_at && (() => {
+            const expiresAt = new Date(profile.subscription_expires_at);
+            const now = new Date();
+            const daysLeft = Math.ceil((expiresAt.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+            if (daysLeft <= 0) {
+              return (
+                <section className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/5 px-5 py-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-semibold text-red-400">Abonamentul tău a expirat</p>
+                      <p className="mt-1 text-sm text-slate-400">Reînnoiește pentru a păstra accesul la conținutul Elite.</p>
+                    </div>
+                    <Link className="accent-button whitespace-nowrap" href="/upgrade">Reînnoiește</Link>
+                  </div>
+                </section>
+              );
+            }
+            if (daysLeft <= 7) {
+              return (
+                <section className="mb-6 rounded-2xl border border-yellow-400/30 bg-yellow-400/5 px-5 py-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-semibold text-yellow-400">Abonamentul tău expiră în {daysLeft} {daysLeft === 1 ? 'zi' : 'zile'}</p>
+                      <p className="mt-1 text-sm text-slate-400">Reînnoiește acum ca să nu pierzi accesul.</p>
+                    </div>
+                    <Link className="accent-button whitespace-nowrap" href="/upgrade">Reînnoiește</Link>
+                  </div>
+                </section>
+              );
+            }
+            return null;
+          })()}
           <section className="mb-8 grid gap-4 md:grid-cols-3">
             <article className="panel px-5 py-5">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Acces curent</p>
