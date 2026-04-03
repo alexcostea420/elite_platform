@@ -393,33 +393,37 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                 </label>
               </div>
 
-              {/* Max risk */}
+              {/* Max risk — 4 fixed options */}
               <div className="mt-6">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="max_risk_pct">
-                    Risc Maxim per Tranzacție
-                  </label>
-                  <span className="text-lg font-bold text-white">2%</span>
-                </div>
-                <input
-                  id="max_risk_pct"
-                  name="max_risk_pct"
-                  type="range"
-                  min="0.5"
-                  max="5"
-                  step="0.1"
-                  defaultValue="2"
-                  className="mt-3 w-full accent-emerald"
-                />
-                <div className="mt-1 flex justify-between text-xs text-slate-500">
-                  <span>0.5%</span>
-                  <span>2%</span>
-                  <span>3.5%</span>
-                  <span>5%</span>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                  Risc Maxim per Tranzacție
+                </p>
+                <div className="mt-3 grid grid-cols-4 gap-3">
+                  {[
+                    { value: "0.5", label: "0.5%", sublabel: "Safest" },
+                    { value: "1", label: "1%", sublabel: "Conservator" },
+                    { value: "1.5", label: "1.5%", sublabel: "Moderat" },
+                    { value: "2", label: "2%", sublabel: "Standard" },
+                  ].map((opt) => (
+                    <label
+                      key={opt.value}
+                      className="flex cursor-pointer flex-col items-center rounded-xl border border-white/10 bg-white/5 p-4 text-center transition hover:border-accent-emerald/50 has-[:checked]:border-accent-emerald has-[:checked]:bg-accent-emerald/10"
+                    >
+                      <input
+                        type="radio"
+                        name="max_risk_pct"
+                        value={opt.value}
+                        defaultChecked={opt.value === "2"}
+                        className="sr-only"
+                      />
+                      <span className="text-xl font-bold text-white">{opt.label}</span>
+                      <span className="mt-1 text-xs text-slate-500">{opt.sublabel}</span>
+                    </label>
+                  ))}
                 </div>
                 <p className="mt-3 text-sm text-slate-400">
-                  Recomandat: 1-2% din capital per tranzacție. Valoare implicită:
-                  2%.
+                  Auto-sizing e activ implicit — mărimea pozițiilor se ajustează automat.
+                  Riscul maxim limitează cât se poate pierde per tranzacție.
                 </p>
               </div>
 
