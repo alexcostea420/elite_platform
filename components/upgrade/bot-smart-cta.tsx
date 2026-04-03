@@ -11,7 +11,7 @@ export function BotSmartCta() {
       {showBanner ? (
         <div className="mt-6 rounded-xl border border-accent-emerald/30 bg-accent-emerald/10 p-4 text-center">
           <p className="text-sm font-semibold text-accent-emerald">
-            Intra si in Elite si platesti doar $29/luna pentru bot! Economisesti $240/an
+            Intră și în Elite și plătești doar $45/lună pentru bot! Economisești $636/an
           </p>
           <Link
             className="mt-3 inline-flex items-center justify-center rounded-lg bg-accent-emerald px-5 py-2 text-sm font-bold text-crypto-dark hover:bg-accent-soft"
@@ -26,7 +26,7 @@ export function BotSmartCta() {
           onClick={() => setShowBanner(true)}
           type="button"
         >
-          Vreau doar botul la $49/luna
+          Vreau doar botul la $98/lună
         </button>
       )}
     </>
