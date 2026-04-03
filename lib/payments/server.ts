@@ -248,7 +248,15 @@ export async function confirmPayment(
   };
 
   if (!existingProfile?.elite_since) {
-    profileUpdate.elite_since = now.toISOString();
+    // Longer plans bypass the 31-day time-gate:
+    // 90_days → indicators unlocked instantly (set elite_since 32 days ago)
+    // 365_days → full dashboard unlocked instantly (set elite_since 32 days ago)
+    // 30_days → normal time-gate (elite_since = now)
+    const bypassTimeGate = payment.plan_duration === "90_days" || payment.plan_duration === "365_days";
+    const eliteSince = bypassTimeGate
+      ? new Date(now.getTime() - 32 * 24 * 60 * 60 * 1000).toISOString()
+      : now.toISOString();
+    profileUpdate.elite_since = eliteSince;
   }
 
   const { error: profileError } = await supabase

@@ -128,8 +128,13 @@ export async function redeemInvite(token: string, userId: string) {
   };
 
   // Only set elite_since on first activation (never reset)
+  // Longer plans bypass the 31-day time-gate
   if (!existingProfile?.elite_since) {
-    updateData.elite_since = now.toISOString();
+    const bypassTimeGate = invite.subscription_days >= 90;
+    const eliteSince = bypassTimeGate
+      ? new Date(now.getTime() - 32 * 24 * 60 * 60 * 1000).toISOString()
+      : now.toISOString();
+    updateData.elite_since = eliteSince;
   }
 
   // Activate subscription
