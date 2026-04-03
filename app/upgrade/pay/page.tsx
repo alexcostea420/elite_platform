@@ -22,6 +22,12 @@ type PlanInfo = {
 };
 
 const PLAN_MAP: Record<string, PlanInfo> = {
+  trial_3days: {
+    slug: "trial_3days",
+    label: "Trial Gratuit — 3 Zile",
+    planDuration: "30_days",
+    chain: "ARB",
+  },
   elite_monthly: {
     slug: "elite_monthly",
     label: "Elite — 30 Zile",

@@ -38,6 +38,7 @@ const comparisonRows = [
 ];
 
 const planSlugMap: Record<string, string> = {
+  "Trial Gratuit": "trial_3days",
   "30 Zile": "elite_monthly",
   "3 Luni": "elite_3mo",
   "12 Luni": "elite_annual",
@@ -145,7 +146,7 @@ export default function UpgradePage() {
 
           <section className="mb-10" id="planuri">
             <h2 className="mb-6 text-center text-3xl font-bold text-white">Alege durata de acces</h2>
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
               {pricingPlans.map((plan) => (
                 <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
                   {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
@@ -164,19 +165,32 @@ export default function UpgradePage() {
                       </li>
                     ))}
                   </ul>
-                  <PlanUpsellTrigger
-                    planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
-                    planLabel={plan.name}
-                    planPrice={plan.price}
-                  >
-                    <button
-                      className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
-                      type="button"
+                  {plan.name === "Trial Gratuit" ? (
+                    <Link
+                      className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
+                      href="/signup"
                     >
                       {plan.cta}
-                    </button>
-                  </PlanUpsellTrigger>
-                  <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
+                    </Link>
+                  ) : (
+                    <PlanUpsellTrigger
+                      planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
+                      planLabel={plan.name}
+                      planPrice={plan.price}
+                    >
+                      <button
+                        className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                        type="button"
+                      >
+                        {plan.cta}
+                      </button>
+                    </PlanUpsellTrigger>
+                  )}
+                  {plan.name === "Trial Gratuit" ? (
+                    <div className="mt-3 text-center text-sm text-slate-500">Fără plată necesară</div>
+                  ) : (
+                    <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
+                  )}
                 </article>
               ))}
             </div>

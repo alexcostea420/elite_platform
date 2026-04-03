@@ -46,6 +46,15 @@ export function PricingSection() {
             Afla mai multe &rarr;
           </Link>
         </div>
+        <div className="mx-auto mt-8 max-w-2xl text-center">
+          <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3">
+            <span className="text-2xl">🛡️</span>
+            <div className="text-left">
+              <p className="text-sm font-semibold text-white">Satisfacție Garantată</p>
+              <p className="text-xs text-slate-400">Încearcă 3 zile gratuit. Dacă nu ești mulțumit, nu plătești nimic.</p>
+            </div>
+          </div>
+        </div>
         <div className="mt-8 space-y-4 text-center">
           <p className="text-slate-400">Plati securizate prin Crypto (USDT)</p>
           <div className="flex items-center justify-center gap-4 text-3xl">

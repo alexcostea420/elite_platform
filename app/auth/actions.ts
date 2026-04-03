@@ -98,6 +98,16 @@ export async function signupAction(formData: FormData) {
         )}`,
       );
     }
+
+    // Auto-grant 3-day free trial
+    const trialSupabase = createServiceRoleSupabaseClient();
+    const trialExpires = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+    await trialSupabase.from("profiles").update({
+      subscription_tier: "elite",
+      subscription_status: "trial",
+      subscription_expires_at: trialExpires.toISOString(),
+      elite_since: new Date().toISOString(),
+    }).eq("id", data.user.id);
   }
 
   if (data.user && data.session) {

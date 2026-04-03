@@ -47,7 +47,7 @@ export function HeroSection() {
                   <span className="gradient-text">ca un profesionist</span>
                 </h1>
                 <p className="mx-auto max-w-3xl text-xl leading-relaxed text-slate-300 md:text-2xl">
-                  Alătură-te comunității de traderi condusă de {siteConfig.creator}. Acces live la sesiuni de trading, indicatori exclusivi ELITE și analize săptămânale.
+                  Comunitate de traderi cu rezultate reale. Indicatori exclusivi, sesiuni live, analize săptămânale și acces la bot de trading AI. Începe gratuit — 3 zile acces complet.
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -61,6 +61,12 @@ export function HeroSection() {
                 >
                   Vezi prezentarea
                 </button>
+              </div>
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-4 py-2 text-sm">
+                <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-green-400" />
+                <span className="text-slate-300">
+                  <span className="font-semibold text-accent-emerald">48 membri activi</span> în comunitate acum
+                </span>
               </div>
               <p className="text-sm text-slate-500">✨ Peste 50 membri Elite · Indicator TradingView inclus</p>
             </div>

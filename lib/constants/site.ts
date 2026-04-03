@@ -39,10 +39,10 @@ export const dashboardNav = [
 ];
 
 export const heroStats = [
-  { value: "350+", label: "Membri Activi", tone: "gold" },
-  { value: "50+", label: "Membri Elite", tone: "green" },
-  { value: "100+", label: "Video Educaționale", tone: "gold" },
-  { value: "24/7", label: "Suport Discord", tone: "green" }
+  { value: "350+", label: "Membri în Comunitate", tone: "gold" },
+  { value: "55+", label: "Video-uri Elite", tone: "green" },
+  { value: "24/7", label: "Bot AI Trading", tone: "gold" },
+  { value: "3 ZILE", label: "Trial Gratuit", tone: "green" }
 ];
 
 export const benefits = [
@@ -79,6 +79,22 @@ export const benefits = [
 ];
 
 export const pricingPlans: PricingPlan[] = [
+  {
+    name: "Trial Gratuit",
+    price: "$0",
+    period: "",
+    details: "(3 zile acces complet)",
+    cta: "Încearcă Gratuit",
+    highlighted: false,
+    badge: "GRATIS",
+    perks: [
+      "Acces complet 3 zile",
+      "Toate video-urile Elite",
+      "Discord Elite",
+      "Fără card, fără plată",
+      "Se anulează automat"
+    ]
+  },
   {
     name: "30 Zile",
     price: "$49",
@@ -133,17 +149,17 @@ export const testimonials = [
   {
     name: "Mihai R.",
     meta: "Membru Elite · 6 luni",
-    quote: "Am învățat mai mult în 3 luni cu Alex decât în 2 ani de trading pe cont propriu. Indicatorul ELITE este incredibil de precis!"
+    quote: "Am recuperat investiția în prima lună. Indicatorul ELITE mi-a adus 3 trade-uri câștigătoare în prima săptămână — în 2 ani singur nu reușisem asta."
   },
   {
     name: "Ana M.",
     meta: "Membru Elite · 1 an",
-    quote: "Comunitatea Discord este fantastică. Toată lumea se ajută și învață constant. Prima investiție în educația mea care s-a plătit singură."
+    quote: "De 3 luni am profit consistent. Am învățat să fac backtesting, să-mi setez stop-loss corect și să nu intru în FOMO. Comunitatea Discord m-a accelerat enorm."
   },
   {
     name: "Andrei P.",
     meta: "Membru Elite · 4 luni",
-    quote: "Sesiunile live sunt aurul programului. Vezi exact cum gândește un trader profesionist și primești claritate reală."
+    quote: "Risk management-ul meu s-a schimbat complet. Înainte pierdeam 10-15% pe trade-uri proaste. Acum risc maxim 1-2% și am drawdown-uri mult mai mici. Sesiunile live fac diferența."
   }
 ];
 
@@ -171,6 +187,14 @@ export const faqs = [
   {
     question: "Pot plăti cu crypto?",
     answer: "Da. Sunt acceptate plăți în USDT pentru planurile de 3 luni și 12 luni. Detaliile de plată se oferă direct în comunitate."
+  },
+  {
+    question: "Există trial gratuit?",
+    answer: "Da! La signup primești automat 3 zile de acces complet gratuit. Fără card, fără obligații. După 3 zile, poți alege un plan sau contul revine la Free."
+  },
+  {
+    question: "Ce se întâmplă dacă nu sunt mulțumit?",
+    answer: "Ai 3 zile gratuit să testezi totul. Dacă nu ești convins, nu plătești nimic. Nu există contracte sau obligații pe termen lung."
   }
 ];
 
