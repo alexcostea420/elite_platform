@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { pauseBotAction } from "@/app/bots/actions";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
@@ -91,6 +92,7 @@ type BotWallet = {
   wallet_address: string | null;
   auto_sizing: boolean | null;
   max_risk_pct: number | null;
+  paused: boolean | null;
 };
 
 /* ------------------------------------------------------------------ */
@@ -133,7 +135,7 @@ export default async function BotDashboardPage() {
       .maybeSingle(),
     supabase
       .from("bot_wallets")
-      .select("wallet_address, auto_sizing, max_risk_pct")
+      .select("wallet_address, auto_sizing, max_risk_pct, paused")
       .eq("user_id", user.id)
       .maybeSingle(),
     supabase
@@ -448,22 +450,20 @@ export default async function BotDashboardPage() {
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  className="ghost-button cursor-not-allowed opacity-60"
-                  disabled
-                  title="În curând"
-                >
-                  Pauză Copiere
-                </button>
-                <button
-                  type="button"
-                  className="ghost-button cursor-not-allowed opacity-60"
-                  disabled
-                  title="În curând"
+                <form action={pauseBotAction}>
+                  <button
+                    type="submit"
+                    className="ghost-button"
+                  >
+                    {wallet?.paused ? "Reactivează Copiere" : "Pauză Copiere"}
+                  </button>
+                </form>
+                <Link
+                  href="/bots/subscribe"
+                  className="ghost-button border-accent-emerald text-accent-emerald"
                 >
                   Setări Wallet
-                </button>
+                </Link>
               </div>
             </div>
           </section>
