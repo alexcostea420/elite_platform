@@ -335,6 +335,38 @@ export async function expireOverdueSubscriptions(): Promise<number> {
 }
 
 /**
+ * Expire profiles that have subscription_expires_at in the past but still show as active.
+ * This catches invite-based subscriptions that don't have a subscriptions table row.
+ */
+export async function expireOverdueProfiles(): Promise<number> {
+  const supabase = createServiceRoleSupabaseClient();
+  const now = new Date().toISOString();
+
+  const { data: expired } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("subscription_tier", "elite")
+    .eq("subscription_status", "active")
+    .lt("subscription_expires_at", now);
+
+  if (!expired || expired.length === 0) {
+    return 0;
+  }
+
+  for (const profile of expired) {
+    await supabase
+      .from("profiles")
+      .update({
+        subscription_tier: "free",
+        subscription_status: "expired",
+      })
+      .eq("id", profile.id);
+  }
+
+  return expired.length;
+}
+
+/**
  * Expire pending payments that are older than the timeout.
  */
 export async function expireOldPendingPayments(): Promise<number> {

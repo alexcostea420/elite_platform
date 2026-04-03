@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   expireBotSubscriptions,
   expireOldPendingPayments,
+  expireOverdueProfiles,
   expireOverdueSubscriptions,
 } from "@/lib/payments/server";
 
@@ -24,9 +25,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 
-    const [expiredPayments, expiredSubscriptions, expiredBotSubs] = await Promise.all([
+    const [expiredPayments, expiredSubscriptions, expiredProfiles, expiredBotSubs] = await Promise.all([
       expireOldPendingPayments(),
       expireOverdueSubscriptions(),
+      expireOverdueProfiles(),
       expireBotSubscriptions(),
     ]);
 
@@ -34,6 +36,7 @@ export async function GET(request: NextRequest) {
       success: true,
       expired_payments: expiredPayments,
       expired_subscriptions: expiredSubscriptions,
+      expired_profiles: expiredProfiles,
       expired_bot_subscriptions: expiredBotSubs,
       timestamp: new Date().toISOString(),
     });
