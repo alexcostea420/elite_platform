@@ -103,11 +103,16 @@ export async function redeemInvite(token: string, userId: string) {
     return { error: redemptionError.message };
   }
 
-  // Increment used_count
-  await supabase
+  // Increment used_count (atomic check to prevent race condition)
+  const { error: countError } = await supabase
     .from("invite_links")
     .update({ used_count: invite.used_count + 1 })
-    .eq("id", invite.id);
+    .eq("id", invite.id)
+    .eq("used_count", invite.used_count);
+
+  if (countError) {
+    return { error: "Invitația a fost deja folosită." };
+  }
 
   // Check if this is their first time becoming Elite
   const { data: existingProfile } = await supabase

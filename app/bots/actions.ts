@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
+import { encrypt } from "@/lib/utils/encryption";
 
 function getTrimmedValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -95,8 +96,8 @@ export async function connectWalletAction(formData: FormData) {
       {
         user_id: user.id,
         hl_address: hlAddress,
-        hl_api_key_encrypted: hlApiKey,
-        hl_api_secret_encrypted: hlApiSecret,
+        hl_api_key_encrypted: encrypt(hlApiKey),
+        hl_api_secret_encrypted: encrypt(hlApiSecret),
         is_verified: false,
       },
       { onConflict: "user_id" },
