@@ -355,10 +355,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 Comunitatea noastră Discord este activă 24/7. Pune întrebări, schimbă idei și învață de la alți traderi.
               </p>
               <div className="mt-6 flex flex-col justify-center gap-4 sm:flex-row">
-                <a className="accent-button" href="https://discord.com" rel="noreferrer" target="_blank">
+                <a className="accent-button" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">
                   Deschide Discord
                 </a>
-                <a className="ghost-button" href="#">
+                <a className="ghost-button" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">
                   Contactează Suportul
                 </a>
               </div>
