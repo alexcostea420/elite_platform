@@ -99,7 +99,14 @@ type BotWallet = {
 /*  Page                                                              */
 /* ------------------------------------------------------------------ */
 
-export default async function BotDashboardPage() {
+type BotDashboardPageProps = {
+  searchParams?: {
+    error?: string;
+    message?: string;
+  };
+};
+
+export default async function BotDashboardPage({ searchParams }: BotDashboardPageProps) {
   const supabase = createServerSupabaseClient();
   const {
     data: { user },
@@ -244,6 +251,17 @@ export default async function BotDashboardPage() {
           </section>
 
           {/* ---- Stats Cards ---- */}
+          {searchParams?.message && (
+            <div className="mb-6 rounded-xl border border-crypto-green/30 bg-crypto-green/10 px-4 py-3 text-sm text-slate-100">
+              {searchParams.message}
+            </div>
+          )}
+          {searchParams?.error && (
+            <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              {searchParams.error}
+            </div>
+          )}
+
           <section className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <article className="panel px-5 py-5">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
@@ -459,7 +477,7 @@ export default async function BotDashboardPage() {
                   </button>
                 </form>
                 <Link
-                  href="/bots/subscribe"
+                  href="/bots/subscribe?settings=wallet"
                   className="ghost-button border-accent-emerald text-accent-emerald"
                 >
                   Setări Wallet

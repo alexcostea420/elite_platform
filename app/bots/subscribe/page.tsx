@@ -28,7 +28,13 @@ const hyperliquidSteps = [
   "Depozitează USDC pe Hyperliquid și începe",
 ];
 
-export default async function BotSubscribePage() {
+type BotSubscribePageProps = {
+  searchParams?: {
+    settings?: string;
+  };
+};
+
+export default async function BotSubscribePage({ searchParams }: BotSubscribePageProps) {
   const supabase = createServerSupabaseClient();
   const {
     data: { user },
@@ -44,7 +50,9 @@ export default async function BotSubscribePage() {
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isElite = profile?.subscription_tier === "elite";
 
-  if (profile?.bot_active) redirect("/bots/dashboard");
+  // Allow active subscribers to access wallet settings via ?settings=wallet
+  const isWalletSettings = searchParams?.settings === "wallet";
+  if (profile?.bot_active && !isWalletSettings) redirect("/bots/dashboard");
 
   const botPrice = isElite ? 45 : 98;
 
