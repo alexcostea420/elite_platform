@@ -20,7 +20,7 @@ export const metadata: Metadata = buildPageMetadata({
   index: false,
 });
 
-const WALLET_ADDRESS = process.env.PAYMENT_WALLET_ADDRESS_ARB ?? "0x...";
+const WALLET_ADDRESS = process.env.PAYMENT_WALLET_ADDRESS_ARB ?? process.env.PAYMENT_WALLET_ADDRESS ?? "0x1af62fac769628ef0a2373d73190cc7cf77020ec";
 
 const hyperliquidSteps = [
   "Accesează link-ul de referral de mai sus",
@@ -274,7 +274,7 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
               </p>
 
               <a
-                href="https://app.hyperliquid.xyz/join/REFERRAL"
+                href="https://app.hyperliquid.xyz/join/ALEXCOSTEA"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="accent-button mt-4 inline-flex items-center gap-2 px-6 py-3 font-bold"
@@ -309,7 +309,6 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                 <input
                   type="checkbox"
                   className="h-5 w-5 rounded border-white/20 bg-surface-graphite text-accent-emerald focus:ring-accent-emerald"
-                  disabled
                 />
                 <span className="text-sm text-slate-300">
                   Am creat contul folosind link-ul de referral
@@ -322,41 +321,47 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
           <section className="mb-10">
             <StepHeader number={4} title="Conectează Wallet" />
 
-            <div className="panel mx-auto max-w-2xl p-8">
+            <form action={connectWalletAction} className="panel mx-auto max-w-2xl p-8">
               <div className="space-y-5">
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="hl_address">
                     Adresa Wallet Hyperliquid
                   </label>
                   <input
+                    id="hl_address"
+                    name="hl_address"
                     type="text"
                     placeholder="0x..."
-                    disabled
-                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald disabled:opacity-50"
+                    required
+                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="hl_api_key">
                     API Key (read + trade only)
                   </label>
                   <input
+                    id="hl_api_key"
+                    name="hl_api_key"
                     type="text"
                     placeholder="API Key"
-                    disabled
-                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald disabled:opacity-50"
+                    required
+                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="hl_api_secret">
                     API Secret
                   </label>
                   <input
+                    id="hl_api_secret"
+                    name="hl_api_secret"
                     type="password"
                     placeholder="API Secret"
-                    disabled
-                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald disabled:opacity-50"
+                    required
+                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
                   />
                 </div>
               </div>
@@ -376,20 +381,19 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
               </div>
 
               <button
-                type="button"
-                disabled
-                className="accent-button mt-6 px-6 py-3 font-bold disabled:opacity-50"
+                type="submit"
+                className="accent-button mt-6 px-6 py-3 font-bold"
               >
-                Verifică conexiunea
+                Salvează Wallet
               </button>
-            </div>
+            </form>
           </section>
 
           {/* Step 5: Configuration */}
           <section className="mb-10">
             <StepHeader number={5} title="Configurare" />
 
-            <div className="panel mx-auto max-w-2xl p-8">
+            <form action={updateBotSettingsAction} className="panel mx-auto max-w-2xl p-8">
               {/* Auto-sizing */}
               <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-5">
                 <div>
@@ -399,40 +403,46 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                     tău
                   </p>
                 </div>
-                <div className="flex h-7 w-12 items-center rounded-full bg-accent-emerald p-1">
-                  <div className="h-5 w-5 translate-x-5 rounded-full bg-white shadow" />
-                </div>
+                <label className="relative inline-flex cursor-pointer items-center">
+                  <input type="checkbox" name="auto_sizing" defaultChecked className="peer sr-only" />
+                  <div className="peer h-7 w-12 rounded-full bg-white/20 after:absolute after:left-[2px] after:top-[2px] after:h-6 after:w-6 after:rounded-full after:bg-white after:transition-all peer-checked:bg-accent-emerald peer-checked:after:translate-x-5" />
+                </label>
               </div>
 
-              {/* Max risk slider */}
+              {/* Max risk */}
               <div className="mt-6">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                  <label className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="max_risk_pct">
                     Risc Maxim per Tranzacție
                   </label>
                   <span className="text-lg font-bold text-white">2%</span>
                 </div>
                 <input
+                  id="max_risk_pct"
+                  name="max_risk_pct"
                   type="range"
                   min="0.5"
-                  max="2"
+                  max="5"
                   step="0.1"
                   defaultValue="2"
-                  disabled
-                  className="mt-3 w-full accent-emerald disabled:opacity-70"
+                  className="mt-3 w-full accent-emerald"
                 />
                 <div className="mt-1 flex justify-between text-xs text-slate-500">
                   <span>0.5%</span>
-                  <span>1%</span>
-                  <span>1.5%</span>
                   <span>2%</span>
+                  <span>3.5%</span>
+                  <span>5%</span>
                 </div>
                 <p className="mt-3 text-sm text-slate-400">
                   Recomandat: 1-2% din capital per tranzacție. Valoare implicită:
                   2%.
                 </p>
               </div>
-            </div>
+
+              <button type="submit" className="accent-button mt-6 w-full py-3 font-bold">
+                Salvează Configurare
+              </button>
+            </form>
           </section>
 
           {/* Step 6: Confirmation */}

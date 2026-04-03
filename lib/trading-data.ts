@@ -3,11 +3,34 @@ import "server-only";
 import { readFile } from "fs/promises";
 import { join } from "path";
 
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+
 const TRADING_BOT_DIR = join(process.env.HOME ?? "/Users/server", "trading-bot");
 
-async function readJsonFile<T>(relativePath: string): Promise<T | null> {
+/**
+ * Read trading data from Supabase first, fallback to local file.
+ * Supabase is used in production (Vercel), local files in dev.
+ */
+async function readTradingData<T>(dataType: string, localPath: string): Promise<T | null> {
+  // Try Supabase first
   try {
-    const raw = await readFile(join(TRADING_BOT_DIR, relativePath), "utf-8");
+    const supabase = createServerSupabaseClient();
+    const { data } = await supabase
+      .from("trading_data")
+      .select("data")
+      .eq("data_type", dataType)
+      .maybeSingle();
+
+    if (data?.data) {
+      return data.data as T;
+    }
+  } catch {
+    // Supabase unavailable, try local
+  }
+
+  // Fallback to local file (works on Mac Mini dev)
+  try {
+    const raw = await readFile(join(TRADING_BOT_DIR, localPath), "utf-8");
     return JSON.parse(raw) as T;
   } catch {
     return null;
@@ -73,7 +96,7 @@ export type RiskScoreData = {
 };
 
 export function getRiskScore() {
-  return readJsonFile<RiskScoreData>("reports/risk_score.json");
+  return readTradingData<RiskScoreData>("risk_score", "reports/risk_score.json");
 }
 
 // ── Fleet Status ────────────────────────────────────────────
@@ -105,7 +128,7 @@ export type FleetStatus = {
 };
 
 export function getFleetStatus() {
-  return readJsonFile<FleetStatus>("data/fleet_status.json");
+  return readTradingData<FleetStatus>("fleet_status", "data/fleet_status.json");
 }
 
 // ── Dynamic Limits ──────────────────────────────────────────
@@ -127,5 +150,5 @@ export type DynamicLimits = {
 };
 
 export function getDynamicLimits() {
-  return readJsonFile<DynamicLimits>("data/dynamic_limits.json");
+  return readTradingData<DynamicLimits>("dynamic_limits", "data/dynamic_limits.json");
 }
