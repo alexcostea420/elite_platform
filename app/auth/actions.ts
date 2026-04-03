@@ -34,18 +34,23 @@ export async function loginAction(formData: FormData) {
   const nextPath = isSafePath ? rawNextPath : "/dashboard";
 
   if (!email || !password) {
-    redirect(`/login?error=${encodeURIComponent("Completează email-ul și parola.")}`);
+    redirect(`/login?error=${encodeURIComponent("Completează email-ul și parola.")}&next=${encodeURIComponent(nextPath)}`);
   }
 
   if (password.length < 8) {
-    redirect(`/login?error=${encodeURIComponent("Parola trebuie să aibă minim 8 caractere.")}`);
+    redirect(`/login?error=${encodeURIComponent("Parola trebuie să aibă minim 8 caractere.")}&next=${encodeURIComponent(nextPath)}`);
   }
 
   const supabase = createServerSupabaseClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent("Email sau parolă incorectă.")}`);
+    const msg = error.message === "Invalid login credentials"
+      ? "Email sau parolă incorectă."
+      : error.message === "Email not confirmed"
+        ? "Verifică email-ul pentru confirmare."
+        : `Eroare la autentificare: ${error.message}`;
+    redirect(`/login?error=${encodeURIComponent(msg)}&next=${encodeURIComponent(nextPath)}`);
   }
 
   redirect(nextPath);
