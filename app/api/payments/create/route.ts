@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json().catch(() => null);
     const planDuration = body?.plan_duration as string;
-    const chain = (body?.chain as string) || "TRC-20";
+    const chain = (body?.chain as string) || "ARB";
 
     if (!planDuration || !validDurations.includes(planDuration as PlanDuration)) {
       return NextResponse.json(

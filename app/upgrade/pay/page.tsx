@@ -52,6 +52,12 @@ const PLAN_MAP: Record<string, PlanInfo> = {
     planDuration: "bot_monthly_elite",
     chain: "ARB",
   },
+  elite_bot_bundle: {
+    slug: "elite_bot_bundle",
+    label: "Elite + Bot Bundle — 30 Zile",
+    planDuration: "30_days",
+    chain: "ARB",
+  },
 };
 
 function formatAmount(amount: number): string {

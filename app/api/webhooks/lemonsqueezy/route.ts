@@ -14,6 +14,7 @@ function verifySignature(payload: string, signature: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  try {
   const body = await request.text()
   const signature = request.headers.get('x-signature') || ''
 
@@ -23,7 +24,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
 
-  const event = JSON.parse(body)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let event: any
+  try {
+    event = JSON.parse(body)
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
   const eventName = event.meta?.event_name
   const data = event.data?.attributes
 
@@ -147,4 +154,8 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({ received: true })
+  } catch (err) {
+    console.error('[LemonSqueezy] Webhook error:', err)
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+  }
 }

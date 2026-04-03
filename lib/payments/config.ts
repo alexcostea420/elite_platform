@@ -10,7 +10,7 @@ export const CHAIN_CONFIG: Record<
   PaymentChain,
   { label: string; envKey: string; enabled: boolean }
 > = {
-  "TRC-20": { label: "Tron (TRC-20)", envKey: "PAYMENT_WALLET_ADDRESS_TRC20", enabled: true },
+  "TRC-20": { label: "Tron (TRC-20)", envKey: "PAYMENT_WALLET_ADDRESS_TRC20", enabled: false },
   ARB: { label: "Arbitrum", envKey: "PAYMENT_WALLET_ADDRESS_ARB", enabled: true },
   SOL: { label: "Solana", envKey: "PAYMENT_WALLET_ADDRESS_SOL", enabled: false },
   "ERC-20": { label: "Ethereum (ERC-20)", envKey: "PAYMENT_WALLET_ADDRESS_ERC20", enabled: false },
