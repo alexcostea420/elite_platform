@@ -106,8 +106,8 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                   </p>
                   <ul className="mt-6 space-y-2">
                     {[
-                      "20 Strategii ML (LightGBM + XGBoost)",
-                      "9 Assets: ETH, SOL, AVAX, DOGE + altele",
+                      "Bitcoin + Ethereum",
+                      "Altcoins: SOL, AVAX, DOGE, BNB, XRP + altele",
                       "Execuție automată 24/7",
                       "Alerte Telegram instant",
                       "Dashboard cu statistici live",
@@ -141,8 +141,8 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                   </div>
                   <ul className="mt-6 space-y-2">
                     {[
-                      "20 Strategii ML",
-                      "9 Assets",
+                      "TradFi: SPX, Oil, Gold, Silver",
+                      "Supraveghere 24/7 de AI",
                       "Execuție automată 24/7",
                       "Alerte Telegram",
                       "Dashboard live",
@@ -183,8 +183,8 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                   </p>
                   <ul className="mt-6 space-y-2">
                     {[
-                      "20 Strategii ML",
-                      "9 Assets",
+                      "TradFi: SPX, Oil, Gold, Silver",
+                      "Supraveghere 24/7 de AI",
                       "Execuție automată 24/7",
                       "Alerte Telegram",
                       "Dashboard live",

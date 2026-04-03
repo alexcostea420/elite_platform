@@ -37,10 +37,10 @@ export function PricingSection() {
         </div>
         <div className="mx-auto mt-10 max-w-2xl rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-5 text-center">
           <p className="text-sm font-semibold text-accent-emerald">
-            AI Trading Bot disponibil pentru membrii Elite la $29/luna
+            AI Trading Bot disponibil pentru membrii Elite la $45/lună
           </p>
           <p className="mt-2 text-xs text-slate-400">
-            20 Strategii ML, 9 Assets, Executie 24/7, Dashboard Live
+            Crypto + TradFi, Auto-scaling, Supraveghere 24/7 de AI
           </p>
           <Link className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent-emerald hover:text-accent-soft" href="/upgrade#bot">
             Afla mai multe &rarr;

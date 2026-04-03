@@ -84,7 +84,7 @@ export const pricingPlans: PricingPlan[] = [
     price: "$49",
     period: "/acces",
     details: "(plan lunar)",
-    cta: "Selectează Planul",
+    cta: "Vreau să intru în grup",
     highlighted: false,
     perks: [
       "Acces Discord Elite",
@@ -97,8 +97,8 @@ export const pricingPlans: PricingPlan[] = [
   {
     name: "3 Luni",
     price: "$137",
-    details: "(crypto)",
-    cta: "Selectează Planul",
+    details: "",
+    cta: "Vreau să intru în grup",
     highlighted: true,
     badge: "CEL MAI POPULAR",
     perks: [
@@ -114,8 +114,8 @@ export const pricingPlans: PricingPlan[] = [
   {
     name: "12 Luni",
     price: "$497",
-    details: "(crypto)",
-    cta: "Selectează Planul",
+    details: "",
+    cta: "Vreau să intru în grup",
     highlighted: false,
     perks: [
       "Acces Discord Elite",
