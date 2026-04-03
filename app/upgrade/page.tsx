@@ -43,11 +43,12 @@ const planSlugMap: Record<string, string> = {
 };
 
 const botFeatures = [
-  "20 Strategii ML (LightGBM + XGBoost)",
-  "9 Assets: ETH, SOL, AVAX, DOGE + altele",
-  "Execuție automată în timp real",
-  "Alerte Telegram instant",
-  "Managementul riscului integrat",
+  "Bitcoin + Ethereum",
+  "Altcoins: SOL, AVAX, DOGE, BNB, XRP + altele",
+  "TradFi: SPX, Oil, Gold, Silver",
+  "Supraveghere 24/7 de AI",
+  "Auto-scaling în funcție de cont",
+  "Auto-adaptare la condițiile pieței",
   "Dashboard cu statistici live",
 ];
 
@@ -182,13 +183,13 @@ export default function UpgradePage() {
               </p>
               <h2 className="text-3xl font-bold text-white">Lasă botul să tradeuiasca pentru tine</h2>
               <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-                Strategii ML validate pe date reale, execuție automată pe Hyperliquid. Fără emoții, fără ezitare.
+                Botul tradeuiește automat pe contul tău, 24/7. Tu te relaxezi, el face banii.
               </p>
               <div className="mx-auto mt-5 flex flex-wrap items-center justify-center gap-3 text-sm text-slate-300">
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">20 Strategii ML</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">9 Assets</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Executie 24/7</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Alerte Telegram</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Crypto + TradFi</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Auto-scaling</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">24/7 AI</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Auto-adaptare</span>
                 <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Dashboard Live</span>
               </div>
             </div>
@@ -201,7 +202,7 @@ export default function UpgradePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-white">Bot AI Trading</h3>
                 <div className="mb-6 mt-3">
-                  <span className="text-5xl font-bold text-accent-emerald">$49</span>
+                  <span className="text-5xl font-bold text-accent-emerald">$98</span>
                   <span className="text-slate-400">/luna</span>
                 </div>
                 <ul className="space-y-3">
@@ -232,10 +233,10 @@ export default function UpgradePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-white">Tot ce ai nevoie</h3>
                 <div className="mb-4 mt-3">
-                  <span className="text-2xl font-bold text-slate-500 line-through">$98</span>
-                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$59</span>
+                  <span className="text-2xl font-bold text-slate-500 line-through">$147</span>
+                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$94</span>
                   <span className="text-slate-400">/luna</span>
-                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisesti $468/an</div>
+                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisești $636/an</div>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2 text-slate-300">
@@ -265,10 +266,10 @@ export default function UpgradePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-white">Bot AI Trading</h3>
                 <div className="mb-6 mt-3">
-                  <span className="text-2xl font-bold text-slate-500 line-through">$49</span>
-                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$29</span>
+                  <span className="text-2xl font-bold text-slate-500 line-through">$98</span>
+                  <span className="ml-3 text-5xl font-bold text-accent-emerald">$45</span>
                   <span className="text-slate-400">/luna</span>
-                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisesti $240/an</div>
+                  <div className="mt-2 text-sm font-semibold text-crypto-green">Economisești $636/an</div>
                 </div>
                 <ul className="space-y-3">
                   {botFeatures.map((feat) => (
