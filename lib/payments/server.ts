@@ -344,7 +344,7 @@ export async function expireOverdueProfiles(): Promise<number> {
 
   const { data: expired } = await supabase
     .from("profiles")
-    .select("id")
+    .select("id, discord_user_id")
     .eq("subscription_tier", "elite")
     .eq("subscription_status", "active")
     .lt("subscription_expires_at", now);
@@ -352,6 +352,11 @@ export async function expireOverdueProfiles(): Promise<number> {
   if (!expired || expired.length === 0) {
     return 0;
   }
+
+  const botToken = process.env.DISCORD_BOT_TOKEN;
+  const guildId = process.env.DISCORD_GUILD_ID;
+  const eliteRoleId = process.env.DISCORD_ROLE_ELITE_ID;
+  const soldatRoleId = process.env.DISCORD_ROLE_SOLDAT_ID;
 
   for (const profile of expired) {
     await supabase
@@ -361,6 +366,45 @@ export async function expireOverdueProfiles(): Promise<number> {
         subscription_status: "expired",
       })
       .eq("id", profile.id);
+
+    // Discord: remove Elite role, add Soldat, send DM
+    if (profile.discord_user_id && botToken && guildId) {
+      try {
+        const headers = { Authorization: `Bot ${botToken}`, "Content-Type": "application/json" };
+        const baseUrl = "https://discord.com/api/v10";
+
+        // Remove Elite role
+        if (eliteRoleId) {
+          await fetch(`${baseUrl}/guilds/${guildId}/members/${profile.discord_user_id}/roles/${eliteRoleId}`, {
+            method: "DELETE", headers,
+          });
+        }
+
+        // Add Soldat role
+        if (soldatRoleId) {
+          await fetch(`${baseUrl}/guilds/${guildId}/members/${profile.discord_user_id}/roles/${soldatRoleId}`, {
+            method: "PUT", headers,
+          });
+        }
+
+        // Send DM
+        const dmChannel = await fetch(`${baseUrl}/users/@me/channels`, {
+          method: "POST", headers,
+          body: JSON.stringify({ recipient_id: profile.discord_user_id }),
+        }).then((r) => r.json());
+
+        if (dmChannel?.id) {
+          await fetch(`${baseUrl}/channels/${dmChannel.id}/messages`, {
+            method: "POST", headers,
+            body: JSON.stringify({
+              content: "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.",
+            }),
+          });
+        }
+      } catch {
+        // Discord notification failed, but profile is already expired
+      }
+    }
   }
 
   return expired.length;
