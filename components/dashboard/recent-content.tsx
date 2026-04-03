@@ -22,14 +22,14 @@ export function RecentContent() {
         <div className="flex items-center">
           <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent-emerald text-2xl">🔴</div>
           <div>
-            <h3 className="text-lg font-bold text-white">Următoarea Sesiune Live</h3>
-            <p className="text-slate-300">Luni, 8 Martie · 19:00 EET</p>
+            <h3 className="text-lg font-bold text-white">Sesiuni Live</h3>
+            <p className="text-slate-300">Urmărește anunțurile pe Discord</p>
           </div>
         </div>
         <p className="mt-4 text-slate-300">
           <strong>Topic:</strong> Analiză de piață BTC/ETH + Strategii pentru săptămâna viitoare
         </p>
-        <button className="mt-4 w-full rounded-xl bg-accent-emerald px-6 py-3 font-bold text-crypto-dark hover:bg-accent-soft">Setează Reminder</button>
+        <a href="https://discord.gg/armatadetraderi" target="_blank" rel="noopener noreferrer" className="mt-4 block w-full rounded-xl bg-accent-emerald px-6 py-3 text-center font-bold text-crypto-dark hover:bg-accent-soft">Intră pe Discord</a>
       </div>
       <div className="mt-6">
         <h3 className="mb-3 text-lg font-semibold text-white">📚 Video-uri Noi</h3>
@@ -46,7 +46,7 @@ export function RecentContent() {
             </article>
           ))}
         </div>
-        <a className="mt-4 block text-center font-semibold text-accent-emerald hover:text-crypto-green" href="#">
+        <a className="mt-4 block text-center font-semibold text-accent-emerald hover:text-crypto-green" href="/dashboard/videos">
           Vezi toate video-urile →
         </a>
       </div>

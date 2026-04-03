@@ -26,7 +26,7 @@ export function RecentAnalyses() {
               <span className={`rounded-full px-3 py-1 text-sm font-semibold ${sentimentClass(analysis.sentimentTone)}`}>{analysis.sentiment}</span>
             </div>
             <p className="mb-4 text-slate-300">{analysis.summary}</p>
-            <a className="font-semibold text-accent-emerald hover:text-crypto-green" href="#">
+            <a className="font-semibold text-accent-emerald hover:text-crypto-green" href="/dashboard/risk-score">
               Citește analiza completă →
             </a>
           </article>
