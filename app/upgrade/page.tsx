@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { BotSmartCta } from "@/components/upgrade/bot-smart-cta";
+import { PlanUpsellTrigger } from "@/components/upgrade/plan-upsell";
 
 const comparisonRows = [
   {
@@ -163,13 +164,18 @@ export default function UpgradePage() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
-                    href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
+                  <PlanUpsellTrigger
+                    planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
+                    planLabel={plan.name}
+                    planPrice={plan.price}
                   >
-                    Plătește cu crypto
-                  </Link>
-                  {plan.crypto ? <div className="mt-4 text-center text-sm text-slate-400">{plan.crypto}</div> : null}
+                    <button
+                      className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                      type="button"
+                    >
+                      {plan.cta}
+                    </button>
+                  </PlanUpsellTrigger>
                   <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
                 </article>
               ))}

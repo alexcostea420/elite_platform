@@ -8,19 +8,19 @@ export function BotLock({ isElite }: { isElite: boolean }) {
       </div>
       <h2 className="text-3xl font-bold text-white">Acces Bot Trading</h2>
       <p className="mx-auto mt-4 max-w-lg text-slate-300">
-        Semnalele ML, performanța și strategiile active sunt disponibile cu abonamentul Bot.
+        Botul de trading automat îți gestionează contul 24/7. Activează abonamentul Bot pentru acces.
       </p>
       <div className="mx-auto mt-6 max-w-sm rounded-2xl border border-white/10 bg-white/5 p-5">
         {isElite ? (
           <>
             <p className="text-sm text-slate-400">Preț pentru membri Elite:</p>
             <p className="mt-1 text-3xl font-bold text-purple-400">$45<span className="text-lg text-slate-500">/lună</span></p>
-            <p className="mt-1 text-xs text-green-400">Economisești $54/lună față de prețul standard</p>
+            <p className="mt-1 text-xs text-green-400">Economisești $53/lună față de prețul standard</p>
           </>
         ) : (
           <>
             <p className="text-sm text-slate-400">Preț standalone:</p>
-            <p className="mt-1 text-3xl font-bold text-purple-400">$99<span className="text-lg text-slate-500">/lună</span></p>
+            <p className="mt-1 text-3xl font-bold text-purple-400">$98<span className="text-lg text-slate-500">/lună</span></p>
             <p className="mt-2 text-xs text-slate-500">Cu Elite activ: doar $45/lună</p>
           </>
         )}
