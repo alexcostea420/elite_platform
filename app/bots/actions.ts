@@ -73,22 +73,16 @@ export async function connectWalletAction(formData: FormData) {
   const { user } = await requireAuth();
 
   const hlAddress = getTrimmedValue(formData, "hl_address");
-  const hlApiKey = getTrimmedValue(formData, "hl_api_key");
-  const hlApiSecret = getTrimmedValue(formData, "hl_api_secret");
+  const hlApiPrivateKey = getTrimmedValue(formData, "hl_api_private_key");
 
   if (!hlAddress.startsWith("0x") || hlAddress.length !== 42) {
-    redirect("/bots/subscribe?step=wallet&error=" + encodeURIComponent("Adresa wallet trebuie să fie validă (0x... 42 caractere)."));
+    redirect("/bots/subscribe?settings=wallet&error=" + encodeURIComponent("Adresa wallet trebuie să fie validă (0x... 42 caractere)."));
   }
 
-  if (!hlApiKey) {
-    redirect("/bots/subscribe?step=wallet&error=" + encodeURIComponent("API Key este obligatoriu."));
+  if (!hlApiPrivateKey) {
+    redirect("/bots/subscribe?settings=wallet&error=" + encodeURIComponent("Private key-ul API wallet este obligatoriu."));
   }
 
-  if (!hlApiSecret) {
-    redirect("/bots/subscribe?step=wallet&error=" + encodeURIComponent("API Secret este obligatoriu."));
-  }
-
-  // Store keys as-is for now — encryption will be added later in production
   const serviceSupabase = createServiceRoleSupabaseClient();
   const { error } = await serviceSupabase
     .from("bot_wallets")
@@ -96,18 +90,17 @@ export async function connectWalletAction(formData: FormData) {
       {
         user_id: user.id,
         hl_address: hlAddress,
-        hl_api_key_encrypted: encrypt(hlApiKey),
-        hl_api_secret_encrypted: encrypt(hlApiSecret),
+        hl_api_private_key_encrypted: encrypt(hlApiPrivateKey),
         is_verified: false,
       },
       { onConflict: "user_id" },
     );
 
   if (error) {
-    redirect("/bots/subscribe?step=wallet&error=" + encodeURIComponent("Nu s-a putut salva wallet-ul. Încearcă din nou."));
+    redirect("/bots/subscribe?settings=wallet&error=" + encodeURIComponent("Nu s-a putut salva wallet-ul. Încearcă din nou."));
   }
 
-  redirect("/bots/subscribe?step=configure");
+  redirect("/bots/dashboard?message=" + encodeURIComponent("Wallet salvat cu succes!"));
 }
 
 export async function updateBotSettingsAction(formData: FormData) {

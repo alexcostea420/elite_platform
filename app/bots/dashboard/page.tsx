@@ -89,7 +89,7 @@ type BotSubscription = {
 };
 
 type BotWallet = {
-  wallet_address: string | null;
+  hl_address: string | null;
   auto_sizing: boolean | null;
   max_risk_pct: number | null;
   paused: boolean | null;
@@ -142,7 +142,7 @@ export default async function BotDashboardPage({ searchParams }: BotDashboardPag
       .maybeSingle(),
     supabase
       .from("bot_wallets")
-      .select("wallet_address, auto_sizing, max_risk_pct, paused")
+      .select("hl_address, auto_sizing, max_risk_pct, paused")
       .eq("user_id", user.id)
       .maybeSingle(),
     supabase
@@ -227,7 +227,7 @@ export default async function BotDashboardPage({ searchParams }: BotDashboardPag
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-slate-400">Wallet:</span>
-                {wallet?.wallet_address ? (
+                {wallet?.hl_address ? (
                   <span className="flex items-center gap-1.5">
                     <span className="inline-block h-2 w-2 rounded-full bg-accent-emerald" />
                     <span className="font-semibold text-white">Conectat</span>
@@ -433,7 +433,7 @@ export default async function BotDashboardPage({ searchParams }: BotDashboardPag
                 <div>
                   <span className="text-slate-500">Wallet Address</span>
                   <p className="mt-1 font-semibold text-white">
-                    {maskWallet(wallet?.wallet_address)}
+                    {maskWallet(wallet?.hl_address)}
                   </p>
                 </div>
                 <div>

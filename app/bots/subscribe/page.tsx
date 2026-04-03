@@ -335,34 +335,22 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                     required
                     className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
                   />
+                  <p className="mt-2 text-xs text-slate-500">Adresa principală a contului tău Hyperliquid (nu API wallet)</p>
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="hl_api_key">
-                    API Key (read + trade only)
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="hl_api_private_key">
+                    API Wallet Private Key
                   </label>
                   <input
-                    id="hl_api_key"
-                    name="hl_api_key"
-                    type="text"
-                    placeholder="API Key"
-                    required
-                    className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald" htmlFor="hl_api_secret">
-                    API Secret
-                  </label>
-                  <input
-                    id="hl_api_secret"
-                    name="hl_api_secret"
+                    id="hl_api_private_key"
+                    name="hl_api_private_key"
                     type="password"
-                    placeholder="API Secret"
+                    placeholder="0x... (private key generat din HL → API)"
                     required
                     className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
                   />
+                  <p className="mt-2 text-xs text-slate-500">Generează din Hyperliquid → API → Create API Wallet (permisiuni: trade only, fără withdraw)</p>
                 </div>
               </div>
 
@@ -371,12 +359,8 @@ export default async function BotSubscribePage({ searchParams }: BotSubscribePag
                   <span className="font-semibold text-accent-emerald">
                     Securitate:
                   </span>{" "}
-                  Folosim API-ul DOAR pentru a plasa tranzacții. NU avem acces la
-                  fondurile tale. Cheia API trebuie să aibă permisiuni{" "}
-                  <span className="font-semibold text-white">
-                    read + trade
-                  </span>{" "}
-                  (fără withdraw).
+                  Folosim API wallet-ul DOAR pentru a plasa tranzacții. NU avem acces la
+                  fondurile tale. API wallet-ul nu poate face withdraw.
                 </p>
               </div>
 
