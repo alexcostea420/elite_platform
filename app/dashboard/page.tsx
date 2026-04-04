@@ -230,6 +230,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                           className={isLocked ? "opacity-45" : ""}
                           date={video.upload_date}
                           tag={video.category}
+                          thumbnailUrl={video.thumbnail_url}
                         />
                         <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-crypto-ink/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
                           {video.tier_required === "elite" ? "Elite" : "Free"}

@@ -242,7 +242,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                         className="panel overflow-hidden border-white/10 p-0 opacity-95"
                       >
                         <div className="relative overflow-hidden bg-crypto-ink">
-                          <VideoTemplateThumbnail className="opacity-40" date={video.upload_date} tag={video.category} />
+                          <VideoTemplateThumbnail className="opacity-40" date={video.upload_date} tag={video.category} thumbnailUrl={video.thumbnail_url} />
                           <div className="absolute left-4 top-4 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">
                             Elite
                           </div>
@@ -286,7 +286,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                       href={`/dashboard/videos?video=${video.id}`}
                     >
                       <div className="relative overflow-hidden bg-crypto-ink">
-                        <VideoTemplateThumbnail date={video.upload_date} tag={video.category} />
+                        <VideoTemplateThumbnail date={video.upload_date} tag={video.category} thumbnailUrl={video.thumbnail_url} />
                         <div className="absolute left-4 top-4 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">
                           {tierLabel[video.tier_required]}
                         </div>

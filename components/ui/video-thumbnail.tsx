@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function formatUploadDate(dateStr: string) {
   const date = new Date(dateStr);
   return date.toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" });
@@ -7,11 +9,29 @@ export function VideoTemplateThumbnail({
   tag,
   date,
   className,
+  thumbnailUrl,
 }: {
   tag: string;
   date: string;
   className?: string;
+  thumbnailUrl?: string | null;
 }) {
+  // Use generated thumbnail image if available
+  if (thumbnailUrl) {
+    return (
+      <div className={`relative aspect-video overflow-hidden ${className ?? ""}`}>
+        <Image
+          alt={`${tag} - ${formatUploadDate(date)}`}
+          className="object-cover"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          src={thumbnailUrl}
+        />
+      </div>
+    );
+  }
+
+  // Fallback: CSS-based template
   return (
     <div
       className={`relative flex aspect-video items-center justify-center overflow-hidden ${className ?? ""}`}
