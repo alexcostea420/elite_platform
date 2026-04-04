@@ -39,9 +39,7 @@ export function Footer({ compact = false }: FooterProps) {
         <div className="mb-8 grid gap-8 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="mb-4 flex items-center gap-2">
-              <svg className="h-8 w-8 text-accent-emerald" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C7 2 3 5.5 3 10c0 2 .7 3.8 2 5.2V18c0 1.1.9 2 2 2h2v-2H7v-2.5C5.5 14.3 5 12.7 5 11c0-3.9 3.1-7 7-7s7 3.1 7 7c0 1.7-.5 3.3-1.5 4.5V18h-2v2h2c1.1 0 2-.9 2-2v-2.8c1.3-1.4 2-3.2 2-5.2 0-4.5-4-8-9-8z" />
-              </svg>
+              <span className="text-2xl">🪖</span>
               <div className="flex flex-col leading-tight">
                 <span className="gradient-text font-display text-xl font-bold">{siteConfig.name}</span>
                 <span className="text-[10px] tracking-[0.15em] text-slate-500">by Alex Costea</span>
