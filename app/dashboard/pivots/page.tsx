@@ -62,10 +62,30 @@ export default async function PivotsPage() {
     <>
       <Navbar mode="dashboard" userIdentity={identity} />
       <main className="pt-16">
+        <div className="mx-auto max-w-7xl px-4 py-6">
+          <div className="mb-4 flex items-center gap-3">
+            <Link className="text-sm text-slate-500 hover:text-accent-emerald" href="/dashboard">Dashboard</Link>
+            <span className="text-slate-600">/</span>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Pivoti BTC</p>
+          </div>
+          <a
+            href="/pivots/dashboard.html"
+            target="_blank"
+            rel="noreferrer"
+            className="accent-button inline-flex items-center gap-2"
+          >
+            Deschide Dashboard Pivoti
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+              <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
+            </svg>
+          </a>
+          <p className="mt-3 text-sm text-slate-500">Se deschide intr-un tab nou cu dashboard-ul complet.</p>
+        </div>
         <iframe
           src="/pivots/dashboard.html"
-          className="h-[calc(100vh-4rem)] w-full border-0"
+          className="h-[calc(100vh-12rem)] w-full border-0"
           title="Elite Pivots Dashboard"
+          sandbox="allow-scripts allow-same-origin"
         />
       </main>
     </>
