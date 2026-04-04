@@ -150,20 +150,25 @@ export const pricingPlans: PricingPlan[] = [
 
 export const testimonials = [
   {
-    name: "Mihai R.",
-    meta: "Membru Elite · 6 luni",
-    quote: "Am recuperat investiția în prima lună. Indicatorul ELITE mi-a adus 3 trade-uri câștigătoare în prima săptămână — în 2 ani singur nu reușisem asta."
+    name: "Alex Ivana",
+    meta: "Membru Elite · martie 2026",
+    quote: "Când am intrat în comunitate, eram destul de pierdut. Ce mi-a plăcut aici a fost că lucrurile au început să capete sens treptat. Nu a fost genul ăla de informație aruncată peste tine, ci explicată pe bune. Partea de risk management mi-a schimbat complet modul de a gândi — cred că acolo a fost cel mai mare \"aha\"."
   },
   {
-    name: "Ana M.",
-    meta: "Membru Elite · 1 an",
-    quote: "De 3 luni am profit consistent. Am învățat să fac backtesting, să-mi setez stop-loss corect și să nu intru în FOMO. Comunitatea Discord m-a accelerat enorm."
+    name: "Polishboy",
+    meta: "Membru Elite · martie 2026",
+    quote: "Am învățat analiză tehnică și cum să înțeleg mai bine structura pieței. Am dezvoltat pattern recognition, am învățat risk management — probabil unul dintre cele mai importante aspecte. Totul este explicat clar și aplicabil, nu doar teorie. Recomand comunitatea ELITE oricui vrea să învețe serios."
   },
   {
-    name: "Andrei P.",
-    meta: "Membru Elite · 4 luni",
-    quote: "Risk management-ul meu s-a schimbat complet. Înainte pierdeam 10-15% pe trade-uri proaste. Acum risc maxim 1-2% și am drawdown-uri mult mai mici. Sesiunile live fac diferența."
-  }
+    name: "Daniel",
+    meta: "Membru Elite · octombrie 2025",
+    quote: "Alex Costea este rachetă pentru mine, în materie de analiză tehnică. Am realizat că nu pot singur și am zis să mă iau de Alex. Este foarte metodic, calculat, și ȘTIE MULTE! De când am intrat în Elite, sunt în sfârșit pe plus. Mersi, Alex Costea! Bagă mare!"
+  },
+  {
+    name: "Liviu Parepa",
+    meta: "Membru Elite · octombrie 2025",
+    quote: "Este mereu prezent și gata să răspundă, să explice, să ajute. Și o face cu răbdare și natural, fără a fi arogant. Oamenii din comunitate sunt faini, activi, haioși. E un echilibru plăcut între profesionalism și camaraderie. Alex, te invidiez pentru ambiția, disciplina și maturitatea de care dai dovadă!"
+  },
 ];
 
 export const faqs = [

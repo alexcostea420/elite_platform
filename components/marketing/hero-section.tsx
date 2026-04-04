@@ -47,7 +47,7 @@ export function HeroSection() {
                   <span className="gradient-text">ca un profesionist</span>
                 </h1>
                 <p className="mx-auto max-w-3xl text-xl leading-relaxed text-slate-300 md:text-2xl">
-                  Comunitate de traderi cu rezultate reale. Indicatori exclusivi, sesiuni live, analize săptămânale și acces la bot de trading AI. Începe gratuit — 3 zile acces complet.
+                  Comunitate de investitori și traderi cu rezultate reale. Indicatori exclusivi, sesiuni live cu ajustare de portofoliu și acces la bot de trading AI. Începe gratuit — 3 zile acces complet.
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

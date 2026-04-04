@@ -8,9 +8,9 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { siteConfig } from "@/lib/constants/site";
 
 const bulletPoints = [
-  "Sesiuni live de trading săptămânale",
-  "Indicator ELITE exclusiv pentru TradingView",
-  "Comunitate Discord dedicată",
+  "Sesiuni live săptămânale — update piață + ajustare portofoliu",
+  "4 Indicatori ELITE exclusivi pentru TradingView",
+  "Comunitate Discord de investitori și traderi activi",
 ];
 
 const credibilityStats = [
@@ -101,10 +101,10 @@ export function AboutSection() {
             <div>
               <SectionHeading align="left" title={<>Despre <span className="gradient-text">{siteConfig.creator}</span></>} />
               <p className="mt-6 text-lg leading-relaxed text-slate-300">
-                Cu <strong className="text-white">4 ani de experiență în trading crypto</strong>, Alex a construit o comunitate de peste 350 de traderi activi. Împărtășește strategii practice și oferă acces la indicatori exclusivi pentru TradingView.
+                Cu <strong className="text-white">4 ani de experiență în trading și investiții crypto</strong>, Alex a construit o comunitate de peste 350 de investitori și traderi activi. Împărtășește strategii practice și oferă acces la indicatori exclusivi pentru TradingView.
               </p>
               <p className="mt-4 text-lg leading-relaxed text-slate-300">
-                Cu sesiuni live de trading, analize săptămânale detaliate și o comunitate activă pe Discord, Armata de Traderi este locul unde învățarea devine execuție reală.
+                Cu sesiuni live săptămânale despre update de piață cu ajustare de portofoliu în situații critice, analize detaliate și o comunitate activă pe Discord, Armata de Traderi este locul unde învățarea devine execuție reală.
               </p>
               <div className="mt-6 grid grid-cols-3 gap-3">
                 {credibilityStats.map((stat) => (
