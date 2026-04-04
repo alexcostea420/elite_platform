@@ -9,32 +9,21 @@ import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { BotSmartCta } from "@/components/upgrade/bot-smart-cta";
 import { PlanUpsellTrigger } from "@/components/upgrade/plan-upsell";
 
-const comparisonRows = [
-  {
-    label: "Biblioteca video",
-    free: "Selecție gratuită",
-    elite: "Acces complet",
-  },
-  {
-    label: "Analize premium",
-    free: "Doar preview",
-    elite: "Incluse integral",
-  },
-  {
-    label: "Sesiuni live",
-    free: "Nu",
-    elite: "Da",
-  },
-  {
-    label: "Discord Elite",
-    free: "Acces limitat",
-    elite: "Acces complet",
-  },
-  {
-    label: "Suport prioritar",
-    free: "Nu",
-    elite: "Da",
-  },
+const comparisonRows: { label: string; free: boolean; elite: boolean }[] = [
+  { label: "Chat general Discord", free: true, elite: true },
+  { label: "Video-uri educaționale gratuite", free: true, elite: true },
+  { label: "Biblioteca video completă (55+)", free: false, elite: true },
+  { label: "Portofoliu Elite live", free: false, elite: true },
+  { label: "Chat direct cu Alex", free: false, elite: true },
+  { label: "Canale Elite (analize, trade ideas)", free: false, elite: true },
+  { label: "Sesiuni live săptămânale", free: false, elite: true },
+  { label: "Analize premium zilnice", free: false, elite: true },
+  { label: "4 Indicatori TradingView exclusivi", free: false, elite: true },
+  { label: "Resurse complete (ghiduri, watchlist)", free: false, elite: true },
+  { label: "Risk Score BTC live", free: false, elite: true },
+  { label: "Should I Trade? — decizia zilei", free: false, elite: true },
+  { label: "Bot AI Trading (discount $45 vs $98)", free: false, elite: true },
+  { label: "Suport prioritar", free: false, elite: true },
 ];
 
 const planSlugMap: Record<string, string> = {
@@ -113,9 +102,21 @@ export default function UpgradePage() {
                 </div>
                 {comparisonRows.map((row) => (
                   <div key={row.label} className="grid grid-cols-[1.2fr_0.9fr_0.9fr] border-t border-white/10 text-sm">
-                    <div className="px-4 py-4 text-slate-200">{row.label}</div>
-                    <div className="px-4 py-4 text-center text-slate-400">{row.free}</div>
-                    <div className="px-4 py-4 text-center font-semibold text-accent-emerald">{row.elite}</div>
+                    <div className="px-4 py-3 text-slate-200">{row.label}</div>
+                    <div className="px-4 py-3 text-center">
+                      {row.free ? (
+                        <span className="text-green-400">✓</span>
+                      ) : (
+                        <span className="text-red-400/60">✗</span>
+                      )}
+                    </div>
+                    <div className="px-4 py-3 text-center">
+                      {row.elite ? (
+                        <span className="font-semibold text-accent-emerald">✓</span>
+                      ) : (
+                        <span className="text-red-400/60">✗</span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

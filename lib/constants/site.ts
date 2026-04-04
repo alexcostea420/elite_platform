@@ -91,8 +91,9 @@ export const pricingPlans: PricingPlan[] = [
     badge: "GRATIS",
     perks: [
       "Acces complet 3 zile",
-      "Toate video-urile Elite",
-      "Discord Elite",
+      "Portofoliu Elite live",
+      "Chat cu Alex și membrii Elite",
+      "Canale Discord Elite",
       "Fără card, fără plată",
       "Se anulează automat"
     ]
