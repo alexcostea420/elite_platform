@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Orbitron } from "next/font/google";
 
+import { FeedbackButton } from "@/components/ui/feedback-button";
 import { metadataBaseUrl } from "@/lib/seo";
 
 import "./globals.css";
@@ -40,7 +41,10 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className={`${inter.variable} ${orbitron.variable} font-sans`}>{children}</body>
+      <body className={`${inter.variable} ${orbitron.variable} font-sans`}>
+        {children}
+        <FeedbackButton />
+      </body>
     </html>
   );
 }
