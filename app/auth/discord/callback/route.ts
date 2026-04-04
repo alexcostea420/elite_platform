@@ -4,6 +4,7 @@ import {
   exchangeDiscordCodeForAccessToken,
   fetchDiscordUser,
   getDiscordRoleLabel,
+  queueDiscordDripMessages,
   saveDiscordIdentityForProfile,
   syncDiscordRole,
 } from "@/lib/discord/server";
@@ -74,6 +75,9 @@ export async function GET(request: NextRequest) {
       subscriptionTier,
       userAccessToken: accessToken,
     });
+
+    // Queue Discord drip DMs (fire-and-forget)
+    queueDiscordDripMessages(user.id, discordUser.id, subscriptionTier === "elite").catch(() => {});
 
     const response = redirectWithDiscordState(request, {
       discord: "connected",

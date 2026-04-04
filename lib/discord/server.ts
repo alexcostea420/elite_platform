@@ -247,3 +247,49 @@ export async function syncDiscordRole({
   ]);
   await markDiscordRoleSynced(profileId);
 }
+
+/**
+ * Queue Discord DM drip messages for a newly connected user.
+ * Messages are sent by a cron/script that processes the queue.
+ */
+export async function queueDiscordDripMessages(userId: string, discordUserId: string, isElite: boolean) {
+  const supabase = createServiceRoleSupabaseClient();
+  const now = new Date();
+
+  const messages = [
+    {
+      type: "welcome",
+      text: "👋 Bine ai venit în Armata de Traderi!\n\nAi conectat Discord cu succes. Aici câteva resurse pentru a începe:\n\n📊 Indicatori Elite: app.armatadetraderi.com/dashboard/indicators\n🎥 Video-uri: app.armatadetraderi.com/dashboard/videos\n💬 Pune întrebări oricând pe server!",
+      delay: 0,
+    },
+    {
+      type: "day1_indicator",
+      text: "📊 Ai instalat indicatorii Elite pe TradingView?\n\nSunt 4 indicatori exclusivi care te ajută să identifici intrări și ieșiri:\n• Elite Bands\n• Elite Momentum\n• Elite Levels\n• Elite Fib Zones\n\nInstalează-i aici: app.armatadetraderi.com/dashboard/indicators",
+      delay: 24 * 60 * 60 * 1000,
+    },
+    {
+      type: "day2_video",
+      text: "🎥 Ai văzut video-ul despre Lot Size?\n\nEste CEL MAI IMPORTANT concept în trading. Fără lot size corect, poți avea 70% win rate și tot să pierzi bani.\n\nUită-te aici: youtu.be/4tNSs6egoM0\n\nDupă ce îl vezi, aplică metoda pe următorul trade.",
+      delay: 2 * 24 * 60 * 60 * 1000,
+    },
+  ];
+
+  // Add trial expiry reminder only for trial users
+  if (isElite) {
+    messages.push({
+      type: "day3_trial",
+      text: "⏰ Trial-ul tău de 3 zile se termină curând!\n\nDacă ți-a plăcut experiența, alege un plan și păstrează accesul:\n\n👉 app.armatadetraderi.com/upgrade\n\nPlanul de 3 luni e cel mai popular — deblochezi instant indicatorii.",
+      delay: 2.5 * 24 * 60 * 60 * 1000,
+    });
+  }
+
+  const rows = messages.map((msg) => ({
+    user_id: userId,
+    discord_user_id: discordUserId,
+    message_type: msg.type,
+    message_text: msg.text,
+    send_at: new Date(now.getTime() + msg.delay).toISOString(),
+  }));
+
+  await supabase.from("discord_drip_queue").insert(rows);
+}
