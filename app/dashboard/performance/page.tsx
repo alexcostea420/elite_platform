@@ -62,7 +62,7 @@ export default async function PerformancePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, bot_active")
+    .select("full_name, subscription_tier, bot_active, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -85,6 +85,31 @@ export default async function PerformancePage() {
               </div>
             </section>
             <BotLock isElite={isElite} />
+          </Container>
+        </main>
+        <Footer compact />
+      </>
+    );
+  }
+
+  const isAdmin = profile?.role === "admin";
+
+  if (!isAdmin) {
+    return (
+      <>
+        <Navbar mode="dashboard" userIdentity={identity} />
+        <main className="pb-16 pt-24 md:pt-28">
+          <Container>
+            <section className="panel p-8 text-center md:p-12">
+              <div className="text-5xl mb-4">🚀</div>
+              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
+              <p className="mt-4 max-w-lg mx-auto text-slate-400">
+                Aceasta sectiune va fi disponibila in curand. Lucram la ea!
+              </p>
+              <Link className="accent-button mt-6 inline-block" href="/dashboard">
+                Inapoi la Dashboard
+              </Link>
+            </section>
           </Container>
         </main>
         <Footer compact />
