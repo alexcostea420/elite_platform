@@ -38,16 +38,11 @@ function getInviteDurationLabel(invite: { plan_duration: string; subscription_da
 export default async function InvitePage({ params, searchParams }: InvitePageProps) {
   const { token } = params;
 
-  // If user is already logged in, try to redeem directly
+  // If user is already logged in, show message to use a new account
   const supabase = createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  if (user) {
-    // Already logged in — redirect to redeem route
-    redirect(`/invite/${token}/redeem`);
-  }
 
   // Validate token
   const { valid, invite, error: validationError } = await validateInviteToken(token);
@@ -80,6 +75,17 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
       <Navbar mode="marketing" />
       <main className="pb-16 pt-28">
         <Container className="max-w-xl">
+          {/* Already logged in warning */}
+          {user && (
+            <section className="mb-6 rounded-2xl border border-yellow-400/30 bg-yellow-400/5 px-5 py-4 text-center">
+              <p className="font-semibold text-yellow-400">Ești deja logat</p>
+              <p className="mt-2 text-sm text-slate-400">
+                Acest link este pentru un cont nou. Deschide link-ul într-o fereastră incognito sau deloghează-te mai întâi.
+              </p>
+              <a href="/api/auth/logout" className="ghost-button mt-3 inline-block text-sm">Deloghează-te</a>
+            </section>
+          )}
+
           {/* Invite badge */}
           <section className="mb-6 rounded-2xl border border-accent-emerald/30 bg-accent-emerald/5 px-5 py-4 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
