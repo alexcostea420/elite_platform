@@ -61,14 +61,14 @@ export default function HomePage() {
             <div className="mb-12 text-center">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Simplu și rapid</p>
               <h2 className="text-3xl font-bold text-white md:text-4xl">Cum <span className="gradient-text">funcționează</span></h2>
-              <p className="mx-auto mt-4 max-w-2xl text-slate-400">De la signup la primul trade — în mai puțin de 5 minute.</p>
+              <p className="mx-auto mt-4 max-w-2xl text-slate-400">De la signup la acces complet — în mai puțin de 5 minute.</p>
             </div>
             <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-4">
               {[
                 { step: "1", icon: "📝", title: "Creează cont", desc: "Signup gratuit cu 3 zile trial. Fără card." },
                 { step: "2", icon: "💬", title: "Intră pe Discord", desc: "Conectează Discord și primești rolul Elite automat." },
-                { step: "3", icon: "📊", title: "Adaugă indicatorii", desc: "Instalează indicatorii Elite pe TradingView." },
-                { step: "4", icon: "🚀", title: "Începe să tradezi", desc: "Urmărește sesiunile live și aplică strategia." },
+                { step: "3", icon: "📊", title: "Explorează resursele", desc: "Analize, portofoliu Elite, video-uri educaționale și ghiduri." },
+                { step: "4", icon: "🚀", title: "Învață și investește", desc: "Analizează chart-urile, cere sfaturi și aplică ce înveți." },
               ].map((item) => (
                 <div key={item.step} className="text-center">
                   <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 text-2xl">{item.icon}</div>
