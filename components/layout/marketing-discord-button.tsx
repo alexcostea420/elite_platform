@@ -32,7 +32,7 @@ export function MarketingDiscordButton({ href }: MarketingDiscordButtonProps) {
   return (
     <>
       <button
-        className="ghost-button flex items-center justify-center px-3 py-2.5 text-center text-xs sm:text-sm md:px-5"
+        className="ghost-button flex items-center justify-center px-3 py-3 text-center text-xs sm:text-sm md:px-5"
         onClick={() => setIsOpen(true)}
         type="button"
       >

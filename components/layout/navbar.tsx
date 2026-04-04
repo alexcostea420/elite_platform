@@ -81,10 +81,10 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
         {mode === "marketing" ? (
           <div className="grid w-full grid-cols-3 gap-2 md:flex md:w-auto md:items-center md:gap-3">
             <MarketingDiscordButton href={siteConfig.discordUrl} />
-            <Link className="ghost-button flex items-center justify-center px-3 py-2.5 text-center text-xs sm:text-sm md:px-5" href={marketingAuthHref}>
+            <Link className="ghost-button flex items-center justify-center px-3 py-3 text-center text-xs sm:text-sm md:px-5" href={marketingAuthHref}>
               Intră în cont
             </Link>
-            <Link className="accent-button flex items-center justify-center px-3 py-2.5 text-center text-xs sm:text-sm md:px-5" href={marketingPrimaryHref}>
+            <Link className="accent-button flex items-center justify-center px-3 py-3 text-center text-xs sm:text-sm md:px-5" href={marketingPrimaryHref}>
               Alătură-te Acum
             </Link>
           </div>
