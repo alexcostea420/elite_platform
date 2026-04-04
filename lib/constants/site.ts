@@ -26,7 +26,8 @@ export const marketingNav = [
   { href: "#beneficii", label: "Beneficii" },
   { href: "#preturi", label: "Prețuri" },
   { href: "#testimoniale", label: "Testimoniale" },
-  { href: "#faq", label: "FAQ" }
+  { href: "#faq", label: "FAQ" },
+  { href: "/blog", label: "Blog" }
 ];
 
 export const dashboardNav = [

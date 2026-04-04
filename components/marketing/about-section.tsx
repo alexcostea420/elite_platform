@@ -13,6 +13,12 @@ const bulletPoints = [
   "Comunitate Discord dedicată",
 ];
 
+const credibilityStats = [
+  { value: "4+", label: "Ani de trading activ", icon: "📈" },
+  { value: "350+", label: "Membri în comunitate", icon: "👥" },
+  { value: "24/7", label: "Bot AI trading", icon: "🤖" },
+];
+
 export function AboutSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
@@ -95,11 +101,20 @@ export function AboutSection() {
             <div>
               <SectionHeading align="left" title={<>Despre <span className="gradient-text">{siteConfig.creator}</span></>} />
               <p className="mt-6 text-lg leading-relaxed text-slate-300">
-                Trader experimentat cu 350+ membri activi în comunitate și 50+ Elite. Alex împărtășește strategii practice de trading crypto și oferă acces la indicatori exclusivi pentru TradingView.
+                Cu <strong className="text-white">4 ani de experiență în trading crypto</strong>, Alex a construit o comunitate de peste 350 de traderi activi. Împărtășește strategii practice și oferă acces la indicatori exclusivi pentru TradingView.
               </p>
               <p className="mt-4 text-lg leading-relaxed text-slate-300">
                 Cu sesiuni live de trading, analize săptămânale detaliate și o comunitate activă pe Discord, Armata de Traderi este locul unde învățarea devine execuție reală.
               </p>
+              <div className="mt-6 grid grid-cols-3 gap-3">
+                {credibilityStats.map((stat) => (
+                  <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center">
+                    <span className="mb-1 block text-2xl">{stat.icon}</span>
+                    <p className="text-xl font-bold text-accent-emerald">{stat.value}</p>
+                    <p className="mt-0.5 text-xs text-slate-400">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
               <div className="mt-6 space-y-3">
                 {bulletPoints.map((item) => (
                   <div key={item} className="flex items-center gap-3">
