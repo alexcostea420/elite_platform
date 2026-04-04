@@ -36,6 +36,7 @@ export const dashboardNav = [
   { href: "/dashboard/resurse", label: "Resurse" },
   { href: "/dashboard/indicators", label: "Indicatori" },
   { href: "/dashboard/stocks", label: "Stocks" },
+  { href: "/dashboard/pivots", label: "Pivoti" },
   { href: "/dashboard/risk-score", label: "Risk Score" },
   { href: "/dashboard/should-i-trade", label: "Trade?" },
   { href: "/bots", label: "Bot" },

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elite-Pivots — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">
+    <div>
+      <h1>Elite-Pivots</h1>
+      <div class="sub">Bitcoin Timing Tools</div>
+    </div>
+  </div>
+  <div class="header-badges">
+    <span class="badge" id="badge-date"></span>
+    <span class="badge" id="badge-pivot"></span>
+  </div>
+</header>
+
+<nav class="subnav" id="subnav">
+  <a class="subnav-link" href="#s-cycles">Cicluri</a>
+  <a class="subnav-link" href="#s-bear">Bear Market</a>
+  <a class="subnav-link" href="#s-seasons">Sezoane</a>
+  <a class="subnav-link" href="#s-dom">Zi din Lună</a>
+  <a class="subnav-link" href="#s-eclipse">Eclipse</a>
+  <a class="subnav-link" href="#s-blood">Blood Moon</a>
+  <a class="subnav-link" href="#s-mercury">Mercury Rx</a>
+  <a class="subnav-link" href="#s-gann">Gann</a>
+  <a class="subnav-link" href="#s-fib">Fibonacci</a>
+  <a class="subnav-link" href="#s-shmita">Shmita</a>
+  <a class="subnav-link" href="#s-halving">Halving+Shmita</a>
+  <a class="subnav-link" href="#s-scoring">Scorare</a>
+  <a class="subnav-link" href="#s-legend">Legendă</a>
+</nav>
+
+<div class="container">
+
+<!-- ── PHILOSOPHY ── -->
+<div class="philosophy reveal">
+  <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> — identifică ferestre în care BTC are mai mari șanse să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur tehnicele pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
+  <p style="margin-top:8px;color:#94a3b8">O fereastră necesită <strong>scor ≥ 4 + cel puțin o metodă PRIMARĂ</strong>. Metodele secundare singure nu pot declanșa un semnal.</p>
+</div>
+
+<!-- ── STATS ── -->
+<div class="grid4 mb20 reveal">
+  <div class="stat"><div class="val" style="color:var(--solar)" data-target="5">5</div><div class="lbl">Metode Primare</div><div class="sub">Eclipse, Halving, Fibonacci, Pi Cycle</div></div>
+  <div class="stat"><div class="val" style="color:var(--cycle)" data-target="6">6</div><div class="lbl">Metode Secundare</div><div class="sub">Ciclu C, Lună, Gann, Ian, DOM, Electoral</div></div>
+  <div class="stat"><div class="val" style="color:var(--fib)" data-target="4">4+</div><div class="lbl">Scor Minim Activare</div><div class="sub">Optimizat prin backtest</div></div>
+  <div class="stat"><div class="val" style="color:var(--halving)" data-target="3144">3144</div><div class="lbl">Bare Analizate</div><div class="sub">DOM: 2017–2026 · Eclipse/Cicluri: 2012–2026</div></div>
+</div>
+
+<div id="score-widget-wrap" class="reveal"></div>
+
+<div class="section-title reveal">Teoria Ciclurilor BTC</div>
+<div class="reveal mb20" style="display:grid;grid-template-columns:3fr 2fr;gap:20px">
+<div class="card">
+  <h2><span class="dot" style="background:var(--cycle)"></span>Pattern 1064 / 364 Zile <span style="color:var(--green);font-size:11px;font-weight:500;text-transform:none;letter-spacing:0">✓ Confirmat 3/3 cicluri mature</span></h2>
+  <p class="small muted" style="margin-bottom:14px">BTC "respiră" cu un ritm consistent: <strong style="color:var(--green)">~1064 zile urcare</strong> (bottom → top), urmate de <strong style="color:var(--red)">~364 zile corecție</strong> (top → bottom).</p>
+  <table class="method-table">
+    <thead><tr><th>Ciclu</th><th>Bottom → Top</th><th>Zile ↑</th><th>Top → Bottom</th><th>Zile ↓</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(100,116,139,.04)"><td class="muted">Ciclu 0</td><td class="muted small">18 Nov 2011 → 30 Nov 2013</td><td style="color:var(--muted)" class="mono">742</td><td class="muted small">30 Nov 2013 → 14 Ian 2015</td><td style="color:var(--muted)" class="mono">~410</td></tr>
+      <tr><td>Ciclu 1</td><td class="muted small">14 Ian 2015 → 17 Dec 2017</td><td style="color:var(--green)" class="mono"><strong>1067</strong></td><td class="muted small">17 Dec 2017 → 15 Dec 2018</td><td style="color:var(--red)" class="mono">~364</td></tr>
+      <tr><td>Ciclu 2</td><td class="muted small">15 Dec 2018 → 10 Nov 2021</td><td style="color:var(--green)" class="mono"><strong>1059</strong></td><td class="muted small">10 Nov 2021 → 9 Nov 2022</td><td style="color:var(--red)" class="mono">~364</td></tr>
+      <tr style="background:rgba(245,158,11,.04)"><td style="color:var(--solar)">Ciclu 3</td><td class="muted small">9 Nov 2022 → 6 Oct 2025</td><td style="color:var(--green)" class="mono"><strong>1062 ✓</strong></td><td class="muted small">6 Oct 2025 → ?</td><td style="color:var(--orange)" class="mono">~364 (în curs)</td></tr>
+    </tbody>
+  </table>
+  <div class="grid2" style="margin-top:14px;gap:10px">
+    <div class="stat"><div class="val" style="color:var(--green)">1062</div><div class="lbl">Medie zile Bottom→Top</div><div class="sub">±5 zile pe cicluri 1–3 (ciclu 0: 742d — piață imatură)</div></div>
+    <div class="stat"><div class="val" style="color:var(--red)">364</div><div class="lbl">Medie zile Top→Bottom</div><div class="sub">Proiecție bottom: ~5 Oct 2026</div></div>
+  </div>
+  <div class="info-box red" style="margin-top:12px"><strong style="color:var(--red)">Proiecție bottom ciclu 3:</strong> <span class="muted">6 Oct 2025 + 364 zile = <strong style="color:var(--text)">~5 Oct 2026</strong>. Pe baza drawdown-urilor descrescătoare (-87%→-84%→-78%→ în curs), proiecție: <strong style="color:var(--text)">-52% la -57% → zona $54–$60K</strong>.</span></div>
+</div>
+<div class="card" style="padding-bottom:12px">
+  <h2><span class="dot" style="background:var(--halving)"></span>Performanță pe Trimestre (2013–2025)</h2>
+  <p class="small muted" style="margin-bottom:14px">Sursa: CoinGlass. <strong style="color:var(--text)">Mediana</strong> e mai relevantă decât media — nu e distorsionată de anii extremi (2013, 2019).</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
+    <div style="background:rgba(245,158,11,.06);border:2px solid rgba(245,158,11,.25);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+      <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--solar)">Q4</div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:2px 0 6px">Oct–Dec</div>
+      <div style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--green);line-height:1">+47.7%</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.4">Cel mai puternic. Toate ATH-urile: Dec 2017, Nov 2021, Oct 2025</div>
+    </div>
+    <div style="background:rgba(16,185,129,.06);border:2px solid rgba(16,185,129,.2);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+      <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--fib)">Q2</div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:2px 0 6px">Apr–Iun</div>
+      <div style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--green);line-height:1">+7.6%</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.4">Post-halving rally. Al doilea cel mai consistent trimestru</div>
+    </div>
+    <div style="background:rgba(100,116,139,.06);border:2px solid rgba(100,116,139,.2);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+      <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text)">Q1</div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:2px 0 6px">Ian–Mar</div>
+      <div style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--red);line-height:1">-2.3%</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.4">Mixt — puternic in bull, slab in bear. Q1 2026: -21%</div>
+    </div>
+    <div style="background:rgba(239,68,68,.05);border:2px solid rgba(239,68,68,.2);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+      <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--red)">Q3</div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:2px 0 6px">Iul–Sep</div>
+      <div style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--orange);line-height:1">+1.0%</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.4">Cel mai slab. Bottom-uri posibile dar fara directie clara</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="grid2 reveal mb20">
+<div class="card">
+  <h2><span class="dot" style="background:var(--solar)"></span>Corelație Alegeri SUA — ATH Post-Alegeri</h2>
+  <p class="small muted" style="margin-bottom:14px">BTC formează ATH la <strong style="color:var(--text)">~11–13 luni</strong> după alegerile prezidențiale americane. Distanța se comprimă cu fiecare ciclu.</p>
+  <table class="method-table">
+    <thead><tr><th>Alegeri</th><th>Dată</th><th>ATH ciclu</th><th>Zile după</th></tr></thead>
+    <tbody>
+      <tr><td>2012 (Obama)</td><td class="muted mono">6 Nov 2012</td><td class="muted">Nov 2013 ~$1,150</td><td style="color:var(--orange)" class="mono">~365</td></tr>
+      <tr><td>2016 (Trump)</td><td class="muted mono">8 Nov 2016</td><td class="muted">17 Dec 2017 $19,799</td><td style="color:var(--orange)" class="mono">~404</td></tr>
+      <tr><td>2020 (Biden)</td><td class="muted mono">3 Nov 2020</td><td class="muted">10 Nov 2021 $69,000</td><td style="color:var(--orange)" class="mono">~372</td></tr>
+      <tr style="background:rgba(245,158,11,.04)"><td style="color:var(--solar)">2024 (Trump)</td><td class="muted mono">5 Nov 2024</td><td class="muted">6 Oct 2025 $126,000</td><td style="color:var(--green)" class="mono">~335</td></tr>
+    </tbody>
+  </table>
+  <div class="info-box green" style="margin-top:12px"><strong style="color:var(--green)">Pattern: 4/4 confirmat.</strong> <span class="muted">ATH vine la <strong style="color:var(--text)">335–404 zile</strong> după alegeri (~12 luni). Distanța se <strong style="color:var(--text)">comprimă</strong>: 404→372→335. Următor: Alegeri Nov 2028 → ATH proiectat ~Oct 2029.</span></div>
+</div>
+<div class="card">
+  <h2><span class="dot" style="background:var(--fib)"></span>Spargere ATH Vechi → Top-ul de Ciclu</h2>
+  <p class="small muted" style="margin-bottom:14px">Câte zile de la spargerea ATH-ului anterior până la top-ul de ciclu?</p>
+  <table class="method-table">
+    <thead><tr><th>Ciclu</th><th>Spargere ATH vechi</th><th>Top ciclu</th><th>Zile</th></tr></thead>
+    <tbody>
+      <tr><td>2017</td><td class="muted small">~Ian 2017 ($1,150)</td><td class="muted">17 Dec 2017</td><td style="color:var(--green)" class="mono">~340</td></tr>
+      <tr><td>2021</td><td class="muted small">30 Nov 2020 ($19,666)</td><td class="muted">10 Nov 2021</td><td style="color:var(--green)" class="mono">~345</td></tr>
+      <tr style="background:rgba(245,158,11,.04)"><td style="color:var(--solar)">2025</td><td class="muted small">14 Mar 2024 ($73,800) ← pre-halving!</td><td class="muted">6 Oct 2025</td><td style="color:var(--orange)" class="mono">~571 ⚠️</td></tr>
+    </tbody>
+  </table>
+  <div class="info-box" style="margin-top:12px"><strong style="color:var(--fib)">Pattern cicluri 2 și 3:</strong> <span class="muted">Spargere ATH → <strong style="color:var(--text)">~340–345 zile</strong> până la top. Ciclul 4 este excepție — a spart ATH pre-halving pentru prima dată (ETF-uri aprobate ian 2024).</span></div>
+  <div class="info-box" style="margin-top:10px"><strong style="color:var(--solar)">Proiecție Ciclu 5:</strong> <span class="muted">Dacă BTC sparge $126k în 2027, adaugă ~345 zile → top estimat <strong style="color:var(--text)">2027–2028</strong>. Dacă sparge pre-halving, top-ul vine mai târziu.</span></div>
+</div>
+</div>
+
+<div class="card">
+  <h2><span class="dot" style="background:var(--halving)"></span>Top-uri după Halving — Istoric</h2>
+  <table class="method-table">
+    <thead><tr><th>Halving</th><th>Dată</th><th>Zile până la ATH</th><th>Luni</th><th>ATH</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(100,116,139,.04)"><td class="muted">Halving 1</td><td class="muted">2012-11-28</td><td class="mono">365</td><td style="color:var(--muted)">12 luni</td><td class="muted">$1,150 <span class="muted small">(Nov 2013)</span></td></tr>
+      <tr><td>Halving 2</td><td class="muted">2016-07-09</td><td class="mono">526</td><td style="color:var(--green)">17.5 luni</td><td>$19,799</td></tr>
+      <tr><td>Halving 3</td><td class="muted">2020-05-11</td><td class="mono">548</td><td style="color:var(--green)">18.3 luni</td><td>$69,000</td></tr>
+      <tr style="background:rgba(245,158,11,.04)"><td style="color:var(--halving)">Halving 4</td><td class="muted">2024-04-19</td><td class="mono" style="color:var(--green)">535</td><td style="color:var(--green)">17.5 luni ✓</td><td style="color:var(--solar)">$126,000 <span class="muted small">(6 Oct 2025)</span></td></tr>
+    </tbody>
+  </table>
+  <p class="small muted" style="margin-top:8px">H1 a fost mai rapid (12 luni) — piață imatură, lichiditate mică. De la H2, pattern-ul se stabilizează la <strong style="color:var(--green)">17–18 luni</strong> consistent.</p>
+
+  <h2 style="margin-top:20px"><span class="dot" style="background:var(--cycle)"></span>Acuratețe Faze Ciclu Halving 4</h2>
+  <table class="method-table">
+    <thead><tr><th>Fază</th><th>Zile</th><th>Acuratețe indicator</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--green)">Acumulare</td><td class="muted mono">0–108</td><td style="color:var(--green)">62%</td></tr>
+      <tr><td style="color:var(--green)">Impuls Bullish</td><td class="muted mono">108–276</td><td style="color:var(--orange)">50%</td></tr>
+      <tr><td style="color:var(--green)">IC Pullback</td><td class="muted mono">276–353</td><td style="color:var(--green)">62%</td></tr>
+      <tr><td style="color:var(--orange)">ATH Push</td><td class="muted mono">353–535</td><td style="color:var(--orange)">67%</td></tr>
+      <tr><td style="color:var(--red)">Post-ATH</td><td class="muted mono">535+</td><td style="color:var(--red)">43%</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted" style="margin-top:8px">Curent: <strong style="color:var(--red)">Post-ATH (ziua ~707, din 6 Oct 2025)</strong> — acuratețe 43%, folosește cu precauție suplimentară.</p>
+</div>
+
+<!-- ── BEAR MARKET ANALYSIS ── -->
+<div class="section-title reveal">Analiză Bear Market — Unde Suntem?</div>
+<p class="small muted mb20 reveal">7 indicatori independenți analizați în Martie 2026. Fiecare derivat independent — nicio metodă nu e construită pe alta.</p>
+
+<div class="grid3 reveal mb20">
+
+<div class="card">
+  <h2><span class="dot" style="background:var(--red)"></span>Drawdown-uri Descrescătoare</h2>
+  <p class="small muted" style="margin-bottom:14px">Fiecare ciclu bear a fost mai puțin sever decât precedentul. Piața maturizează.</p>
+  <table class="method-table">
+    <thead><tr><th>Ciclu Bear</th><th>Drawdown ATH</th><th>Bottom</th></tr></thead>
+    <tbody>
+      <tr><td class="muted">2014</td><td style="color:var(--red)" class="mono">-86.8%</td><td class="muted small">$152</td></tr>
+      <tr><td class="muted">2018</td><td style="color:var(--red)" class="mono">-83.8%</td><td class="muted small">$3,200</td></tr>
+      <tr><td class="muted">2022</td><td style="color:var(--orange)" class="mono">-77.6%</td><td class="muted small">$15,500</td></tr>
+      <tr style="background:rgba(245,158,11,.04)"><td style="color:var(--solar)">2026 (proj.)</td><td style="color:var(--green)" class="mono">-52% la -57%</td><td style="color:var(--solar)" class="small"><strong>$54K–$60K</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="info-box green" style="margin-top:12px">Fiecare crash: mai mic cu ~6–7pp. La $126K ATH: -52% = $60.5K · -57% = $54.2K</div>
+</div>
+
+<div class="card">
+  <h2><span class="dot" style="background:var(--fib)"></span>RSI Săptămânal &lt; 30 — 5/5</h2>
+  <p class="small muted" style="margin-bottom:14px">De fiecare dată când RSI weekly a scăzut sub 30, a urmat un rally masiv. Niciodată nu a eșuat.</p>
+  <table class="method-table">
+    <thead><tr><th>An</th><th>RSI min</th><th>Ce a urmat</th></tr></thead>
+    <tbody>
+      <tr><td class="muted">2012</td><td class="mono" style="color:var(--red)">&lt;30</td><td class="small muted">Bull run 2013 → $1,150</td></tr>
+      <tr><td class="muted">2015</td><td class="mono" style="color:var(--red)">&lt;30</td><td class="small muted">Bottom exact bear → $152</td></tr>
+      <tr><td class="muted">Mar 2020</td><td class="mono" style="color:var(--red)">29.5</td><td class="small muted">+1,002% în 12 luni</td></tr>
+      <tr><td class="muted">Iun 2022</td><td class="mono" style="color:var(--red)">25.8</td><td class="small muted">+59% în 12 luni (FTX retest -15%)</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td style="color:var(--green)">Feb 2026</td><td class="mono" style="color:var(--red)">26.8</td><td class="small" style="color:var(--solar)">??? — în curs</td></tr>
+    </tbody>
+  </table>
+  <div class="info-box green" style="margin-top:12px"><strong style="color:var(--fib)">Hit rate: 5/5 — 100%</strong> în toată istoria BTC. RSI a revenit la ~31 după low-ul de 26.8 din Feb 2026.</div>
+</div>
+
+<div class="card">
+  <h2><span class="dot" style="background:var(--solar)"></span>Raport Aur / BTC (XAU/BTC)</h2>
+  <p class="small muted" style="margin-bottom:14px">Aurul bate BTC în bear markets. Când raportul XAU/BTC depășește +70–80% față de minim, BTC se apropie de bottom.</p>
+  <table class="method-table">
+    <thead><tr><th>Ciclu</th><th>Rebound XAU/BTC</th><th>Semnal</th></tr></thead>
+    <tbody>
+      <tr><td class="muted">2018</td><td class="mono" style="color:var(--orange)">masiv</td><td class="small muted">Bottom BTC $3,200</td></tr>
+      <tr><td class="muted">2022</td><td class="mono" style="color:var(--orange)">~4.3×</td><td class="small muted">Bottom BTC $15,500</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td style="color:var(--green)">2026</td><td class="mono" style="color:var(--green)">+92% ✓</td><td class="small" style="color:var(--solar)">Prag 70–80% depășit</td></tr>
+    </tbody>
+  </table>
+  <div class="info-box green" style="margin-top:12px">XAU/BTC a atins minimul în Oct 2025 (BTC ATH: 0.024). Martie 2026: 0.046 = <strong style="color:var(--fib)">+92%</strong> față de minim — trecut de pragul istoric de semnal.</div>
+</div>
+
+</div>
+
+<div class="card reveal mb20">
+  <h2><span class="dot" style="background:var(--solar)"></span>Convergență — 6 Indicatori, Același Window</h2>
+  <p class="small muted" style="margin-bottom:16px">Fiecare metodă e independentă. Când 6 lentile diferite arată același lucru, probabilitatea de coincidență aleatorie este extrem de mică.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px">
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <span style="color:var(--fib);font-size:18px;font-family:var(--font-mono)">✓</span>
+      <div><div style="font-weight:600;color:var(--text);font-size:13px">Timing Ciclu (top confirmat)</div><div class="small muted">Oct 2025 — 1062 zile după bottom Nov 2022</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <span style="color:var(--fib);font-size:18px;font-family:var(--font-mono)">✓</span>
+      <div><div style="font-weight:600;color:var(--text);font-size:13px">RSI Săptămânal &lt; 30</div><div class="small muted">Februarie 2026 — 26.8 · 5/5 hit rate</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <span style="color:var(--fib);font-size:18px;font-family:var(--font-mono)">✓</span>
+      <div><div style="font-weight:600;color:var(--text);font-size:13px">XAU/BTC rebound &gt; 80%</div><div class="small muted">Martie 2026 — +92% față de minim (Oct 2025)</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <span style="color:var(--fib);font-size:18px;font-family:var(--font-mono)">✓</span>
+      <div><div style="font-weight:600;color:var(--text);font-size:13px">Spargere ATH → Bottom</div><div class="small muted">Martie 2024 + 693 zile med. = Februarie 2026</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <span style="color:var(--fib);font-size:18px;font-family:var(--font-mono)">✓</span>
+      <div><div style="font-weight:600;color:var(--text);font-size:13px">Fed Rate BPS = Zile la Bottom</div><div class="small muted">550 bps · Sep 2024 + 550 zile = Martie 2026</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <span style="color:var(--fib);font-size:18px;font-family:var(--font-mono)">✓</span>
+      <div><div style="font-weight:600;color:var(--text);font-size:13px">Drawdown Comprimat (-52–57%)</div><div class="small muted">Zonă de bottom: $54K–$60K față de ATH $126K</div></div>
+    </div>
+  </div>
+  <div class="info-box" style="margin-top:14px"><strong style="color:var(--solar)">Disclaimer:</strong> <span class="muted">Aceasta este analiză de pattern, nu sfat financiar. Unele metode au doar 3 date istorice (Fed Rate, drawdowns). Corelația nu înseamnă cauzalitate. Pozitionează-te în funcție de toleranța ta la risc.</span></div>
+</div>
+
+<!-- ── SEZOANE TOP + BOTTOM (paralel) ── -->
+<div class="section-title reveal">Sezoane Top &amp; Bottom <span class="st-sub">— în ce luni apar cel mai des</span></div>
+<div class="grid2 reveal mb20" style="align-items:start">
+  <div class="card">
+    <h2><span class="dot" style="background:var(--solar)"></span>Top-uri BTC — lunile cele mai active</h2>
+    <div id="mchart-tops"></div>
+    <div style="margin-top:14px;font-size:11px;color:var(--muted);line-height:1.6"><strong style="color:var(--solar)">Sep</strong> (+41%) cel mai activ · <strong style="color:var(--fib)">Mai · Iun · Dec</strong> (+14–28%) · <strong style="color:var(--red)">Nov</strong> = aproape zero top-uri</div>
+  </div>
+  <div class="card">
+    <h2><span class="dot" style="background:var(--cycle)"></span>Bottom-uri BTC — lunile cele mai active</h2>
+    <div id="mchart"></div>
+    <div style="margin-top:14px;font-size:11px;color:var(--muted);line-height:1.6"><strong style="color:var(--cycle)">Iun–Sep</strong> (+110–150%) zona de acumulare · <strong style="color:var(--solar)">Ian–Feb</strong> (+79%) · <strong style="color:var(--red)">Oct</strong> = zero low-uri majore</div>
+  </div>
+</div>
+
+<!-- ── FIBONACCI + ECLIPSE ── -->
+<div class="section-title reveal">Analiză Zi din Lună <span class="st-sub">— 3144 bare · Aug 2017–Mar 2026</span></div>
+<div class="grid2 reveal">
+  <div class="card"><h2><span class="dot" style="background:var(--solar)"></span>Top-uri Pivot — % mai frecvente decât media</h2><div id="hchart"></div></div>
+  <div class="card"><h2><span class="dot" style="background:var(--cycle)"></span>Bottom-uri Pivot — % mai frecvente decât media</h2><div id="lchart"></div></div>
+</div>
+
+
+<!-- ── SEASONAL LOWS ── -->
+<div class="section-title reveal">Eclipse <span class="st-sub">— performanță BTC la fiecare eclipsă solară și lunară</span></div>
+
+<!-- Eclipse: Solar + Lunar side by side -->
+<div class="grid2 reveal" style="align-items:stretch">
+  <div class="concept-group" style="margin-bottom:0">
+    <div class="concept-header"><span class="astro-icon solar-eclipse" style="width:24px;height:24px"></span><div class="concept-name">Eclipsă Solară</div><div class="concept-sub">-7z pre-eclipsă · 90z</div></div>
+    <div class="metric-bar" id="metrics-solar"></div>
+    <div id="cards-solar"></div>
+  </div>
+  <div class="concept-group" style="margin-bottom:0">
+    <div class="concept-header"><span class="astro-icon lunar-eclipse" style="width:24px;height:24px"></span><div class="concept-name">Eclipsă Lunară</div><div class="concept-sub">±3z · 90z</div></div>
+    <div class="metric-bar" id="metrics-lunar"></div>
+    <div id="cards-lunar"></div>
+  </div>
+</div>
+
+<!-- Halving -->
+<div class="concept-group reveal">
+  <div class="concept-header"><div class="concept-dot" style="background:var(--halving)"></div><div class="concept-name">Halving — 365 zile</div><div class="concept-sub">performanță 1 an post-halving</div></div>
+  <div class="metric-bar" id="metrics-halving"></div>
+  <div id="cards-halving"></div>
+</div>
+
+<!-- Ciclu Scurt 86z -->
+<div class="concept-group reveal">
+  <div class="concept-header"><div class="concept-dot" style="background:var(--cycle)"></div><div class="concept-name">Ciclu Scurt — 86 zile</div><div class="concept-sub">bottom-uri ciclice intermediare</div></div>
+  <div class="metric-bar" id="metrics-cycle"></div>
+  <div id="cards-cycle"></div>
+</div>
+
+<!-- Pi Cycle -->
+<div class="concept-group reveal">
+  <div class="concept-header"><div class="concept-dot" style="background:var(--pi)"></div><div class="concept-name">Pi Cycle — 90 zile post-cross</div><div class="concept-sub">top indicator istoric</div></div>
+  <div class="metric-bar" id="metrics-pi"></div>
+  <div id="cards-pi"></div>
+</div>
+
+<!-- ── LEGEND ── -->
+<div class="section-title reveal"><span class="astro-icon blood-moon"></span> Blood Moon Bottom Pattern <span class="st-sub">— a 3-a eclipsă lunară totală = bottom de ciclu</span></div>
+<div class="philosophy reveal" style="margin-bottom:16px">
+  <p><strong>Pattern:</strong> Eclipsele lunare totale (Blood Moons) vin în serii de 3-4 în fiecare ciclu BTC, urmate de o pauză de ~2.5 ani fără niciuna. <strong style="color:var(--green)">A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong> — confirmat pe toate cele 3 cicluri anterioare. După ultima Blood Moon, BTC a urcat masiv în fiecare caz.</p>
+</div>
+
+<div class="card reveal mb20">
+  <h2><span class="astro-icon blood-moon" style="width:20px;height:20px"></span> Blood Moon Serii — Istoric Complet</h2>
+  <div style="overflow-x:auto">
+  <table class="method-table">
+    <thead><tr><th>Seria</th><th>#1</th><th>#2</th><th>#3</th><th>#4</th><th>Bottom BTC</th><th>Rally după</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(100,116,139,.04)">
+        <td class="muted">2014–2015</td>
+        <td class="muted small mono">15 Apr 2014<br>~$430</td>
+        <td class="muted small mono">8 Oct 2014<br>~$353</td>
+        <td class="muted small mono">4 Apr 2015<br>~$255</td>
+        <td style="color:var(--green)" class="small mono"><strong>28 Sep 2015</strong><br><strong>~$235</strong></td>
+        <td style="color:var(--green)"><strong>$152</strong> <span class="muted small">(Ian 2015)</span></td>
+        <td style="color:var(--green)">$235 → $20,000<br><span class="muted small">+8,400%</span></td>
+      </tr>
+      <tr>
+        <td>2018–2019</td>
+        <td class="muted small mono">31 Ian 2018<br>~$10,100</td>
+        <td class="muted small mono">27 Iul 2018<br>~$7,600</td>
+        <td style="color:var(--green)" class="small mono"><strong>21 Ian 2019</strong><br><strong>~$3,331</strong></td>
+        <td class="muted small">—</td>
+        <td style="color:var(--green)"><strong>$3,200</strong> <span class="muted small">(Dec 2018)</span></td>
+        <td style="color:var(--green)">$3,331 → $69,000<br><span class="muted small">+1,970%</span></td>
+      </tr>
+      <tr>
+        <td>2021–2022</td>
+        <td class="muted small mono">26 Mai 2021<br>~$39,000</td>
+        <td class="muted small mono">16 Mai 2022<br>~$30,000</td>
+        <td style="color:var(--green)" class="small mono"><strong>8 Nov 2022</strong><br><strong>~$15,563</strong></td>
+        <td class="muted small">—</td>
+        <td style="color:var(--green)"><strong>$15,500</strong> <span class="muted small">(Nov 2022 FTX)</span></td>
+        <td style="color:var(--green)">$15,563 → $126,000<br><span class="muted small">+710%</span></td>
+      </tr>
+      <tr style="background:rgba(245,158,11,.05)">
+        <td style="color:var(--solar)"><strong>2025–2026</strong></td>
+        <td class="muted small mono">14 Mar 2025<br>~$83,000</td>
+        <td class="muted small mono">7 Sep 2025<br>~$111,000</td>
+        <td style="color:var(--solar)" class="small mono"><strong>3 Mar 2026</strong><br><strong>~$66,154</strong></td>
+        <td class="muted small">—</td>
+        <td style="color:var(--solar)"><strong>$66,154?</strong> <span class="muted small">(în curs)</span></td>
+        <td style="color:var(--muted)">??? <br><span class="muted small">Pauză până în 2028</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="grid3" style="margin-top:18px">
+    <div class="insight" style="border-left-color:var(--green)">
+      <div class="ins-title" style="color:var(--green)">Hit Rate: 3/3 — 100%</div>
+      <div class="ins-body">Ultima Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC (±2 săptămâni). Nicio excepție în 12 ani de date.</div>
+    </div>
+    <div class="insight" style="border-left-color:var(--solar)">
+      <div class="ins-title" style="color:var(--solar)">Pauză 2026–2028: Zero Blood Moons</div>
+      <div class="ins-body">Următoarea eclipsă lunară totală: <strong style="color:var(--text)">~2028–2029</strong>. Istoric, perioadele fără Blood Moon = <strong style="color:var(--text)">bull market</strong>.</div>
+    </div>
+    <div class="insight" style="border-left-color:var(--red)">
+      <div class="ins-title" style="color:var(--red)">Contra-argument: Benjamin Cowen</div>
+      <div class="ins-body">Bottom-ul real ar putea veni Q4 2026, nu acum. Rally-ul actual ar fi doar un <strong style="color:var(--text)">lower high</strong>, similar cu Mar 2022.</div>
+    </div>
+  </div>
+
+  <div class="info-box green" style="margin-top:14px">
+    <strong style="color:var(--green)">Status actual:</strong> <span class="muted">A 3-a Blood Moon din seria 2025–2026 a avut loc pe <strong style="color:var(--text)">3 Martie 2026</strong> la BTC <strong style="color:var(--text)">$66,154</strong>. Dacă pattern-ul se repetă, aceasta marchează bottom-ul ciclului. Următoarea Blood Moon nu vine până în <strong style="color:var(--text)">2028–2029</strong> (Halving 5 + Shmita).</span>
+  </div>
+  <div class="info-box" style="margin-top:8px">
+    <strong style="color:var(--solar)">Surse:</strong> <span class="muted"><strong style="color:var(--text)">@rektfencer</strong> (X/Twitter) · <strong style="color:var(--text)">Pure</strong> (NewsBTC) · Eclipse dates: NASA/TimeandDate.com</span>
+  </div>
+</div>
+
+<!-- ── MERCURY RETROGRADE ── -->
+<div class="section-title reveal">Mercury Retrograde &amp; BTC <span class="st-sub">— performanță în cele 21 de perioade cu date (2019–2026)</span></div>
+<div class="philosophy reveal" style="margin-bottom:16px">
+  <p><strong>Ce este:</strong> Mercury Retrograde = perioadă de ~3 săptămâni când Mercur pare să meargă înapoi pe cer (de 3 ori pe an). Traderii astro cred că aduce <strong>volatilitate și inversări</strong>. Pattern-ul depinde de trend: în bear market BTC scade, în bull market BTC urcă. <strong style="color:var(--solar)">Nu este predictiv singur</strong> — a fost testat și eliminat din indicatorul Pine Script.</p>
+</div>
+
+<div class="card reveal mb20">
+  <h2><span class="dot" style="background:var(--pi)"></span>Mercury Retrograde — Performanță BTC (21 perioade verificate)</h2>
+  <div class="grid4" style="margin-bottom:16px">
+    <div class="stat"><div class="val" style="color:var(--muted);font-size:22px">21</div><div class="lbl">Perioade Analizate</div><div class="sub">Oct 2019 – Mar 2026</div></div>
+    <div class="stat"><div class="val" style="color:var(--red);font-size:22px">57%</div><div class="lbl">Bearish</div><div class="sub">12 din 21 = scădere</div></div>
+    <div class="stat"><div class="val" style="color:var(--muted);font-size:22px">+4.0%</div><div class="lbl">Avg Return</div><div class="sub">Distorsionat de #14 (+63%)</div></div>
+    <div class="stat"><div class="val" style="color:var(--red);font-size:22px">-20%</div><div class="lbl">Max Drawdown</div><div class="sub">#11 Feb–Mar 2020 (COVID)</div></div>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="method-table">
+    <thead><tr><th>#</th><th>Perioadă</th><th>Start</th><th>End</th><th style="text-align:right">Return</th><th>Context</th></tr></thead>
+    <tbody>
+      <tr><td class="muted mono">10</td><td class="muted small">31 Oct – 20 Nov 2019</td><td class="mono">$9,150</td><td class="mono">$8,094</td><td style="text-align:right"><span class="ecl-ret bear">-11.5%</span></td><td class="muted small">Bear</td></tr>
+      <tr><td class="muted mono">11</td><td class="muted small">16 Feb – 9 Mar 2020</td><td class="mono">$9,922</td><td class="mono">$7,932</td><td style="text-align:right"><span class="ecl-ret bear">-20.1%</span></td><td class="small" style="color:var(--red)">COVID crash</td></tr>
+      <tr><td class="muted mono">12</td><td class="muted small">17 Iun – 12 Iul 2020</td><td class="mono">$9,458</td><td class="mono">$9,301</td><td style="text-align:right"><span class="ecl-ret bear">-1.7%</span></td><td class="muted small">Flat</td></tr>
+      <tr><td class="muted mono">13</td><td class="muted small">13 Oct – 3 Nov 2020</td><td class="mono">$11,419</td><td class="mono">$14,017</td><td style="text-align:right"><span class="ecl-ret bull">+22.8%</span></td><td class="small" style="color:var(--green)">Bull start</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)">14</td><td class="small" style="color:var(--green)">30 Ian – 20 Feb 2021</td><td class="mono">$34,290</td><td class="mono">$55,917</td><td style="text-align:right"><span class="ecl-ret bull">+63.1%</span></td><td class="small" style="color:var(--green)">Bull run peak</td></tr>
+      <tr><td class="muted mono">15</td><td class="muted small">29 Mai – 22 Iun 2021</td><td class="mono">$34,612</td><td class="mono">$32,496</td><td style="text-align:right"><span class="ecl-ret bear">-6.1%</span></td><td class="muted small">Post-crash</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)">16</td><td class="small" style="color:var(--green)">27 Sep – 18 Oct 2021</td><td class="mono">$42,123</td><td class="mono">$62,038</td><td style="text-align:right"><span class="ecl-ret bull">+47.3%</span></td><td class="small" style="color:var(--green)">Rally spre ATH</td></tr>
+      <tr><td class="muted mono">17</td><td class="muted small">14 Ian – 3 Feb 2022</td><td class="mono">$43,042</td><td class="mono">$37,290</td><td style="text-align:right"><span class="ecl-ret bear">-13.4%</span></td><td class="muted small">Bear start</td></tr>
+      <tr><td class="muted mono">18</td><td class="muted small">10 Mai – 3 Iun 2022</td><td class="mono">$31,002</td><td class="mono">$29,683</td><td style="text-align:right"><span class="ecl-ret bear">-4.3%</span></td><td class="small" style="color:var(--red)">LUNA crash</td></tr>
+      <tr><td class="muted mono">19</td><td class="muted small">9 Sep – 2 Oct 2022</td><td class="mono">$21,352</td><td class="mono">$19,049</td><td style="text-align:right"><span class="ecl-ret bear">-10.8%</span></td><td class="muted small">Bear</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)">20</td><td class="small" style="color:var(--green)">29 Dec 2022 – 18 Ian 2023</td><td class="mono">$16,630</td><td class="mono">$20,680</td><td style="text-align:right"><span class="ecl-ret bull">+24.4%</span></td><td class="small" style="color:var(--green)">Bottom rally</td></tr>
+      <tr><td class="muted mono">21</td><td class="muted small">21 Apr – 14 Mai 2023</td><td class="mono">$27,252</td><td class="mono">$26,902</td><td style="text-align:right"><span class="ecl-ret bear">-1.3%</span></td><td class="muted small">Flat</td></tr>
+      <tr><td class="muted mono">22</td><td class="muted small">23 Aug – 15 Sep 2023</td><td class="mono">$26,419</td><td class="mono">$26,591</td><td style="text-align:right"><span class="ecl-ret bull">+0.7%</span></td><td class="muted small">Flat</td></tr>
+      <tr><td class="muted mono">23</td><td class="muted small">13 Dec 2023 – 1 Ian 2024</td><td class="mono">$42,875</td><td class="mono">$44,230</td><td style="text-align:right"><span class="ecl-ret bull">+3.2%</span></td><td class="muted small">Pre-ETF</td></tr>
+      <tr><td class="muted mono">24</td><td class="muted small">1 Apr – 25 Apr 2024</td><td class="mono">$69,700</td><td class="mono">$64,479</td><td style="text-align:right"><span class="ecl-ret bear">-7.5%</span></td><td class="muted small">Post-halving</td></tr>
+      <tr><td class="muted mono">25</td><td class="muted small">4 Aug – 28 Aug 2024</td><td class="mono">$58,144</td><td class="mono">$59,010</td><td style="text-align:right"><span class="ecl-ret bull">+1.5%</span></td><td class="muted small">Flat</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)">26</td><td class="small" style="color:var(--green)">25 Nov – 15 Dec 2024</td><td class="mono">$93,064</td><td class="mono">$104,460</td><td style="text-align:right"><span class="ecl-ret bull">+12.2%</span></td><td class="small" style="color:var(--green)">Post-election rally</td></tr>
+      <tr><td class="muted mono">27</td><td class="muted small">14 Mar – 7 Apr 2025</td><td class="mono">$83,940</td><td class="mono">$79,140</td><td style="text-align:right"><span class="ecl-ret bear">-5.7%</span></td><td class="muted small">Declining</td></tr>
+      <tr><td class="muted mono">28</td><td class="muted small">17 Iul – 11 Aug 2025</td><td class="mono">$119,177</td><td class="mono">$118,642</td><td style="text-align:right"><span class="ecl-ret bear">-0.4%</span></td><td class="muted small">Flat pre-ATH</td></tr>
+      <tr><td class="muted mono">29</td><td class="muted small">9 Nov – 29 Nov 2025</td><td class="mono">$104,671</td><td class="mono">$90,765</td><td style="text-align:right"><span class="ecl-ret bear">-13.3%</span></td><td class="small" style="color:var(--red)">Bear accelerare</td></tr>
+      <tr style="background:rgba(245,158,11,.04)"><td class="mono" style="color:var(--solar)">30</td><td class="small" style="color:var(--solar)">25 Feb – 20 Mar 2026</td><td class="mono">$67,952</td><td class="mono">$70,473</td><td style="text-align:right"><span class="ecl-ret bull">+3.7%</span></td><td class="small" style="color:var(--solar)">Blood Moon #3 + MR</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="grid3" style="margin-top:16px">
+    <div class="insight" style="border-left-color:var(--red)"><div class="ins-title" style="color:var(--red)">Bear Market = Scădere</div><div class="ins-body">În bear (2022): toate 3 retrogradele au fost bearish (-4% la -13%). Mercury Retrograde <strong style="color:var(--text)">amplifică trendul existent</strong>.</div></div>
+    <div class="insight" style="border-left-color:var(--green)"><div class="ins-title" style="color:var(--green)">Bull Market = Urcușuri Masive</div><div class="ins-body">#14 (+63%) și #16 (+47%) au fost în bull run 2021. Retrograde-ul nu oprește un bull — îl <strong style="color:var(--text)">accelerează</strong>.</div></div>
+    <div class="insight" style="border-left-color:var(--solar)"><div class="ins-title" style="color:var(--solar)">#30: Blood Moon + Mercury Rx</div><div class="ins-body">Retrograde-ul #30 (Feb-Mar 2026) a coincis cu <strong style="color:var(--text)">Blood Moon #3</strong>. BTC +3.7% — primul semn de stabilizare post-crash.</div></div>
+  </div>
+  <div class="info-box" style="margin-top:14px"><strong style="color:var(--pi)">Concluzie:</strong> <span class="muted">Mercury Retrograde <strong style="color:var(--text)">nu este predictiv singur</strong> (57% bearish, 43% bullish). Funcționează ca <strong style="color:var(--text)">amplificator de trend</strong> — verifică întotdeauna direcția pieței înainte. Cel mai util când coincide cu alte metode (eclipsă, ciclu).</span></div>
+</div>
+
+<!-- ── GANN TIME CYCLES ── -->
+<div class="section-title reveal">Gann Time Cycles <span class="st-sub">— proiecții timp de la pivoți majori</span></div>
+
+<div class="philosophy reveal" style="margin-bottom:16px">
+  <p><strong>Verdict din 153 date verificate (3 marje):</strong> La ±3z Gann NU bate random-ul. La <strong style="color:var(--green)">±5z bate cu +2.6pp</strong>, la <strong style="color:var(--green)">±7z bate cu +8.8pp</strong>. Intervalele cu edge real: <strong style="color:var(--green)">+49z (+27pp), +45z (+18pp), +144z (+18pp)</strong>. <strong style="color:var(--red)">+90z e complet inutil</strong> — cel mai popular dar cel mai slab.</p>
+</div>
+
+<!-- Gann Stats -->
+<div class="grid4 reveal mb20">
+  <div class="stat"><div class="val" style="color:var(--green);font-size:22px">+8.8pp</div><div class="lbl">Edge la ±7z</div><div class="sub">59% vs 50% random</div></div>
+  <div class="stat"><div class="val" style="color:var(--green);font-size:22px">75%</div><div class="lbl">+49z la ±7z</div><div class="sub">Cel mai bun · +25pp vs random</div></div>
+  <div class="stat"><div class="val" style="color:var(--red);font-size:22px">25%</div><div class="lbl">+90z la ±7z</div><div class="sub">Mereu sub random · INUTIL</div></div>
+  <div class="stat"><div class="val" style="color:var(--muted);font-size:22px">153</div><div class="lbl">Date Verificate</div><div class="sub">13 ancore × 14 intervale</div></div>
+</div>
+
+<!-- Hit Rate per interval — 3 marje -->
+<div class="card reveal mb20">
+  <h2><span class="dot" style="background:var(--cycle)"></span>Hit Rate per Interval — 3 marje de toleranță</h2>
+  <p class="small muted" style="margin-bottom:12px">Gann nu e exact la zi — funcționează ca <strong style="color:var(--text)">zonă de alertă</strong>. Cu ±7z devine semnificativ. Random baseline: ±3z=28%, ±5z=40%, ±7z=50%.</p>
+  <div style="overflow-x:auto">
+  <table class="method-table">
+    <thead><tr><th>Interval</th><th>Grad</th><th style="text-align:center">±3z</th><th style="text-align:center">±5z</th><th style="text-align:center">±7z</th><th>Edge ±5z</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(16,185,129,.06)"><td class="mono" style="color:var(--green)"><strong>+49z ★</strong></td><td class="muted mono">7²</td><td class="mono" style="text-align:center">50%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>67%</strong></td><td class="mono" style="text-align:center;color:var(--green)"><strong>75%</strong></td><td style="color:var(--green)" class="mono"><strong>+27pp</strong></td></tr>
+      <tr style="background:rgba(16,185,129,.06)"><td class="mono" style="color:var(--green)"><strong>+45z ★</strong></td><td class="muted mono">45°</td><td class="mono" style="text-align:center">25%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>58%</strong></td><td class="mono" style="text-align:center;color:var(--green)"><strong>75%</strong></td><td style="color:var(--green)" class="mono"><strong>+18pp</strong></td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)"><strong>+144z ★</strong></td><td class="muted mono">12²</td><td class="mono" style="text-align:center">25%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>58%</strong></td><td class="mono" style="text-align:center;color:var(--green)"><strong>67%</strong></td><td style="color:var(--green)" class="mono"><strong>+18pp</strong></td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)"><strong>+60z</strong></td><td class="muted mono">60°</td><td class="mono" style="text-align:center">17%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>50%</strong></td><td class="mono" style="text-align:center;color:var(--green)"><strong>75%</strong></td><td style="color:var(--green)" class="mono">+10pp</td></tr>
+      <tr style="background:rgba(16,185,129,.04)"><td class="mono" style="color:var(--green)"><strong>+30z</strong></td><td class="muted mono">30°</td><td class="mono" style="text-align:center">42%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>50%</strong></td><td class="mono" style="text-align:center">58%</td><td style="color:var(--green)" class="mono">+10pp</td></tr>
+      <tr><td class="mono">+360z</td><td class="muted mono">360°</td><td class="mono" style="text-align:center">36%</td><td class="mono" style="text-align:center">45%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>73%</strong></td><td class="muted mono">+5pp</td></tr>
+      <tr><td class="mono">+520z</td><td class="muted mono">2×260</td><td class="mono" style="text-align:center">20%</td><td class="mono" style="text-align:center">40%</td><td class="mono" style="text-align:center;color:var(--green)">70%</td><td class="muted mono">0pp</td></tr>
+      <tr><td class="mono">+180z</td><td class="muted mono">180°</td><td class="mono" style="text-align:center">18%</td><td class="mono" style="text-align:center">36%</td><td class="mono" style="text-align:center">64%</td><td class="muted mono">-4pp</td></tr>
+      <tr><td class="mono">+120z</td><td class="muted mono">120°</td><td class="mono" style="text-align:center">33%</td><td class="mono" style="text-align:center">33%</td><td class="mono" style="text-align:center">50%</td><td class="muted mono">-7pp</td></tr>
+      <tr><td class="mono">+1440z</td><td class="muted mono">4×360</td><td class="mono" style="text-align:center">33%</td><td class="mono" style="text-align:center">33%</td><td class="mono" style="text-align:center">44%</td><td class="muted mono">-7pp</td></tr>
+      <tr><td class="mono">+1080z</td><td class="muted mono">3×360</td><td class="mono" style="text-align:center">11%</td><td class="mono" style="text-align:center">33%</td><td class="mono" style="text-align:center">44%</td><td class="muted mono">-7pp</td></tr>
+      <tr><td class="mono">+270z</td><td class="muted mono">270°</td><td class="mono" style="text-align:center">18%</td><td class="mono" style="text-align:center">36%</td><td class="mono" style="text-align:center">36%</td><td class="muted mono">-4pp</td></tr>
+      <tr><td class="mono">+720z</td><td class="muted mono">2×360</td><td class="mono" style="text-align:center">25%</td><td class="mono" style="text-align:center">25%</td><td class="mono" style="text-align:center">62%</td><td class="muted mono">-15pp</td></tr>
+      <tr style="background:rgba(239,68,68,.04)"><td class="mono" style="color:var(--red)">+90z</td><td class="muted mono">90°</td><td class="mono" style="text-align:center;color:var(--red)">8%</td><td class="mono" style="text-align:center;color:var(--red)">17%</td><td class="mono" style="text-align:center;color:var(--red)">25%</td><td style="color:var(--red)" class="mono"><strong>-23pp</strong></td></tr>
+      <tr style="background:rgba(255,255,255,.02)"><td class="mono" style="color:var(--muted)"><strong>TOTAL</strong></td><td></td><td class="mono" style="text-align:center">26%</td><td class="mono" style="text-align:center">42%</td><td class="mono" style="text-align:center;color:var(--green)"><strong>59%</strong></td><td class="mono" style="color:var(--green)">+2.6pp</td></tr>
+      <tr><td class="muted" style="font-size:10px">RANDOM</td><td></td><td class="muted mono" style="text-align:center;font-size:10px">28%</td><td class="muted mono" style="text-align:center;font-size:10px">40%</td><td class="muted mono" style="text-align:center;font-size:10px">50%</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="grid3" style="margin-top:14px">
+    <div class="insight" style="border-left-color:var(--green)"><div class="ins-title" style="color:var(--green)">Top 3: +49z, +45z, +144z</div><div class="ins-body">Intervalele cu cel mai mare edge peste random la ±5z: <strong style="color:var(--text)">+27pp, +18pp, +18pp</strong>. Square of 7 (49z) și 12² (144z) bat intervalele clasice.</div></div>
+    <div class="insight" style="border-left-color:var(--red)"><div class="ins-title" style="color:var(--red)">+90z = complet inutil</div><div class="ins-body">Cel mai citat interval Gann are <strong style="color:var(--red)">cel mai mic hit rate</strong> pe BTC la orice marjă. 8% / 17% / 25% — mereu sub random.</div></div>
+    <div class="insight" style="border-left-color:var(--solar)"><div class="ins-title" style="color:var(--solar)">Concluzie practică</div><div class="ins-body">Gann = <strong style="color:var(--text)">zonă de alertă ±1 săptămână</strong>, nu dată exactă. Folosește doar <strong style="color:var(--green)">+45z, +49z, +60z, +144z</strong> — restul e zgomot.</div></div>
+  </div>
+</div>
+
+<!-- Proiecții din ancore -->
+<div class="grid2 reveal mb20" style="align-items:start">
+<div class="card">
+  <h2><span class="dot" style="background:var(--solar)"></span>ATH — 6 Oct 2025 ($124,659) <span style="color:var(--green);font-size:11px;font-weight:500;text-transform:none">57% hit</span></h2>
+  <div id="gann-ath"></div>
+</div>
+<div class="card">
+  <h2><span class="dot" style="background:var(--green)"></span>Bottom FTX — 21 Nov 2022 ($15,781) <span style="color:var(--muted);font-size:11px;font-weight:500;text-transform:none">31% hit</span></h2>
+  <div id="gann-bottom"></div>
+</div>
+</div>
+
+<!-- Calculator -->
+<div class="card reveal mb20">
+  <h2><span class="dot" style="background:var(--cycle)"></span>Calculator Gann — Introdu propriul pivot</h2>
+  <p class="small muted" style="margin-bottom:12px">Selectează o dată și tipul pivotului. Focusează pe <strong style="color:var(--green)">+45z, +49z, +60z și +144z</strong> — intervalele cu edge real (±5z). Tratează ca <strong style="color:var(--text)">zonă de alertă ±1 săptămână</strong>.</p>
+  <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:16px">
+    <div>
+      <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;font-family:var(--font-mono)">Data Pivot</label>
+      <input type="date" id="gann-date" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px">
+    </div>
+    <div>
+      <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;font-family:var(--font-mono)">Tip</label>
+      <select id="gann-type" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px">
+        <option value="high">HIGH (Top)</option>
+        <option value="low">LOW (Bottom)</option>
+      </select>
+    </div>
+    <button id="gann-calc" style="background:var(--accent);color:#000;border:none;border-radius:10px;padding:8px 18px;font-family:var(--font-mono);font-size:12px;font-weight:600;cursor:pointer;transition:transform .15s">CALCULEAZĂ</button>
+  </div>
+  <div id="gann-result"></div>
+</div>
+
+<!-- ── FIBONACCI ── -->
+<div class="section-title reveal">Fibonacci Timp &amp; Eclipse</div>
+
+<div class="card reveal mb20">
+  <h2><span class="dot" style="background:var(--fib)"></span>Niveluri Fibonacci pe Timp (Halving 3 → Halving 4)</h2>
+  <p class="small muted" style="margin-bottom:14px">Halving 3 = 11 Mai 2020 · Halving 4 = 19 Apr 2024 · Span = 1439 zile · Toleranță ±7 zile</p>
+  <div class="tl">
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">2022-04-30 · nivel 0.5</div><div class="tl-label" style="color:var(--fib)">NIMERIT — High local ~$47k</div></div>
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">2023-06-16 · nivel 0.786</div><div class="tl-label" style="color:var(--fib)">NIMERIT — Breakout ~$25k</div></div>
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">2024-04-19 · nivel 1.0</div><div class="tl-label" style="color:var(--fib)">NIMERIT — Halvingul 4 însuși</div></div>
+    <div class="tl-item"><div class="tl-dot miss"></div><div class="tl-date">2024-10-15 · nivel 1.168</div><div class="tl-label" style="color:var(--muted)">RATAT</div></div>
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">2025-05-15 · nivel 1.272</div><div class="tl-label" style="color:var(--fib)">NIMERIT — High local ~$103k</div></div>
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">2025-10-06 · ~1.372 (între nivele)</div><div class="tl-label" style="color:var(--solar)">ATH $126,000 — între 1.272 și 1.414</div></div>
+    <div class="tl-item"><div class="tl-dot miss"></div><div class="tl-date">2025-12-06 · nivel 1.414</div><div class="tl-label" style="color:var(--muted)">RATAT — ATH format deja în Oct</div></div>
+    <div class="tl-item"><div class="tl-dot future"></div><div class="tl-date">2026-09-24 · nivel 1.618 — Raportul de Aur</div><div class="tl-label" style="color:var(--solar)">URMĂTOR — ~181 zile</div></div>
+    <div class="tl-item"><div class="tl-dot future"></div><div class="tl-date">2028-03-28 · nivel 2.0</div><div class="tl-label" style="color:var(--solar)">VIITOR — Aproape de Halving 5</div></div>
+    <div class="tl-item"><div class="tl-dot future"></div><div class="tl-date">2030-09-19 · nivel 2.618</div><div class="tl-label" style="color:var(--solar)">VIITOR — Post Halving 5 macro</div></div>
+  </div>
+  <div class="info-box green" style="margin-top:14px"><strong style="color:var(--fib)">Rată de succes: 5/9 = 56%</strong> (ATH H4 a căzut între nivele) · Aleatoriu: ~46% · Avantaj: +10pp</div>
+</div>
+
+<!-- ── SHMITA ── -->
+<div class="section-title reveal">Ciclul Shmita — 7 Ani</div>
+<div class="philosophy reveal" style="margin-bottom:16px">
+  <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic — al 7-lea an dintr-un ciclu de 7. În Tora, este an de "eliberare": datorii iertate, pământ lăsat să se odihnească. Popularizat în finanțe de Rabbi Jonathan Cahn (<em>The Mystery of the Shemitah</em>, 2014). Corelație remarcabilă cu crizele financiare majore.</p>
+  <p style="margin-top:8px;color:#94a3b8">⚠️ Corelație observațională, nu cauzalitate dovedită. Folosit ca context macro, nu ca semnal de intrare.</p>
+</div>
+<div class="grid2 reveal">
+<div class="card">
+  <h2><span class="dot" style="background:var(--halving)"></span>Istoric — Evenimente Financiare Majore în Shmita</h2>
+  <table class="method-table">
+    <thead><tr><th>Perioadă Shmita</th><th>Eveniment Major</th><th>Impact</th></tr></thead>
+    <tbody>
+      <tr><td class="muted mono">1930–1931</td><td>Marea Criză Economică</td><td style="color:var(--red)">Cea mai gravă criză din istorie</td></tr>
+      <tr><td class="muted mono">1937–1938</td><td>Recesiune globală</td><td style="color:var(--red)">Post-New Deal</td></tr>
+      <tr><td class="muted mono">1979–1980</td><td>Criză petrol + stagflație</td><td style="color:var(--red)">Recesiune globală</td></tr>
+      <tr><td class="muted mono">1993–1994</td><td>Crash obligațiuni</td><td style="color:var(--orange)">Pierderi masive bond market</td></tr>
+      <tr><td class="muted mono">2000–2001</td><td>Dot-com bubble + 9/11</td><td style="color:var(--red)">NASDAQ -78%</td></tr>
+      <tr><td class="muted mono">2007–2008</td><td>Lehman Brothers — Criză imobiliară</td><td style="color:var(--red)">S&amp;P 500 -57%</td></tr>
+      <tr><td class="muted mono">2014–2015</td><td>Crash BTC post Mt.Gox</td><td style="color:var(--orange)">BTC -85% (Nov 2013 → Ian 2015)</td></tr>
+      <tr style="background:rgba(247,147,26,.05)"><td style="color:var(--halving)" class="mono">2021–2022</td><td>Crypto winter + FTX collapse</td><td style="color:var(--red)">BTC -80% · S&amp;P -27%</td></tr>
+    </tbody>
+  </table>
+  <div class="info-box" style="margin-top:14px;border-color:rgba(247,147,26,.2);background:rgba(247,147,26,.05)"><strong style="color:var(--orange)">Pattern: 8/8 = 100%</strong> <span class="muted">— toate Shmita-urile recente au coincis cu o criză majoră. Sample size mic, selection bias posibil — folosit ca context macro.</span></div>
+</div>
+<div class="card">
+  <h2><span class="dot" style="background:var(--cycle)"></span>BTC în Shmita — Comportament</h2>
+  <h2 style="margin-bottom:8px;margin-top:4px"><span class="dot" style="background:var(--orange)"></span>Shmita 2014–2015 <span class="muted small" style="font-weight:400;text-transform:none">(Sep 2014 → Sep 2015)</span></h2>
+  <div class="tl">
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">Nov 2013 — ATH pre-Shmita: ~$1,150</div><div class="tl-label muted">Mt.Gox collapse Feb 2014 → bear market</div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--red);border-color:var(--red)"></div><div class="tl-date">Ian 2015 — Fond în Shmita: ~$152 <span style="color:var(--red)">(-87%)</span></div><div class="tl-label" style="color:var(--green)">Bottom de ciclu format în interiorul Shmita</div></div>
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">Sep 2015 — Recuperare ~$230 la final Shmita</div><div class="tl-label muted">Urmat de bull run masiv spre $20k (2017)</div></div>
+  </div>
+  <h2 style="margin-top:18px;margin-bottom:8px"><span class="dot" style="background:var(--halving)"></span>Shmita 2021–2022 <span class="muted small" style="font-weight:400;text-transform:none">(Sep 2021 → Sep 2022)</span></h2>
+  <div class="tl">
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">Nov 2021 — ATH în Shmita: ~$69,000</div><div class="tl-label muted">Top format la 2 luni după startul Shmita</div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--red);border-color:var(--red)"></div><div class="tl-date">Nov 2022 — Bottom post-Shmita: ~$15,500 <span style="color:var(--red)">(-78%)</span></div><div class="tl-label" style="color:var(--orange)">FTX collapse — bottom-ul la 2 luni DUPĂ finalul Shmita</div></div>
+    <div class="tl-item"><div class="tl-dot hit"></div><div class="tl-date">2023–2025 — Recuperare spre $126,000 (ATH 6 Oct 2025)</div><div class="tl-label muted">Bull run post-Shmita confirmat · 17.5 luni după Halving 4</div></div>
+  </div>
+  <h2 style="margin-top:18px;margin-bottom:8px"><span class="dot" style="background:var(--fib)"></span>Shmita 2028–2029 — Următor</h2>
+  <div class="info-box" style="margin-top:0">
+    <div style="color:var(--solar);font-weight:700;margin-bottom:6px;font-family:var(--font-mono)">Sep 2028 → Sep 2029</div>
+    <span class="muted">Coincide cu <strong style="color:var(--text)">Halving 5 (Apr 2028)</strong>. Dacă pattern-ul se repetă, un top macro BTC ar putea precede Shmita-ul, iar bottom-ul de ciclu s-ar forma în 2028–2029.</span>
+  </div>
+  <div class="info-box" style="margin-top:10px;border-color:var(--border)"><strong style="color:var(--cycle)">Pattern BTC în Shmita:</strong><br>
+    <span class="muted">· Shmita = perioadă bear sau crash &nbsp;· Bottom în sau imediat după Shmita<br>· Bull run masiv urmează întotdeauna post-Shmita &nbsp;· 2/2 confirmate</span>
+  </div>
+</div>
+</div>
+
+<!-- ── HALVING + SHMITA CONFLUENCE ── -->
+<div class="section-title reveal">Confluență Halving + Shmita</div>
+<div class="philosophy reveal" style="margin-bottom:16px">
+  <p><strong>Observație cheie:</strong> Când fereastra de top post-halving (12–18 luni) se suprapune cu un an Shmita, rezultatul istoric este un <strong>top exploziv urmat de crash major</strong>. Când NU se suprapun (Halvinguri 2 și 4), ciclul bear este mai "normal". Halving 5 + Shmita 2028–2029 recreează exact setup-ul Halvingului 3.</p>
+</div>
+<div class="card reveal">
+  <h2><span class="dot" style="background:var(--halving)"></span>Comparație Cicluri — Top Post-Halving vs. Shmita</h2>
+  <div style="overflow-x:auto">
+  <table class="method-table">
+    <thead><tr><th>Halving</th><th>Dată</th><th>ATH</th><th>Luni până la ATH</th><th>Shmita activ?</th><th>Crash după</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(100,116,139,.04)"><td class="muted">Halving 1</td><td class="muted">28 Nov 2012</td><td class="muted">$1,150 <span class="muted small">(Nov 2013)</span></td><td class="muted">12 luni</td><td style="color:var(--muted)">✗ Nu — Shmita 2014 începe după ATH</td><td style="color:var(--red)">-87% (Mt.Gox)</td></tr>
+      <tr><td><strong>Halving 2</strong></td><td class="muted">9 Iul 2016</td><td>$19,799 <span class="muted small">(Dec 2017)</span></td><td style="color:var(--green)">17.5 luni</td><td style="color:var(--muted)">✗ Nu — între Shmita</td><td style="color:var(--orange)">-84% (normal)</td></tr>
+      <tr style="background:rgba(167,139,250,.04)"><td><strong style="color:var(--pi)">Halving 3</strong></td><td class="muted">11 Mai 2020</td><td style="color:var(--solar)">$69,000 <span class="muted small">(Nov 2021)</span></td><td style="color:var(--green)">18.3 luni</td><td style="color:var(--solar)">✓ DA — Shmita sept 2021, ATH 2 luni după</td><td style="color:var(--red)"><strong>-78% sever</strong></td></tr>
+      <tr><td><strong>Halving 4</strong></td><td class="muted">19 Apr 2024</td><td style="color:var(--solar)">$126,000 <span class="muted small">(6 Oct 2025)</span></td><td style="color:var(--green)">17.5 luni</td><td style="color:var(--muted)">✗ Nu — între Shmita</td><td style="color:var(--orange)">În desfășurare</td></tr>
+      <tr style="background:rgba(245,158,11,.05)"><td><strong style="color:var(--solar)">Halving 5 ⚡</strong></td><td class="muted">~20 Apr 2028</td><td style="color:var(--muted)">? (proiectat)</td><td style="color:var(--muted)">+12–18 luni = Apr–Oct 2029</td><td style="color:var(--solar)">✓ DA — Shmita Sep 2028–Sep 2029 = overlap complet</td><td style="color:var(--red)">Potențial sever</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="grid3" style="margin-top:18px">
+    <div class="insight" style="border-left-color:var(--pi)"><div class="ins-title" style="color:var(--pi)">Halving 3 + Shmita 2021 — Confirmat</div><div class="ins-body">Shmita a început <strong style="color:var(--text)">7 Sep 2021</strong>. ATH $69k format la 18.3 luni după Halving 3 = Nov 2021, exact <strong style="color:var(--text)">2 luni în Shmita</strong>. Crash -78% și FTX collapse. Bottom-ul (Nov 2022) la 2 luni după finalul Shmita.</div></div>
+    <div class="insight"><div class="ins-title" style="color:var(--muted)">Halvinguri 2 &amp; 4 — Fără Shmita</div><div class="ins-body">Halvingul 2 (Dec 2017) și Halvingul 4 (Oct 2025) au format top-uri <strong style="color:var(--text)">în afara anilor Shmita</strong>. Crash-urile au urmat normal (-84%, respectiv în desfășurare), fără amplitudinea extremă a confluenței.</div></div>
+    <div class="insight" style="background:rgba(245,158,11,.06);border-left-color:var(--solar)"><div class="ins-title" style="color:var(--solar)">Halving 5 + Shmita 2028–2029 ⚡</div><div class="ins-body">Setup <strong style="color:var(--text)">identic cu Halvingul 3</strong>. Shmita începe Sep 2028 — la 5 luni după Halving 5. Fereastra de top (Apr–Oct 2029) cade <strong style="color:var(--text)">100% în Shmita</strong>. De monitorizat cu atenție maximă.</div></div>
+  </div>
+  <div class="info-box purple" style="margin-top:14px"><strong style="color:var(--pi)">Matematică:</strong> <span class="muted">Ciclul de 4 ani BTC și ciclul Shmita de 7 ani se sincronizează complet o dată la <strong style="color:var(--text)">28 de ani</strong>. Halvingul 3 și Halvingul 5 sunt la distanță de exact <strong style="color:var(--text)">2 cicluri Shmita</strong> (14 ani). Sample size mic — folosit ca context macro.</span></div>
+</div>
+
+<!-- ── CYCLE THEORY ── -->
+<div class="section-title reveal">Sistem de Scorare <span class="st-sub">— ce face fiecare metodă și de ce contează</span></div>
+
+<p class="small muted mb20 reveal">Fiecare metodă adaugă puncte la un scor total. Când scorul atinge <strong style="color:var(--solar)">4+ puncte și cel puțin o metodă PRIMARĂ</strong> este activă, indicatorul semnalează o fereastră de pivot. Cu cât scorul e mai mare, cu atât fereastra e mai importantă.</p>
+
+<div class="card reveal" style="padding:0;overflow-x:auto">
+<table class="method-table" style="min-width:700px;table-layout:fixed">
+<thead>
+  <tr>
+    <th style="width:14%">Metodă</th>
+    <th style="width:10%">Tip · Pct</th>
+    <th style="width:42%">Ce este și de ce contează</th>
+    <th style="width:34%">Exemplu real din trecut</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong style="color:var(--solar)">Eclipsă Solară</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-p">PRIMAR</span><span class="score s3">3</span></span></td>
+  <td><span style="color:var(--green);font-weight:600">Cea mai puternică metodă.</span> O eclipsă de soare declanșează o fereastră de cumpărare cu <strong>7 zile înainte</strong> de eclipsă. Istoric, 68% din ferestre sunt bullish. În perioade de scădere, rata crește la 75%. Câștigul mediu maxim în 90 de zile: <strong>+40%</strong>.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> <strong>Mar 2024</strong> → BTC urcă de la $65k la $126k în 6 luni<br><span style="color:var(--green)">✓</span> <strong>Aug 2017</strong> → rally spre ATH $19k în 4 luni</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--lunar)">Eclipsă Lunară</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-p">PRIMAR</span><span class="score s2">2</span></span></td>
+  <td><span style="color:var(--orange);font-weight:600">Semnal de răsturnare.</span> O eclipsă de lună marchează un moment de schimbare de direcție — poate fi atât bottom cât și top. Fereastra se activează la <strong>±3 zile</strong> față de data eclipsei. Combinată cu alte metode devine puternică.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> Eclipsă lunară <strong>Nov 2021</strong> → top de ciclu $69k, bear market<br><span style="color:var(--green)">✓</span> Eclipsă lunară <strong>Mar 2026</strong> → pivot recent (3 Mar)</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--halving)">Proximitate Halving</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-p">PRIMAR</span><span class="score s2">2</span></span></td>
+  <td><span style="color:var(--green);font-weight:600">Cel mai cunoscut ciclu BTC.</span> La fiecare 4 ani recompensa minerilor se înjumătățește — oferta nouă scade. Statistic, <strong>ATH-ul vine la 17–18 luni după halving</strong>, pe toate ciclurile confirmate. Fereastra: ±14 zile de la data halvingului.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> <strong>Halving 4 — 19 Apr 2024</strong> → ATH $126k la 6 Oct 2025 (17.5 luni)<br><span style="color:var(--green)">✓</span> <strong>Halving 3 — 11 Mai 2020</strong> → ATH $69k la 10 Nov 2021 (18.3 luni)<br><span class="muted">Următor: <strong>Halving 5 — ~20 Apr 2028</strong></span></td>
+</tr>
+<tr>
+  <td><strong style="color:var(--fib)">Fibonacci pe Timp</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-p">PRIMAR</span><span class="score s2">2</span></span></td>
+  <td><span style="color:var(--green);font-weight:600">Niveluri Fibonacci aplicate pe calendar, nu pe preț.</span> Luăm distanța de timp dintre <strong>Halving 3 (2020)</strong> și <strong>Halving 4 (2024)</strong> = 1439 zile, și proiectăm în viitor. 5 din 9 niveluri au marcat un pivot. Rată: 56% vs. 46% aleatoriu.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> Nivel 1.272 = <strong>15 Mai 2025</strong> → high local $103k ✓<br><span style="color:var(--green)">✓</span> Nivel 1.0 = <strong>19 Apr 2024</strong> → chiar Halvingul 4 ✓<br><span style="color:var(--solar)">→ Următor: 1.618 (Raportul de Aur) = <strong>24 Sep 2026</strong></span></td>
+</tr>
+<tr>
+  <td><strong style="color:var(--pi)">Pi Cycle Top</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-p">PRIMAR</span><span class="score s3">3</span></span></td>
+  <td><span style="color:var(--red);font-weight:600">Semnalul nuclear — cel mai rar, cel mai puternic.</span> Când două medii mobile specifice se încrucișează (111 zile depășește 350 zile × 2), BTC a format top de ciclu macro <strong>de fiecare dată</strong>. S-a întâmplat de 2/2 ori. Când apare → <strong>vinde tot</strong>.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> <strong>Apr 2013</strong> → top $260, semnal Pi Cycle ✓<br><span style="color:var(--green)">✓</span> <strong>Apr 2021</strong> → top local $64k, Pi Cycle ✓<br><span class="muted">Nu s-a activat în Oct 2025 — de monitorizat</span></td>
+</tr>
+<tr style="background:rgba(6,182,212,.025)">
+  <td><strong style="color:var(--cycle)">Ciclu Scurt — 86 zile</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-s">secundar</span><span class="score s1">1</span></span></td>
+  <td>Un ciclu de <strong>~86 de zile</strong> (Intermediate Cycle). BTC formează un <strong>low local</strong> la fiecare 2–3 luni. Detectat automat de indicator pe baza ultimului <strong>low</strong> din grafic. Mai puțin precis decât ciclurile mari, dar util ca filtru suplimentar.</td>
+  <td class="small muted">Mediană istorică: 84 zile între bottom-uri intermediare.<br>Funcționează mai bine în trend față de consolidare laterală.</td>
+</tr>
+<tr style="background:rgba(6,182,212,.025)">
+  <td><strong>Faza Lunii</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-s">secundar</span><span class="score s1">1</span></span></td>
+  <td>La <strong>Lună Nouă</strong> și <strong>Lună Plină</strong> (ciclu de 29.5 zile), BTC prezintă o tendință ușoară de inversare. Efectul e modest singur, dar adaugă confirmare când coincide cu alte semnale. Fereastra: ±1.5 zile față de momentul exact.</td>
+  <td class="small muted">Efect statistic moderat — nu folosi singur.<br>Cel mai util când coincide cu o eclipsă (Lună Plină = eclipsă lunară posibilă).</td>
+</tr>
+<tr style="background:rgba(6,182,212,.025)">
+  <td><strong>Intervale Gann</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-s">secundar</span><span class="score s1">1</span></span></td>
+  <td>W.D. Gann (trader legendar, 1900s) a observat că piețele reacționează la intervale specifice de timp numărând de la un eveniment important: <strong>30, 45, 90, 180, 360 zile</strong> etc. Cel mai puternic: <strong>180 zile</strong>. Ancora setată de tine în indicator.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> <strong>7 Apr 2025</strong> + 180 zile = <strong>5 Oct 2025</strong> = ATH $126,000 ✓<br><span class="muted">Mulți traderi folosesc 90 și 180 zile de la evenimente macro cheie.</span></td>
+</tr>
+<tr style="background:rgba(6,182,212,.025)">
+  <td><strong>Sezonier Ianuarie</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-s">secundar</span><span class="score s1">1</span></span></td>
+  <td>Statistic, BTC formează low-uri cu <strong>+79% mai des</strong> în perioada 16 Ianuarie – 15 Februarie față de orice altă perioadă echivalentă. Posibil legat de vânzările de taxe din SUA la finalul anului fiscal și reacumularea în ianuarie.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> <strong>Ian 2015</strong> → bottom ciclu $152 ✓ &nbsp; <span style="color:var(--green)">✓</span> <strong>Ian 2019</strong> → fund $3,200 ✓<br><span style="color:var(--green)">✓</span> <strong>Ian 2023</strong> → bottom local $16,500 ✓</td>
+</tr>
+<tr style="background:rgba(6,182,212,.025)">
+  <td><strong>Zi din Lună</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-s">secundar</span><span class="score s1">1</span></span></td>
+  <td>Backtest pe 3144 zile de date BTC: anumite zile din lună au <strong>semnificativ mai multe low-uri sau top-uri</strong> decât media. Ziua 14 → <strong>+147% top-uri</strong> față de medie. Ziua 25 → <strong>+135% low-uri</strong> față de medie. Ziua 12 → zero top-uri în toată istoria BTC.</td>
+  <td class="small muted">Bottom-uri frecvente: zilele 5, 10, 11, 24, 25.<br>Top-uri frecvente: zilele 2, 7, 8, 14, 21, 22.</td>
+</tr>
+<tr style="background:rgba(245,158,11,.03)">
+  <td><strong style="color:var(--solar)">Ciclu Electoral SUA</strong></td>
+  <td><span style="display:flex;align-items:center;gap:8px"><span class="tag tag-s">secundar</span><span class="score s1">1</span></span></td>
+  <td><span style="color:var(--solar);font-weight:600">Corelație consistentă pe 4 cicluri.</span> ATH-ul BTC a venit sistematic la <strong>11–13 luni după alegerile prezidențiale americane</strong>, iar distanța se comprimă cu fiecare ciclu. Fereastra: lunile 10–14 după alegeri.</td>
+  <td class="small"><span style="color:var(--green)">✓</span> Alegeri <strong>Nov 2016</strong> → ATH Dec 2017 (+13 luni) ✓<br><span style="color:var(--green)">✓</span> Alegeri <strong>Nov 2020</strong> → ATH Nov 2021 (+12 luni) ✓<br><span style="color:var(--green)">✓</span> Alegeri <strong>Nov 2024</strong> → ATH Oct 2025 (+11 luni) ✓<br><span class="muted">Următor: Alegeri Nov 2028 → ATH ~Oct 2029</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ── DOM ANALYSIS ── -->
+<div class="section-title reveal">Legendă Culori Indicator</div>
+<div class="card reveal">
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+    <span class="color-pill" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--solar)">Auriu — Eclipsă Solară</span>
+    <span class="color-pill" style="background:rgba(147,197,253,.12);border-color:rgba(147,197,253,.3);color:var(--lunar)">Albastru — Eclipsă Lunară</span>
+    <span class="color-pill" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:var(--fib)">Verde — Fibonacci</span>
+    <span class="color-pill" style="background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.3);color:var(--halving)">Portocaliu — Halving</span>
+    <span class="color-pill" style="background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.3);color:var(--cycle)">Teal — Cicluri A/B</span>
+    <span class="color-pill" style="background:rgba(100,116,139,.12);border-color:rgba(100,116,139,.3);color:#90a4ae">Gri — Watch (scor=3)</span>
+  </div>
+  <p class="small muted">Triunghi mare = scor ≥5 (convicție ridicată) · Triunghi mic = scor 4 · Punct gri = Watch (orientativ, fără metodă primară)</p>
+</div>
+
+<div class="footer">
+  Elite-Pivots Dashboard &nbsp;·&nbsp; 3144 bare zilnice BTC (2017–2026) &nbsp;·&nbsp; Nu este sfat financiar
+</div>
+
+</div><!-- /container -->
+
+<script src="dashboard.js"></script>
+</body>
+</html>
