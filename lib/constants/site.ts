@@ -33,6 +33,7 @@ export const marketingNav = [
 export const dashboardNav = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/videos", label: "Video-uri" },
+  { href: "/dashboard/resurse", label: "Resurse" },
   { href: "/dashboard/indicators", label: "Indicatori" },
   { href: "/dashboard/risk-score", label: "Risk Score" },
   { href: "/dashboard/should-i-trade", label: "Trade?" },
