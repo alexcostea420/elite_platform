@@ -76,7 +76,7 @@ function PlanUpsellModal({
           Știai că Alex oferă și un Bot de Trading?
         </h2>
         <p className="text-white/60 text-sm md:text-base mb-6">
-          Botul tradeuiește automat pe contul tău Hyperliquid, 24/7. Bitcoin,
+          Botul tranzacționează automat pe contul tău Hyperliquid, 24/7. Bitcoin,
           Ethereum, Altcoins și TradFi.
         </p>
 

@@ -27,7 +27,7 @@ const comparisonRows: { label: string; free: boolean; elite: boolean }[] = [
 ];
 
 const planSlugMap: Record<string, string> = {
-  "Trial Gratuit": "trial_3days",
+  "Încearcă Gratis!": "trial_3days",
   "30 Zile": "elite_monthly",
   "3 Luni": "elite_3mo",
   "12 Luni": "elite_annual",
@@ -147,8 +147,35 @@ export default function UpgradePage() {
 
           <section className="mb-10" id="planuri">
             <h2 className="mb-6 text-center text-3xl font-bold text-white">Alege durata de acces</h2>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-              {pricingPlans.map((plan) => (
+
+            {/* Trial Banner — separate, full width, clickbait */}
+            <div className="mx-auto mb-8 max-w-2xl">
+              <Link href="/signup" className="group relative block overflow-hidden rounded-[1.5rem] border-2 border-accent-emerald bg-gradient-to-r from-accent-emerald/10 via-surface-graphite to-accent-emerald/10 p-6 shadow-glow transition-all hover:shadow-[0_0_40px_rgba(105,224,143,0.3)] md:p-8">
+                <div className="absolute -top-0 left-1/2 -translate-x-1/2 rounded-b-xl bg-accent-emerald px-5 py-1.5 text-sm font-bold text-crypto-dark">
+                  🎁 GRATIS
+                </div>
+                <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-white md:text-3xl">Încearcă Gratis!</h3>
+                    <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet — $0</p>
+                    <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
+                      {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
+                        <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="shrink-0">
+                    <span className="inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-8 py-4 text-lg font-bold text-crypto-dark transition-colors group-hover:bg-accent-soft">
+                      Începe Acum — Gratis →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Paid Plans */}
+            <div className="grid gap-8 md:grid-cols-3">
+              {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => (
                 <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
                   {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
                   <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
@@ -166,32 +193,19 @@ export default function UpgradePage() {
                       </li>
                     ))}
                   </ul>
-                  {plan.name === "Trial Gratuit" ? (
-                    <Link
-                      className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
-                      href="/signup"
+                  <PlanUpsellTrigger
+                    planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
+                    planLabel={plan.name}
+                    planPrice={plan.price}
+                  >
+                    <button
+                      className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                      type="button"
                     >
                       {plan.cta}
-                    </Link>
-                  ) : (
-                    <PlanUpsellTrigger
-                      planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
-                      planLabel={plan.name}
-                      planPrice={plan.price}
-                    >
-                      <button
-                        className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
-                        type="button"
-                      >
-                        {plan.cta}
-                      </button>
-                    </PlanUpsellTrigger>
-                  )}
-                  {plan.name === "Trial Gratuit" ? (
-                    <div className="mt-3 text-center text-sm text-slate-500">Fără plată necesară</div>
-                  ) : (
-                    <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
-                  )}
+                    </button>
+                  </PlanUpsellTrigger>
+                  <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
                 </article>
               ))}
             </div>
@@ -202,9 +216,9 @@ export default function UpgradePage() {
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
                 AI Trading Bot
               </p>
-              <h2 className="text-3xl font-bold text-white">Lasă botul să tradeuiasca pentru tine</h2>
+              <h2 className="text-3xl font-bold text-white">Lasă botul să tranzacționeze pentru tine</h2>
               <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-                Botul tradeuiește automat pe contul tău, 24/7. Tu te relaxezi, el face banii.
+                Botul tranzacționează automat pe contul tău, 24/7. Tu te relaxezi, el face banii.
               </p>
               <div className="mx-auto mt-5 flex flex-wrap items-center justify-center gap-3 text-sm text-slate-300">
                 <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Crypto + TradFi</span>

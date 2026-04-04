@@ -82,13 +82,13 @@ export const benefits = [
 
 export const pricingPlans: PricingPlan[] = [
   {
-    name: "Trial Gratuit",
+    name: "Încearcă Gratis!",
     price: "$0",
     period: "",
-    details: "(3 zile acces complet)",
-    cta: "Încearcă Gratuit",
+    details: "3 zile acces complet",
+    cta: "Începe Acum — Gratis",
     highlighted: false,
-    badge: "GRATIS",
+    badge: "🎁 GRATIS",
     perks: [
       "Acces complet 3 zile",
       "Portofoliu Elite live",
