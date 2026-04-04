@@ -34,6 +34,9 @@ export async function createInviteLink(opts: {
 
   const token = generateInviteToken();
 
+  // Default expiry: 3 days from now if not specified
+  const defaultExpiry = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
+
   const { data, error } = await supabase
     .from("invite_links")
     .insert({
@@ -41,7 +44,7 @@ export async function createInviteLink(opts: {
       plan_duration: opts.planDuration === "custom" ? "custom" : opts.planDuration,
       subscription_days: subscriptionDays,
       max_uses: opts.maxUses ?? 1,
-      expires_at: opts.expiresAt || null,
+      expires_at: opts.expiresAt || defaultExpiry,
       notes: opts.notes || null,
     })
     .select()

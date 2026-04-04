@@ -252,6 +252,8 @@ export async function syncDiscordRole({
  * Queue Discord DM drip messages for a newly connected user.
  * Messages are sent by a cron/script that processes the queue.
  */
+const ANTI_SCAM_FOOTER = "\n\n---\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP). Nu trimite niciodata parole, crypto sau date personale nimanui pe Discord. Daca primesti DM-uri suspecte de la conturi similare, raporteaza-le lui Alex.";
+
 export async function queueDiscordDripMessages(userId: string, discordUserId: string, isElite: boolean) {
   const supabase = createServiceRoleSupabaseClient();
   const now = new Date();
@@ -259,17 +261,17 @@ export async function queueDiscordDripMessages(userId: string, discordUserId: st
   const messages = [
     {
       type: "welcome",
-      text: "👋 Bine ai venit în Armata de Traderi!\n\nAi conectat Discord cu succes. Aici câteva resurse pentru a începe:\n\n📊 Indicatori Elite: app.armatadetraderi.com/dashboard/indicators\n🎥 Video-uri: app.armatadetraderi.com/dashboard/videos\n💬 Pune întrebări oricând pe server!",
+      text: "👋 Bine ai venit in Armata de Traderi!\n\nAi conectat Discord cu succes. Aici cateva resurse pentru a incepe:\n\n📊 Indicatori Elite: app.armatadetraderi.com/dashboard/indicators\n🎥 Video-uri: app.armatadetraderi.com/dashboard/videos\n💬 Pune intrebari oricand pe server!" + ANTI_SCAM_FOOTER,
       delay: 0,
     },
     {
       type: "day1_indicator",
-      text: "📊 Ai instalat indicatorii Elite pe TradingView?\n\nSunt 4 indicatori exclusivi care te ajută să identifici intrări și ieșiri:\n• Elite Bands\n• Elite Momentum\n• Elite Levels\n• Elite Fib Zones\n\nInstalează-i aici: app.armatadetraderi.com/dashboard/indicators",
+      text: "📊 Ai instalat indicatorii Elite pe TradingView?\n\nSunt 4 indicatori exclusivi care te ajuta sa identifici intrari si iesiri:\n• Elite Bands\n• Elite Momentum\n• Elite Levels\n• Elite Fib Zones\n\nInstaleaza-i aici: app.armatadetraderi.com/dashboard/indicators" + ANTI_SCAM_FOOTER,
       delay: 24 * 60 * 60 * 1000,
     },
     {
       type: "day2_video",
-      text: "🎥 Ai văzut video-ul despre Lot Size?\n\nEste CEL MAI IMPORTANT concept în trading. Fără lot size corect, poți avea 70% win rate și tot să pierzi bani.\n\nUită-te aici: youtu.be/4tNSs6egoM0\n\nDupă ce îl vezi, aplică metoda pe următorul trade.",
+      text: "🎥 Ai vazut video-ul despre Lot Size?\n\nEste CEL MAI IMPORTANT concept in trading. Fara lot size corect, poti avea 70% win rate si tot sa pierzi bani.\n\nUita-te aici: youtu.be/4tNSs6egoM0\n\nDupa ce il vezi, aplica metoda pe urmatorul trade." + ANTI_SCAM_FOOTER,
       delay: 2 * 24 * 60 * 60 * 1000,
     },
   ];
@@ -278,7 +280,7 @@ export async function queueDiscordDripMessages(userId: string, discordUserId: st
   if (isElite) {
     messages.push({
       type: "day3_trial",
-      text: "⏰ Trial-ul tău de 3 zile se termină curând!\n\nDacă ți-a plăcut experiența, alege un plan și păstrează accesul:\n\n👉 app.armatadetraderi.com/upgrade\n\nPlanul de 3 luni e cel mai popular — deblochezi instant indicatorii.",
+      text: "⏰ Trial-ul tau de 3 zile se termina curand!\n\nDaca ti-a placut experienta, alege un plan si pastreaza accesul:\n\n👉 app.armatadetraderi.com/upgrade\n\nPlanul de 3 luni e cel mai popular — deblochezi instant indicatorii." + ANTI_SCAM_FOOTER,
       delay: 2.5 * 24 * 60 * 60 * 1000,
     });
   }
