@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { BotSmartCta } from "@/components/upgrade/bot-smart-cta";
 import { PlanUpsellTrigger } from "@/components/upgrade/plan-upsell";
 
@@ -59,8 +60,31 @@ export const metadata: Metadata = buildPageMetadata({
   host: "app",
 });
 
-export default function UpgradePage() {
+const veteranPrices: Record<string, string> = {
+  "30 Zile": "$33",
+  "3 Luni": "$100",
+  "12 Luni": "$300",
+};
+
+export default async function UpgradePage() {
   const offerSchema = getUpgradeOfferSchema();
+
+  // Check if user is veteran for pricing
+  let isVeteran = false;
+  try {
+    const supabase = createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("is_veteran")
+        .eq("id", user.id)
+        .maybeSingle();
+      isVeteran = profile?.is_veteran ?? false;
+    }
+  } catch {
+    // Not logged in — show normal prices
+  }
 
   return (
     <>
@@ -180,7 +204,15 @@ export default function UpgradePage() {
                   {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
                   <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
                   <div className="mb-6 mt-3">
-                    <span className="text-5xl font-bold text-accent-emerald">{plan.price}</span>
+                    {isVeteran && veteranPrices[plan.name] ? (
+                      <>
+                        <span className="text-2xl font-bold text-slate-500 line-through">{plan.price}</span>
+                        <span className="ml-3 text-5xl font-bold text-accent-emerald">{veteranPrices[plan.name]}</span>
+                        <div className="mt-2 rounded-full inline-block bg-yellow-400/10 border border-yellow-400/30 px-3 py-1 text-xs font-bold text-yellow-400">VETERAN PRICE</div>
+                      </>
+                    ) : (
+                      <span className="text-5xl font-bold text-accent-emerald">{plan.price}</span>
+                    )}
                     {plan.period ? <span className="text-slate-400">{plan.period}</span> : null}
                     <div className="mt-1 text-sm text-slate-500">{plan.details}</div>
                     {plan.savings ? <div className="mt-2 text-sm font-semibold text-crypto-green">{plan.savings}</div> : null}
@@ -196,7 +228,7 @@ export default function UpgradePage() {
                   <PlanUpsellTrigger
                     planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
                     planLabel={plan.name}
-                    planPrice={plan.price}
+                    planPrice={isVeteran && veteranPrices[plan.name] ? veteranPrices[plan.name] : plan.price}
                   >
                     <button
                       className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}

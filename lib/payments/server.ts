@@ -65,12 +65,23 @@ export async function createPaymentRequest(
     return { payment: null, error: "Plan invalid." };
   }
 
-  const basePrice = config.basePrices[planDuration];
+  const supabase = createServiceRoleSupabaseClient();
+
+  // Check veteran pricing
+  const { data: userProfile } = await supabase
+    .from("profiles")
+    .select("is_veteran")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const isVeteran = userProfile?.is_veteran ?? false;
+  const basePrice = isVeteran && config.veteranPrices[planDuration]
+    ? config.veteranPrices[planDuration]
+    : config.basePrices[planDuration];
+
   if (!basePrice) {
     return { payment: null, error: "Prețul nu este configurat pentru acest plan." };
   }
-
-  const supabase = createServiceRoleSupabaseClient();
 
   // Check for existing pending payment
   const { data: existingPayment } = await supabase
