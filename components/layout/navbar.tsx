@@ -65,9 +65,9 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
       aria-label={mode === "marketing" ? "Navigare principală publică" : "Navigare principală cont"}
       className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-surface-graphite/95 backdrop-blur-sm"
     >
-      <Container className={`py-4 ${mode === "marketing" ? "flex flex-col gap-3 md:flex-row md:items-center md:justify-between" : "flex items-center justify-between"}`}>
+      <Container className={`py-2.5 md:py-4 ${mode === "marketing" ? "flex items-center justify-between" : "flex items-center justify-between"}`}>
         <Brand href={brandHref} />
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-6 lg:flex">
           {navItems.map((item) => (
             <Link
               key={item.label}
@@ -79,13 +79,15 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
           ))}
         </div>
         {mode === "marketing" ? (
-          <div className="grid w-full grid-cols-3 gap-2 md:flex md:w-auto md:items-center md:gap-3">
-            <MarketingDiscordButton href={siteConfig.discordUrl} />
-            <Link className="ghost-button flex items-center justify-center px-3 py-3 text-center text-xs sm:text-sm md:px-5" href={marketingAuthHref}>
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="hidden sm:block">
+              <MarketingDiscordButton href={siteConfig.discordUrl} />
+            </div>
+            <Link className="ghost-button flex items-center justify-center px-3 py-2 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingAuthHref}>
               Intră în cont
             </Link>
-            <Link className="accent-button flex items-center justify-center px-3 py-3 text-center text-xs sm:text-sm md:px-5" href={marketingPrimaryHref}>
-              Alătură-te Acum
+            <Link className="accent-button flex items-center justify-center px-3 py-2 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingPrimaryHref}>
+              Alătură-te
             </Link>
           </div>
         ) : (
