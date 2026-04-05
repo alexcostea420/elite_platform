@@ -39,7 +39,7 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
     <div className="lg:hidden">
       <button
         aria-label={open ? "Inchide meniu" : "Deschide meniu"}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10"
+        className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10"
         onClick={() => setOpen((v) => !v)}
         type="button"
       >

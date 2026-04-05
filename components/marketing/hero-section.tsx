@@ -41,7 +41,7 @@ export function HeroSection() {
                 <span className="font-semibold text-accent-emerald">🎯 350+ membri activi · 50+ Elite</span>
               </div>
               <div className="space-y-6">
-                <h1 className="text-5xl font-bold leading-tight text-white md:text-7xl">
+                <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl">
                   Învață să tranzacționezi
                   <br />
                   <span className="gradient-text">ca un profesionist</span>
@@ -51,11 +51,11 @@ export function HeroSection() {
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link className="accent-button min-w-[220px] px-8 py-4 text-lg font-bold" href="#preturi">
+                <Link className="accent-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="#preturi">
                   Începe Acum →
                 </Link>
                 <button
-                  className="ghost-button min-w-[220px] px-8 py-4 text-lg font-bold"
+                  className="ghost-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
                   onClick={() => setIsVideoOpen(true)}
                   type="button"
                 >

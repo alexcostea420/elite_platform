@@ -124,6 +124,15 @@ export async function signupAction(formData: FormData) {
         subscription_expires_at: trialExpires.toISOString(),
         elite_since: new Date().toISOString(),
       }).eq("id", data.user.id);
+
+      // Queue email drip sequence for trial users
+      const now = new Date();
+      await trialSupabase.from("email_drip_queue").insert([
+        { user_id: data.user.id, email, template: "welcome", subject: "Bine ai venit in Armata de Traderi!", scheduled_at: now.toISOString() },
+        { user_id: data.user.id, email, template: "value_day1", subject: "3 lucruri pe care le fac inainte de fiecare trade", scheduled_at: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() },
+        { user_id: data.user.id, email, template: "social_proof", subject: "Ce spun membrii despre Armata de Traderi", scheduled_at: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString() },
+        { user_id: data.user.id, email, template: "trial_expiry", subject: "Trial-ul tau expira azi", scheduled_at: new Date(now.getTime() + 65 * 60 * 60 * 1000).toISOString() },
+      ]);
     }
   }
 
