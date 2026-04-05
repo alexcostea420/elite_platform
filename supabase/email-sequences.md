@@ -5,14 +5,14 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
 ## Cum functioneaza
 1. La signup, se insereaza in `email_drip_queue` 4 emailuri programate
 2. Un cron (sau Edge Function) verifica la fiecare 5 min daca sunt emailuri de trimis
-3. Emailurile se trimit prin Supabase Auth SMTP (sau Resend/Mailgun cand e configurat)
+3. Emailurile se trimit prin Resend/Mailgun (recomandat Resend - free 100/zi)
 
 ## Secventa (4 emailuri in 3 zile de trial)
 
 ---
 
 ### Email 1: Welcome (imediat dupa signup)
-**Subject:** `Bine ai venit in Armata de Traderi!`
+**Subject:** `Contul tau Elite e activ - uite ce sa faci prima data`
 **Delay:** 0 ore
 
 ```html
@@ -34,38 +34,48 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
           </tr>
           <tr>
             <td style="padding:0 32px 32px;">
-              <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
-                Bine ai venit, soldat!
+              <h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
+                Contul tau Elite e activ
               </h1>
               <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#A3B8B0;">
-                Ai 3 zile de acces complet la tot ce oferim. Fara card, fara obligatii.
+                Ai 3 zile acces la tot. Uite cum sa profiti la maxim:
               </p>
-              <p style="margin:0 0 8px;font-size:15px;line-height:1.7;color:#A3B8B0;">
-                Ce poti face acum:
-              </p>
-              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">✅ Conecteaza Discord - primesti rolul Elite automat</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">✅ Exploreaza video-urile - 55+ lectii de trading</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">✅ Vezi portofoliul de stocks - 16 actiuni cu zone de Buy/Sell</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">✅ Intra pe chat - intreaba orice</td></tr>
-              </table>
+
+              <div style="background:#0A1712;border-radius:12px;padding:16px 20px;margin:0 0 12px;">
+                <p style="margin:0;font-size:14px;color:#FFFFFF;font-weight:600;">1. Conecteaza-ti Discord-ul</p>
+                <p style="margin:4px 0 0;font-size:13px;color:#A3B8B0;">Primesti instant acces la canalele Elite unde discutam in timp real ce se intampla pe piata.</p>
+              </div>
+
+              <div style="background:#0A1712;border-radius:12px;padding:16px 20px;margin:0 0 12px;">
+                <p style="margin:0;font-size:14px;color:#FFFFFF;font-weight:600;">2. Uita-te la ultimele 3 video-uri</p>
+                <p style="margin:4px 0 0;font-size:13px;color:#A3B8B0;">Sunt cele mai recente analize. Iti dau o idee clara despre cum gandesc si cum iau decizii.</p>
+              </div>
+
+              <div style="background:#0A1712;border-radius:12px;padding:16px 20px;margin:0 0 24px;">
+                <p style="margin:0;font-size:14px;color:#FFFFFF;font-weight:600;">3. Verifica portofoliul de stocks</p>
+                <p style="margin:4px 0 0;font-size:13px;color:#A3B8B0;">16 actiuni cu zone exacte de Buy si Sell. Vezi unde suntem pozitionati si de ce.</p>
+              </div>
+
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/dashboard"
                        style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
-                      Mergi la Dashboard
+                      Intra in Dashboard
                     </a>
                   </td>
                 </tr>
               </table>
+
+              <p style="margin:20px 0 0;font-size:13px;color:#5A7168;text-align:center;">
+                Daca ai intrebari, scrie direct pe Discord. Raspund personal.
+              </p>
             </td>
           </tr>
           <tr>
             <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
-                Ai primit acest email pentru ca ti-ai creat cont pe armatadetraderi.com<br>
-                &copy; Armata de Traderi
+                Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
             </td>
           </tr>
@@ -79,8 +89,8 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
 
 ---
 
-### Email 2: Valoare (dupa 24h)
-**Subject:** `3 lucruri pe care le fac inainte de fiecare trade`
+### Email 2: Valoare concreta (dupa 24h)
+**Subject:** `Greseala #1 care costa bani pe 90% din traderi`
 **Delay:** 24 ore
 
 ```html
@@ -102,49 +112,47 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
           </tr>
           <tr>
             <td style="padding:0 32px 32px;">
-              <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
-                3 lucruri pe care le fac inainte de fiecare trade
+              <h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
+                Greseala care costa cel mai mult
               </h1>
-              <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#A3B8B0;">
-                Majoritatea traderilor pierd bani pentru ca nu au un proces. Eu folosesc aceste 3 reguli de fiecare data:
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                Stii care e diferenta intre un trader care face bani si unul care pierde?
               </p>
-              <p style="margin:0 0 12px;font-size:15px;line-height:1.7;color:#FFFFFF;font-weight:600;">
-                1. Stabilesc riscul INAINTE sa intru
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                Nu e analiza tehnica. Nu e timing-ul. Nu e "alfa" pe care il gasesti pe Twitter.
               </p>
-              <p style="margin:0 0 20px;font-size:14px;line-height:1.7;color:#A3B8B0;">
-                Niciodata mai mult de 1-2% din portofoliu pe un singur trade. Daca pierd, pierd putin. Daca castig, castig mult.
+              <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#FFFFFF;font-weight:600;">
+                E cat de mult risc pui pe un singur trade.
               </p>
-              <p style="margin:0 0 12px;font-size:15px;line-height:1.7;color:#FFFFFF;font-weight:600;">
-                2. Verific structura pietei
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                Majoritatea pun 10-20% din portofoliu pe o singura idee. Cand merge, se simt genii. Cand nu merge - si la un moment dat nu va merge - pierd luni de progres intr-o zi.
               </p>
-              <p style="margin:0 0 20px;font-size:14px;line-height:1.7;color:#A3B8B0;">
-                Higher highs si higher lows = trend bullish. Lower highs si lower lows = trend bearish. Nu tranzactionez impotriva trendului.
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                In comunitatea Elite lucram cu regula de 1-2%. Niciodata mai mult pe o singura pozitie. Pare putin, dar compound interest face restul.
               </p>
-              <p style="margin:0 0 12px;font-size:15px;line-height:1.7;color:#FFFFFF;font-weight:600;">
-                3. Astept confirmarea
-              </p>
-              <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#A3B8B0;">
-                Nu intru la "feeling". Astept un semnal clar: un bounce de pe suport, un break de rezistenta, un pattern pe volum. Rabdarea e cea mai importanta abilitate.
-              </p>
-              <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#A3B8B0;">
-                Vrei sa vezi cum aplic asta in practica? Am 55+ video-uri in biblioteca Elite unde explic fiecare decizie.
+              <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                Am un video in care explic exact cum calculez sizing-ul pe fiecare trade. Il gasesti in biblioteca video:
               </p>
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/dashboard/videos"
                        style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
-                      Vezi Video-urile
+                      Vezi Video-urile Elite
                     </a>
                   </td>
                 </tr>
               </table>
+
+              <p style="margin:20px 0 0;font-size:13px;color:#5A7168;text-align:center;">
+                PS: Maine iti trimit ce spun membrii care sunt de cateva luni in comunitate.
+              </p>
             </td>
           </tr>
           <tr>
             <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
-                &copy; Armata de Traderi - armatadetraderi.com
+                Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
             </td>
           </tr>
@@ -158,8 +166,8 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
 
 ---
 
-### Email 3: Social proof (dupa 48h)
-**Subject:** `Ce spun membrii despre Armata de Traderi`
+### Email 3: Social proof + urgenta (dupa 48h)
+**Subject:** `"De cand am intrat in Elite, sunt pe plus" - Daniel`
 **Delay:** 48 ore
 
 ```html
@@ -182,39 +190,48 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
           <tr>
             <td style="padding:0 32px 32px;">
               <h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
-                Ce spun membrii
+                Nu trebuie sa ma crezi pe cuvant
               </h1>
+              <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                Uite ce zic oamenii care sunt deja in comunitate:
+              </p>
 
-              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 16px;border-left:3px solid #69E08F;">
-                <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
-                  "Partea de risk management mi-a schimbat complet modul de a gandi - cred ca acolo a fost cel mai mare aha."
-                </p>
-                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">- Alex Ivana, Membru Elite</p>
-              </div>
-
-              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 16px;border-left:3px solid #69E08F;">
-                <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
-                  "Am invatat analiza tehnica si cum sa inteleg mai bine structura pietei. Totul este explicat clar si aplicabil, nu doar teorie."
-                </p>
-                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">- Polishboy, Membru Elite</p>
-              </div>
-
-              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 24px;border-left:3px solid #69E08F;">
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #69E08F;">
                 <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
                   "De cand am intrat in Elite, sunt in sfarsit pe plus. Alex este foarte metodic, calculat, si STIE MULTE!"
                 </p>
-                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">- Daniel, Membru Elite</p>
+                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">Daniel - membru din octombrie 2025</p>
               </div>
 
-              <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#A3B8B0;text-align:center;">
-                Trial-ul tau expira maine. Alege un plan si ramai in echipa.
-              </p>
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #69E08F;">
+                <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
+                  "Partea de risk management mi-a schimbat complet modul de a gandi. Nu a fost genul ala de informatie aruncata peste tine, ci explicata pe bune."
+                </p>
+                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">Alex Ivana - membru din martie 2026</p>
+              </div>
+
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #69E08F;">
+                <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
+                  "Este mereu prezent si gata sa raspunda, sa explice, sa ajute. Oamenii din comunitate sunt faini, activi, haiosi."
+                </p>
+                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">Liviu Parepa - membru din octombrie 2025</p>
+              </div>
+
+              <div style="background:rgba(245,158,11,0.08);border-radius:12px;padding:20px;margin:24px 0;border:1px solid rgba(245,158,11,0.2);">
+                <p style="margin:0;font-size:15px;line-height:1.7;color:#F59E0B;font-weight:600;text-align:center;">
+                  Trial-ul tau expira maine.
+                </p>
+                <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#A3B8B0;text-align:center;">
+                  Daca ti-a placut ce ai vazut, alege un plan si ramai in echipa.
+                </p>
+              </div>
+
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/upgrade"
                        style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
-                      Vezi Planurile
+                      Alege un Plan
                     </a>
                   </td>
                 </tr>
@@ -224,7 +241,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
           <tr>
             <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
-                &copy; Armata de Traderi - armatadetraderi.com
+                Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
             </td>
           </tr>
@@ -238,8 +255,8 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
 
 ---
 
-### Email 4: Ultima zi (dupa 65h - ultimele ore de trial)
-**Subject:** `Trial-ul tau expira azi`
+### Email 4: Ultimele ore (dupa 65h)
+**Subject:** `Accesul tau Elite se inchide in cateva ore`
 **Delay:** 65 ore
 
 ```html
@@ -261,41 +278,51 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
           </tr>
           <tr>
             <td style="padding:0 32px 32px;">
-              <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
-                Trial-ul tau expira azi
+              <h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#FFFFFF;text-align:center;">
+                Accesul Elite se inchide azi
               </h1>
-              <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#A3B8B0;">
-                Dupa expirare, pierzi accesul la:
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#A3B8B0;">
+                Dupa expirare, contul tau ramane activ dar pierzi accesul la:
               </p>
-              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">❌ Discord Elite - canalele private</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">❌ 55+ video-uri de trading</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">❌ Indicatori TradingView Elite</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">❌ Portofoliu stocks cu Buy/Sell zones</td></tr>
-                <tr><td style="padding:6px 0;font-size:14px;color:#A3B8B0;">❌ Analize si sesiuni live</td></tr>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+                <tr><td style="padding:5px 0;font-size:14px;color:#A3B8B0;">Canalele private Discord cu analize live</td></tr>
+                <tr><td style="padding:5px 0;font-size:14px;color:#A3B8B0;">Cele 55+ video-uri de trading</td></tr>
+                <tr><td style="padding:5px 0;font-size:14px;color:#A3B8B0;">Indicatorii Elite pe TradingView</td></tr>
+                <tr><td style="padding:5px 0;font-size:14px;color:#A3B8B0;">Portofoliul de stocks cu Buy/Sell zones</td></tr>
+                <tr><td style="padding:5px 0;font-size:14px;color:#A3B8B0;">Sesiunile live saptamanale</td></tr>
               </table>
-              <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#A3B8B0;">
-                Planul de 30 zile e $49. Daca alegi 3 luni ($137) primesti acces instant la indicatori fara perioada de asteptare.
-              </p>
+
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 24px;">
+                <p style="margin:0 0 4px;font-size:13px;color:#5A7168;">Cel mai popular plan:</p>
+                <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:#FFFFFF;">3 Luni - $137</p>
+                <p style="margin:0;font-size:13px;color:#69E08F;">Indicatori deblocati instant, fara perioada de asteptare de 31 zile</p>
+              </div>
+
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/upgrade"
                        style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
-                      Alege un Plan
+                      Continua cu Elite
                     </a>
                   </td>
                 </tr>
               </table>
+
               <p style="margin:20px 0 0;font-size:13px;color:#5A7168;text-align:center;">
-                Daca nu vrei sa continui, nu trebuie sa faci nimic. Contul ramane, doar accesul Elite se opreste.
+                Daca nu vrei sa continui, nu trebuie sa faci nimic. Contul ramane, dar accesul Elite se opreste automat.
+              </p>
+
+              <p style="margin:16px 0 0;font-size:13px;color:#5A7168;text-align:center;">
+                Intrebari? Scrie-mi pe Discord sau raspunde la acest email.
               </p>
             </td>
           </tr>
           <tr>
             <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
-                &copy; Armata de Traderi - armatadetraderi.com
+                Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
             </td>
           </tr>
@@ -311,12 +338,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
 
 ## Implementare
 
-Emailurile necesita un provider SMTP. Optiuni:
-1. **Supabase SMTP** - limitat la auth emails, nu suporta custom drip
-2. **Resend** - free tier 100 emails/zi, API simplu
-3. **Mailgun** - free tier 100 emails/zi
-
-Recomandat: Resend (resend.com) - se integreaza usor cu Next.js.
+Emailurile necesita un provider SMTP. Recomandat: Resend (resend.com) - free 100 emails/zi.
 
 ### Tabel email_drip_queue
 ```sql
@@ -328,15 +350,13 @@ CREATE TABLE email_drip_queue (
   subject text NOT NULL,
   scheduled_at timestamptz NOT NULL,
   sent_at timestamptz,
-  status text DEFAULT 'pending'
+  status text DEFAULT 'pending',
+  created_at timestamptz DEFAULT now()
 );
 ```
 
-### La signup, insereaza:
-```sql
-INSERT INTO email_drip_queue (user_id, email, template, subject, scheduled_at) VALUES
-(user_id, email, 'welcome', 'Bine ai venit in Armata de Traderi!', NOW()),
-(user_id, email, 'value_day1', '3 lucruri pe care le fac inainte de fiecare trade', NOW() + interval '24 hours'),
-(user_id, email, 'social_proof', 'Ce spun membrii despre Armata de Traderi', NOW() + interval '48 hours'),
-(user_id, email, 'trial_expiry', 'Trial-ul tau expira azi', NOW() + interval '65 hours');
-```
+### La signup, se insereaza automat (vezi app/auth/actions.ts):
+- welcome (0h)
+- value_day1 (24h)
+- social_proof (48h)
+- trial_expiry (65h)

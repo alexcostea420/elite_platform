@@ -128,10 +128,10 @@ export async function signupAction(formData: FormData) {
       // Queue email drip sequence for trial users
       const now = new Date();
       await trialSupabase.from("email_drip_queue").insert([
-        { user_id: data.user.id, email, template: "welcome", subject: "Bine ai venit in Armata de Traderi!", scheduled_at: now.toISOString() },
-        { user_id: data.user.id, email, template: "value_day1", subject: "3 lucruri pe care le fac inainte de fiecare trade", scheduled_at: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() },
-        { user_id: data.user.id, email, template: "social_proof", subject: "Ce spun membrii despre Armata de Traderi", scheduled_at: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString() },
-        { user_id: data.user.id, email, template: "trial_expiry", subject: "Trial-ul tau expira azi", scheduled_at: new Date(now.getTime() + 65 * 60 * 60 * 1000).toISOString() },
+        { user_id: data.user.id, email, template: "welcome", subject: "Contul tau Elite e activ - uite ce sa faci prima data", scheduled_at: now.toISOString() },
+        { user_id: data.user.id, email, template: "value_day1", subject: "Greseala #1 care costa bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() },
+        { user_id: data.user.id, email, template: "social_proof", subject: "\"De cand am intrat in Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString() },
+        { user_id: data.user.id, email, template: "trial_expiry", subject: "Accesul tau Elite se inchide in cateva ore", scheduled_at: new Date(now.getTime() + 65 * 60 * 60 * 1000).toISOString() },
       ]);
     }
   }
