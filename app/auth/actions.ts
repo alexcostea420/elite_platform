@@ -99,15 +99,32 @@ export async function signupAction(formData: FormData) {
       );
     }
 
-    // Auto-grant 3-day free trial
+    // Auto-grant 3-day free trial (with abuse prevention)
     const trialSupabase = createServiceRoleSupabaseClient();
-    const trialExpires = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
-    await trialSupabase.from("profiles").update({
-      subscription_tier: "elite",
-      subscription_status: "trial",
-      subscription_expires_at: trialExpires.toISOString(),
-      elite_since: new Date().toISOString(),
-    }).eq("id", data.user.id);
+
+    // Check if this Discord username already used a trial
+    const { data: existingTrial } = await trialSupabase
+      .from("profiles")
+      .select("id, discord_username")
+      .eq("discord_username", discordUsername)
+      .neq("id", data.user.id)
+      .maybeSingle();
+
+    if (existingTrial) {
+      // Discord username already has an account - no trial
+      await trialSupabase.from("profiles").update({
+        subscription_tier: "free",
+        subscription_status: "none",
+      }).eq("id", data.user.id);
+    } else {
+      const trialExpires = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+      await trialSupabase.from("profiles").update({
+        subscription_tier: "elite",
+        subscription_status: "trial",
+        subscription_expires_at: trialExpires.toISOString(),
+        elite_since: new Date().toISOString(),
+      }).eq("id", data.user.id);
+    }
   }
 
   if (data.user && data.session) {

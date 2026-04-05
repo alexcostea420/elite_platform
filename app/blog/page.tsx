@@ -5,18 +5,20 @@ import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Blog — Armata de Traderi",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Blog - Armata de Traderi",
   description:
-    "Articole despre trading crypto, educație financiară și strategii de investiții. Ghiduri pentru începători și traderi avansați.",
+    "Articole despre trading crypto, educatie financiara si strategii de investitii. Ghiduri pentru incepatori si traderi avansati.",
   keywords: [
     "blog trading crypto",
     "educatie trading romania",
     "ghid trading crypto",
     "cum sa incepi trading",
   ],
-};
+  path: "/blog",
+});
 
 const articles = [
   {

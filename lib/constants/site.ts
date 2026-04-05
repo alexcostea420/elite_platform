@@ -43,6 +43,37 @@ export const dashboardNav = [
   { href: "/bots", label: "Bot" },
 ];
 
+export const dashboardNavStandalone = [
+  { href: "/dashboard", label: "Dashboard", icon: "📊" },
+  { href: "/bots", label: "Bot Trading", icon: "🤖" },
+];
+
+export const dashboardNavGroups = [
+  {
+    label: "Educatie",
+    items: [
+      { href: "/dashboard/videos", label: "Video-uri", icon: "🎥" },
+      { href: "/dashboard/resurse", label: "Resurse", icon: "📚" },
+      { href: "/dashboard/indicators", label: "Indicatori", icon: "📈" },
+    ],
+  },
+  {
+    label: "Research",
+    items: [
+      { href: "/dashboard/stocks", label: "Stocks", icon: "💹" },
+      { href: "/dashboard/pivots", label: "Pivoti BTC", icon: "🔮" },
+      { href: "/dashboard/countertrade", label: "Countertrade", icon: "📺" },
+    ],
+  },
+  {
+    label: "Trading",
+    items: [
+      { href: "/dashboard/risk-score", label: "Risk Score", icon: "🎯" },
+      { href: "/dashboard/should-i-trade", label: "Should I Trade?", icon: "⚡" },
+    ],
+  },
+];
+
 export const heroStats = [
   { value: "350+", label: "Membri în Comunitate", tone: "gold" },
   { value: "55+", label: "Video-uri Elite", tone: "green" },

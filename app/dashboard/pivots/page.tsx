@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import PivotsDashboard from "@/components/dashboard/pivots-dashboard";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
@@ -58,6 +59,14 @@ export default async function PivotsPage() {
     );
   }
 
-  // Admin — redirect to the static HTML dashboard
-  redirect("/pivots/dashboard.html");
+  // Admin — render native Next.js dashboard (no Container wrapper — full-width)
+  return (
+    <>
+      <Navbar mode="dashboard" userIdentity={identity} />
+      <main className="pb-16 pt-20">
+        <PivotsDashboard />
+      </main>
+      <Footer compact />
+    </>
+  );
 }

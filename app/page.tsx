@@ -11,8 +11,10 @@ const AboutSection = dynamic(() => import("@/components/marketing/about-section"
 const BenefitsSection = dynamic(() => import("@/components/marketing/benefits-section").then(m => m.BenefitsSection));
 const CtaSection = dynamic(() => import("@/components/marketing/cta-section").then(m => m.CtaSection));
 const FaqSection = dynamic(() => import("@/components/marketing/faq-section").then(m => m.FaqSection));
+const LeadMagnetSection = dynamic(() => import("@/components/marketing/lead-magnet-section").then(m => m.LeadMagnetSection));
 const PricingSection = dynamic(() => import("@/components/marketing/pricing-section").then(m => m.PricingSection));
 const TestimonialsSection = dynamic(() => import("@/components/marketing/testimonials-section").then(m => m.TestimonialsSection));
+const TrialPopup = dynamic(() => import("@/components/marketing/trial-popup").then(m => m.TrialPopup));
 import {
   buildPageMetadata,
   getHomepageFaqSchema,
@@ -80,12 +82,14 @@ export default function HomePage() {
             </div>
           </Container>
         </section>
+        <LeadMagnetSection />
         <PricingSection />
         <TestimonialsSection />
         <FaqSection />
         <CtaSection />
       </main>
       <Footer />
+      <TrialPopup />
     </>
   );
 }

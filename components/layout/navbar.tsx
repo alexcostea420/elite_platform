@@ -2,8 +2,10 @@ import Link from "next/link";
 import { headers } from "next/headers";
 
 import { Container } from "@/components/ui/container";
-import { dashboardNav, marketingNav, siteConfig } from "@/lib/constants/site";
+import { dashboardNavGroups, dashboardNavStandalone, marketingNav, siteConfig } from "@/lib/constants/site";
 import { MarketingDiscordButton } from "@/components/layout/marketing-discord-button";
+import { MobileNav } from "@/components/layout/mobile-nav";
+import { NavDropdown } from "@/components/layout/nav-dropdown";
 import { ProfileMenu } from "@/components/layout/profile-menu";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getAbsoluteHostUrl, getHostRole } from "@/lib/utils/host-routing";
@@ -29,7 +31,6 @@ function Brand({ href }: { href: string }) {
 }
 
 export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) {
-  const navItems = mode === "dashboard" ? dashboardNav : marketingNav;
   const requestHeaders = headers();
   const hostRole = getHostRole(requestHeaders.get("host") ?? "");
   let marketingAuthHref = "/login";
@@ -60,41 +61,78 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
 
   return (
     <nav
-      aria-label={mode === "marketing" ? "Navigare principală publică" : "Navigare principală cont"}
+      aria-label={mode === "marketing" ? "Navigare principala publica" : "Navigare principala cont"}
       className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-surface-graphite/95 backdrop-blur-sm"
     >
-      <Container className={`py-2.5 md:py-4 ${mode === "marketing" ? "flex items-center justify-between" : "flex items-center justify-between"}`}>
+      <Container className="flex items-center justify-between py-2.5 md:py-4">
         <Brand href={brandHref} />
-        <div className="hidden items-center gap-6 lg:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              className={`text-sm font-medium ${mode === "dashboard" && item.href === "/dashboard" ? "text-accent-emerald" : "text-slate-200 hover:text-accent-emerald"}`}
-              href={item.href}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-        {mode === "marketing" ? (
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="hidden sm:block">
-              <MarketingDiscordButton href={siteConfig.discordUrl} />
+
+        {mode === "dashboard" ? (
+          <>
+            {/* Desktop: standalone links + dropdown groups */}
+            <div className="hidden items-center gap-5 lg:flex">
+              <Link
+                className="text-sm font-medium text-accent-emerald"
+                href="/dashboard"
+              >
+                Dashboard
+              </Link>
+              {dashboardNavGroups.map((group) => (
+                <NavDropdown
+                  key={group.label}
+                  items={group.items}
+                  label={group.label}
+                />
+              ))}
+              <Link
+                className="text-sm font-medium text-slate-200 hover:text-accent-emerald"
+                href="/bots"
+              >
+                🤖 Bot
+              </Link>
             </div>
-            <Link className="ghost-button flex items-center justify-center px-3 py-2 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingAuthHref}>
-              Intră în cont
-            </Link>
-            <Link className="accent-button flex items-center justify-center px-3 py-2 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingPrimaryHref}>
-              Alătură-te
-            </Link>
-          </div>
+
+            {/* Mobile hamburger + profile */}
+            <div className="flex items-center gap-2">
+              <MobileNav
+                groups={dashboardNavGroups}
+                standalone={dashboardNavStandalone}
+              />
+              <ProfileMenu
+                dashboardHref={dashboardHref}
+                displayName={userIdentity?.displayName ?? "Membru"}
+                initials={userIdentity?.initials ?? "M"}
+                settingsHref={settingsHref}
+              />
+            </div>
+          </>
         ) : (
-          <ProfileMenu
-            dashboardHref={dashboardHref}
-            displayName={userIdentity?.displayName ?? "Membru"}
-            initials={userIdentity?.initials ?? "M"}
-            settingsHref={settingsHref}
-          />
+          <>
+            {/* Marketing desktop nav */}
+            <div className="hidden items-center gap-6 lg:flex">
+              {marketingNav.map((item) => (
+                <Link
+                  key={item.label}
+                  className="text-sm font-medium text-slate-200 hover:text-accent-emerald"
+                  href={item.href}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="hidden sm:block">
+                <MarketingDiscordButton href={siteConfig.discordUrl} />
+              </div>
+              <Link className="ghost-button flex items-center justify-center px-3 py-2 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingAuthHref}>
+                Intra in cont
+              </Link>
+              <Link className="accent-button flex items-center justify-center px-3 py-2 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingPrimaryHref}>
+                Alatura-te
+              </Link>
+            </div>
+          </>
         )}
       </Container>
     </nav>

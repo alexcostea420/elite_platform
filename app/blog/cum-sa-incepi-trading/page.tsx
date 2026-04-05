@@ -4,11 +4,12 @@ import Link from "next/link";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cum să Începi în Trading Crypto — Ghid Complet | Armata de Traderi",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Cum sa Incepi in Trading Crypto - Ghid Complet | Armata de Traderi",
   description:
-    "Ghid complet pentru începători: ce trebuie să înveți, cum să-ți deschizi primul cont, cum să-ți alegi strategia și cum să gestionezi riscul în trading crypto.",
+    "Ghid complet pentru incepatori: ce trebuie sa inveti, cum sa-ti deschizi primul cont, cum sa-ti alegi strategia si cum sa gestionezi riscul in trading crypto.",
   keywords: [
     "cum sa incepi trading crypto",
     "ghid trading incepatori",
@@ -16,7 +17,9 @@ export const metadata: Metadata = {
     "risk management trading",
     "educatie trading",
   ],
-};
+  path: "/blog/cum-sa-incepi-trading",
+  type: "article",
+});
 
 export default function CumSaIncepiTradingPage() {
   return (

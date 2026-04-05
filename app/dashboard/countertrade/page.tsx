@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { CountertradeDashboard } from "@/components/dashboard/countertrade-dashboard";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
@@ -58,5 +59,15 @@ export default async function CountertradePage() {
     );
   }
 
-  redirect("/countertrade/dashboard.html");
+  return (
+    <>
+      <Navbar mode="dashboard" userIdentity={identity} />
+      <main className="pb-16 pt-24 md:pt-28">
+        <Container>
+          <CountertradeDashboard />
+        </Container>
+      </main>
+      <Footer compact />
+    </>
+  );
 }
