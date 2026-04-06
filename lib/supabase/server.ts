@@ -18,7 +18,11 @@ export function createServerSupabaseClient() {
       setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
+            cookieStore.set(name, value, {
+              ...options,
+              domain: ".armatadetraderi.com",
+              maxAge: 60 * 60 * 24 * 7, // 7 days
+            });
           });
         } catch {
           // Cookie writes are ignored in Server Components. Middleware and
