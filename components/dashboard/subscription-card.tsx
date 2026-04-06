@@ -7,6 +7,7 @@ type SubscriptionCardProps = {
   subscriptionTier: SubscriptionTier;
   subscriptionStatus: SubscriptionStatus;
   subscriptionExpiresAt: string | null;
+  discordConnected?: boolean;
 };
 
 const tierLabels: Record<Exclude<SubscriptionTier, null>, string> = {
@@ -115,6 +116,7 @@ export function SubscriptionCard({
   subscriptionTier,
   subscriptionStatus,
   subscriptionExpiresAt,
+  discordConnected = false,
 }: SubscriptionCardProps) {
   const copy = getSubscriptionCopy(subscriptionTier, subscriptionStatus, subscriptionExpiresAt);
   const badge = getStatusBadge(subscriptionStatus);
@@ -143,6 +145,17 @@ export function SubscriptionCard({
           {secondaryCta.label}
         </Link>
       </div>
+      {!discordConnected && subscriptionTier === "elite" && (
+        <div className="mt-5 rounded-xl bg-crypto-dark/10 px-5 py-4">
+          <p className="text-sm font-semibold text-crypto-dark">Conecteaza Discord pentru a primi rolul Elite</p>
+          <Link
+            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[#5865F2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4752C4]"
+            href="/auth/discord/start"
+          >
+            Conecteaza Discord
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
