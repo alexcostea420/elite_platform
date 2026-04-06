@@ -152,6 +152,25 @@ export default async function IndicatorsPage() {
                 ))}
               </section>
 
+              {/* Video Tutorial */}
+              <section className="panel mb-8 p-6 md:p-8">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="mb-1 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Video Tutorial</p>
+                    <h2 className="text-xl font-bold text-white">Cum sa folosesti indicatorii Elite</h2>
+                    <p className="mt-2 text-sm text-slate-400">Tutorial complet: instalare, configurare si interpretare semnale.</p>
+                  </div>
+                  <a
+                    className="accent-button shrink-0 text-center text-sm"
+                    href="https://youtu.be/Gpz_TpMLu2I"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Vezi tutorial-ul
+                  </a>
+                </div>
+              </section>
+
               {/* Instructions */}
               <section className="panel mb-8 p-6 md:p-8">
                 <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
