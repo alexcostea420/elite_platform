@@ -126,7 +126,7 @@ export default async function UpgradePage() {
             </div>
           </section>
 
-          <section className="mb-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <section className="mb-10">
             <article className="panel p-6 md:p-8">
               <h2 className="text-2xl font-bold text-white">Free vs Elite</h2>
               <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
@@ -156,28 +156,6 @@ export default async function UpgradePage() {
                 ))}
               </div>
             </article>
-
-            <article className="panel p-6 md:p-8">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                Ce deblochezi
-              </p>
-              <h2 className="text-2xl font-bold text-white">Tot ce ai nevoie pentru execuție reală</h2>
-              <div className="mt-6 space-y-4">
-                {[
-                  "Biblioteca video completă, structurată pe setup-uri și contexte reale",
-                  "Analize premium cu niveluri importante și context clar de piață",
-                  "Sesiuni live recurente și acces în Discord Elite",
-                  "Suport prioritar și răspunsuri mai rapide în comunitate",
-                ].map((item) => (
-                  <div key={item} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <div className="flex items-start gap-3">
-                      <span className="mt-1 text-accent-emerald">✓</span>
-                      <p className="text-slate-300">{item}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </article>
           </section>
 
           <section className="mb-10" id="planuri">
@@ -194,7 +172,8 @@ export default async function UpgradePage() {
                   <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white md:text-3xl">Activeaza Trial Gratuit</h3>
-                      <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet — $0</p>
+                      <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet - $0</p>
+                      <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
                         {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fara card"].map((perk) => (
                           <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
@@ -214,7 +193,8 @@ export default async function UpgradePage() {
                   <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white md:text-3xl">Incearca Gratis!</h3>
-                      <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet — $0</p>
+                      <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet - $0</p>
+                      <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
                         {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fara card"].map((perk) => (
                           <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
@@ -404,15 +384,31 @@ export default async function UpgradePage() {
             </div>
           </section>
 
-          <section className="panel px-6 py-8 text-center md:px-8">
-            <h2 className="text-3xl font-bold text-white">Ai întrebări despre plată?</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-slate-300">
-              Plata se face în USDT sau USDC pe rețeaua Arbitrum One. După confirmare, accesul se activează automat.
-            </p>
-            <div className="mt-6 flex flex-col justify-center gap-4 sm:flex-row">
-              <Link className="ghost-button" href="/dashboard">
-                Înapoi în dashboard
-              </Link>
+          <section className="panel px-6 py-8 md:px-8">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">Vrei sa platesti dar nu stii cum?</h2>
+              <p className="mx-auto mt-4 max-w-lg text-slate-300">
+                Lasa-mi emailul tau si te contactez personal sa te ajut cu plata. Raspund in maxim 24h.
+              </p>
+              <form action="/api/lead-magnet" method="POST" className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
+                <input type="hidden" name="source" value="payment_help" />
+                <input
+                  className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:border-accent-emerald/50"
+                  name="email"
+                  placeholder="email@exemplu.com"
+                  required
+                  type="email"
+                />
+                <button
+                  className="accent-button whitespace-nowrap rounded-xl px-6 py-3 text-sm font-semibold"
+                  type="submit"
+                >
+                  Contacteaza-ma
+                </button>
+              </form>
+              <p className="mt-3 text-xs text-slate-600">
+                Plata se face in USDT sau USDC pe reteaua Arbitrum One.
+              </p>
             </div>
           </section>
         </Container>
