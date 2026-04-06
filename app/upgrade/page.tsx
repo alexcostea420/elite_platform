@@ -69,18 +69,28 @@ const veteranPrices: Record<string, string> = {
 export default async function UpgradePage() {
   const offerSchema = getUpgradeOfferSchema();
 
-  // Check if user is veteran for pricing
+  // Check if user is logged in, veteran, and has used trial
   let isVeteran = false;
+  let isLoggedIn = false;
+  let hasUsedTrial = false;
+  let userIdentity: { displayName: string; initials: string } | undefined;
   try {
     const supabase = createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
+      isLoggedIn = true;
       const { data: profile } = await supabase
         .from("profiles")
-        .select("is_veteran")
+        .select("is_veteran, full_name, subscription_status")
         .eq("id", user.id)
         .maybeSingle();
       isVeteran = profile?.is_veteran ?? false;
+      hasUsedTrial = !!profile?.subscription_status; // any status means they've had an account
+      const name = profile?.full_name ?? user.email ?? "Membru";
+      userIdentity = {
+        displayName: name,
+        initials: name.slice(0, 2).toUpperCase(),
+      };
     }
   } catch {
     // Not logged in — show normal prices
@@ -92,7 +102,7 @@ export default async function UpgradePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(offerSchema) }}
         type="application/ld+json"
       />
-      <Navbar mode="marketing" />
+      <Navbar mode={isLoggedIn ? "dashboard" : "marketing"} userIdentity={userIdentity} />
       <main className="pb-20 pt-28">
         <Container>
           <section className="mb-10 text-center">
@@ -172,7 +182,8 @@ export default async function UpgradePage() {
           <section className="mb-10" id="planuri">
             <h2 className="mb-6 text-center text-3xl font-bold text-white">Alege durata de acces</h2>
 
-            {/* Trial Banner — separate, full width, clickbait */}
+            {/* Trial Banner — only show for visitors who don't have an account yet */}
+            {!hasUsedTrial && (
             <div className="mx-auto mb-8 max-w-2xl">
               <Link href="/signup" className="group relative block overflow-hidden rounded-[1.5rem] border-2 border-accent-emerald bg-gradient-to-r from-accent-emerald/10 via-surface-graphite to-accent-emerald/10 p-6 shadow-glow transition-all hover:shadow-[0_0_40px_rgba(105,224,143,0.3)] md:p-8">
                 <div className="absolute -top-0 left-1/2 -translate-x-1/2 rounded-b-xl bg-accent-emerald px-5 py-1.5 text-sm font-bold text-crypto-dark">
@@ -196,6 +207,7 @@ export default async function UpgradePage() {
                 </div>
               </Link>
             </div>
+            )}
 
             {/* Paid Plans */}
             <div className="grid gap-8 md:grid-cols-3">
