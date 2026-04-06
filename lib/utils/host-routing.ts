@@ -32,7 +32,7 @@ export function isMemberFacingPath(pathname: string) {
   return (
     pathname === "/login" ||
     pathname === "/signup" ||
-    pathname === "/upgrade" ||
+    pathname.startsWith("/upgrade") ||
     pathname.startsWith("/dashboard")
   );
 }
