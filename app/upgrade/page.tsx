@@ -9,6 +9,7 @@ import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { BotSmartCta } from "@/components/upgrade/bot-smart-cta";
 import { PlanUpsellTrigger } from "@/components/upgrade/plan-upsell";
+import { TrialActivateButton } from "@/components/upgrade/trial-activate-button";
 
 const comparisonRows: { label: string; free: boolean; elite: boolean }[] = [
   { label: "Chat general Discord", free: true, elite: true },
@@ -182,30 +183,52 @@ export default async function UpgradePage() {
           <section className="mb-10" id="planuri">
             <h2 className="mb-6 text-center text-3xl font-bold text-white">Alege durata de acces</h2>
 
-            {/* Trial Banner — only show for visitors who don't have an account yet */}
+            {/* Trial Banner — for non-logged-in: signup link, for logged-in without trial: activate button */}
             {!hasUsedTrial && (
             <div className="mx-auto mb-8 max-w-2xl">
-              <Link href="/signup" className="group relative block overflow-hidden rounded-[1.5rem] border-2 border-accent-emerald bg-gradient-to-r from-accent-emerald/10 via-surface-graphite to-accent-emerald/10 p-6 shadow-glow transition-all hover:shadow-[0_0_40px_rgba(105,224,143,0.3)] md:p-8">
-                <div className="absolute -top-0 left-1/2 -translate-x-1/2 rounded-b-xl bg-accent-emerald px-5 py-1.5 text-sm font-bold text-crypto-dark">
-                  🎁 GRATIS
-                </div>
-                <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white md:text-3xl">Încearcă Gratis!</h3>
-                    <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet — $0</p>
-                    <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
-                      {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
-                        <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
-                      ))}
+              {isLoggedIn ? (
+                <div className="relative overflow-hidden rounded-[1.5rem] border-2 border-accent-emerald bg-gradient-to-r from-accent-emerald/10 via-surface-graphite to-accent-emerald/10 p-6 md:p-8">
+                  <div className="absolute -top-0 left-1/2 -translate-x-1/2 rounded-b-xl bg-accent-emerald px-5 py-1.5 text-sm font-bold text-crypto-dark">
+                    🎁 GRATIS
+                  </div>
+                  <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-white md:text-3xl">Activeaza Trial Gratuit</h3>
+                      <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet — $0</p>
+                      <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
+                        {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fara card"].map((perk) => (
+                          <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="shrink-0">
+                      <TrialActivateButton />
                     </div>
                   </div>
-                  <div className="shrink-0">
-                    <span className="inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-8 py-4 text-lg font-bold text-crypto-dark transition-colors group-hover:bg-accent-soft">
-                      Începe Acum — Gratis →
-                    </span>
-                  </div>
                 </div>
-              </Link>
+              ) : (
+                <Link href="/signup" className="group relative block overflow-hidden rounded-[1.5rem] border-2 border-accent-emerald bg-gradient-to-r from-accent-emerald/10 via-surface-graphite to-accent-emerald/10 p-6 shadow-glow transition-all hover:shadow-[0_0_40px_rgba(105,224,143,0.3)] md:p-8">
+                  <div className="absolute -top-0 left-1/2 -translate-x-1/2 rounded-b-xl bg-accent-emerald px-5 py-1.5 text-sm font-bold text-crypto-dark">
+                    🎁 GRATIS
+                  </div>
+                  <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-white md:text-3xl">Incearca Gratis!</h3>
+                      <p className="mt-2 text-lg text-accent-emerald">3 zile acces complet — $0</p>
+                      <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
+                        {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fara card"].map((perk) => (
+                          <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="shrink-0">
+                      <span className="inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-8 py-4 text-lg font-bold text-crypto-dark transition-colors group-hover:bg-accent-soft">
+                        Creeaza Cont Gratuit →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              )}
             </div>
             )}
 

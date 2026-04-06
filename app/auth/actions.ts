@@ -99,41 +99,8 @@ export async function signupAction(formData: FormData) {
       );
     }
 
-    // Auto-grant 3-day free trial (with abuse prevention)
-    const trialSupabase = createServiceRoleSupabaseClient();
-
-    // Check if this Discord username already used a trial
-    const { data: existingTrial } = await trialSupabase
-      .from("profiles")
-      .select("id, discord_username")
-      .eq("discord_username", discordUsername)
-      .neq("id", data.user.id)
-      .maybeSingle();
-
-    if (existingTrial) {
-      // Discord username already has an account - no trial
-      await trialSupabase.from("profiles").update({
-        subscription_tier: "free",
-        subscription_status: "none",
-      }).eq("id", data.user.id);
-    } else {
-      const trialExpires = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
-      await trialSupabase.from("profiles").update({
-        subscription_tier: "elite",
-        subscription_status: "trial",
-        subscription_expires_at: trialExpires.toISOString(),
-        elite_since: new Date().toISOString(),
-      }).eq("id", data.user.id);
-
-      // Queue email drip sequence for trial users
-      const now = new Date();
-      await trialSupabase.from("email_drip_queue").insert([
-        { user_id: data.user.id, email, template: "welcome", subject: "Contul tau Elite e activ - uite ce sa faci prima data", scheduled_at: now.toISOString() },
-        { user_id: data.user.id, email, template: "value_day1", subject: "Greseala #1 care costa bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() },
-        { user_id: data.user.id, email, template: "social_proof", subject: "\"De cand am intrat in Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString() },
-        { user_id: data.user.id, email, template: "trial_expiry", subject: "Accesul tau Elite se inchide in cateva ore", scheduled_at: new Date(now.getTime() + 65 * 60 * 60 * 1000).toISOString() },
-      ]);
-    }
+    // New accounts start as free - trial is opt-in from /upgrade
+    // No auto-grant of trial
   }
 
   if (data.user && data.session) {

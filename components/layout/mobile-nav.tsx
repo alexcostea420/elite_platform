@@ -55,7 +55,7 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 top-[53px] z-40 overflow-y-auto bg-crypto-dark/98 backdrop-blur-md md:top-[61px]">
+        <div className="fixed inset-0 top-[53px] z-[55] overflow-y-auto bg-crypto-dark/98 backdrop-blur-md md:top-[61px]">
           <div className="mx-auto max-w-md space-y-1 p-4">
             {/* Standalone items first */}
             {standalone.map((item) => (
