@@ -67,7 +67,7 @@ const PLAN_MAP: Record<string, PlanInfo> = {
 };
 
 function formatAmount(amount: number): string {
-  return amount.toFixed(3);
+  return amount.toFixed(1);
 }
 
 function formatTime(seconds: number): string {

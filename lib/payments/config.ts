@@ -73,9 +73,9 @@ export const planDurations: Record<PlanDuration, { days: number; label: string }
 };
 
 /**
- * Generate a unique reference amount by adding small mills (3 decimal places)
- * derived from a hash of the payment ID. This makes each payment amount unique
- * for matching on the blockchain. 999 unique values per plan per chain.
+ * Generate a unique reference amount by adding a single decimal (0.1 - 0.9)
+ * derived from a hash of the payment ID. Simple and easy to send.
+ * 9 unique values per plan — enough for small community.
  */
 export function generateReferenceAmount(
   basePrice: number,
@@ -89,7 +89,7 @@ export function generateReferenceAmount(
     hash = (hash << 5) - hash + char;
     hash = hash & hash;
   }
-  // Generate mills between 0.001 and 0.999
-  const uniqueMills = (Math.abs(hash) % 999) + 1;
-  return Number((basePrice + uniqueMills / 1000).toFixed(3));
+  // Generate single decimal between 0.1 and 0.9
+  const uniqueTenth = (Math.abs(hash) % 9) + 1;
+  return Number((basePrice + uniqueTenth / 10).toFixed(1));
 }
