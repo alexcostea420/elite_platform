@@ -328,7 +328,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                       <a
                         className="accent-button"
-                        href="https://youtube.com/@alexcostea"
+                        href="https://youtube.com/@AlexCostea03"
                         rel="noreferrer"
                         target="_blank"
                       >
