@@ -143,10 +143,10 @@ export function PaymentFlow() {
     return (
       <section className="panel border-accent-emerald/30 px-6 py-8 text-center md:px-8">
         <div className="text-5xl">✅</div>
-        <h2 className="mt-4 text-3xl font-bold text-white">Plata confirmată!</h2>
+        <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">Plata confirmata!</h2>
         <p className="mt-3 text-slate-300">
-          Accesul tău Elite a fost activat{paymentStatus?.expires_at
-            ? ` până pe ${new Date(paymentStatus.expires_at).toLocaleDateString("ro-RO")}`
+          Accesul tau Elite a fost activat{paymentStatus?.expires_at
+            ? ` pana pe ${new Date(paymentStatus.expires_at).toLocaleDateString("ro-RO")}`
             : ""}.
         </p>
         {paymentStatus?.tx_hash ? (
@@ -154,11 +154,25 @@ export function PaymentFlow() {
             TX: {paymentStatus.tx_hash.slice(0, 16)}...{paymentStatus.tx_hash.slice(-8)}
           </p>
         ) : null}
+
+        <div className="mt-6 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-5">
+          <p className="text-base font-semibold text-white">Conecteaza Discord</p>
+          <p className="mt-2 text-sm text-slate-400">
+            Primesti automat rolul Elite si acces la canalele private.
+          </p>
+          <a
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#5865F2] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#4752C4]"
+            href="/auth/discord/start"
+          >
+            Conecteaza Discord
+          </a>
+        </div>
+
         <a
-          className="accent-button mt-6 inline-block"
+          className="mt-4 inline-block text-sm text-slate-500 underline hover:text-slate-300"
           href="/dashboard"
         >
-          Mergi la Dashboard
+          Mergi la Dashboard fara Discord
         </a>
       </section>
     );
