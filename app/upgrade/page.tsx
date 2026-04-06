@@ -110,7 +110,7 @@ export default async function UpgradePage() {
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
               Upgrade la Elite
             </p>
-            <h1 className="text-4xl font-bold text-white md:text-6xl">
+            <h1 className="text-3xl font-bold text-white sm:text-4xl md:text-6xl">
               Deblochează <span className="gradient-text">experiența completă</span>
             </h1>
             <p className="mx-auto mt-5 max-w-3xl text-lg text-slate-300">

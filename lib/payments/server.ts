@@ -102,7 +102,7 @@ export async function createPaymentRequest(
         .from("payments")
         .select("*")
         .eq("id", existingPayment.id)
-        .single();
+        .maybeSingle();
 
       return { payment: fullPayment as PaymentRow, error: null };
     }
