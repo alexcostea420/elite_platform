@@ -365,7 +365,7 @@ export async function expireOverdueProfiles(): Promise<number> {
     .from("profiles")
     .select("id, discord_user_id")
     .eq("subscription_tier", "elite")
-    .eq("subscription_status", "active")
+    .in("subscription_status", ["active", "trial"])
     .lt("subscription_expires_at", now);
 
   if (!expired || expired.length === 0) {
