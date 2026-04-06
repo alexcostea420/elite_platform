@@ -187,7 +187,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
                   allowFullScreen
                   className="h-full w-full"
                   referrerPolicy="strict-origin-when-cross-origin"
-                  src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}`}
+                  src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?modestbranding=1&rel=0&showinfo=0&disablekb=0`}
                   title={selectedVideo.title}
                 />
               </div>
