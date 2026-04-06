@@ -60,7 +60,7 @@ export function getPaymentConfig(chain: PaymentChain = "TRC-20") {
       "bot_monthly": 98,
       "bot_monthly_elite": 45,
     } as Record<string, number>,
-    toleranceUsd: 0.02,
+    toleranceUsd: 0.2,
   };
 }
 

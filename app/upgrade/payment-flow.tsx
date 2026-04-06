@@ -192,7 +192,7 @@ export function PaymentFlow() {
           <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
             Plată în curs
           </p>
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-xl font-bold text-white sm:text-3xl">
             Trimite exact {formatAmount(paymentData.amount)} {paymentData.currency}
           </h2>
           <p className="mt-2 text-slate-400">
@@ -201,42 +201,38 @@ export function PaymentFlow() {
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
               Adresa wallet ({paymentData.chain_label})
             </p>
-            <div className="flex items-center gap-3">
-              <code className="flex-1 break-all text-sm font-mono text-white">
-                {paymentData.wallet_address}
-              </code>
-              <button
-                className="shrink-0 rounded-xl border border-white/10 px-3 py-2 text-sm text-slate-300 hover:bg-white/5"
-                onClick={() => copyToClipboard(paymentData.wallet_address, "address")}
-                type="button"
-              >
-                {copied === "address" ? "Copiat!" : "Copiază"}
-              </button>
-            </div>
+            <code className="mb-3 block break-all text-xs text-white sm:text-sm">
+              {paymentData.wallet_address}
+            </code>
+            <button
+              className="w-full rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-white/5 sm:w-auto"
+              onClick={() => copyToClipboard(paymentData.wallet_address, "address")}
+              type="button"
+            >
+              {copied === "address" ? "Copiat!" : "Copiaza adresa"}
+            </button>
           </div>
 
-          <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-5">
+          <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-4 md:p-5">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-              Sumă exactă de trimis
+              Suma exacta de trimis
             </p>
-            <div className="flex items-center gap-3">
-              <span className="text-3xl font-bold text-accent-emerald">
-                {formatAmount(paymentData.amount)} {paymentData.currency}
-              </span>
-              <button
-                className="shrink-0 rounded-xl border border-accent-emerald/30 px-3 py-2 text-sm text-accent-emerald hover:bg-accent-emerald/10"
-                onClick={() => copyToClipboard(formatAmount(paymentData.amount), "amount")}
-                type="button"
-              >
-                {copied === "amount" ? "Copiat!" : "Copiază"}
-              </button>
-            </div>
-            <p className="mt-2 text-sm text-slate-400">
-              Suma include un identificator unic. Trimite exact această sumă pentru detectarea automată.
+            <span className="block text-2xl font-bold text-accent-emerald sm:text-3xl">
+              {formatAmount(paymentData.amount)} {paymentData.currency}
+            </span>
+            <button
+              className="mt-3 w-full rounded-xl border border-accent-emerald/30 px-4 py-3 text-sm font-semibold text-accent-emerald hover:bg-accent-emerald/10 sm:w-auto"
+              onClick={() => copyToClipboard(formatAmount(paymentData.amount), "amount")}
+              type="button"
+            >
+              {copied === "amount" ? "Copiat!" : "Copiaza suma"}
+            </button>
+            <p className="mt-3 text-xs text-slate-400 sm:text-sm">
+              Suma include un identificator unic. Trimite exact aceasta suma.
             </p>
           </div>
 
