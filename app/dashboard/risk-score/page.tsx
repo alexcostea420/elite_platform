@@ -22,7 +22,7 @@ export const metadata: Metadata = buildPageMetadata({
   index: false,
 });
 
-export const revalidate = 300; // refresh every 5 min
+export const revalidate = 0; // always fresh data
 
 const componentLabels: Record<string, string> = {
   pi_cycle_top: "Pi Cycle Top",
@@ -109,31 +109,6 @@ export default async function RiskScorePage() {
   }
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
-
-  const isAdmin = profile?.role === "admin";
-
-  if (!isAdmin) {
-    return (
-      <>
-        <Navbar mode="dashboard" userIdentity={identity} />
-        <main className="pb-16 pt-24 md:pt-28">
-          <Container>
-            <section className="panel p-8 text-center md:p-12">
-              <div className="text-5xl mb-4">🚀</div>
-              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mt-4 max-w-lg mx-auto text-slate-400">
-                Aceasta sectiune va fi disponibila in curand. Lucram la ea!
-              </p>
-              <Link className="accent-button mt-6 inline-block" href="/dashboard">
-                Inapoi la Dashboard
-              </Link>
-            </section>
-          </Container>
-        </main>
-        <Footer compact />
-      </>
-    );
-  }
 
   const unlocked = hasPassedTimeGate(profile?.elite_since ?? null);
   const daysRemaining = getDaysUntilUnlock(profile?.elite_since ?? null);

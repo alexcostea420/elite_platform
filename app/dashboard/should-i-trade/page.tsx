@@ -10,6 +10,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getRiskScore } from "@/lib/trading-data";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 import { TimeGateLock } from "@/components/dashboard/time-gate-lock";
+import { TradingViewChart } from "@/components/dashboard/tradingview-chart";
 import { getDaysUntilUnlock, hasPassedTimeGate } from "@/lib/utils/time-gate";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -22,7 +23,7 @@ export const metadata: Metadata = buildPageMetadata({
   index: false,
 });
 
-export const revalidate = 300;
+export const revalidate = 0; // always fresh
 
 type Decision = "BUY" | "SELL" | "HOLD";
 
@@ -91,31 +92,6 @@ export default async function ShouldITradePage() {
   }
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
-
-  const isAdmin = profile?.role === "admin";
-
-  if (!isAdmin) {
-    return (
-      <>
-        <Navbar mode="dashboard" userIdentity={identity} />
-        <main className="pb-16 pt-24 md:pt-28">
-          <Container>
-            <section className="panel p-8 text-center md:p-12">
-              <div className="text-5xl mb-4">🚀</div>
-              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mt-4 max-w-lg mx-auto text-slate-400">
-                Aceasta sectiune va fi disponibila in curand. Lucram la ea!
-              </p>
-              <Link className="accent-button mt-6 inline-block" href="/dashboard">
-                Inapoi la Dashboard
-              </Link>
-            </section>
-          </Container>
-        </main>
-        <Footer compact />
-      </>
-    );
-  }
 
   const unlocked = hasPassedTimeGate(profile?.elite_since ?? null);
   const daysRemaining = getDaysUntilUnlock(profile?.elite_since ?? null);
@@ -205,6 +181,53 @@ export default async function ShouldITradePage() {
               </h3>
               <p className="mt-2 text-sm text-slate-400">{riskScore.fear_greed.label}</p>
             </article>
+          </section>
+
+          {/* TradingView Chart */}
+          <section className="panel mb-8 overflow-hidden p-4 md:p-6">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+              BTC/USDT - 15 min
+            </p>
+            <div className="overflow-hidden rounded-2xl border border-white/10">
+              <TradingViewChart />
+            </div>
+          </section>
+
+          {/* Derivatives Explained */}
+          <section className="panel mb-8 p-6 md:p-8">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Derivatives</p>
+            <h2 className="mb-5 text-2xl font-bold text-white">Ce spun futuresurile</h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                <p className="text-xs text-slate-500">Open Interest</p>
+                <p className="mt-1 text-xl font-bold text-white">${(riskScore.derivatives.oi_value / 1e9).toFixed(2)}B</p>
+                <p className="mt-1 text-xs text-slate-500">Bani in futures</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                <p className="text-xs text-slate-500">Long / Short</p>
+                <p className={`mt-1 text-xl font-bold ${riskScore.derivatives.long_pct > 55 ? "text-green-400" : riskScore.derivatives.short_pct > 55 ? "text-red-400" : "text-white"}`}>
+                  {riskScore.derivatives.long_pct.toFixed(0)}% / {riskScore.derivatives.short_pct.toFixed(0)}%
+                </p>
+                <p className="mt-1 text-xs text-slate-500">{riskScore.derivatives.long_pct > 55 ? "Majority long" : riskScore.derivatives.short_pct > 55 ? "Majority short" : "Echilibrat"}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                <p className="text-xs text-slate-500">Funding Rate</p>
+                <p className={`mt-1 text-xl font-bold ${riskScore.derivatives.funding_pct > 0.01 ? "text-green-400" : riskScore.derivatives.funding_pct < -0.01 ? "text-red-400" : "text-white"}`}>
+                  {riskScore.derivatives.funding_pct.toFixed(4)}%
+                </p>
+                <p className="mt-1 text-xs text-slate-500">{riskScore.derivatives.funding_pct > 0 ? "Longii platesc" : "Shortii platesc"}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                <p className="text-xs text-slate-500">Basis</p>
+                <p className={`mt-1 text-xl font-bold ${riskScore.derivatives.basis_pct > 0 ? "text-green-400" : "text-red-400"}`}>
+                  {riskScore.derivatives.basis_pct.toFixed(3)}%
+                </p>
+                <p className="mt-1 text-xs text-slate-500">{riskScore.derivatives.basis_pct > 0 ? "Futures > Spot" : "Spot > Futures"}</p>
+              </div>
+            </div>
+            <p className="mt-4 text-xs text-slate-600">
+              Funding rate pozitiv = longii sunt majoritari si platesc taxa. Basis negativ = futures sub spot, semn de pesimism.
+            </p>
           </section>
 
           {/* Key Data Points */}
