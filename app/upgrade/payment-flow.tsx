@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 type PlanDuration = "30_days" | "90_days" | "365_days";
 
@@ -219,6 +220,11 @@ export function PaymentFlow() {
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
               Adresa wallet ({paymentData.chain_label})
             </p>
+            <div className="mb-3 flex justify-center">
+              <div className="rounded-xl bg-white p-3">
+                <QRCodeSVG value={paymentData.wallet_address} size={160} />
+              </div>
+            </div>
             <code className="mb-3 block break-all text-xs text-white sm:text-sm">
               {paymentData.wallet_address}
             </code>
