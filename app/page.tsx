@@ -82,7 +82,6 @@ export default function HomePage() {
             </div>
           </Container>
         </section>
-        <LeadMagnetSection />
         <PricingSection />
         <TestimonialsSection />
         <FaqSection />

@@ -7,7 +7,6 @@ import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { BotSmartCta } from "@/components/upgrade/bot-smart-cta";
 import { PlanUpsellTrigger } from "@/components/upgrade/plan-upsell";
 import { TrialActivateButton } from "@/components/upgrade/trial-activate-button";
 
@@ -34,16 +33,6 @@ const planSlugMap: Record<string, string> = {
   "3 Luni": "elite_3mo",
   "12 Luni": "elite_annual",
 };
-
-const botFeatures = [
-  "Bitcoin + Ethereum",
-  "Altcoins: SOL, AVAX, DOGE, BNB, XRP + altele",
-  "TradFi: SPX, Oil, Gold, Silver",
-  "Supraveghere 24/7 de AI",
-  "Auto-scaling în funcție de cont",
-  "Auto-adaptare la condițiile pieței",
-  "Dashboard cu statistici live",
-];
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Abonament Trading Crypto | Prețuri Elite România",
@@ -255,26 +244,6 @@ export default async function UpgradePage() {
                   <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
                 </article>
               ))}
-            </div>
-          </section>
-
-          <section className="mb-10" id="bot">
-            <div className="mx-auto max-w-2xl rounded-[1.5rem] border border-accent-emerald/20 bg-surface-graphite/80 p-8 text-center backdrop-blur-sm md:p-12">
-              <div className="mb-4 text-4xl">🤖</div>
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                Coming Soon
-              </p>
-              <h2 className="text-2xl font-bold text-white sm:text-3xl">Bot AI Trading</h2>
-              <p className="mx-auto mt-4 max-w-lg text-slate-400">
-                Un bot care tranzactioneaza automat pe contul tau, 24/7.
-                Crypto, actiuni, materii prime - totul automatizat.
-              </p>
-              <p className="mt-4 text-sm font-semibold text-accent-emerald">
-                Membrii Elite vor primi acces prioritar si pret redus.
-              </p>
-              <p className="mt-6 text-xs text-slate-600">
-                Detalii in curand. Intra in comunitatea Elite ca sa fii primul care afla.
-              </p>
             </div>
           </section>
 

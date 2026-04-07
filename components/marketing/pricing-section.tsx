@@ -9,7 +9,7 @@ export function PricingSection() {
     <section className="px-4 py-20" id="preturi">
       <Container>
         <SectionHeading title={<>Alege <span className="gradient-text">Planul Tău</span></>} description="Alege durata de acces potrivită pentru nivelul tău." />
-        <div className="mx-auto mt-16 grid max-w-6xl gap-8 md:grid-cols-3">
+        <div className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pricingPlans.map((plan) => (
             <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
               {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
@@ -34,17 +34,6 @@ export function PricingSection() {
               {plan.crypto ? <div className="mt-4 text-center text-sm text-slate-400">{plan.crypto}</div> : null}
             </article>
           ))}
-        </div>
-        <div className="mx-auto mt-10 max-w-2xl rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-5 text-center">
-          <p className="text-sm font-semibold text-accent-emerald">
-            AI Trading Bot disponibil pentru membrii Elite la $45/lună
-          </p>
-          <p className="mt-2 text-xs text-slate-400">
-            Crypto + TradFi, Auto-scaling, Supraveghere 24/7 de AI
-          </p>
-          <Link className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent-emerald hover:text-accent-soft" href="/upgrade#bot">
-            Afla mai multe &rarr;
-          </Link>
         </div>
         <div className="mx-auto mt-8 max-w-2xl text-center">
           <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3">
