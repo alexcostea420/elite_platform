@@ -20,7 +20,6 @@ export function createServerSupabaseClient() {
           cookiesToSet.forEach(({ name, value, options }) => {
             cookieStore.set(name, value, {
               ...options,
-              domain: ".armatadetraderi.com",
               maxAge: 60 * 60 * 24 * 7, // 7 days
             });
           });

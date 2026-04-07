@@ -70,7 +70,6 @@ export async function middleware(request: NextRequest) {
         cookiesToSet.forEach(({ name, value, options }) => {
           response.cookies.set(name, value, {
             ...options,
-            domain: ".armatadetraderi.com",
             maxAge: 60 * 60 * 24 * 7, // 7 days
           });
         });
