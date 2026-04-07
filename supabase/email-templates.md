@@ -32,11 +32,11 @@ Variabile Supabase disponibile:
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;min-height:100vh;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);overflow:hidden;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);overflow:hidden;">
           <!-- Header -->
           <tr>
             <td align="center" style="padding:40px 32px 24px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;letter-spacing:-0.5px;">
+              <div style="font-size:28px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
                 ⚔️ Armata de Traderi
               </div>
             </td>
@@ -56,7 +56,7 @@ Variabile Supabase disponibile:
                   <td align="center">
                     <a href="{{ .ConfirmationURL }}"
                        target="_blank"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;letter-spacing:0.3px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;letter-spacing:0.3px;">
                       Confirmă Contul
                     </a>
                   </td>
@@ -66,7 +66,7 @@ Variabile Supabase disponibile:
           </tr>
           <!-- Footer -->
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#5A7168;text-align:center;">
                 Dacă nu ai cerut acest email, ignoră-l.<br>
                 &copy; Armata de Traderi — armatadetraderi.com
@@ -101,11 +101,11 @@ Variabile Supabase disponibile:
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;min-height:100vh;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);overflow:hidden;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);overflow:hidden;">
           <!-- Header -->
           <tr>
             <td align="center" style="padding:40px 32px 24px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;letter-spacing:-0.5px;">
+              <div style="font-size:28px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
                 ⚔️ Armata de Traderi
               </div>
             </td>
@@ -125,7 +125,7 @@ Variabile Supabase disponibile:
                   <td align="center">
                     <a href="{{ .ConfirmationURL }}"
                        target="_blank"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;letter-spacing:0.3px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;letter-spacing:0.3px;">
                       Resetează Parola
                     </a>
                   </td>
@@ -138,7 +138,7 @@ Variabile Supabase disponibile:
           </tr>
           <!-- Footer -->
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#5A7168;text-align:center;">
                 Dacă nu ai cerut acest email, ignoră-l.<br>
                 &copy; Armata de Traderi — armatadetraderi.com
@@ -173,11 +173,11 @@ Variabile Supabase disponibile:
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;min-height:100vh;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);overflow:hidden;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);overflow:hidden;">
           <!-- Header -->
           <tr>
             <td align="center" style="padding:40px 32px 24px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;letter-spacing:-0.5px;">
+              <div style="font-size:28px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
                 ⚔️ Armata de Traderi
               </div>
             </td>
@@ -197,7 +197,7 @@ Variabile Supabase disponibile:
                   <td align="center">
                     <a href="{{ .ConfirmationURL }}"
                        target="_blank"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;letter-spacing:0.3px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;letter-spacing:0.3px;">
                       Intră în Cont
                     </a>
                   </td>
@@ -207,7 +207,7 @@ Variabile Supabase disponibile:
           </tr>
           <!-- Footer -->
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#5A7168;text-align:center;">
                 Dacă nu ai cerut acest email, ignoră-l.<br>
                 &copy; Armata de Traderi — armatadetraderi.com

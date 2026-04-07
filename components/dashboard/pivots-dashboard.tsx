@@ -407,7 +407,7 @@ function EclipseCompactTable({ events, color: conceptColor }: { events: EclipseE
                   flex: 1, minWidth: 65, textAlign: "center", padding: "6px 4px", borderRadius: 6,
                   fontFamily: "var(--font-mono)", fontSize: 10,
                   border: `1px solid ${isBot ? "var(--green)" : isTop ? "var(--red)" : "var(--border)"}`,
-                  background: isBot ? "rgba(16,185,129,.08)" : isTop ? "rgba(239,68,68,.08)" : "var(--bg3)",
+                  background: isBot ? "rgba(11,102,35,.08)" : isTop ? "rgba(239,68,68,.08)" : "var(--bg3)",
                 }}>
                   <div style={{ fontSize: 8, color: "var(--muted)", textTransform: "uppercase", marginBottom: 3 }}>{KEY_LABELS[k] || k}</div>
                   {bCount > 0 && <div style={{ color: "var(--green)", fontWeight: 600 }}>{"\u25BC"} {bCount}/{real.length}</div>}
@@ -753,7 +753,7 @@ function GannTable({ anchorDate }: { anchorDate: string }) {
             const isMajor = g.cat === "Major";
             const statusText = isPast ? "Trecut" : isNear ? "ACUM" : `în ${daysFromNow}z`;
             const statusColor = isNear ? "var(--solar)" : isPast ? "var(--dim)" : "var(--green)";
-            const rowBg = isNear ? "rgba(245,158,11,.08)" : isMajor && isFuture ? "rgba(16,185,129,.03)" : "transparent";
+            const rowBg = isNear ? "rgba(245,158,11,.08)" : isMajor && isFuture ? "rgba(11,102,35,.03)" : "transparent";
             const labelColor = isMajor ? "var(--text)" : "var(--muted)";
 
             return (
@@ -1031,7 +1031,7 @@ function HeaderBadges() {
 
   let pivotText = "Nicio fereastră activă";
   let pivotColor = "var(--accent)";
-  let pivotBorder = "rgba(16,185,129,.15)";
+  let pivotBorder = "rgba(11,102,35,.15)";
 
   if (sc.upcoming.length > 0) {
     const u = sc.upcoming[0];
@@ -1041,18 +1041,18 @@ function HeaderBadges() {
     pivotBorder = "rgba(245,158,11,.3)";
   } else if (sc.active.length > 0) {
     pivotText = `\u26A1 Pivot activ: ${sc.active[0].name}`;
-    pivotColor = "#10B981";
-    pivotBorder = "rgba(16,185,129,.3)";
+    pivotColor = "#0B6623";
+    pivotBorder = "rgba(11,102,35,.3)";
   }
 
   return (
     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
       <span style={{
-        background: "rgba(16,185,129,.06)", border: "1px solid rgba(16,185,129,.15)",
+        background: "rgba(11,102,35,.06)", border: "1px solid rgba(11,102,35,.15)",
         borderRadius: 20, padding: "4px 12px", fontSize: 11, color: "var(--accent)", fontFamily: "var(--font-mono)"
       }}>{dateBadge}</span>
       <span style={{
-        background: "rgba(16,185,129,.06)", border: `1px solid ${pivotBorder}`,
+        background: "rgba(11,102,35,.06)", border: `1px solid ${pivotBorder}`,
         borderRadius: 20, padding: "4px 12px", fontSize: 11, color: pivotColor, fontFamily: "var(--font-mono)"
       }}>{pivotText}</span>
     </div>
@@ -1147,7 +1147,7 @@ export default function PivotsDashboard() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
                 {[
                   { q: "Q4", sub: "Oct–Dec", val: "+47.7%", color: "var(--solar)", bg: "rgba(245,158,11,.06)", border: "rgba(245,158,11,.25)", valColor: "var(--green)", desc: "Cel mai puternic. Toate ATH-urile: Dec 2017, Nov 2021, Oct 2025" },
-                  { q: "Q2", sub: "Apr–Iun", val: "+7.6%", color: "var(--fib)", bg: "rgba(16,185,129,.06)", border: "rgba(16,185,129,.2)", valColor: "var(--green)", desc: "Post-halving rally. Al doilea cel mai consistent trimestru" },
+                  { q: "Q2", sub: "Apr–Iun", val: "+7.6%", color: "var(--fib)", bg: "rgba(11,102,35,.06)", border: "rgba(11,102,35,.2)", valColor: "var(--green)", desc: "Post-halving rally. Al doilea cel mai consistent trimestru" },
                   { q: "Q1", sub: "Ian–Mar", val: "-2.3%", color: "var(--text)", bg: "rgba(100,116,139,.06)", border: "rgba(100,116,139,.2)", valColor: "var(--red)", desc: "Mixt - puternic in bull, slab in bear. Q1 2026: -21%" },
                   { q: "Q3", sub: "Iul–Sep", val: "+1.0%", color: "var(--red)", bg: "rgba(239,68,68,.05)", border: "rgba(239,68,68,.2)", valColor: "var(--orange)", desc: "Cel mai slab. Bottom-uri posibile dar fara directie clara" },
                 ].map((item) => (
@@ -1250,7 +1250,7 @@ export default function PivotsDashboard() {
                   <tr><td className={s.muted}>2015</td><td className={s.mono} style={{ color: "var(--red)" }}>&lt;30</td><td className={cx(s.small, s.muted)}>Bottom exact bear → $152</td></tr>
                   <tr><td className={s.muted}>Mar 2020</td><td className={s.mono} style={{ color: "var(--red)" }}>29.5</td><td className={cx(s.small, s.muted)}>+1,002% în 12 luni</td></tr>
                   <tr><td className={s.muted}>Iun 2022</td><td className={s.mono} style={{ color: "var(--red)" }}>25.8</td><td className={cx(s.small, s.muted)}>+59% în 12 luni (FTX retest -15%)</td></tr>
-                  <tr style={{ background: "rgba(16,185,129,.04)" }}><td style={{ color: "var(--green)" }}>Feb 2026</td><td className={s.mono} style={{ color: "var(--red)" }}>26.8</td><td className={s.small} style={{ color: "var(--solar)" }}>??? - în curs</td></tr>
+                  <tr style={{ background: "rgba(11,102,35,.04)" }}><td style={{ color: "var(--green)" }}>Feb 2026</td><td className={s.mono} style={{ color: "var(--red)" }}>26.8</td><td className={s.small} style={{ color: "var(--solar)" }}>??? - în curs</td></tr>
                 </tbody>
               </table>
               <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}><strong style={{ color: "var(--fib)" }}>Hit rate: 5/5 - 100%</strong> în toată istoria BTC. RSI a revenit la ~31 după low-ul de 26.8 din Feb 2026.</div>
@@ -1263,7 +1263,7 @@ export default function PivotsDashboard() {
                 <tbody>
                   <tr><td className={s.muted}>2018</td><td className={s.mono} style={{ color: "var(--orange)" }}>masiv</td><td className={cx(s.small, s.muted)}>Bottom BTC $3,200</td></tr>
                   <tr><td className={s.muted}>2022</td><td className={s.mono} style={{ color: "var(--orange)" }}>~4.3×</td><td className={cx(s.small, s.muted)}>Bottom BTC $15,500</td></tr>
-                  <tr style={{ background: "rgba(16,185,129,.04)" }}><td style={{ color: "var(--green)" }}>2026</td><td className={s.mono} style={{ color: "var(--green)" }}>+92% ✓</td><td className={s.small} style={{ color: "var(--solar)" }}>Prag 70–80% depășit</td></tr>
+                  <tr style={{ background: "rgba(11,102,35,.04)" }}><td style={{ color: "var(--green)" }}>2026</td><td className={s.mono} style={{ color: "var(--green)" }}>+92% ✓</td><td className={s.small} style={{ color: "var(--solar)" }}>Prag 70–80% depășit</td></tr>
                 </tbody>
               </table>
               <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}>XAU/BTC a atins minimul în Oct 2025 (BTC ATH: 0.024). Martie 2026: 0.046 = <strong style={{ color: "var(--fib)" }}>+92%</strong> față de minim - trecut de pragul istoric de semnal.</div>
@@ -1283,7 +1283,7 @@ export default function PivotsDashboard() {
                 { title: "Fed Rate BPS = Zile la Bottom", desc: "550 bps · Sep 2024 + 550 zile = Martie 2026" },
                 { title: "Drawdown Comprimat (-52–57%)", desc: "Zonă de bottom: $54K–$60K față de ATH $126K" },
               ].map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: 12, background: "rgba(16,185,129,.06)", border: "1px solid rgba(16,185,129,.2)", borderRadius: 8 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: 12, background: "rgba(11,102,35,.06)", border: "1px solid rgba(11,102,35,.2)", borderRadius: 8 }}>
                   <span style={{ color: "var(--fib)", fontSize: 18, fontFamily: "var(--font-mono)" }}>✓</span>
                   <div><div style={{ fontWeight: 600, color: "var(--text)", fontSize: 13 }}>{item.title}</div><div className={cx(s.small, s.muted)}>{item.desc}</div></div>
                 </div>
@@ -1416,7 +1416,7 @@ export default function PivotsDashboard() {
                 <thead><tr><th>#</th><th>Perioadă</th><th>Start</th><th>End</th><th style={{ textAlign: "right" }}>Return</th><th>Context</th></tr></thead>
                 <tbody>
                   {MERCURY_DATA.map((mr) => (
-                    <tr key={mr.num} style={{ background: mr.highlight === "green" ? "rgba(16,185,129,.04)" : mr.highlight === "solar" ? "rgba(245,158,11,.04)" : undefined }}>
+                    <tr key={mr.num} style={{ background: mr.highlight === "green" ? "rgba(11,102,35,.04)" : mr.highlight === "solar" ? "rgba(245,158,11,.04)" : undefined }}>
                       <td className={cx(s.mono, mr.highlight ? undefined : s.muted)} style={mr.highlight === "green" ? { color: "var(--green)" } : mr.highlight === "solar" ? { color: "var(--solar)" } : undefined}>{mr.num}</td>
                       <td className={cx(s.small, mr.highlight ? undefined : s.muted)} style={mr.highlight === "green" ? { color: "var(--green)" } : mr.highlight === "solar" ? { color: "var(--solar)" } : undefined}>{mr.period}</td>
                       <td className={s.mono}>{mr.start}</td>
@@ -1473,7 +1473,7 @@ export default function PivotsDashboard() {
                     { int: "+720z", deg: "2×360", d3: "25%", d5: "25%", d7: "62%", edge: "-15pp", good: false },
                     { int: "+90z", deg: "90°", d3: "8%", d5: "17%", d7: "25%", edge: "-23pp", bad: true },
                   ].map((row) => (
-                    <tr key={row.int} style={{ background: row.good ? "rgba(16,185,129,.06)" : row.bad ? "rgba(239,68,68,.04)" : undefined }}>
+                    <tr key={row.int} style={{ background: row.good ? "rgba(11,102,35,.06)" : row.bad ? "rgba(239,68,68,.04)" : undefined }}>
                       <td className={s.mono} style={{ color: row.good ? "var(--green)" : row.bad ? "var(--red)" : undefined, fontWeight: row.good || row.bad ? 600 : undefined }}>{row.int}</td>
                       <td className={cx(s.muted, s.mono)} style={{ fontSize: 11 }}>{row.deg}</td>
                       <td className={s.mono} style={{ textAlign: "center" }}>{row.d3}</td>
@@ -1641,7 +1641,7 @@ export default function PivotsDashboard() {
               {[
                 { label: "Auriu - Eclipsă Solară", bg: "rgba(245,158,11,.12)", border: "rgba(245,158,11,.3)", color: "var(--solar)" },
                 { label: "Albastru - Eclipsă Lunară", bg: "rgba(147,197,253,.12)", border: "rgba(147,197,253,.3)", color: "var(--lunar)" },
-                { label: "Verde - Fibonacci", bg: "rgba(16,185,129,.12)", border: "rgba(16,185,129,.3)", color: "var(--fib)" },
+                { label: "Verde - Fibonacci", bg: "rgba(11,102,35,.12)", border: "rgba(11,102,35,.3)", color: "var(--fib)" },
                 { label: "Portocaliu - Halving", bg: "rgba(249,115,22,.12)", border: "rgba(249,115,22,.3)", color: "var(--halving)" },
                 { label: "Teal - Cicluri A/B", bg: "rgba(6,182,212,.12)", border: "rgba(6,182,212,.3)", color: "var(--cycle)" },
                 { label: "Gri - Watch (scor=3)", bg: "rgba(100,116,139,.12)", border: "rgba(100,116,139,.3)", color: "#90a4ae" },

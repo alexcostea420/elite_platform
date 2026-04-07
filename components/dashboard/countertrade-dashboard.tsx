@@ -290,7 +290,7 @@ function ScoresTable() {
                 : s < 35
                   ? "#d95555"
                   : s > 65
-                    ? "#27b86e"
+                    ? "#0B6623"
                     : "#c88c0a";
 
             let trend: React.ReactNode = (
@@ -526,8 +526,8 @@ function MainChart() {
           {
             label: "BTC Price",
             data: allDates.map((d) => pm[d] ?? null),
-            borderColor: "#27b86e",
-            backgroundColor: "rgba(39,184,110,.04)",
+            borderColor: "#0B6623",
+            backgroundColor: "rgba(11,102,35,.04)",
             fill: true,
             borderWidth: 2,
             pointRadius: 0,
@@ -639,7 +639,7 @@ function FngChart() {
     const sentVals = allDates.map((d) => sentMap[d] ?? null);
     const barColors = sentVals.map((v) => {
       if (v == null) return "transparent";
-      if (v < 35) return "rgba(39,184,110,.55)";
+      if (v < 35) return "rgba(11,102,35,.55)";
       if (v > 65) return "rgba(217,85,85,.55)";
       return "rgba(200,140,10,.45)";
     });

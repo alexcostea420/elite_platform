@@ -13,15 +13,15 @@
   --text: #e2e8f0;
   --muted: #94a3b8;
   --dim: #475569;
-  --accent: #10b981;
-  --accent2: #34d399;
+  --accent: #0B6623;
+  --accent2: #0E7A2B;
   --solar: #f59e0b;
   --lunar: #93c5fd;
-  --fib: #10b981;
+  --fib: #0B6623;
   --halving: #f97316;
   --cycle: #06b6d4;
   --pi: #a78bfa;
-  --green: #10b981;
+  --green: #0B6623;
   --red: #ef4444;
   --orange: #f97316;
   --font-head: 'Syne', sans-serif;
@@ -410,7 +410,7 @@
 .swScore { font-family: var(--font-mono); font-size: 40px; font-weight: 700; line-height: 1; animation: scorePop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 .swLabel { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-top: 4px; }
 .swStatus { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); }
-.swActive { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.swActive { background: rgba(16, 185, 129, 0.15); color: #0B6623; border: 1px solid rgba(16, 185, 129, 0.3); }
 .swInactive { background: rgba(100, 116, 139, 0.1); color: var(--muted); border: 1px solid rgba(100, 116, 139, 0.2); }
 .swWatch { background: rgba(245, 158, 11, 0.12); color: var(--solar); border: 1px solid rgba(245, 158, 11, 0.25); }
 .swMethods { flex: 1; min-width: 200px; }

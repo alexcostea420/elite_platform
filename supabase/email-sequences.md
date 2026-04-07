@@ -26,10 +26,10 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);">
           <tr>
             <td align="center" style="padding:40px 32px 16px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;">🪖 Armata de Traderi</div>
+              <div style="font-size:28px;font-weight:800;color:#0B6623;">🪖 Armata de Traderi</div>
             </td>
           </tr>
           <tr>
@@ -60,7 +60,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/dashboard"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
                       Intra in Dashboard
                     </a>
                   </td>
@@ -73,7 +73,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
             </td>
           </tr>
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
                 Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
@@ -104,10 +104,10 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);">
           <tr>
             <td align="center" style="padding:40px 32px 16px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;">🪖 Armata de Traderi</div>
+              <div style="font-size:28px;font-weight:800;color:#0B6623;">🪖 Armata de Traderi</div>
             </td>
           </tr>
           <tr>
@@ -137,7 +137,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/dashboard/videos"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
                       Vezi Video-urile Elite
                     </a>
                   </td>
@@ -150,7 +150,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
             </td>
           </tr>
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
                 Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
@@ -181,10 +181,10 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);">
           <tr>
             <td align="center" style="padding:40px 32px 16px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;">🪖 Armata de Traderi</div>
+              <div style="font-size:28px;font-weight:800;color:#0B6623;">🪖 Armata de Traderi</div>
             </td>
           </tr>
           <tr>
@@ -196,25 +196,25 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
                 Uite ce zic oamenii care sunt deja in comunitate:
               </p>
 
-              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #69E08F;">
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #0B6623;">
                 <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
                   "De cand am intrat in Elite, sunt in sfarsit pe plus. Alex este foarte metodic, calculat, si STIE MULTE!"
                 </p>
-                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">Daniel - membru din octombrie 2025</p>
+                <p style="margin:0;font-size:13px;color:#0B6623;font-weight:600;">Daniel - membru din octombrie 2025</p>
               </div>
 
-              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #69E08F;">
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #0B6623;">
                 <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
                   "Partea de risk management mi-a schimbat complet modul de a gandi. Nu a fost genul ala de informatie aruncata peste tine, ci explicata pe bune."
                 </p>
-                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">Alex Ivana - membru din martie 2026</p>
+                <p style="margin:0;font-size:13px;color:#0B6623;font-weight:600;">Alex Ivana - membru din martie 2026</p>
               </div>
 
-              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #69E08F;">
+              <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 14px;border-left:3px solid #0B6623;">
                 <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#A3B8B0;font-style:italic;">
                   "Este mereu prezent si gata sa raspunda, sa explice, sa ajute. Oamenii din comunitate sunt faini, activi, haiosi."
                 </p>
-                <p style="margin:0;font-size:13px;color:#69E08F;font-weight:600;">Liviu Parepa - membru din octombrie 2025</p>
+                <p style="margin:0;font-size:13px;color:#0B6623;font-weight:600;">Liviu Parepa - membru din octombrie 2025</p>
               </div>
 
               <div style="background:rgba(245,158,11,0.08);border-radius:12px;padding:20px;margin:24px 0;border:1px solid rgba(245,158,11,0.2);">
@@ -230,7 +230,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/upgrade"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
                       Alege un Plan
                     </a>
                   </td>
@@ -239,7 +239,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
             </td>
           </tr>
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
                 Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>
@@ -270,10 +270,10 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#06110D;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(105,224,143,0.15);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);">
           <tr>
             <td align="center" style="padding:40px 32px 16px;">
-              <div style="font-size:28px;font-weight:800;color:#69E08F;">🪖 Armata de Traderi</div>
+              <div style="font-size:28px;font-weight:800;color:#0B6623;">🪖 Armata de Traderi</div>
             </td>
           </tr>
           <tr>
@@ -296,14 +296,14 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
               <div style="background:#0A1712;border-radius:12px;padding:20px;margin:0 0 24px;">
                 <p style="margin:0 0 4px;font-size:13px;color:#5A7168;">Cel mai popular plan:</p>
                 <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:#FFFFFF;">3 Luni - $137</p>
-                <p style="margin:0;font-size:13px;color:#69E08F;">Indicatori deblocati instant, fara perioada de asteptare de 31 zile</p>
+                <p style="margin:0;font-size:13px;color:#0B6623;">Indicatori deblocati instant, fara perioada de asteptare de 31 zile</p>
               </div>
 
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
                     <a href="https://app.armatadetraderi.com/upgrade"
-                       style="display:inline-block;padding:14px 40px;background-color:#69E08F;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
+                       style="display:inline-block;padding:14px 40px;background-color:#0B6623;color:#06110D;font-size:16px;font-weight:700;text-decoration:none;border-radius:10px;">
                       Continua cu Elite
                     </a>
                   </td>
@@ -320,7 +320,7 @@ Secventa de emailuri automate dupa signup. Se trimit prin Supabase Edge Function
             </td>
           </tr>
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(105,224,143,0.1);">
+            <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;color:#5A7168;text-align:center;">
                 Alex Costea - Armata de Traderi<br>armatadetraderi.com
               </p>

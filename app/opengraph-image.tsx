@@ -16,7 +16,7 @@ export default function OpenGraphImage() {
           position: "relative",
           overflow: "hidden",
           background:
-            "radial-gradient(circle at top right, rgba(22, 163, 74, 0.18), transparent 34%), linear-gradient(135deg, #0a0a0f 0%, #111827 50%, #1a1a2e 100%)",
+            "radial-gradient(circle at top right, rgba(11, 102, 35, 0.18), transparent 34%), linear-gradient(135deg, #0a0a0f 0%, #111827 50%, #1a1a2e 100%)",
           color: "#ffffff",
           fontFamily: "Inter, sans-serif",
         }}
@@ -121,7 +121,7 @@ export default function OpenGraphImage() {
         >
           <defs>
             <linearGradient id="chartLine" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#34d399" />
+              <stop offset="0%" stopColor="#0B6623" />
               <stop offset="100%" stopColor="#f59e0b" />
             </linearGradient>
           </defs>
@@ -142,7 +142,7 @@ export default function OpenGraphImage() {
             strokeLinejoin="round"
             strokeWidth="8"
           />
-          <g fill="#34d399">
+          <g fill="#0B6623">
             <circle cx="74" cy="170" r="7" />
             <circle cx="178" cy="160" r="7" />
             <circle cx="282" cy="124" r="7" />
