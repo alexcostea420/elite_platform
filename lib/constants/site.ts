@@ -85,32 +85,32 @@ export const benefits = [
   {
     icon: "💬",
     title: "Discord Elite",
-    description: "Acces exclusiv la canalele Elite pe Discord cu analize în timp real, alerte de trading și suport prioritar."
+    description: "Canale private cu analize in timp real, discutii de piata si suport direct de la Alex."
   },
   {
     icon: "📊",
-    title: "Indicator ELITE",
-    description: "Indicator exclusiv pentru TradingView cu semnale de intrare și ieșire bazate pe strategiile testate de Alex."
+    title: "4 Indicatori Elite",
+    description: "Indicatori exclusivi pe TradingView: Elite Bands, Momentum, Levels si Fib Zones."
   },
   {
     icon: "🎥",
     title: "Sesiuni Live",
-    description: "Participi la sesiuni live unde vezi exact cum este analizată piața și cum se iau deciziile în timp real."
-  },
-  {
-    icon: "📚",
-    title: "Video Educaționale",
-    description: "Peste 100 de video-uri care acoperă totul, de la fundamente până la strategii avansate de trading crypto."
+    description: "Update de piata saptamanal cu ajustare de portofoliu. Vezi exact cum se iau deciziile."
   },
   {
     icon: "📈",
-    title: "Analize Săptămânale",
-    description: "Primești analize detaliate ale pieței crypto, cu predicții, niveluri și oportunități de trading."
+    title: "Portofoliu Live",
+    description: "16 actiuni cu zone de Buy/Sell actualizate. Stii mereu unde suntem pozitionati si de ce."
+  },
+  {
+    icon: "📚",
+    title: "55+ Video-uri",
+    description: "Biblioteca completa: de la bazele investitiilor pana la strategii avansate de executie."
   },
   {
     icon: "🤝",
-    title: "Comunitate Activă",
-    description: "Conectează-te cu traderi activi, schimbă idei și învață din experiențele altora în comunitatea Discord."
+    title: "Comunitate",
+    description: "Investitori si traderi activi care impart idei, rezultate si se sustin reciproc."
   }
 ];
 
