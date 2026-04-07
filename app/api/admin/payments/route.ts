@@ -43,7 +43,9 @@ export async function GET(request: NextRequest) {
       const csvRows = allPayments.map((p) => {
         const row = p as Record<string, unknown>;
         const profiles = row.profiles as Record<string, string> | null;
-        const userName = profiles?.full_name ?? profiles?.discord_username ?? "";
+        let userName = profiles?.full_name ?? profiles?.discord_username ?? "";
+        // Prevent CSV formula injection
+        if (/^[=+\-@\t\r]/.test(userName)) userName = `'${userName}`;
         return [
           row.created_at,
           `"${userName.replace(/"/g, '""')}"`,

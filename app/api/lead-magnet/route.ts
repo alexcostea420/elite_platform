@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     const { email } = await request.json();
 
-    if (!email || typeof email !== "string" || !email.includes("@")) {
+    if (!email || typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
       return NextResponse.json({ error: "Email invalid" }, { status: 400 });
     }
 

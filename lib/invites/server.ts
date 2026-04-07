@@ -11,7 +11,7 @@ const PLAN_DAYS: Record<string, number> = {
 };
 
 export function generateInviteToken() {
-  return randomBytes(16).toString("hex"); // 32 char hex token, 128 bits entropy
+  return randomBytes(32).toString("hex"); // 64 char hex token, 256 bits entropy
 }
 
 export async function createInviteLink(opts: {
