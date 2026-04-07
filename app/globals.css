@@ -13,9 +13,9 @@ html {
 body {
   @apply bg-crypto-dark text-slate-100 antialiased;
   background-image:
-    radial-gradient(circle at top, rgba(105, 224, 143, 0.14), transparent 28%),
-    radial-gradient(circle at 82% 18%, rgba(63, 201, 122, 0.08), transparent 18%),
-    linear-gradient(180deg, #0d1713 0%, #06110d 34%, #030806 100%);
+    radial-gradient(circle at top, rgba(212, 168, 83, 0.08), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(212, 168, 83, 0.04), transparent 18%),
+    linear-gradient(180deg, #0e1017 0%, #0a0d14 34%, #060810 100%);
 }
 
 a,
@@ -24,7 +24,7 @@ button {
 }
 
 *:focus-visible {
-  @apply outline-none ring-2 ring-accent-emerald ring-offset-2 ring-offset-crypto-dark;
+  @apply outline-none ring-2 ring-accent-emerald/60 ring-offset-2 ring-offset-crypto-dark;
 }
 
 @layer components {
@@ -48,13 +48,13 @@ button {
   }
 
   .ghost-button {
-    @apply inline-flex items-center justify-center rounded-xl border border-white/20 px-6 py-3 font-semibold text-white hover:border-accent-emerald hover:text-accent-emerald;
+    @apply inline-flex items-center justify-center rounded-xl border border-white/20 px-6 py-3 font-semibold text-white hover:border-accent-emerald/70 hover:text-accent-emerald;
   }
 
   .grid-glow {
     background-image:
-      linear-gradient(rgba(105, 224, 143, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(105, 224, 143, 0.045) 1px, transparent 1px);
+      linear-gradient(rgba(212, 168, 83, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 168, 83, 0.03) 1px, transparent 1px);
     background-size: 42px 42px;
   }
 }
