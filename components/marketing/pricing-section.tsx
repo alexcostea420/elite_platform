@@ -37,6 +37,7 @@ export function PricingSection() {
         </div>
 
         {/* Paid plans - 3 columns below */}
+        <div className="mt-16" />
         <SectionHeading title={<>Alege <span className="gradient-text">Planul Tau</span></>} description="Alege durata de acces potrivita pentru nivelul tau." />
         <div className="mx-auto mt-10 grid max-w-5xl gap-8 md:grid-cols-3">
           {pricingPlans.filter((plan) => plan.price !== "$0").map((plan) => (
