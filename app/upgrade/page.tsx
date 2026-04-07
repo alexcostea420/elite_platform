@@ -7,7 +7,6 @@ import { Container } from "@/components/ui/container";
 import { pricingPlans } from "@/lib/constants/site";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { PlanUpsellTrigger } from "@/components/upgrade/plan-upsell";
 import { TrialActivateButton } from "@/components/upgrade/trial-activate-button";
 
 const comparisonRows: { label: string; free: boolean; elite: boolean }[] = [
@@ -229,18 +228,12 @@ export default async function UpgradePage() {
                       </li>
                     ))}
                   </ul>
-                  <PlanUpsellTrigger
-                    planSlug={planSlugMap[plan.name] ?? "elite_monthly"}
-                    planLabel={plan.name}
-                    planPrice={isVeteran && veteranPrices[plan.name] ? veteranPrices[plan.name] : plan.price}
+                  <Link
+                    className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                    href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
                   >
-                    <button
-                      className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
-                      type="button"
-                    >
-                      {plan.cta}
-                    </button>
-                  </PlanUpsellTrigger>
+                    {plan.cta}
+                  </Link>
                   <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
                 </article>
               ))}
