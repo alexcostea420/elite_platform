@@ -14,9 +14,9 @@ const bulletPoints = [
 ];
 
 const credibilityStats = [
-  { value: "4+", label: "Ani de trading activ", icon: "📈" },
-  { value: "350+", label: "Membri în comunitate", icon: "👥" },
-  { value: "24/7", label: "Bot AI trading", icon: "🤖" },
+  { value: "4+", label: "Ani de experienta", icon: "📈" },
+  { value: "350+", label: "Membri in comunitate", icon: "👥" },
+  { value: "16", label: "Actiuni monitorizate", icon: "📊" },
 ];
 
 export function AboutSection() {

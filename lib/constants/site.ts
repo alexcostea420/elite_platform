@@ -75,9 +75,9 @@ export const dashboardNavGroups = [
 ];
 
 export const heroStats = [
-  { value: "350+", label: "Membri în Comunitate", tone: "gold" },
+  { value: "350+", label: "Membri in Comunitate", tone: "gold" },
   { value: "55+", label: "Video-uri Elite", tone: "green" },
-  { value: "24/7", label: "Bot AI Trading", tone: "gold" },
+  { value: "4+", label: "Ani de Experienta", tone: "gold" },
   { value: "3 ZILE", label: "Trial Gratuit", tone: "green" }
 ];
 
