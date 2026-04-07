@@ -74,7 +74,7 @@ export async function signupAction(formData: FormData) {
     redirect(`/signup?error=${encodeURIComponent("Numele este prea lung (maxim 100 caractere).")}`);
   }
 
-  if (discordUsername.length > 50) {
+  if (discordUsername.length > 32 || discordUsername.length < 2) {
     redirect(`/signup?error=${encodeURIComponent("Username-ul Discord este prea lung (maxim 50 caractere).")}`);
   }
 
