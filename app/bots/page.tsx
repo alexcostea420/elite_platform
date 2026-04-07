@@ -11,14 +11,14 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Bot Trading Automat | Copiaza Tranzactiile AI",
+  title: "Bot Trading Automat | Tranzactioneaza Non-Stop",
   description:
-    "Copiaza automat tranzactiile ML pe contul tau Hyperliquid. Return consistent, sizing automat, zero acces la fonduri.",
+    "Bot de trading automat care tranzactioneaza pentru tine, 24/7. Return consistent, sizing automat, zero acces la fonduri.",
   keywords: [
     "bot trading",
     "copytrade crypto",
     "trading automat",
-    "hyperliquid bot",
+    "bot AI trading",
   ],
   path: "/bots",
   host: "app",
@@ -187,10 +187,10 @@ export default async function BotsPage() {
             <h1 className="text-3xl font-bold text-white">Bot Trading AI</h1>
             <h2 className="mt-2 text-xl font-semibold text-accent-emerald">Coming Soon</h2>
             <p className="mx-auto mt-4 max-w-lg text-slate-400">
-              Botul de trading automat este in dezvoltare. Copiaza automat tranzactiile ML pe contul tau Hyperliquid - return consistent, sizing automat, zero acces la fonduri.
+              Un bot care tranzactioneaza pentru tine, non-stop. Tu setezi riscul, el executa.
             </p>
             <p className="mt-6 text-sm text-slate-500">
-              Vrei sa fii notificat cand e gata? Intra in comunitatea Elite si vei fi primul care afla.
+              Membrii Elite vor primi acces prioritar si pret redus. Intra in comunitate ca sa fii primul care afla.
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <Link className="accent-button px-6 py-3" href="/upgrade">
