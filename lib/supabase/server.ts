@@ -18,10 +18,7 @@ export function createServerSupabaseClient() {
       setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, {
-              ...options,
-              maxAge: 60 * 60 * 24 * 7, // 7 days
-            });
+            cookieStore.set(name, value, options);
           });
         } catch {
           // Cookie writes are ignored in Server Components. Middleware and
