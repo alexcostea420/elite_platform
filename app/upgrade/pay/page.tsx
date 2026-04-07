@@ -233,29 +233,49 @@ function PayPageInner() {
     );
   }
 
-  // Error
+  // Error - special handling for unauthenticated
   if (step === "error") {
+    const isAuthError = error === "Neautentificat.";
     return (
-      <div className="flex min-h-screen items-center justify-center bg-crypto-dark">
-        <div className="panel max-w-md border-red-500/30 px-6 py-8 text-center md:px-8">
-          <div className="text-5xl">⚠️</div>
-          <h2 className="mt-4 text-2xl font-bold text-white">Eroare la plată</h2>
-          <p className="mt-3 text-slate-300">{error}</p>
+      <div className="flex min-h-screen items-center justify-center bg-crypto-dark px-4">
+        <div className={`panel max-w-md px-6 py-8 text-center md:px-8 ${isAuthError ? "border-accent-emerald/30" : "border-red-500/30"}`}>
+          <div className="text-5xl">{isAuthError ? "🔒" : "⚠️"}</div>
+          <h2 className="mt-4 text-2xl font-bold text-white">
+            {isAuthError ? "Ai nevoie de un cont" : "Eroare la plata"}
+          </h2>
+          <p className="mt-3 text-slate-300">
+            {isAuthError
+              ? "Pentru a plati, trebuie sa ai un cont. Creaza-ti unul gratuit sau logheaza-te."
+              : error}
+          </p>
           <div className="mt-6 flex flex-col gap-3">
-            <button
-              className="accent-button"
-              onClick={() => {
-                setStep("loading");
-                setError(null);
-                createPayment();
-              }}
-              type="button"
-            >
-              Încearcă din nou
-            </button>
-            <Link className="ghost-button" href="/upgrade">
-              Înapoi la planuri
-            </Link>
+            {isAuthError ? (
+              <>
+                <Link className="accent-button" href="/signup">
+                  Creaza cont gratuit
+                </Link>
+                <Link className="ghost-button" href="/login?next=/upgrade">
+                  Am deja cont - Logheaza-ma
+                </Link>
+              </>
+            ) : (
+              <>
+                <button
+                  className="accent-button"
+                  onClick={() => {
+                    setStep("loading");
+                    setError(null);
+                    createPayment();
+                  }}
+                  type="button"
+                >
+                  Incearca din nou
+                </button>
+                <Link className="ghost-button" href="/upgrade">
+                  Inapoi la planuri
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
