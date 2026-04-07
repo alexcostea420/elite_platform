@@ -22,6 +22,15 @@ export const metadata: Metadata = buildPageMetadata({
 
 const articles = [
   {
+    slug: "ciclul-bitcoin-2026",
+    title: "Bitcoin in 2026 - Suntem la Bottom? 7 Indicatori Analizați",
+    excerpt:
+      "7 indicatori independenți analizați fără bias. Cycle timing, RSI, Gold/BTC, Fed Rate și altele - toți converg spre aceeași fereastră. Analiza completă a ciclului Bitcoin.",
+    date: "Martie 2026",
+    readTime: "12 min",
+    category: "Analiză",
+  },
+  {
     slug: "cum-sa-incepi-trading",
     title: "Cum să Începi în Trading Crypto - Ghid Complet pentru Începători",
     excerpt:
