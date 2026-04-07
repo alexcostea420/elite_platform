@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function TradingViewChart() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [showZones, setShowZones] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    const studies = [];
+    if (showZones) {
+      studies.push("MASimple@tv-basicstudies");
+      studies.push("BB@tv-basicstudies");
+    }
 
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
@@ -28,18 +35,34 @@ export function TradingViewChart() {
       calendar: false,
       hide_volume: false,
       support_host: "https://www.tradingview.com",
-      studies: [
-        "MASimple@tv-basicstudies",
-      ],
+      studies,
     });
 
     containerRef.current.innerHTML = "";
     containerRef.current.appendChild(script);
-  }, []);
+  }, [showZones]);
 
   return (
-    <div className="tradingview-widget-container" ref={containerRef} style={{ height: 500 }}>
-      <div className="tradingview-widget-container__widget" style={{ height: "100%", width: "100%" }} />
+    <div>
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+          BTC/USDT - 15 min
+        </p>
+        <button
+          className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+            showZones
+              ? "bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/30"
+              : "bg-white/5 text-slate-400 border border-white/10"
+          }`}
+          onClick={() => setShowZones((v) => !v)}
+          type="button"
+        >
+          {showZones ? "Zones ON" : "Zones OFF"}
+        </button>
+      </div>
+      <div className="tradingview-widget-container overflow-hidden rounded-2xl border border-white/10" ref={containerRef} style={{ height: 500 }}>
+        <div className="tradingview-widget-container__widget" style={{ height: "100%", width: "100%" }} />
+      </div>
     </div>
   );
 }

@@ -17,33 +17,30 @@ function getSupabaseConfig() {
 }
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request });
   const { url, anonKey } = getSupabaseConfig();
   const pathname = request.nextUrl.pathname;
   const search = request.nextUrl.search;
   const hostRole = getHostRole(request.nextUrl.hostname);
 
+  // Host-based redirects (no auth needed)
   if (hostRole === "marketing") {
     if (pathname.startsWith("/admin")) {
       return NextResponse.redirect(getAbsoluteHostUrl("admin", `${pathname}${search}`));
     }
-
     if (isMemberFacingPath(pathname)) {
       return NextResponse.redirect(getAbsoluteHostUrl("app", `${pathname}${search}`));
     }
   }
 
-  if (hostRole === "app") {
-    if (pathname === "/") {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/dashboard";
-      redirectUrl.search = "";
-      return NextResponse.redirect(redirectUrl);
-    }
+  if (hostRole === "app" && pathname === "/") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/dashboard";
+    redirectUrl.search = "";
+    return NextResponse.redirect(redirectUrl);
+  }
 
-    if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(getAbsoluteHostUrl("admin", `${pathname}${search}`));
-    }
+  if (hostRole === "app" && pathname.startsWith("/admin")) {
+    return NextResponse.redirect(getAbsoluteHostUrl("admin", `${pathname}${search}`));
   }
 
   if (hostRole === "admin") {
@@ -53,11 +50,13 @@ export async function middleware(request: NextRequest) {
       redirectUrl.search = "";
       return NextResponse.redirect(redirectUrl);
     }
-
     if (pathname.startsWith("/dashboard") || pathname === "/upgrade") {
       return NextResponse.redirect(getAbsoluteHostUrl("app", `${pathname}${search}`));
     }
   }
+
+  // Create Supabase client with proper cookie handling
+  let response = NextResponse.next({ request });
 
   const supabase = createServerClient(url, anonKey, {
     cookies: {
@@ -65,8 +64,11 @@ export async function middleware(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
+        // Update request cookies for downstream
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        // Create fresh response with updated request
         response = NextResponse.next({ request });
+        // Set cookies on response so they reach the browser
         cookiesToSet.forEach(({ name, value, options }) => {
           response.cookies.set(name, value, options);
         });
@@ -74,36 +76,21 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  let user = null;
-  try {
-    const { data } = await supabase.auth.getUser();
-    user = data.user;
-  } catch {
-    // If Supabase is unreachable, allow public pages through but block protected ones.
-    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/login";
-      redirectUrl.searchParams.set("next", pathname);
-      return NextResponse.redirect(redirectUrl);
-    }
-    return response;
-  }
+  // IMPORTANT: Always call getUser() to refresh the session
+  // This must happen BEFORE any redirects so cookies are set
+  const { data: { user } } = await supabase.auth.getUser();
 
+  // Admin role check
   if (hostRole === "admin" && pathname.startsWith("/admin")) {
     if (!user) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/login";
-      redirectUrl.searchParams.set("next", pathname);
-      return NextResponse.redirect(redirectUrl);
+      return createRedirect(request, response, "/login", pathname);
     }
-
     try {
       const { data: profile } = await supabase
         .from("profiles")
         .select("role")
         .eq("id", user.id)
         .maybeSingle();
-
       if (profile?.role !== "admin") {
         return NextResponse.redirect(getAbsoluteHostUrl("app", "/dashboard"));
       }
@@ -112,32 +99,48 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // /bots is public, but /bots/subscribe, /bots/dashboard, /bots/admin need auth
+  // Bot protected paths
   const botProtectedPaths = ["/bots/subscribe", "/bots/dashboard", "/bots/admin"];
   const isBotProtected = botProtectedPaths.some((p) => pathname.startsWith(p));
 
   if (!user && isBotProtected) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/login";
-    redirectUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(redirectUrl);
+    return createRedirect(request, response, "/login", pathname);
   }
 
+  // Dashboard/admin auth check
   if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/login";
-    redirectUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(redirectUrl);
+    return createRedirect(request, response, "/login", pathname);
   }
 
+  // Redirect logged-in users away from login/signup
   if (user && (pathname === "/login" || pathname === "/signup")) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = hostRole === "admin" ? "/admin/videos" : "/dashboard";
     redirectUrl.search = "";
-    return NextResponse.redirect(redirectUrl);
+    return createRedirectWithCookies(response, redirectUrl.toString());
   }
 
   return response;
+}
+
+/**
+ * Create a redirect that preserves the session cookies from the Supabase refresh.
+ * Without this, redirects lose the refreshed cookies and users get logged out.
+ */
+function createRedirect(request: NextRequest, response: NextResponse, loginPath: string, nextPath: string) {
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = loginPath;
+  redirectUrl.searchParams.set("next", nextPath);
+  return createRedirectWithCookies(response, redirectUrl.toString());
+}
+
+function createRedirectWithCookies(response: NextResponse, url: string) {
+  const redirect = NextResponse.redirect(url);
+  // Copy refreshed session cookies to the redirect response
+  response.cookies.getAll().forEach((cookie) => {
+    redirect.cookies.set(cookie.name, cookie.value);
+  });
+  return redirect;
 }
 
 export const config = {

@@ -183,14 +183,9 @@ export default async function ShouldITradePage() {
             </article>
           </section>
 
-          {/* TradingView Chart */}
-          <section className="panel mb-8 overflow-hidden p-4 md:p-6">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-              BTC/USDT - 15 min
-            </p>
-            <div className="overflow-hidden rounded-2xl border border-white/10">
-              <TradingViewChart />
-            </div>
+          {/* TradingView Chart with Zone Toggle */}
+          <section className="panel mb-8 p-4 md:p-6">
+            <TradingViewChart />
           </section>
 
           {/* Derivatives Explained */}
