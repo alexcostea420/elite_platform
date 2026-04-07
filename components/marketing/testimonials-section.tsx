@@ -17,7 +17,7 @@ export function TestimonialsSection() {
                   <p className="text-sm text-accent-emerald">{testimonial.meta}</p>
                 </div>
               </div>
-              <div className="mt-4 text-accent-emerald">*****</div>
+              <div className="mt-4 text-accent-emerald">★★★★★</div>
               <p className="mt-3 italic leading-relaxed text-slate-300">&ldquo;{testimonial.quote}&rdquo;</p>
             </article>
           ))}
