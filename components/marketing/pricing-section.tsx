@@ -8,9 +8,38 @@ export function PricingSection() {
   return (
     <section className="px-4 py-20" id="preturi">
       <Container>
-        <SectionHeading title={<>Alege <span className="gradient-text">Planul Tău</span></>} description="Alege durata de acces potrivită pentru nivelul tău." />
-        <div className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {pricingPlans.map((plan) => (
+        {/* Trial CTA - standalone at top */}
+        <div className="mx-auto max-w-2xl">
+          <div className="rounded-[1.75rem] border border-accent-emerald/20 bg-surface-graphite/80 p-8 text-center backdrop-blur-sm md:p-10">
+            <div className="mb-3 text-3xl">🪖</div>
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+              3 zile gratuit
+            </p>
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              Testeaza totul. Fara card. Fara obligatii.
+            </h2>
+            <p className="mx-auto mt-3 max-w-lg text-slate-400">
+              Acces complet la Discord Elite, video-uri, indicatori, analize si portofoliul live.
+              Dupa 3 zile decizi daca merita.
+            </p>
+            <Link
+              className="accent-button mt-6 inline-block rounded-xl px-8 py-4 text-base font-semibold"
+              href="/signup"
+            >
+              Incepe acum - gratuit
+            </Link>
+            <div className="mx-auto mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
+              <span>Fara card de credit</span>
+              <span>Se anuleaza automat</span>
+              <span>Acces complet</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Paid plans - 3 columns below */}
+        <SectionHeading title={<>Alege <span className="gradient-text">Planul Tau</span></>} description="Alege durata de acces potrivita pentru nivelul tau." />
+        <div className="mx-auto mt-10 grid max-w-5xl gap-8 md:grid-cols-3">
+          {pricingPlans.filter((plan) => plan.price !== "$0").map((plan) => (
             <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
               {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
               <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
