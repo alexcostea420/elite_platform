@@ -43,7 +43,7 @@ export function VideoTemplateThumbnail({
         className="absolute inset-0 opacity-30"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(201, 168, 76, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(201, 168, 76, 0.06) 1px, transparent 1px)",
+            "linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
         }}
       />

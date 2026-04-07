@@ -5,20 +5,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "accent-emerald": "#C9A84C",       // Gold/amber - buttons, links, accents
-        "accent-soft": "#E0C068",           // Lighter gold - hover states
-        "crypto-green": "#3FC97A",          // Bright green for profit/positive only
-        "crypto-dark": "#0A0E0C",           // Dark with military green undertone
-        "surface-graphite": "#111916",      // Dark surface, subtle military green
-        "crypto-ink": "#060A08",            // Deepest dark
+        "accent-emerald": "#0B6623",       // Forest green - primary accent
+        "accent-soft": "#0E7A2B",           // Slightly lighter - hover
+        "crypto-green": "#0B6623",          // Same forest green for profit
+        "crypto-dark": "#080808",           // Pure dark
+        "surface-graphite": "#121212",      // Neutral dark surface
+        "crypto-ink": "#050505",            // Deepest dark
       },
       boxShadow: {
-        glow: "0 0 28px rgba(201, 168, 76, 0.15)",
-        card: "0 18px 38px rgba(4, 8, 6, 0.48)",
+        glow: "0 0 28px rgba(11, 102, 35, 0.12)",
+        card: "0 18px 38px rgba(0, 0, 0, 0.5)",
       },
       backgroundImage: {
-        "emerald-gradient": "linear-gradient(135deg, #C9A84C 0%, #E0C068 100%)",
-        "hero-radial": "radial-gradient(circle at top, rgba(74, 124, 89, 0.12), transparent 38%)",
+        "emerald-gradient": "linear-gradient(135deg, #0B6623 0%, #0E7A2B 100%)",
+        "hero-radial": "radial-gradient(circle at top, rgba(11, 102, 35, 0.08), transparent 38%)",
       },
       fontFamily: {
         display: ["var(--font-orbitron)"],

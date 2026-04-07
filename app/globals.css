@@ -12,10 +12,7 @@ html {
 
 body {
   @apply bg-crypto-dark text-slate-100 antialiased;
-  background-image:
-    radial-gradient(circle at top, rgba(74, 124, 89, 0.10), transparent 28%),
-    radial-gradient(circle at 82% 18%, rgba(74, 124, 89, 0.05), transparent 18%),
-    linear-gradient(180deg, #0c100e 0%, #0a0e0c 34%, #060a08 100%);
+  background-color: #080808;
 }
 
 a,
@@ -53,8 +50,8 @@ button {
 
   .grid-glow {
     background-image:
-      linear-gradient(rgba(74, 124, 89, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 124, 89, 0.04) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     background-size: 42px 42px;
   }
 }
