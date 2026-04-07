@@ -120,7 +120,7 @@ export const pricingPlans: PricingPlan[] = [
     price: "$0",
     period: "",
     details: "3 zile acces complet",
-    cta: "Începe Acum — Gratis",
+    cta: "Începe Acum - Gratis",
     highlighted: false,
     badge: "🎁 GRATIS",
     perks: [
@@ -186,12 +186,12 @@ export const testimonials = [
   {
     name: "Alex Ivana",
     meta: "Membru Elite · martie 2026",
-    quote: "Când am intrat în comunitate, eram destul de pierdut. Ce mi-a plăcut aici a fost că lucrurile au început să capete sens treptat. Nu a fost genul ăla de informație aruncată peste tine, ci explicată pe bune. Partea de risk management mi-a schimbat complet modul de a gândi — cred că acolo a fost cel mai mare \"aha\"."
+    quote: "Când am intrat în comunitate, eram destul de pierdut. Ce mi-a plăcut aici a fost că lucrurile au început să capete sens treptat. Nu a fost genul ăla de informație aruncată peste tine, ci explicată pe bune. Partea de risk management mi-a schimbat complet modul de a gândi - cred că acolo a fost cel mai mare \"aha\"."
   },
   {
     name: "Polishboy",
     meta: "Membru Elite · martie 2026",
-    quote: "Am învățat analiză tehnică și cum să înțeleg mai bine structura pieței. Am dezvoltat pattern recognition, am învățat risk management — probabil unul dintre cele mai importante aspecte. Totul este explicat clar și aplicabil, nu doar teorie. Recomand comunitatea ELITE oricui vrea să învețe serios."
+    quote: "Am învățat analiză tehnică și cum să înțeleg mai bine structura pieței. Am dezvoltat pattern recognition, am învățat risk management - probabil unul dintre cele mai importante aspecte. Totul este explicat clar și aplicabil, nu doar teorie. Recomand comunitatea ELITE oricui vrea să învețe serios."
   },
   {
     name: "Daniel",

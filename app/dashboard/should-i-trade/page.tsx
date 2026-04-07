@@ -15,7 +15,7 @@ import { getDaysUntilUnlock, hasPassedTimeGate } from "@/lib/utils/time-gate";
 export const metadata: Metadata = buildPageMetadata({
   title: "Should I Trade? | Decizia Zilei",
   description:
-    "Decizie clară de trading bazată pe analiza automată a riscului. YES / NO / WAIT — actualizat în timp real.",
+    "Decizie clară de trading bazată pe analiza automată a riscului. YES / NO / WAIT - actualizat în timp real.",
   keywords: ["should i trade", "decizie trading", "semnal trading crypto", "elite trading"],
   path: "/dashboard/should-i-trade",
   host: "app",

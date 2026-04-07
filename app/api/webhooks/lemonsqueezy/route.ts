@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     try {
       const tgToken = process.env.TELEGRAM_BOT_TOKEN || ''
       if (tgToken) {
-        const msg = `💰 <b>NEW PAYMENT</b>\n${email}\n$${total} — ${planDuration}\nvia LemonSqueezy`
+        const msg = `💰 <b>NEW PAYMENT</b>\n${email}\n$${total} - ${planDuration}\nvia LemonSqueezy`
         const tgUrl = `https://api.telegram.org/bot${tgToken}/sendMessage`
         await fetch(tgUrl, {
           method: 'POST',

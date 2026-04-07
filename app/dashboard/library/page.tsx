@@ -12,7 +12,7 @@ import { getDisplayIdentity } from "@/lib/utils/identity";
 const libraryVideos = [
   {
     id: "1",
-    title: "Live Trading #1 — Analiza BTC + Setup-uri",
+    title: "Live Trading #1 - Analiza BTC + Setup-uri",
     date: "25 Mar 2026",
     youtubeId: "dQw4w9WgXcQ",
   },
@@ -24,7 +24,7 @@ const libraryVideos = [
   },
   {
     id: "3",
-    title: "Managementul riscului — Reguli de aur",
+    title: "Managementul riscului - Reguli de aur",
     date: "10 Mar 2026",
     youtubeId: "dQw4w9WgXcQ",
   },

@@ -172,7 +172,7 @@ export default async function StocksPage() {
 
           {/* Price position bars */}
           <section className="mt-8">
-            <h2 className="mb-5 text-xl font-bold text-white">Pozitie in Range (Buy 2 — Sell 2)</h2>
+            <h2 className="mb-5 text-xl font-bold text-white">Pozitie in Range (Buy 2 - Sell 2)</h2>
             <div className="space-y-3">
               {stocks.map((stock) => {
                 const pos = getPricePosition(stock.currentPrice, stock.buy2, stock.sell2);

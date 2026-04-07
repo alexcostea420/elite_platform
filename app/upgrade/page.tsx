@@ -21,7 +21,7 @@ const comparisonRows: { label: string; free: boolean; elite: boolean }[] = [
   { label: "4 Indicatori TradingView exclusivi", free: false, elite: true },
   { label: "Resurse complete (ghiduri, watchlist)", free: false, elite: true },
   { label: "Risk Score BTC live", free: false, elite: true },
-  { label: "Should I Trade? — decizia zilei", free: false, elite: true },
+  { label: "Should I Trade? - decizia zilei", free: false, elite: true },
   { label: "Bot AI Trading (discount $45 vs $98)", free: false, elite: true },
   { label: "Suport prioritar", free: false, elite: true },
 ];
@@ -82,7 +82,7 @@ export default async function UpgradePage() {
       };
     }
   } catch {
-    // Not logged in — show normal prices
+    // Not logged in - show normal prices
   }
 
   return (
@@ -149,7 +149,7 @@ export default async function UpgradePage() {
           <section className="mb-10" id="planuri">
             <h2 className="mb-6 text-center text-3xl font-bold text-white">Alege durata de acces</h2>
 
-            {/* Trial Banner — for non-logged-in: signup link, for logged-in without trial: activate button */}
+            {/* Trial Banner - for non-logged-in: signup link, for logged-in without trial: activate button */}
             {!hasUsedTrial && (
             <div className="mx-auto mb-8 max-w-2xl">
               {isLoggedIn ? (

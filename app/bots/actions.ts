@@ -189,7 +189,7 @@ export async function activateBotSubscriptionAction(formData: FormData) {
     redirect("/bots/admin?error=" + encodeURIComponent("Nu s-a putut activa abonamentul."));
   }
 
-  // Update profile — set bot_since only if not already set
+  // Update profile - set bot_since only if not already set
   const { data: profile } = await serviceSupabase
     .from("profiles")
     .select("bot_since")

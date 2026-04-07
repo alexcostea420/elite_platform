@@ -63,7 +63,7 @@ export default function HomePage() {
             <div className="mb-12 text-center">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Simplu și rapid</p>
               <h2 className="text-3xl font-bold text-white md:text-4xl">Cum <span className="gradient-text">funcționează</span></h2>
-              <p className="mx-auto mt-4 max-w-2xl text-slate-400">De la signup la acces complet — în mai puțin de 5 minute.</p>
+              <p className="mx-auto mt-4 max-w-2xl text-slate-400">De la signup la acces complet - în mai puțin de 5 minute.</p>
             </div>
             <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-4">
               {[

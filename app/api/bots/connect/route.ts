@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         connected = true;
       }
     } catch {
-      // HL API unreachable — still save wallet, mark as unverified
+      // HL API unreachable - still save wallet, mark as unverified
     }
 
     // Save to database

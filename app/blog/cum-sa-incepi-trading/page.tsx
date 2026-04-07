@@ -46,7 +46,7 @@ export default function CumSaIncepiTradingPage() {
               <span className="text-slate-500">8 min citire</span>
             </div>
             <h1 className="text-3xl font-bold leading-tight text-white md:text-5xl">
-              Cum să Începi în Trading Crypto —{" "}
+              Cum să Începi în Trading Crypto -{" "}
               <span className="gradient-text">Ghid Complet pentru Începători</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-slate-400">
@@ -82,18 +82,18 @@ export default function CumSaIncepiTradingPage() {
             {/* Section 2 */}
             <section className="mb-12">
               <h2 className="mb-4 text-2xl font-bold text-accent-emerald">
-                Pasul 1: Educația — ce trebuie să înveți înainte
+                Pasul 1: Educația - ce trebuie să înveți înainte
               </h2>
               <div className="rounded-2xl border border-white/10 bg-surface-graphite p-6 md:p-8">
                 <p className="text-lg leading-relaxed text-slate-300">
                   Înainte să pui un singur ban pe piață, trebuie să înțelegi bazele.
-                  Nu sări peste acest pas — este cel mai important.
+                  Nu sări peste acest pas - este cel mai important.
                 </p>
                 <ul className="mt-4 space-y-3 text-slate-300">
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Risk Management</strong> —
+                      <strong className="text-white">Risk Management</strong> -
                       Cât ești dispus să pierzi pe un trade? Regula de aur: maxim
                       1-2% din capitalul total pe fiecare trade. Aceasta te protejează
                       de pierderi catastrofale.
@@ -103,7 +103,7 @@ export default function CumSaIncepiTradingPage() {
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
                       <strong className="text-white">Lot Size / Position Sizing</strong>{" "}
-                      — Câți bani pui pe fiecare trade? Dimensiunea poziției trebuie
+                      - Câți bani pui pe fiecare trade? Dimensiunea poziției trebuie
                       calculată în funcție de stop loss și risc maxim, nu &ldquo;la
                       ochi&rdquo;.
                     </span>
@@ -111,7 +111,7 @@ export default function CumSaIncepiTradingPage() {
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Suport și Rezistență</strong> —
+                      <strong className="text-white">Suport și Rezistență</strong> -
                       Acestea sunt nivelurile de preț unde piața tinde să se oprească
                       sau să se inverseze. Înțelegerea lor este fundamentală pentru
                       orice strategie de trading.
@@ -120,7 +120,7 @@ export default function CumSaIncepiTradingPage() {
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Candlestick Patterns</strong> —
+                      <strong className="text-white">Candlestick Patterns</strong> -
                       Graficele cu lumânări (candlestick) îți arată ce fac cumpărătorii
                       și vânzătorii în timp real. Învață pattern-urile de bază: pin bar,
                       engulfing, doji.
@@ -144,7 +144,7 @@ export default function CumSaIncepiTradingPage() {
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Cont demo</strong> — Majoritatea
+                      <strong className="text-white">Cont demo</strong> - Majoritatea
                       exchange-urilor oferă conturi demo cu bani virtuali. Exersează
                       strategia fără risc real. Bybit, Binance și altele oferă
                       simulatoare bune.
@@ -153,7 +153,7 @@ export default function CumSaIncepiTradingPage() {
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Cont mic ($100–200)</strong> —
+                      <strong className="text-white">Cont mic ($100–200)</strong> -
                       Dacă vrei să simți &ldquo;presiunea reală&rdquo;, începe cu o
                       sumă mică. Scopul nu este profitul, ci să înveți procesul:
                       intrare, stop loss, take profit, jurnal.
@@ -161,7 +161,7 @@ export default function CumSaIncepiTradingPage() {
                   </li>
                 </ul>
                 <p className="mt-4 text-lg leading-relaxed text-slate-300">
-                  Obiectivul în primele 3 luni nu e să faci bani — e să nu pierzi
+                  Obiectivul în primele 3 luni nu e să faci bani - e să nu pierzi
                   mult și să înveți disciplina.
                 </p>
               </div>
@@ -170,7 +170,7 @@ export default function CumSaIncepiTradingPage() {
             {/* Section 4 */}
             <section className="mb-12">
               <h2 className="mb-4 text-2xl font-bold text-accent-emerald">
-                Pasul 3: Strategia — un singur setup, 100 de trade-uri
+                Pasul 3: Strategia - un singur setup, 100 de trade-uri
               </h2>
               <div className="rounded-2xl border border-white/10 bg-surface-graphite p-6 md:p-8">
                 <p className="text-lg leading-relaxed text-slate-300">
@@ -194,7 +194,7 @@ export default function CumSaIncepiTradingPage() {
             {/* Section 5 */}
             <section className="mb-12">
               <h2 className="mb-4 text-2xl font-bold text-accent-emerald">
-                Pasul 4: Risk Management — max 1-2% per trade
+                Pasul 4: Risk Management - max 1-2% per trade
               </h2>
               <div className="rounded-2xl border border-white/10 bg-surface-graphite p-6 md:p-8">
                 <p className="text-lg leading-relaxed text-slate-300">
@@ -205,7 +205,7 @@ export default function CumSaIncepiTradingPage() {
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Max 1-2% risc per trade</strong> —
+                      <strong className="text-white">Max 1-2% risc per trade</strong> -
                       Dacă ai $1000, nu risca mai mult de $10-20 pe un singur trade.
                       Chiar și cu 10 pierderi consecutive (care se întâmplă), pierzi
                       doar 10-20%.
@@ -214,16 +214,16 @@ export default function CumSaIncepiTradingPage() {
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Stop loss obligatoriu</strong> —
+                      <strong className="text-white">Stop loss obligatoriu</strong> -
                       Fiecare trade trebuie să aibă stop loss setat ÎNAINTE de intrare.
-                      Nu &ldquo;ții și speri&rdquo; — dacă merge contra ta, ieși la
+                      Nu &ldquo;ții și speri&rdquo; - dacă merge contra ta, ieși la
                       nivel predefinit.
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="mt-1 text-accent-emerald">&#9679;</span>
                     <span>
-                      <strong className="text-white">Risk:Reward minim 1:2</strong> —
+                      <strong className="text-white">Risk:Reward minim 1:2</strong> -
                       Dacă riști $10, target-ul tău trebuie să fie minim $20.
                       Astfel, chiar și cu un win rate de 40%, tot ești profitabil.
                     </span>
@@ -235,7 +235,7 @@ export default function CumSaIncepiTradingPage() {
             {/* Section 6 */}
             <section className="mb-12">
               <h2 className="mb-4 text-2xl font-bold text-accent-emerald">
-                Pasul 5: Comunitate — nu tranzacționa singur
+                Pasul 5: Comunitate - nu tranzacționa singur
               </h2>
               <div className="rounded-2xl border border-white/10 bg-surface-graphite p-6 md:p-8">
                 <p className="text-lg leading-relaxed text-slate-300">
@@ -260,9 +260,9 @@ export default function CumSaIncepiTradingPage() {
               </h2>
               <div className="rounded-2xl border border-white/10 bg-surface-graphite p-6 md:p-8">
                 <p className="text-lg leading-relaxed text-slate-300">
-                  Trading-ul crypto nu e un sprint — e un maraton. Succesul vine
+                  Trading-ul crypto nu e un sprint - e un maraton. Succesul vine
                   din educație, disciplină, risk management strict și o comunitate
-                  care te susține. Nu căuta &ldquo;schema magică&rdquo; — caută
+                  care te susține. Nu căuta &ldquo;schema magică&rdquo; - caută
                   procesul corect.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed text-slate-300">

@@ -8,7 +8,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { siteConfig } from "@/lib/constants/site";
 
 const bulletPoints = [
-  "Sesiuni live săptămânale — update piață + ajustare portofoliu",
+  "Sesiuni live săptămânale - update piață + ajustare portofoliu",
   "4 Indicatori ELITE exclusivi pentru TradingView",
   "Comunitate Discord de investitori și traderi activi",
 ];

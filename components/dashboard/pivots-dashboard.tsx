@@ -391,7 +391,7 @@ function EclipseCompactTable({ events, color: conceptColor }: { events: EclipseE
       {real.length >= 3 && (
         <div className={s.eclConclusion}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", textTransform: "uppercase", letterSpacing: ".8px", marginBottom: 10, fontFamily: "var(--font-mono)" }}>
-            Analiză Bottom/Top — {real.length} eclipse
+            Analiză Bottom/Top - {real.length} eclipse
           </div>
 
           {/* Bottom/Top frequency */}
@@ -449,19 +449,19 @@ function EclipseCompactTable({ events, color: conceptColor }: { events: EclipseE
             {agg.topBottom && (
               <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>
                 <strong style={{ color: "var(--green)" }}>{"\u25BC"} Bottom probabil: </strong>
-                {KEY_LABELS[agg.topBottom]} — {agg.topBottomN}/{real.length} eclipse ({Math.round((agg.topBottomN / real.length) * 100)}%) au format bottom local la acest interval.
+                {KEY_LABELS[agg.topBottom]} - {agg.topBottomN}/{real.length} eclipse ({Math.round((agg.topBottomN / real.length) * 100)}%) au format bottom local la acest interval.
               </p>
             )}
             {agg.topTop && (
               <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>
                 <strong style={{ color: "var(--red)" }}>{"\u25B2"} Top probabil: </strong>
-                {KEY_LABELS[agg.topTop]} — {agg.topTopN}/{real.length} eclipse ({Math.round((agg.topTopN / real.length) * 100)}%) au format top local la acest interval.
+                {KEY_LABELS[agg.topTop]} - {agg.topTopN}/{real.length} eclipse ({Math.round((agg.topTopN / real.length) * 100)}%) au format top local la acest interval.
               </p>
             )}
             {agg.bestEntry && agg.result[agg.bestEntry]?.avg != null && (
               <p style={{ fontSize: 12, color: "var(--muted)" }}>
                 <strong style={{ color: conceptColor }}>{"\u25B6"} Intrare optimă: </strong>
-                {KEY_LABELS[agg.bestEntry]} — preț mediu {Math.abs(agg.result[agg.bestEntry].avg!).toFixed(1)}% {agg.result[agg.bestEntry].avg! < 0 ? "sub" : "peste"} prețul eclipsei.
+                {KEY_LABELS[agg.bestEntry]} - preț mediu {Math.abs(agg.result[agg.bestEntry].avg!).toFixed(1)}% {agg.result[agg.bestEntry].avg! < 0 ? "sub" : "peste"} prețul eclipsei.
               </p>
             )}
           </div>
@@ -801,7 +801,7 @@ function Section({
       <div className={cx(s.sectionTitle, s.reveal, s.visible)} id={id}>
         {icon}
         {title}
-        {subtitle && <span className={s.stSub}>— {subtitle}</span>}
+        {subtitle && <span className={s.stSub}>- {subtitle}</span>}
         {nextEvent && <span className={s.nextBadgeInline}>{nextEvent.text}</span>}
         <button className={s.sectionToggle} onClick={() => setOpen(!open)} title="Ascunde/arată secțiunea">
           {open ? "\u2212" : "+"}
@@ -850,7 +850,7 @@ function FibTimeline() {
           {idx === insertAfterIdx && (
             <div className={s.tlToday}>
               <div className={s.tlTodayDot} />
-              <div className={s.tlTodayLabel}>{"\u25B6"} AZI — {ds}</div>
+              <div className={s.tlTodayLabel}>{"\u25B6"} AZI - {ds}</div>
             </div>
           )}
         </div>
@@ -947,9 +947,9 @@ function GannCalculator() {
 
   return (
     <div className={s.card}>
-      <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Calculator Gann — Introdu propriul pivot</h2>
+      <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Calculator Gann - Introdu propriul pivot</h2>
       <p className={cx(s.small, s.muted)} style={{ marginBottom: 12 }}>
-        Selectează o dată și tipul pivotului. Focusează pe <strong style={{ color: "var(--green)" }}>+45z, +49z, +60z și +144z</strong> — intervalele cu edge real (±5z). Tratează ca <strong style={{ color: "var(--text)" }}>zonă de alertă ±1 săptămână</strong>.
+        Selectează o dată și tipul pivotului. Focusează pe <strong style={{ color: "var(--green)" }}>+45z, +49z, +60z și +144z</strong> - intervalele cu edge real (±5z). Tratează ca <strong style={{ color: "var(--text)" }}>zonă de alertă ±1 săptămână</strong>.
       </p>
       <div style={{ display: "flex", gap: 12, alignItems: "end", flexWrap: "wrap", marginBottom: 16 }}>
         <div>
@@ -1036,7 +1036,7 @@ function HeaderBadges() {
   if (sc.upcoming.length > 0) {
     const u = sc.upcoming[0];
     const pivotDate = new Date(now.getTime() + u.days * 86400000);
-    pivotText = `Next Pivot: ${u.name} — ${fmtDate(pivotDate)} (${u.days} zile)`;
+    pivotText = `Next Pivot: ${u.name} - ${fmtDate(pivotDate)} (${u.days} zile)`;
     pivotColor = "#F59E0B";
     pivotBorder = "rgba(245,158,11,.3)";
   } else if (sc.active.length > 0) {
@@ -1100,7 +1100,7 @@ export default function PivotsDashboard() {
 
         {/* Philosophy */}
         <div className={cx(s.philosophy, s.reveal)}>
-          <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> — identifică ferestre în care BTC are mai mari șanse să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur tehnicele pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
+          <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> - identifică ferestre în care BTC are mai mari șanse să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur tehnicele pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
           <p style={{ marginTop: 8, color: "#94a3b8" }}>O fereastră necesită <strong>scor ≥ 4 + cel puțin o metodă PRIMARĂ</strong>. Metodele secundare singure nu pot declanșa un semnal.</p>
         </div>
 
@@ -1134,7 +1134,7 @@ export default function PivotsDashboard() {
                 </tbody>
               </table>
               <div className={s.grid2} style={{ marginTop: 14, gap: 10 }}>
-                <div className={s.stat}><div className={s.statVal} style={{ color: "var(--green)" }}>1062</div><div className={s.statLbl}>Medie zile Bottom→Top</div><div className={s.statSub}>±5 zile pe cicluri 1–3 (ciclu 0: 742d — piață imatură)</div></div>
+                <div className={s.stat}><div className={s.statVal} style={{ color: "var(--green)" }}>1062</div><div className={s.statLbl}>Medie zile Bottom→Top</div><div className={s.statSub}>±5 zile pe cicluri 1–3 (ciclu 0: 742d - piață imatură)</div></div>
                 <div className={s.stat}><div className={s.statVal} style={{ color: "var(--red)" }}>364</div><div className={s.statLbl}>Medie zile Top→Bottom</div><div className={s.statSub}>Proiecție bottom: ~5 Oct 2026</div></div>
               </div>
               <div className={cx(s.infoBox, s.infoBoxRed)} style={{ marginTop: 12 }}><strong style={{ color: "var(--red)" }}>Proiecție bottom ciclu 3:</strong> <span className={s.muted}>6 Oct 2025 + 364 zile = <strong style={{ color: "var(--text)" }}>~5 Oct 2026</strong>. Pe baza drawdown-urilor descrescătoare (-87%→-84%→-78%→ în curs), proiecție: <strong style={{ color: "var(--text)" }}>-52% la -57% → zona $54–$60K</strong>.</span></div>
@@ -1143,12 +1143,12 @@ export default function PivotsDashboard() {
             {/* Quarterly Performance */}
             <div className={s.card} style={{ paddingBottom: 12 }}>
               <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Performanță pe Trimestre (2013–2025)</h2>
-              <p className={cx(s.small, s.muted)} style={{ marginBottom: 14 }}>Sursa: CoinGlass. <strong style={{ color: "var(--text)" }}>Mediana</strong> e mai relevantă decât media — nu e distorsionată de anii extremi (2013, 2019).</p>
+              <p className={cx(s.small, s.muted)} style={{ marginBottom: 14 }}>Sursa: CoinGlass. <strong style={{ color: "var(--text)" }}>Mediana</strong> e mai relevantă decât media - nu e distorsionată de anii extremi (2013, 2019).</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
                 {[
                   { q: "Q4", sub: "Oct–Dec", val: "+47.7%", color: "var(--solar)", bg: "rgba(245,158,11,.06)", border: "rgba(245,158,11,.25)", valColor: "var(--green)", desc: "Cel mai puternic. Toate ATH-urile: Dec 2017, Nov 2021, Oct 2025" },
                   { q: "Q2", sub: "Apr–Iun", val: "+7.6%", color: "var(--fib)", bg: "rgba(16,185,129,.06)", border: "rgba(16,185,129,.2)", valColor: "var(--green)", desc: "Post-halving rally. Al doilea cel mai consistent trimestru" },
-                  { q: "Q1", sub: "Ian–Mar", val: "-2.3%", color: "var(--text)", bg: "rgba(100,116,139,.06)", border: "rgba(100,116,139,.2)", valColor: "var(--red)", desc: "Mixt — puternic in bull, slab in bear. Q1 2026: -21%" },
+                  { q: "Q1", sub: "Ian–Mar", val: "-2.3%", color: "var(--text)", bg: "rgba(100,116,139,.06)", border: "rgba(100,116,139,.2)", valColor: "var(--red)", desc: "Mixt - puternic in bull, slab in bear. Q1 2026: -21%" },
                   { q: "Q3", sub: "Iul–Sep", val: "+1.0%", color: "var(--red)", bg: "rgba(239,68,68,.05)", border: "rgba(239,68,68,.2)", valColor: "var(--orange)", desc: "Cel mai slab. Bottom-uri posibile dar fara directie clara" },
                 ].map((item) => (
                   <div key={item.q} style={{ background: item.bg, border: `2px solid ${item.border}`, borderRadius: 16, padding: "12px 14px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
@@ -1165,7 +1165,7 @@ export default function PivotsDashboard() {
           {/* Elections + ATH Break */}
           <div className={cx(s.grid2, s.reveal, s.mb20)}>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Corelație Alegeri SUA — ATH Post-Alegeri</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Corelație Alegeri SUA - ATH Post-Alegeri</h2>
               <p className={cx(s.small, s.muted)} style={{ marginBottom: 14 }}>BTC formează ATH la <strong style={{ color: "var(--text)" }}>~11–13 luni</strong> după alegerile prezidențiale americane. Distanța se comprimă cu fiecare ciclu.</p>
               <table className={s.methodTable}>
                 <thead><tr><th>Alegeri</th><th>Dată</th><th>ATH ciclu</th><th>Zile după</th></tr></thead>
@@ -1189,14 +1189,14 @@ export default function PivotsDashboard() {
                   <tr style={{ background: "rgba(245,158,11,.04)" }}><td style={{ color: "var(--solar)" }}>2025</td><td className={cx(s.muted, s.small)}>14 Mar 2024 ($73,800) ← pre-halving!</td><td className={s.muted}>6 Oct 2025</td><td style={{ color: "var(--orange)" }} className={s.mono}>~571 ⚠️</td></tr>
                 </tbody>
               </table>
-              <div className={s.infoBox} style={{ marginTop: 12 }}><strong style={{ color: "var(--fib)" }}>Pattern cicluri 2 și 3:</strong> <span className={s.muted}>Spargere ATH → <strong style={{ color: "var(--text)" }}>~340–345 zile</strong> până la top. Ciclul 4 este excepție — a spart ATH pre-halving pentru prima dată (ETF-uri aprobate ian 2024).</span></div>
+              <div className={s.infoBox} style={{ marginTop: 12 }}><strong style={{ color: "var(--fib)" }}>Pattern cicluri 2 și 3:</strong> <span className={s.muted}>Spargere ATH → <strong style={{ color: "var(--text)" }}>~340–345 zile</strong> până la top. Ciclul 4 este excepție - a spart ATH pre-halving pentru prima dată (ETF-uri aprobate ian 2024).</span></div>
               <div className={s.infoBox} style={{ marginTop: 10 }}><strong style={{ color: "var(--solar)" }}>Proiecție Ciclu 5:</strong> <span className={s.muted}>Dacă BTC sparge $126k în 2027, adaugă ~345 zile → top estimat <strong style={{ color: "var(--text)" }}>2027–2028</strong>. Dacă sparge pre-halving, top-ul vine mai târziu.</span></div>
             </div>
           </div>
 
           {/* Halving History */}
           <div className={s.card}>
-            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Top-uri după Halving — Istoric</h2>
+            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Top-uri după Halving - Istoric</h2>
             <table className={s.methodTable}>
               <thead><tr><th>Halving</th><th>Dată</th><th>Zile până la ATH</th><th>Luni</th><th>ATH</th></tr></thead>
               <tbody>
@@ -1206,7 +1206,7 @@ export default function PivotsDashboard() {
                 <tr style={{ background: "rgba(245,158,11,.04)" }}><td style={{ color: "var(--halving)" }}>Halving 4</td><td className={s.muted}>2024-04-19</td><td className={s.mono} style={{ color: "var(--green)" }}>535</td><td style={{ color: "var(--green)" }}>17.5 luni ✓</td><td style={{ color: "var(--solar)" }}>$126,000 <span className={cx(s.muted, s.small)}>(6 Oct 2025)</span></td></tr>
               </tbody>
             </table>
-            <p className={cx(s.small, s.muted)} style={{ marginTop: 8 }}>H1 a fost mai rapid (12 luni) — piață imatură, lichiditate mică. De la H2, pattern-ul se stabilizează la <strong style={{ color: "var(--green)" }}>17–18 luni</strong> consistent.</p>
+            <p className={cx(s.small, s.muted)} style={{ marginTop: 8 }}>H1 a fost mai rapid (12 luni) - piață imatură, lichiditate mică. De la H2, pattern-ul se stabilizează la <strong style={{ color: "var(--green)" }}>17–18 luni</strong> consistent.</p>
             <h2 className={s.cardH2} style={{ marginTop: 20 }}><span className={s.dot} style={{ background: "var(--cycle)" }} />Acuratețe Faze Ciclu Halving 4</h2>
             <table className={s.methodTable}>
               <thead><tr><th>Fază</th><th>Zile</th><th>Acuratețe indicator</th></tr></thead>
@@ -1218,13 +1218,13 @@ export default function PivotsDashboard() {
                 <tr><td style={{ color: "var(--red)" }}>Post-ATH</td><td className={cx(s.muted, s.mono)}>535+</td><td style={{ color: "var(--red)" }}>43%</td></tr>
               </tbody>
             </table>
-            <p className={cx(s.small, s.muted)} style={{ marginTop: 8 }}>Curent: <strong style={{ color: "var(--red)" }}>Post-ATH (ziua ~707, din 6 Oct 2025)</strong> — acuratețe 43%, folosește cu precauție suplimentară.</p>
+            <p className={cx(s.small, s.muted)} style={{ marginTop: 8 }}>Curent: <strong style={{ color: "var(--red)" }}>Post-ATH (ziua ~707, din 6 Oct 2025)</strong> - acuratețe 43%, folosește cu precauție suplimentară.</p>
           </div>
         </Section>
 
         {/* ── BEAR MARKET ── */}
-        <Section id="s-bear" title="Analiză Bear Market — Unde Suntem?">
-          <p className={cx(s.small, s.muted, s.mb20, s.reveal)}>7 indicatori independenți analizați în Martie 2026. Fiecare derivat independent — nicio metodă nu e construită pe alta.</p>
+        <Section id="s-bear" title="Analiză Bear Market - Unde Suntem?">
+          <p className={cx(s.small, s.muted, s.mb20, s.reveal)}>7 indicatori independenți analizați în Martie 2026. Fiecare derivat independent - nicio metodă nu e construită pe alta.</p>
           <div className={cx(s.grid3, s.reveal, s.mb20)}>
             <div className={s.card}>
               <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--red)" }} />Drawdown-uri Descrescătoare</h2>
@@ -1241,7 +1241,7 @@ export default function PivotsDashboard() {
               <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}>Fiecare crash: mai mic cu ~6–7pp. La $126K ATH: -52% = $60.5K · -57% = $54.2K</div>
             </div>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--fib)" }} />RSI Săptămânal &lt; 30 — 5/5</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--fib)" }} />RSI Săptămânal &lt; 30 - 5/5</h2>
               <p className={cx(s.small, s.muted)} style={{ marginBottom: 14 }}>De fiecare dată când RSI weekly a scăzut sub 30, a urmat un rally masiv. Niciodată nu a eșuat.</p>
               <table className={s.methodTable}>
                 <thead><tr><th>An</th><th>RSI min</th><th>Ce a urmat</th></tr></thead>
@@ -1250,10 +1250,10 @@ export default function PivotsDashboard() {
                   <tr><td className={s.muted}>2015</td><td className={s.mono} style={{ color: "var(--red)" }}>&lt;30</td><td className={cx(s.small, s.muted)}>Bottom exact bear → $152</td></tr>
                   <tr><td className={s.muted}>Mar 2020</td><td className={s.mono} style={{ color: "var(--red)" }}>29.5</td><td className={cx(s.small, s.muted)}>+1,002% în 12 luni</td></tr>
                   <tr><td className={s.muted}>Iun 2022</td><td className={s.mono} style={{ color: "var(--red)" }}>25.8</td><td className={cx(s.small, s.muted)}>+59% în 12 luni (FTX retest -15%)</td></tr>
-                  <tr style={{ background: "rgba(16,185,129,.04)" }}><td style={{ color: "var(--green)" }}>Feb 2026</td><td className={s.mono} style={{ color: "var(--red)" }}>26.8</td><td className={s.small} style={{ color: "var(--solar)" }}>??? — în curs</td></tr>
+                  <tr style={{ background: "rgba(16,185,129,.04)" }}><td style={{ color: "var(--green)" }}>Feb 2026</td><td className={s.mono} style={{ color: "var(--red)" }}>26.8</td><td className={s.small} style={{ color: "var(--solar)" }}>??? - în curs</td></tr>
                 </tbody>
               </table>
-              <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}><strong style={{ color: "var(--fib)" }}>Hit rate: 5/5 — 100%</strong> în toată istoria BTC. RSI a revenit la ~31 după low-ul de 26.8 din Feb 2026.</div>
+              <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}><strong style={{ color: "var(--fib)" }}>Hit rate: 5/5 - 100%</strong> în toată istoria BTC. RSI a revenit la ~31 după low-ul de 26.8 din Feb 2026.</div>
             </div>
             <div className={s.card}>
               <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Raport Aur / BTC (XAU/BTC)</h2>
@@ -1266,19 +1266,19 @@ export default function PivotsDashboard() {
                   <tr style={{ background: "rgba(16,185,129,.04)" }}><td style={{ color: "var(--green)" }}>2026</td><td className={s.mono} style={{ color: "var(--green)" }}>+92% ✓</td><td className={s.small} style={{ color: "var(--solar)" }}>Prag 70–80% depășit</td></tr>
                 </tbody>
               </table>
-              <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}>XAU/BTC a atins minimul în Oct 2025 (BTC ATH: 0.024). Martie 2026: 0.046 = <strong style={{ color: "var(--fib)" }}>+92%</strong> față de minim — trecut de pragul istoric de semnal.</div>
+              <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}>XAU/BTC a atins minimul în Oct 2025 (BTC ATH: 0.024). Martie 2026: 0.046 = <strong style={{ color: "var(--fib)" }}>+92%</strong> față de minim - trecut de pragul istoric de semnal.</div>
             </div>
           </div>
 
           {/* Convergence card */}
           <div className={cx(s.card, s.reveal, s.mb20)}>
-            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Convergență — 6 Indicatori, Același Window</h2>
+            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Convergență - 6 Indicatori, Același Window</h2>
             <p className={cx(s.small, s.muted)} style={{ marginBottom: 16 }}>Fiecare metodă e independentă. Când 6 lentile diferite arată același lucru, probabilitatea de coincidență aleatorie este extrem de mică.</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10 }}>
               {[
-                { title: "Timing Ciclu (top confirmat)", desc: "Oct 2025 — 1062 zile după bottom Nov 2022" },
-                { title: "RSI Săptămânal < 30", desc: "Februarie 2026 — 26.8 · 5/5 hit rate" },
-                { title: "XAU/BTC rebound > 80%", desc: "Martie 2026 — +92% față de minim (Oct 2025)" },
+                { title: "Timing Ciclu (top confirmat)", desc: "Oct 2025 - 1062 zile după bottom Nov 2022" },
+                { title: "RSI Săptămânal < 30", desc: "Februarie 2026 - 26.8 · 5/5 hit rate" },
+                { title: "XAU/BTC rebound > 80%", desc: "Martie 2026 - +92% față de minim (Oct 2025)" },
                 { title: "Spargere ATH → Bottom", desc: "Martie 2024 + 693 zile med. = Februarie 2026" },
                 { title: "Fed Rate BPS = Zile la Bottom", desc: "550 bps · Sep 2024 + 550 zile = Martie 2026" },
                 { title: "Drawdown Comprimat (-52–57%)", desc: "Zonă de bottom: $54K–$60K față de ATH $126K" },
@@ -1297,12 +1297,12 @@ export default function PivotsDashboard() {
         <Section id="s-seasons" title="Sezoane Top & Bottom" subtitle="în ce luni apar cel mai des">
           <div className={cx(s.grid2, s.reveal, s.mb20)} style={{ alignItems: "start" }}>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Top-uri BTC — lunile cele mai active</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Top-uri BTC - lunile cele mai active</h2>
               <BarChart data={MONTH_TOPS} maxV={1.5} hotColor="#F59E0B" isMonth />
               <div style={{ marginTop: 14, fontSize: 11, color: "var(--muted)", lineHeight: 1.6 }}><strong style={{ color: "var(--solar)" }}>Sep</strong> (+41%) cel mai activ · <strong style={{ color: "var(--fib)" }}>Mai · Iun · Dec</strong> (+14–28%) · <strong style={{ color: "var(--red)" }}>Nov</strong> = aproape zero top-uri</div>
             </div>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Bottom-uri BTC — lunile cele mai active</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Bottom-uri BTC - lunile cele mai active</h2>
               <BarChart data={MONTH_BOTTOMS} maxV={2.7} hotColor="#06B6D4" isMonth />
               <div style={{ marginTop: 14, fontSize: 11, color: "var(--muted)", lineHeight: 1.6 }}><strong style={{ color: "var(--cycle)" }}>Iun–Sep</strong> (+110–150%) zona de acumulare · <strong style={{ color: "var(--solar)" }}>Ian–Feb</strong> (+79%) · <strong style={{ color: "var(--red)" }}>Oct</strong> = zero low-uri majore</div>
             </div>
@@ -1313,11 +1313,11 @@ export default function PivotsDashboard() {
         <Section id="s-dom" title="Analiză Zi din Lună" subtitle="3144 bare · Aug 2017–Mar 2026">
           <div className={cx(s.grid2, s.reveal)}>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Top-uri Pivot — % mai frecvente decât media</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />Top-uri Pivot - % mai frecvente decât media</h2>
               <BarChart data={DOM_HIGHS} maxV={3} hotColor="#F59E0B" />
             </div>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Bottom-uri Pivot — % mai frecvente decât media</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Bottom-uri Pivot - % mai frecvente decât media</h2>
               <BarChart data={DOM_LOWS} maxV={3} hotColor="#06B6D4" />
             </div>
           </div>
@@ -1337,10 +1337,10 @@ export default function PivotsDashboard() {
         {/* ── BLOOD MOON ── */}
         <Section id="s-blood" title="Blood Moon Bottom Pattern" subtitle="a 3-a eclipsă lunară totală = bottom de ciclu" icon={<span className={cx(s.astroIcon, s.bloodMoon)} />}>
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Pattern:</strong> Eclipsele lunare totale (Blood Moons) vin în serii de 3-4 în fiecare ciclu BTC, urmate de o pauză de ~2.5 ani fără niciuna. <strong style={{ color: "var(--green)" }}>A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong> — confirmat pe toate cele 3 cicluri anterioare. După ultima Blood Moon, BTC a urcat masiv în fiecare caz.</p>
+            <p><strong>Pattern:</strong> Eclipsele lunare totale (Blood Moons) vin în serii de 3-4 în fiecare ciclu BTC, urmate de o pauză de ~2.5 ani fără niciuna. <strong style={{ color: "var(--green)" }}>A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong> - confirmat pe toate cele 3 cicluri anterioare. După ultima Blood Moon, BTC a urcat masiv în fiecare caz.</p>
           </div>
           <div className={cx(s.card, s.reveal, s.mb20)}>
-            <h2 className={s.cardH2}><span className={cx(s.astroIcon, s.bloodMoon)} style={{ width: 20, height: 20 }} /> Blood Moon Serii — Istoric Complet</h2>
+            <h2 className={s.cardH2}><span className={cx(s.astroIcon, s.bloodMoon)} style={{ width: 20, height: 20 }} /> Blood Moon Serii - Istoric Complet</h2>
             <div style={{ overflowX: "auto" }}>
               <table className={s.methodTable}>
                 <thead><tr><th>Seria</th><th>#1</th><th>#2</th><th>#3</th><th>#4</th><th>Bottom BTC</th><th>Rally după</th></tr></thead>
@@ -1359,7 +1359,7 @@ export default function PivotsDashboard() {
                     <td className={cx(s.muted, s.small, s.mono)}>31 Ian 2018<br/>~$10,100</td>
                     <td className={cx(s.muted, s.small, s.mono)}>27 Iul 2018<br/>~$7,600</td>
                     <td style={{ color: "var(--green)" }} className={cx(s.small, s.mono)}><strong>21 Ian 2019</strong><br/><strong>~$3,331</strong></td>
-                    <td className={cx(s.muted, s.small)}>—</td>
+                    <td className={cx(s.muted, s.small)}>-</td>
                     <td style={{ color: "var(--green)" }}><strong>$3,200</strong> <span className={cx(s.muted, s.small)}>(Dec 2018)</span></td>
                     <td style={{ color: "var(--green)" }}>$3,331 → $69,000<br/><span className={cx(s.muted, s.small)}>+1,970%</span></td>
                   </tr>
@@ -1368,7 +1368,7 @@ export default function PivotsDashboard() {
                     <td className={cx(s.muted, s.small, s.mono)}>26 Mai 2021<br/>~$39,000</td>
                     <td className={cx(s.muted, s.small, s.mono)}>16 Mai 2022<br/>~$30,000</td>
                     <td style={{ color: "var(--green)" }} className={cx(s.small, s.mono)}><strong>8 Nov 2022</strong><br/><strong>~$15,563</strong></td>
-                    <td className={cx(s.muted, s.small)}>—</td>
+                    <td className={cx(s.muted, s.small)}>-</td>
                     <td style={{ color: "var(--green)" }}><strong>$15,500</strong> <span className={cx(s.muted, s.small)}>(Nov 2022 FTX)</span></td>
                     <td style={{ color: "var(--green)" }}>$15,563 → $126,000<br/><span className={cx(s.muted, s.small)}>+710%</span></td>
                   </tr>
@@ -1377,7 +1377,7 @@ export default function PivotsDashboard() {
                     <td className={cx(s.muted, s.small, s.mono)}>14 Mar 2025<br/>~$83,000</td>
                     <td className={cx(s.muted, s.small, s.mono)}>7 Sep 2025<br/>~$111,000</td>
                     <td style={{ color: "var(--solar)" }} className={cx(s.small, s.mono)}><strong>3 Mar 2026</strong><br/><strong>~$66,154</strong></td>
-                    <td className={cx(s.muted, s.small)}>—</td>
+                    <td className={cx(s.muted, s.small)}>-</td>
                     <td style={{ color: "var(--solar)" }}><strong>$66,154?</strong> <span className={cx(s.muted, s.small)}>(în curs)</span></td>
                     <td style={{ color: "var(--muted)" }}>??? <br/><span className={cx(s.muted, s.small)}>Pauză până în 2028</span></td>
                   </tr>
@@ -1385,7 +1385,7 @@ export default function PivotsDashboard() {
               </table>
             </div>
             <div className={s.grid3} style={{ marginTop: 18 }}>
-              <div className={s.insight} style={{ borderLeftColor: "var(--green)" }}><div className={s.insTitle} style={{ color: "var(--green)" }}>Hit Rate: 3/3 — 100%</div><div className={s.insBody}>Ultima Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC (±2 săptămâni). Nicio excepție în 12 ani de date.</div></div>
+              <div className={s.insight} style={{ borderLeftColor: "var(--green)" }}><div className={s.insTitle} style={{ color: "var(--green)" }}>Hit Rate: 3/3 - 100%</div><div className={s.insBody}>Ultima Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC (±2 săptămâni). Nicio excepție în 12 ani de date.</div></div>
               <div className={s.insight} style={{ borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>Pauză 2026–2028: Zero Blood Moons</div><div className={s.insBody}>Următoarea eclipsă lunară totală: <strong style={{ color: "var(--text)" }}>~2028–2029</strong>. Istoric, perioadele fără Blood Moon = <strong style={{ color: "var(--text)" }}>bull market</strong>.</div></div>
               <div className={s.insight} style={{ borderLeftColor: "var(--red)" }}><div className={s.insTitle} style={{ color: "var(--red)" }}>Contra-argument: Benjamin Cowen</div><div className={s.insBody}>Bottom-ul real ar putea veni Q4 2026, nu acum. Rally-ul actual ar fi doar un <strong style={{ color: "var(--text)" }}>lower high</strong>, similar cu Mar 2022.</div></div>
             </div>
@@ -1401,10 +1401,10 @@ export default function PivotsDashboard() {
         {/* ── MERCURY RETROGRADE ── */}
         <Section id="s-mercury" title="Mercury Retrograde & BTC" subtitle="performanță în cele 21 de perioade cu date (2019–2026)">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Ce este:</strong> Mercury Retrograde = perioadă de ~3 săptămâni când Mercur pare să meargă înapoi pe cer (de 3 ori pe an). Traderii astro cred că aduce <strong>volatilitate și inversări</strong>. Pattern-ul depinde de trend: în bear market BTC scade, în bull market BTC urcă. <strong style={{ color: "var(--solar)" }}>Nu este predictiv singur</strong> — a fost testat și eliminat din indicatorul Pine Script.</p>
+            <p><strong>Ce este:</strong> Mercury Retrograde = perioadă de ~3 săptămâni când Mercur pare să meargă înapoi pe cer (de 3 ori pe an). Traderii astro cred că aduce <strong>volatilitate și inversări</strong>. Pattern-ul depinde de trend: în bear market BTC scade, în bull market BTC urcă. <strong style={{ color: "var(--solar)" }}>Nu este predictiv singur</strong> - a fost testat și eliminat din indicatorul Pine Script.</p>
           </div>
           <div className={cx(s.card, s.reveal, s.mb20)}>
-            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--pi)" }} />Mercury Retrograde — Performanță BTC (21 perioade verificate)</h2>
+            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--pi)" }} />Mercury Retrograde - Performanță BTC (21 perioade verificate)</h2>
             <div className={s.grid4} style={{ marginBottom: 16 }}>
               <div className={s.stat}><div className={s.statVal} style={{ color: "var(--muted)", fontSize: 22 }}>21</div><div className={s.statLbl}>Perioade Analizate</div><div className={s.statSub}>Oct 2019 – Mar 2026</div></div>
               <div className={s.stat}><div className={s.statVal} style={{ color: "var(--red)", fontSize: 22 }}>57%</div><div className={s.statLbl}>Bearish</div><div className={s.statSub}>12 din 21 = scădere</div></div>
@@ -1430,17 +1430,17 @@ export default function PivotsDashboard() {
             </div>
             <div className={s.grid3} style={{ marginTop: 16 }}>
               <div className={s.insight} style={{ borderLeftColor: "var(--red)" }}><div className={s.insTitle} style={{ color: "var(--red)" }}>Bear Market = Scădere</div><div className={s.insBody}>În bear (2022): toate 3 retrogradele au fost bearish (-4% la -13%). Mercury Retrograde <strong style={{ color: "var(--text)" }}>amplifică trendul existent</strong>.</div></div>
-              <div className={s.insight} style={{ borderLeftColor: "var(--green)" }}><div className={s.insTitle} style={{ color: "var(--green)" }}>Bull Market = Urcușuri Masive</div><div className={s.insBody}>#14 (+63%) și #16 (+47%) au fost în bull run 2021. Retrograde-ul nu oprește un bull — îl <strong style={{ color: "var(--text)" }}>accelerează</strong>.</div></div>
-              <div className={s.insight} style={{ borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>#30: Blood Moon + Mercury Rx</div><div className={s.insBody}>Retrograde-ul #30 (Feb-Mar 2026) a coincis cu <strong style={{ color: "var(--text)" }}>Blood Moon #3</strong>. BTC +3.7% — primul semn de stabilizare post-crash.</div></div>
+              <div className={s.insight} style={{ borderLeftColor: "var(--green)" }}><div className={s.insTitle} style={{ color: "var(--green)" }}>Bull Market = Urcușuri Masive</div><div className={s.insBody}>#14 (+63%) și #16 (+47%) au fost în bull run 2021. Retrograde-ul nu oprește un bull - îl <strong style={{ color: "var(--text)" }}>accelerează</strong>.</div></div>
+              <div className={s.insight} style={{ borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>#30: Blood Moon + Mercury Rx</div><div className={s.insBody}>Retrograde-ul #30 (Feb-Mar 2026) a coincis cu <strong style={{ color: "var(--text)" }}>Blood Moon #3</strong>. BTC +3.7% - primul semn de stabilizare post-crash.</div></div>
             </div>
-            <div className={s.infoBox} style={{ marginTop: 14 }}><strong style={{ color: "var(--pi)" }}>Concluzie:</strong> <span className={s.muted}>Mercury Retrograde <strong style={{ color: "var(--text)" }}>nu este predictiv singur</strong> (57% bearish, 43% bullish). Funcționează ca <strong style={{ color: "var(--text)" }}>amplificator de trend</strong> — verifică întotdeauna direcția pieței înainte. Cel mai util când coincide cu alte metode (eclipsă, ciclu).</span></div>
+            <div className={s.infoBox} style={{ marginTop: 14 }}><strong style={{ color: "var(--pi)" }}>Concluzie:</strong> <span className={s.muted}>Mercury Retrograde <strong style={{ color: "var(--text)" }}>nu este predictiv singur</strong> (57% bearish, 43% bullish). Funcționează ca <strong style={{ color: "var(--text)" }}>amplificator de trend</strong> - verifică întotdeauna direcția pieței înainte. Cel mai util când coincide cu alte metode (eclipsă, ciclu).</span></div>
           </div>
         </Section>
 
         {/* ── GANN ── */}
         <Section id="s-gann" title="Gann Time Cycles" subtitle="proiecții timp de la pivoți majori">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Verdict din 153 date verificate (3 marje):</strong> La ±3z Gann NU bate random-ul. La <strong style={{ color: "var(--green)" }}>±5z bate cu +2.6pp</strong>, la <strong style={{ color: "var(--green)" }}>±7z bate cu +8.8pp</strong>. Intervalele cu edge real: <strong style={{ color: "var(--green)" }}>+49z (+27pp), +45z (+18pp), +144z (+18pp)</strong>. <strong style={{ color: "var(--red)" }}>+90z e complet inutil</strong> — cel mai popular dar cel mai slab.</p>
+            <p><strong>Verdict din 153 date verificate (3 marje):</strong> La ±3z Gann NU bate random-ul. La <strong style={{ color: "var(--green)" }}>±5z bate cu +2.6pp</strong>, la <strong style={{ color: "var(--green)" }}>±7z bate cu +8.8pp</strong>. Intervalele cu edge real: <strong style={{ color: "var(--green)" }}>+49z (+27pp), +45z (+18pp), +144z (+18pp)</strong>. <strong style={{ color: "var(--red)" }}>+90z e complet inutil</strong> - cel mai popular dar cel mai slab.</p>
           </div>
           <div className={cx(s.grid4, s.reveal, s.mb20)}>
             <div className={s.stat}><div className={s.statVal} style={{ color: "var(--green)", fontSize: 22 }}>+8.8pp</div><div className={s.statLbl}>Edge la ±7z</div><div className={s.statSub}>59% vs 50% random</div></div>
@@ -1451,8 +1451,8 @@ export default function PivotsDashboard() {
 
           {/* Hit Rate per interval table - kept as static HTML since it's a fixed research table */}
           <div className={cx(s.card, s.reveal, s.mb20)}>
-            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Hit Rate per Interval — 3 marje de toleranță</h2>
-            <p className={cx(s.small, s.muted)} style={{ marginBottom: 12 }}>Gann nu e exact la zi — funcționează ca <strong style={{ color: "var(--text)" }}>zonă de alertă</strong>. Cu ±7z devine semnificativ. Random baseline: ±3z=28%, ±5z=40%, ±7z=50%.</p>
+            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />Hit Rate per Interval - 3 marje de toleranță</h2>
+            <p className={cx(s.small, s.muted)} style={{ marginBottom: 12 }}>Gann nu e exact la zi - funcționează ca <strong style={{ color: "var(--text)" }}>zonă de alertă</strong>. Cu ±7z devine semnificativ. Random baseline: ±3z=28%, ±5z=40%, ±7z=50%.</p>
             <div style={{ overflowX: "auto" }}>
               <table className={s.methodTable}>
                 <thead><tr><th>Interval</th><th>Grad</th><th style={{ textAlign: "center" }}>±3z</th><th style={{ textAlign: "center" }}>±5z</th><th style={{ textAlign: "center" }}>±7z</th><th>Edge ±5z</th></tr></thead>
@@ -1489,19 +1489,19 @@ export default function PivotsDashboard() {
             </div>
             <div className={s.grid3} style={{ marginTop: 14 }}>
               <div className={s.insight} style={{ borderLeftColor: "var(--green)" }}><div className={s.insTitle} style={{ color: "var(--green)" }}>Top 3: +49z, +45z, +144z</div><div className={s.insBody}>Intervalele cu cel mai mare edge peste random la ±5z: <strong style={{ color: "var(--text)" }}>+27pp, +18pp, +18pp</strong>. Square of 7 (49z) și 12² (144z) bat intervalele clasice.</div></div>
-              <div className={s.insight} style={{ borderLeftColor: "var(--red)" }}><div className={s.insTitle} style={{ color: "var(--red)" }}>+90z = complet inutil</div><div className={s.insBody}>Cel mai citat interval Gann are <strong style={{ color: "var(--red)" }}>cel mai mic hit rate</strong> pe BTC la orice marjă. 8% / 17% / 25% — mereu sub random.</div></div>
-              <div className={s.insight} style={{ borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>Concluzie practică</div><div className={s.insBody}>Gann = <strong style={{ color: "var(--text)" }}>zonă de alertă ±1 săptămână</strong>, nu dată exactă. Folosește doar <strong style={{ color: "var(--green)" }}>+45z, +49z, +60z, +144z</strong> — restul e zgomot.</div></div>
+              <div className={s.insight} style={{ borderLeftColor: "var(--red)" }}><div className={s.insTitle} style={{ color: "var(--red)" }}>+90z = complet inutil</div><div className={s.insBody}>Cel mai citat interval Gann are <strong style={{ color: "var(--red)" }}>cel mai mic hit rate</strong> pe BTC la orice marjă. 8% / 17% / 25% - mereu sub random.</div></div>
+              <div className={s.insight} style={{ borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>Concluzie practică</div><div className={s.insBody}>Gann = <strong style={{ color: "var(--text)" }}>zonă de alertă ±1 săptămână</strong>, nu dată exactă. Folosește doar <strong style={{ color: "var(--green)" }}>+45z, +49z, +60z, +144z</strong> - restul e zgomot.</div></div>
             </div>
           </div>
 
           {/* Gann projection tables */}
           <div className={cx(s.grid2, s.reveal, s.mb20)} style={{ alignItems: "start" }}>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />ATH — 6 Oct 2025 ($124,659) <span style={{ color: "var(--green)", fontSize: 11, fontWeight: 500, textTransform: "none" }}>57% hit</span></h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--solar)" }} />ATH - 6 Oct 2025 ($124,659) <span style={{ color: "var(--green)", fontSize: 11, fontWeight: 500, textTransform: "none" }}>57% hit</span></h2>
               <GannTable anchorDate="2025-10-06" />
             </div>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--green)" }} />Bottom FTX — 21 Nov 2022 ($15,781) <span style={{ color: "var(--muted)", fontSize: 11, fontWeight: 500, textTransform: "none" }}>31% hit</span></h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--green)" }} />Bottom FTX - 21 Nov 2022 ($15,781) <span style={{ color: "var(--muted)", fontSize: 11, fontWeight: 500, textTransform: "none" }}>31% hit</span></h2>
               <GannTable anchorDate="2022-11-21" />
             </div>
           </div>
@@ -1523,14 +1523,14 @@ export default function PivotsDashboard() {
         </Section>
 
         {/* ── SHMITA ── */}
-        <Section id="s-shmita" title="Ciclul Shmita — 7 Ani">
+        <Section id="s-shmita" title="Ciclul Shmita - 7 Ani">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic — al 7-lea an dintr-un ciclu de 7. În Tora, este an de &quot;eliberare&quot;: datorii iertate, pământ lăsat să se odihnească. Popularizat în finanțe de Rabbi Jonathan Cahn (<em>The Mystery of the Shemitah</em>, 2014). Corelație remarcabilă cu crizele financiare majore.</p>
+            <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic - al 7-lea an dintr-un ciclu de 7. În Tora, este an de &quot;eliberare&quot;: datorii iertate, pământ lăsat să se odihnească. Popularizat în finanțe de Rabbi Jonathan Cahn (<em>The Mystery of the Shemitah</em>, 2014). Corelație remarcabilă cu crizele financiare majore.</p>
             <p style={{ marginTop: 8, color: "#94a3b8" }}>⚠️ Corelație observațională, nu cauzalitate dovedită. Folosit ca context macro, nu ca semnal de intrare.</p>
           </div>
           <div className={cx(s.grid2, s.reveal)}>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Istoric — Evenimente Financiare Majore în Shmita</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Istoric - Evenimente Financiare Majore în Shmita</h2>
               <table className={s.methodTable}>
                 <thead><tr><th>Perioadă Shmita</th><th>Eveniment Major</th><th>Impact</th></tr></thead>
                 <tbody>
@@ -1539,28 +1539,28 @@ export default function PivotsDashboard() {
                   <tr><td className={cx(s.muted, s.mono)}>1979–1980</td><td>Criză petrol + stagflație</td><td style={{ color: "var(--red)" }}>Recesiune globală</td></tr>
                   <tr><td className={cx(s.muted, s.mono)}>1993–1994</td><td>Crash obligațiuni</td><td style={{ color: "var(--orange)" }}>Pierderi masive bond market</td></tr>
                   <tr><td className={cx(s.muted, s.mono)}>2000–2001</td><td>Dot-com bubble + 9/11</td><td style={{ color: "var(--red)" }}>NASDAQ -78%</td></tr>
-                  <tr><td className={cx(s.muted, s.mono)}>2007–2008</td><td>Lehman Brothers — Criză imobiliară</td><td style={{ color: "var(--red)" }}>S&amp;P 500 -57%</td></tr>
+                  <tr><td className={cx(s.muted, s.mono)}>2007–2008</td><td>Lehman Brothers - Criză imobiliară</td><td style={{ color: "var(--red)" }}>S&amp;P 500 -57%</td></tr>
                   <tr><td className={cx(s.muted, s.mono)}>2014–2015</td><td>Crash BTC post Mt.Gox</td><td style={{ color: "var(--orange)" }}>BTC -85% (Nov 2013 → Ian 2015)</td></tr>
                   <tr style={{ background: "rgba(247,147,26,.05)" }}><td style={{ color: "var(--halving)" }} className={s.mono}>2021–2022</td><td>Crypto winter + FTX collapse</td><td style={{ color: "var(--red)" }}>BTC -80% · S&amp;P -27%</td></tr>
                 </tbody>
               </table>
-              <div className={s.infoBox} style={{ marginTop: 14, borderColor: "rgba(247,147,26,.2)", background: "rgba(247,147,26,.05)" }}><strong style={{ color: "var(--orange)" }}>Pattern: 8/8 = 100%</strong> <span className={s.muted}>— toate Shmita-urile recente au coincis cu o criză majoră. Sample size mic, selection bias posibil — folosit ca context macro.</span></div>
+              <div className={s.infoBox} style={{ marginTop: 14, borderColor: "rgba(247,147,26,.2)", background: "rgba(247,147,26,.05)" }}><strong style={{ color: "var(--orange)" }}>Pattern: 8/8 = 100%</strong> <span className={s.muted}>- toate Shmita-urile recente au coincis cu o criză majoră. Sample size mic, selection bias posibil - folosit ca context macro.</span></div>
             </div>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />BTC în Shmita — Comportament</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--cycle)" }} />BTC în Shmita - Comportament</h2>
               <h2 className={s.cardH2} style={{ marginBottom: 8, marginTop: 4 }}><span className={s.dot} style={{ background: "var(--orange)" }} />Shmita 2014–2015 <span className={cx(s.muted, s.small)} style={{ fontWeight: 400, textTransform: "none" }}>(Sep 2014 → Sep 2015)</span></h2>
               <div className={s.tl}>
-                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>Nov 2013 — ATH pre-Shmita: ~$1,150</div><div className={cx(s.tlLabel, s.muted)}>Mt.Gox collapse Feb 2014 → bear market</div></div>
-                <div className={s.tlItem}><div className={s.tlDot} style={{ background: "var(--red)", borderColor: "var(--red)" }} /><div className={s.tlDate}>Ian 2015 — Fond în Shmita: ~$152 <span style={{ color: "var(--red)" }}>(-87%)</span></div><div className={s.tlLabel} style={{ color: "var(--green)" }}>Bottom de ciclu format în interiorul Shmita</div></div>
-                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>Sep 2015 — Recuperare ~$230 la final Shmita</div><div className={cx(s.tlLabel, s.muted)}>Urmat de bull run masiv spre $20k (2017)</div></div>
+                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>Nov 2013 - ATH pre-Shmita: ~$1,150</div><div className={cx(s.tlLabel, s.muted)}>Mt.Gox collapse Feb 2014 → bear market</div></div>
+                <div className={s.tlItem}><div className={s.tlDot} style={{ background: "var(--red)", borderColor: "var(--red)" }} /><div className={s.tlDate}>Ian 2015 - Fond în Shmita: ~$152 <span style={{ color: "var(--red)" }}>(-87%)</span></div><div className={s.tlLabel} style={{ color: "var(--green)" }}>Bottom de ciclu format în interiorul Shmita</div></div>
+                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>Sep 2015 - Recuperare ~$230 la final Shmita</div><div className={cx(s.tlLabel, s.muted)}>Urmat de bull run masiv spre $20k (2017)</div></div>
               </div>
               <h2 className={s.cardH2} style={{ marginTop: 18, marginBottom: 8 }}><span className={s.dot} style={{ background: "var(--halving)" }} />Shmita 2021–2022 <span className={cx(s.muted, s.small)} style={{ fontWeight: 400, textTransform: "none" }}>(Sep 2021 → Sep 2022)</span></h2>
               <div className={s.tl}>
-                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>Nov 2021 — ATH în Shmita: ~$69,000</div><div className={cx(s.tlLabel, s.muted)}>Top format la 2 luni după startul Shmita</div></div>
-                <div className={s.tlItem}><div className={s.tlDot} style={{ background: "var(--red)", borderColor: "var(--red)" }} /><div className={s.tlDate}>Nov 2022 — Bottom post-Shmita: ~$15,500 <span style={{ color: "var(--red)" }}>(-78%)</span></div><div className={s.tlLabel} style={{ color: "var(--orange)" }}>FTX collapse — bottom-ul la 2 luni DUPĂ finalul Shmita</div></div>
-                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>2023–2025 — Recuperare spre $126,000 (ATH 6 Oct 2025)</div><div className={cx(s.tlLabel, s.muted)}>Bull run post-Shmita confirmat · 17.5 luni după Halving 4</div></div>
+                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>Nov 2021 - ATH în Shmita: ~$69,000</div><div className={cx(s.tlLabel, s.muted)}>Top format la 2 luni după startul Shmita</div></div>
+                <div className={s.tlItem}><div className={s.tlDot} style={{ background: "var(--red)", borderColor: "var(--red)" }} /><div className={s.tlDate}>Nov 2022 - Bottom post-Shmita: ~$15,500 <span style={{ color: "var(--red)" }}>(-78%)</span></div><div className={s.tlLabel} style={{ color: "var(--orange)" }}>FTX collapse - bottom-ul la 2 luni DUPĂ finalul Shmita</div></div>
+                <div className={s.tlItem}><div className={cx(s.tlDot, s.tlDotHit)} /><div className={s.tlDate}>2023–2025 - Recuperare spre $126,000 (ATH 6 Oct 2025)</div><div className={cx(s.tlLabel, s.muted)}>Bull run post-Shmita confirmat · 17.5 luni după Halving 4</div></div>
               </div>
-              <h2 className={s.cardH2} style={{ marginTop: 18, marginBottom: 8 }}><span className={s.dot} style={{ background: "var(--fib)" }} />Shmita 2028–2029 — Următor</h2>
+              <h2 className={s.cardH2} style={{ marginTop: 18, marginBottom: 8 }}><span className={s.dot} style={{ background: "var(--fib)" }} />Shmita 2028–2029 - Următor</h2>
               <div className={s.infoBox} style={{ marginTop: 0 }}>
                 <div style={{ color: "var(--solar)", fontWeight: 700, marginBottom: 6, fontFamily: "var(--font-mono)" }}>Sep 2028 → Sep 2029</div>
                 <span className={s.muted}>Coincide cu <strong style={{ color: "var(--text)" }}>Halving 5 (Apr 2028)</strong>. Dacă pattern-ul se repetă, un top macro BTC ar putea precede Shmita-ul, iar bottom-ul de ciclu s-ar forma în 2028–2029.</span>
@@ -1578,25 +1578,25 @@ export default function PivotsDashboard() {
             <p><strong>Observație cheie:</strong> Când fereastra de top post-halving (12–18 luni) se suprapune cu un an Shmita, rezultatul istoric este un <strong>top exploziv urmat de crash major</strong>. Când NU se suprapun (Halvinguri 2 și 4), ciclul bear este mai &quot;normal&quot;. Halving 5 + Shmita 2028–2029 recreează exact setup-ul Halvingului 3.</p>
           </div>
           <div className={cx(s.card, s.reveal)}>
-            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Comparație Cicluri — Top Post-Halving vs. Shmita</h2>
+            <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Comparație Cicluri - Top Post-Halving vs. Shmita</h2>
             <div style={{ overflowX: "auto" }}>
               <table className={s.methodTable}>
                 <thead><tr><th>Halving</th><th>Dată</th><th>ATH</th><th>Luni până la ATH</th><th>Shmita activ?</th><th>Crash după</th></tr></thead>
                 <tbody>
-                  <tr style={{ background: "rgba(100,116,139,.04)" }}><td className={s.muted}>Halving 1</td><td className={s.muted}>28 Nov 2012</td><td className={s.muted}>$1,150 <span className={cx(s.muted, s.small)}>(Nov 2013)</span></td><td className={s.muted}>12 luni</td><td style={{ color: "var(--muted)" }}>✗ Nu — Shmita 2014 începe după ATH</td><td style={{ color: "var(--red)" }}>-87% (Mt.Gox)</td></tr>
-                  <tr><td><strong>Halving 2</strong></td><td className={s.muted}>9 Iul 2016</td><td>$19,799 <span className={cx(s.muted, s.small)}>(Dec 2017)</span></td><td style={{ color: "var(--green)" }}>17.5 luni</td><td style={{ color: "var(--muted)" }}>✗ Nu — între Shmita</td><td style={{ color: "var(--orange)" }}>-84% (normal)</td></tr>
-                  <tr style={{ background: "rgba(167,139,250,.04)" }}><td><strong style={{ color: "var(--pi)" }}>Halving 3</strong></td><td className={s.muted}>11 Mai 2020</td><td style={{ color: "var(--solar)" }}>$69,000 <span className={cx(s.muted, s.small)}>(Nov 2021)</span></td><td style={{ color: "var(--green)" }}>18.3 luni</td><td style={{ color: "var(--solar)" }}>✓ DA — Shmita sept 2021, ATH 2 luni după</td><td style={{ color: "var(--red)" }}><strong>-78% sever</strong></td></tr>
-                  <tr><td><strong>Halving 4</strong></td><td className={s.muted}>19 Apr 2024</td><td style={{ color: "var(--solar)" }}>$126,000 <span className={cx(s.muted, s.small)}>(6 Oct 2025)</span></td><td style={{ color: "var(--green)" }}>17.5 luni</td><td style={{ color: "var(--muted)" }}>✗ Nu — între Shmita</td><td style={{ color: "var(--orange)" }}>În desfășurare</td></tr>
-                  <tr style={{ background: "rgba(245,158,11,.05)" }}><td><strong style={{ color: "var(--solar)" }}>Halving 5 ⚡</strong></td><td className={s.muted}>~20 Apr 2028</td><td style={{ color: "var(--muted)" }}>? (proiectat)</td><td style={{ color: "var(--muted)" }}>+12–18 luni = Apr–Oct 2029</td><td style={{ color: "var(--solar)" }}>✓ DA — Shmita Sep 2028–Sep 2029 = overlap complet</td><td style={{ color: "var(--red)" }}>Potențial sever</td></tr>
+                  <tr style={{ background: "rgba(100,116,139,.04)" }}><td className={s.muted}>Halving 1</td><td className={s.muted}>28 Nov 2012</td><td className={s.muted}>$1,150 <span className={cx(s.muted, s.small)}>(Nov 2013)</span></td><td className={s.muted}>12 luni</td><td style={{ color: "var(--muted)" }}>✗ Nu - Shmita 2014 începe după ATH</td><td style={{ color: "var(--red)" }}>-87% (Mt.Gox)</td></tr>
+                  <tr><td><strong>Halving 2</strong></td><td className={s.muted}>9 Iul 2016</td><td>$19,799 <span className={cx(s.muted, s.small)}>(Dec 2017)</span></td><td style={{ color: "var(--green)" }}>17.5 luni</td><td style={{ color: "var(--muted)" }}>✗ Nu - între Shmita</td><td style={{ color: "var(--orange)" }}>-84% (normal)</td></tr>
+                  <tr style={{ background: "rgba(167,139,250,.04)" }}><td><strong style={{ color: "var(--pi)" }}>Halving 3</strong></td><td className={s.muted}>11 Mai 2020</td><td style={{ color: "var(--solar)" }}>$69,000 <span className={cx(s.muted, s.small)}>(Nov 2021)</span></td><td style={{ color: "var(--green)" }}>18.3 luni</td><td style={{ color: "var(--solar)" }}>✓ DA - Shmita sept 2021, ATH 2 luni după</td><td style={{ color: "var(--red)" }}><strong>-78% sever</strong></td></tr>
+                  <tr><td><strong>Halving 4</strong></td><td className={s.muted}>19 Apr 2024</td><td style={{ color: "var(--solar)" }}>$126,000 <span className={cx(s.muted, s.small)}>(6 Oct 2025)</span></td><td style={{ color: "var(--green)" }}>17.5 luni</td><td style={{ color: "var(--muted)" }}>✗ Nu - între Shmita</td><td style={{ color: "var(--orange)" }}>În desfășurare</td></tr>
+                  <tr style={{ background: "rgba(245,158,11,.05)" }}><td><strong style={{ color: "var(--solar)" }}>Halving 5 ⚡</strong></td><td className={s.muted}>~20 Apr 2028</td><td style={{ color: "var(--muted)" }}>? (proiectat)</td><td style={{ color: "var(--muted)" }}>+12–18 luni = Apr–Oct 2029</td><td style={{ color: "var(--solar)" }}>✓ DA - Shmita Sep 2028–Sep 2029 = overlap complet</td><td style={{ color: "var(--red)" }}>Potențial sever</td></tr>
                 </tbody>
               </table>
             </div>
             <div className={s.grid3} style={{ marginTop: 18 }}>
-              <div className={s.insight} style={{ borderLeftColor: "var(--pi)" }}><div className={s.insTitle} style={{ color: "var(--pi)" }}>Halving 3 + Shmita 2021 — Confirmat</div><div className={s.insBody}>Shmita a început <strong style={{ color: "var(--text)" }}>7 Sep 2021</strong>. ATH $69k format la 18.3 luni după Halving 3 = Nov 2021, exact <strong style={{ color: "var(--text)" }}>2 luni în Shmita</strong>. Crash -78% și FTX collapse. Bottom-ul (Nov 2022) la 2 luni după finalul Shmita.</div></div>
-              <div className={s.insight}><div className={s.insTitle} style={{ color: "var(--muted)" }}>Halvinguri 2 &amp; 4 — Fără Shmita</div><div className={s.insBody}>Halvingul 2 (Dec 2017) și Halvingul 4 (Oct 2025) au format top-uri <strong style={{ color: "var(--text)" }}>în afara anilor Shmita</strong>. Crash-urile au urmat normal (-84%, respectiv în desfășurare), fără amplitudinea extremă a confluenței.</div></div>
-              <div className={s.insight} style={{ background: "rgba(245,158,11,.06)", borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>Halving 5 + Shmita 2028–2029 ⚡</div><div className={s.insBody}>Setup <strong style={{ color: "var(--text)" }}>identic cu Halvingul 3</strong>. Shmita începe Sep 2028 — la 5 luni după Halving 5. Fereastra de top (Apr–Oct 2029) cade <strong style={{ color: "var(--text)" }}>100% în Shmita</strong>. De monitorizat cu atenție maximă.</div></div>
+              <div className={s.insight} style={{ borderLeftColor: "var(--pi)" }}><div className={s.insTitle} style={{ color: "var(--pi)" }}>Halving 3 + Shmita 2021 - Confirmat</div><div className={s.insBody}>Shmita a început <strong style={{ color: "var(--text)" }}>7 Sep 2021</strong>. ATH $69k format la 18.3 luni după Halving 3 = Nov 2021, exact <strong style={{ color: "var(--text)" }}>2 luni în Shmita</strong>. Crash -78% și FTX collapse. Bottom-ul (Nov 2022) la 2 luni după finalul Shmita.</div></div>
+              <div className={s.insight}><div className={s.insTitle} style={{ color: "var(--muted)" }}>Halvinguri 2 &amp; 4 - Fără Shmita</div><div className={s.insBody}>Halvingul 2 (Dec 2017) și Halvingul 4 (Oct 2025) au format top-uri <strong style={{ color: "var(--text)" }}>în afara anilor Shmita</strong>. Crash-urile au urmat normal (-84%, respectiv în desfășurare), fără amplitudinea extremă a confluenței.</div></div>
+              <div className={s.insight} style={{ background: "rgba(245,158,11,.06)", borderLeftColor: "var(--solar)" }}><div className={s.insTitle} style={{ color: "var(--solar)" }}>Halving 5 + Shmita 2028–2029 ⚡</div><div className={s.insBody}>Setup <strong style={{ color: "var(--text)" }}>identic cu Halvingul 3</strong>. Shmita începe Sep 2028 - la 5 luni după Halving 5. Fereastra de top (Apr–Oct 2029) cade <strong style={{ color: "var(--text)" }}>100% în Shmita</strong>. De monitorizat cu atenție maximă.</div></div>
             </div>
-            <div className={cx(s.infoBox, s.infoBoxPurple)} style={{ marginTop: 14 }}><strong style={{ color: "var(--pi)" }}>Matematică:</strong> <span className={s.muted}>Ciclul de 4 ani BTC și ciclul Shmita de 7 ani se sincronizează complet o dată la <strong style={{ color: "var(--text)" }}>28 de ani</strong>. Halvingul 3 și Halvingul 5 sunt la distanță de exact <strong style={{ color: "var(--text)" }}>2 cicluri Shmita</strong> (14 ani). Sample size mic — folosit ca context macro.</span></div>
+            <div className={cx(s.infoBox, s.infoBoxPurple)} style={{ marginTop: 14 }}><strong style={{ color: "var(--pi)" }}>Matematică:</strong> <span className={s.muted}>Ciclul de 4 ani BTC și ciclul Shmita de 7 ani se sincronizează complet o dată la <strong style={{ color: "var(--text)" }}>28 de ani</strong>. Halvingul 3 și Halvingul 5 sunt la distanță de exact <strong style={{ color: "var(--text)" }}>2 cicluri Shmita</strong> (14 ani). Sample size mic - folosit ca context macro.</span></div>
           </div>
         </Section>
 
@@ -1618,10 +1618,10 @@ export default function PivotsDashboard() {
                 <tr><td><strong style={{ color: "var(--lunar)" }}>Eclipsă Lunară</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s2)}>2</span></span></td><td><span style={{ color: "var(--orange)", fontWeight: 600 }}>Semnal de răsturnare.</span> Fereastra se activează la <strong>±3 zile</strong> față de data eclipsei.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> Eclipsă lunară <strong>Nov 2021</strong> → top de ciclu $69k</td></tr>
                 <tr><td><strong style={{ color: "var(--halving)" }}>Proximitate Halving</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s2)}>2</span></span></td><td><span style={{ color: "var(--green)", fontWeight: 600 }}>Cel mai cunoscut ciclu BTC.</span> ATH-ul vine la 17–18 luni după halving.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> <strong>Halving 4</strong> → ATH $126k la 17.5 luni</td></tr>
                 <tr><td><strong style={{ color: "var(--fib)" }}>Fibonacci pe Timp</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s2)}>2</span></span></td><td><span style={{ color: "var(--green)", fontWeight: 600 }}>Niveluri Fibonacci aplicate pe calendar.</span> 5 din 9 niveluri au marcat un pivot. Rată: 56%.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> Nivel 1.272 = <strong>15 Mai 2025</strong> → high local $103k</td></tr>
-                <tr><td><strong style={{ color: "var(--pi)" }}>Pi Cycle Top</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s3)}>3</span></span></td><td><span style={{ color: "var(--red)", fontWeight: 600 }}>Semnalul nuclear — cel mai rar.</span> 2/2 ori a marcat top de ciclu macro.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> <strong>Apr 2021</strong> → top local $64k</td></tr>
+                <tr><td><strong style={{ color: "var(--pi)" }}>Pi Cycle Top</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s3)}>3</span></span></td><td><span style={{ color: "var(--red)", fontWeight: 600 }}>Semnalul nuclear - cel mai rar.</span> 2/2 ori a marcat top de ciclu macro.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> <strong>Apr 2021</strong> → top local $64k</td></tr>
                 {[
-                  { name: "Ciclu Scurt — 86 zile", desc: "Un ciclu de ~86 de zile (Intermediate Cycle). BTC formează un low local la fiecare 2–3 luni.", ex: "Mediană istorică: 84 zile între bottom-uri intermediare." },
-                  { name: "Faza Lunii", desc: "La Lună Nouă și Lună Plină (ciclu de 29.5 zile), BTC prezintă o tendință ușoară de inversare.", ex: "Efect statistic moderat — nu folosi singur." },
+                  { name: "Ciclu Scurt - 86 zile", desc: "Un ciclu de ~86 de zile (Intermediate Cycle). BTC formează un low local la fiecare 2–3 luni.", ex: "Mediană istorică: 84 zile între bottom-uri intermediare." },
+                  { name: "Faza Lunii", desc: "La Lună Nouă și Lună Plină (ciclu de 29.5 zile), BTC prezintă o tendință ușoară de inversare.", ex: "Efect statistic moderat - nu folosi singur." },
                   { name: "Intervale Gann", desc: "Piețele reacționează la intervale specifice de timp: 30, 45, 90, 180, 360 zile. Cel mai puternic: 180 zile.", ex: "7 Apr 2025 + 180 zile = 5 Oct 2025 = ATH $126,000 ✓" },
                   { name: "Sezonier Ianuarie", desc: "BTC formează low-uri cu +79% mai des în perioada 16 Ianuarie – 15 Februarie.", ex: "Ian 2015 → bottom $152 ✓ · Ian 2023 → bottom $16,500 ✓" },
                   { name: "Zi din Lună", desc: "Ziua 14 → +147% top-uri. Ziua 25 → +135% low-uri. Ziua 12 → zero top-uri.", ex: "Bottom-uri frecvente: zilele 5, 10, 11, 24, 25." },
@@ -1639,12 +1639,12 @@ export default function PivotsDashboard() {
           <div className={cx(s.card, s.reveal)}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {[
-                { label: "Auriu — Eclipsă Solară", bg: "rgba(245,158,11,.12)", border: "rgba(245,158,11,.3)", color: "var(--solar)" },
-                { label: "Albastru — Eclipsă Lunară", bg: "rgba(147,197,253,.12)", border: "rgba(147,197,253,.3)", color: "var(--lunar)" },
-                { label: "Verde — Fibonacci", bg: "rgba(16,185,129,.12)", border: "rgba(16,185,129,.3)", color: "var(--fib)" },
-                { label: "Portocaliu — Halving", bg: "rgba(249,115,22,.12)", border: "rgba(249,115,22,.3)", color: "var(--halving)" },
-                { label: "Teal — Cicluri A/B", bg: "rgba(6,182,212,.12)", border: "rgba(6,182,212,.3)", color: "var(--cycle)" },
-                { label: "Gri — Watch (scor=3)", bg: "rgba(100,116,139,.12)", border: "rgba(100,116,139,.3)", color: "#90a4ae" },
+                { label: "Auriu - Eclipsă Solară", bg: "rgba(245,158,11,.12)", border: "rgba(245,158,11,.3)", color: "var(--solar)" },
+                { label: "Albastru - Eclipsă Lunară", bg: "rgba(147,197,253,.12)", border: "rgba(147,197,253,.3)", color: "var(--lunar)" },
+                { label: "Verde - Fibonacci", bg: "rgba(16,185,129,.12)", border: "rgba(16,185,129,.3)", color: "var(--fib)" },
+                { label: "Portocaliu - Halving", bg: "rgba(249,115,22,.12)", border: "rgba(249,115,22,.3)", color: "var(--halving)" },
+                { label: "Teal - Cicluri A/B", bg: "rgba(6,182,212,.12)", border: "rgba(6,182,212,.3)", color: "var(--cycle)" },
+                { label: "Gri - Watch (scor=3)", bg: "rgba(100,116,139,.12)", border: "rgba(100,116,139,.3)", color: "#90a4ae" },
               ].map((pill) => (
                 <span key={pill.label} className={s.colorPill} style={{ background: pill.bg, borderColor: pill.border, color: pill.color }}>
                   {pill.label}

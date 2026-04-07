@@ -59,7 +59,7 @@ export default async function PivotsPage() {
     );
   }
 
-  // Admin — render native Next.js dashboard (no Container wrapper — full-width)
+  // Admin - render native Next.js dashboard (no Container wrapper - full-width)
   return (
     <>
       <Navbar mode="dashboard" userIdentity={identity} />

@@ -161,7 +161,7 @@ export default async function PerformancePage() {
               Performanță <span className="gradient-text">Bot</span>
             </h1>
             <p className="mt-3 max-w-3xl text-slate-400">
-              Equity, expunere, drawdown-uri și controlul riscului — actualizat automat.
+              Equity, expunere, drawdown-uri și controlul riscului - actualizat automat.
             </p>
           </section>
 

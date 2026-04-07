@@ -80,7 +80,7 @@ function PlanUpsellModal({
           Ethereum, Altcoins și TradFi.
         </p>
 
-        {/* Option A — Bundle (highlighted) */}
+        {/* Option A - Bundle (highlighted) */}
         <div className="border border-accent-emerald bg-accent-emerald/5 rounded-xl p-5 mb-4">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-bold text-white">
@@ -104,11 +104,11 @@ function PlanUpsellModal({
           </Link>
         </div>
 
-        {/* Option B — Community only (ghost) */}
+        {/* Option B - Community only (ghost) */}
         <div className="border border-white/10 bg-white/5 rounded-xl p-5">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-bold text-white">
-              Doar comunitatea — {planPrice}
+              Doar comunitatea - {planPrice}
             </h3>
           </div>
           <p className="text-white/50 text-sm mb-4">

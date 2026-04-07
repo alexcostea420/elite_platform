@@ -29,7 +29,7 @@ type ResourceCard = {
 const resources: ResourceCard[] = [
   {
     icon: "📖",
-    title: "Ghid Complet — Start Rapid",
+    title: "Ghid Complet - Start Rapid",
     description: "Primul lucru pe care trebuie să-l vezi. Ghidul complet de la 0 la trading real.",
     tag: "OBLIGATORIU",
     links: [
@@ -50,7 +50,7 @@ const resources: ResourceCard[] = [
   },
   {
     icon: "🎯",
-    title: "Lot Size — CEL MAI IMPORTANT Video",
+    title: "Lot Size - CEL MAI IMPORTANT Video",
     description: "Fără lot size corect, poți avea 70% win rate și tot să pierzi bani. Uită-te OBLIGATORIU.",
     tag: "ESENȚIAL",
     links: [
@@ -69,7 +69,7 @@ const resources: ResourceCard[] = [
   {
     icon: "⚙️",
     title: "Setup TradingView",
-    description: "Cum îți configurezi TradingView corect — timezone România, layout, indicatori.",
+    description: "Cum îți configurezi TradingView corect - timezone România, layout, indicatori.",
     links: [
       { label: "Tutorial Setup (Varianta Gratis)", href: "https://youtu.be/K4lIYkutU58", external: true },
       { label: "Tutorial Setup (TradingView Platit)", href: "https://youtu.be/shjwxsS9S8", external: true },
@@ -96,7 +96,7 @@ const resources: ResourceCard[] = [
   {
     icon: "💱",
     title: "Exchange Recomandat",
-    description: "MEXC — exchange recomandat pentru tradingul de crypto. Link de referral cu beneficii.",
+    description: "MEXC - exchange recomandat pentru tradingul de crypto. Link de referral cu beneficii.",
     links: [
       { label: "Creează Cont MEXC", href: "https://promote.mexc.com/a/GxbgCLhX", external: true },
     ],

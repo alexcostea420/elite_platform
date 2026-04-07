@@ -206,8 +206,8 @@ export default async function AdminBotsPage({ searchParams }: AdminBotsPageProps
                     required
                     className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
                   >
-                    <option value="free_tier">Free Tier — $98</option>
-                    <option value="elite_tier">Elite Tier — $45</option>
+                    <option value="free_tier">Free Tier - $98</option>
+                    <option value="elite_tier">Elite Tier - $45</option>
                   </select>
                 </div>
                 <button type="submit" className="accent-button whitespace-nowrap">
@@ -248,7 +248,7 @@ export default async function AdminBotsPage({ searchParams }: AdminBotsPageProps
                             {profiles?.full_name ?? "N/A"}
                           </td>
                           <td className="px-4 py-3 text-slate-300">
-                            {(sub.plan as string) ?? "—"}
+                            {(sub.plan as string) ?? "-"}
                           </td>
                           <td className="px-4 py-3 font-display text-white">
                             ${Number(sub.price_usd ?? 0).toFixed(2)}
@@ -263,12 +263,12 @@ export default async function AdminBotsPage({ searchParams }: AdminBotsPageProps
                           <td className="px-4 py-3 text-slate-400">
                             {sub.starts_at
                               ? new Date(sub.starts_at as string).toLocaleDateString("ro-RO")
-                              : "—"}
+                              : "-"}
                           </td>
                           <td className="px-4 py-3 text-slate-400">
                             {sub.expires_at
                               ? new Date(sub.expires_at as string).toLocaleDateString("ro-RO")
-                              : "—"}
+                              : "-"}
                           </td>
                         </tr>
                       );
@@ -304,7 +304,7 @@ export default async function AdminBotsPage({ searchParams }: AdminBotsPageProps
                 Pauză Globală
               </button>
               <p className="mt-3 text-xs text-red-400/60">
-                Oprește copierea pentru toți abonații — funcționalitate în dezvoltare.
+                Oprește copierea pentru toți abonații - funcționalitate în dezvoltare.
               </p>
             </div>
           </section>

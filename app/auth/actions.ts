@@ -149,11 +149,11 @@ export async function signupWithInviteAction(formData: FormData) {
   if (data.user) {
     await upsertProfile(data.user.id, fullName, discordUsername);
 
-    // Redeem invite — activate Elite subscription
+    // Redeem invite - activate Elite subscription
     const redeemResult = await redeemInvite(inviteToken, data.user.id);
 
     if (redeemResult.error) {
-      // Account created but invite failed — they can try redeem later
+      // Account created but invite failed - they can try redeem later
       redirect(`/dashboard?invite_error=${encodeURIComponent(redeemResult.error)}`);
     }
   }

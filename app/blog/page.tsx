@@ -23,7 +23,7 @@ export const metadata: Metadata = buildPageMetadata({
 const articles = [
   {
     slug: "cum-sa-incepi-trading",
-    title: "Cum să Începi în Trading Crypto — Ghid Complet pentru Începători",
+    title: "Cum să Începi în Trading Crypto - Ghid Complet pentru Începători",
     excerpt:
       "Totul de la educație, cont demo, strategie, risk management și comunitate. Ghidul complet pentru cei care vor să facă primii pași în trading crypto.",
     date: "2 Aprilie 2026",
@@ -42,7 +42,7 @@ export default function BlogPage() {
             eyebrow="Articole & Ghiduri"
             title={
               <>
-                Blog — <span className="gradient-text">Armata de Traderi</span>
+                Blog - <span className="gradient-text">Armata de Traderi</span>
               </>
             }
             description="Educație, strategii și insight-uri din lumea trading-ului crypto."

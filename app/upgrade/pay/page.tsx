@@ -25,43 +25,43 @@ type PlanInfo = {
 const PLAN_MAP: Record<string, PlanInfo> = {
   trial_3days: {
     slug: "trial_3days",
-    label: "Trial Gratuit — 3 Zile",
+    label: "Trial Gratuit - 3 Zile",
     planDuration: "30_days",
     chain: "ARB",
   },
   elite_monthly: {
     slug: "elite_monthly",
-    label: "Elite — 30 Zile",
+    label: "Elite - 30 Zile",
     planDuration: "30_days",
     chain: "ARB",
   },
   elite_3mo: {
     slug: "elite_3mo",
-    label: "Elite — 3 Luni",
+    label: "Elite - 3 Luni",
     planDuration: "90_days",
     chain: "ARB",
   },
   elite_annual: {
     slug: "elite_annual",
-    label: "Elite — 12 Luni",
+    label: "Elite - 12 Luni",
     planDuration: "365_days",
     chain: "ARB",
   },
   bot_monthly: {
     slug: "bot_monthly",
-    label: "Bot AI Trading — 30 Zile",
+    label: "Bot AI Trading - 30 Zile",
     planDuration: "bot_monthly",
     chain: "ARB",
   },
   bot_monthly_elite: {
     slug: "bot_monthly_elite",
-    label: "Bot AI Trading (Elite) — 30 Zile",
+    label: "Bot AI Trading (Elite) - 30 Zile",
     planDuration: "bot_monthly_elite",
     chain: "ARB",
   },
   elite_bot_bundle: {
     slug: "elite_bot_bundle",
-    label: "Elite + Bot Bundle — 30 Zile",
+    label: "Elite + Bot Bundle - 30 Zile",
     planDuration: "30_days",
     chain: "ARB",
   },
@@ -411,7 +411,7 @@ function PayPageInner() {
                 Suma exacta de trimis
               </p>
               <span className="block text-2xl font-bold text-accent-emerald sm:text-3xl">
-                {paymentData ? formatAmount(paymentData.amount) : "—"}{" "}
+                {paymentData ? formatAmount(paymentData.amount) : "-"}{" "}
                 <span className="text-base sm:text-lg">{paymentData?.currency ?? "USDT"}</span>
               </span>
               <button
@@ -439,7 +439,7 @@ function PayPageInner() {
                 </div>
               )}
               <code className="mb-3 block break-all text-xs text-white sm:text-sm">
-                {paymentData?.wallet_address ?? "—"}
+                {paymentData?.wallet_address ?? "-"}
               </code>
               <button
                 className="w-full rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-white/5 sm:w-auto"

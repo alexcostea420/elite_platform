@@ -153,7 +153,7 @@ export default async function AdminPaymentsPage({ searchParams }: AdminPaymentsP
                           </span>
                           <span className="text-slate-500">{p.plan_duration as string}</span>
                           <span className="text-slate-500">|</span>
-                          <span className="text-slate-400">{profiles?.full_name ?? profiles?.discord_username ?? "—"}</span>
+                          <span className="text-slate-400">{profiles?.full_name ?? profiles?.discord_username ?? "-"}</span>
                         </div>
                         <div className="mt-2 flex flex-wrap gap-4 text-sm text-slate-400">
                           <span>Sumă: <strong className="text-white">{p.reference_amount as number} {p.currency as string}</strong></span>
