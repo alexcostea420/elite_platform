@@ -248,9 +248,9 @@ export const footerLinks = {
     { href: "#faq", label: "FAQ" }
   ],
   legal: [
-    { href: "#", label: "Termeni și Condiții" },
-    { href: "#", label: "Politică de Confidențialitate" },
-    { href: "https://anpc.ro", label: "ANPC" }
+    { href: "/termeni", label: "Termeni și Condiții" },
+    { href: "/confidentialitate", label: "Politică de Confidențialitate" },
+    { href: "https://anpc.ro/ce-este-sal/", label: "ANPC" }
   ],
   dashboard: [
     { href: "#setari", label: "Setări" },

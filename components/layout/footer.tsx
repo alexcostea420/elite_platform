@@ -86,9 +86,15 @@ export function Footer({ compact = false }: FooterProps) {
             <ul className="space-y-2 text-slate-400">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a className="hover:text-accent-emerald" href={link.href} rel={link.href.startsWith("http") ? "noreferrer" : undefined} target={link.href.startsWith("http") ? "_blank" : undefined}>
-                    {link.label}
-                  </a>
+                  {link.href.startsWith("http") ? (
+                    <a className="hover:text-accent-emerald" href={link.href} rel="noreferrer" target="_blank">
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link className="hover:text-accent-emerald" href={link.href}>
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

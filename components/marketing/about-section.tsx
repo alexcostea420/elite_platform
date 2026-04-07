@@ -85,7 +85,7 @@ export function AboutSection() {
                   <div className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
                     <div>
                       <p className="text-sm font-semibold text-white">{siteConfig.creator}</p>
-                      <p className="text-sm text-slate-400">Trader & Educator</p>
+                      <p className="text-sm text-slate-400">Investitor & Educator</p>
                     </div>
                     <button
                       className="ghost-button px-5 py-2.5 text-sm font-semibold"
@@ -100,12 +100,15 @@ export function AboutSection() {
             </div>
             <div>
               <SectionHeading align="left" title={<>Despre <span className="gradient-text">{siteConfig.creator}</span></>} />
-              <p className="mt-6 text-lg leading-relaxed text-slate-300">
-                Cu <strong className="text-white">4 ani de experiență în trading și investiții crypto</strong>, Alex a construit o comunitate de peste 350 de investitori și traderi activi. Împărtășește strategii practice și oferă acces la indicatori exclusivi pentru TradingView.
-              </p>
-              <p className="mt-4 text-lg leading-relaxed text-slate-300">
-                Cu sesiuni live săptămânale despre update de piață cu ajustare de portofoliu în situații critice, analize detaliate și o comunitate activă pe Discord, Armata de Traderi este locul unde învățarea devine execuție reală.
-              </p>
+              <div className="mt-6 space-y-4 text-lg leading-relaxed text-slate-300">
+                <p><strong className="text-white">4 ani de experienta in trading si investitii crypto.</strong></p>
+                <p>O comunitate de peste 350 de investitori si traderi activi.</p>
+                <p>Strategii practice, nu teorie.</p>
+                <p>Indicatori exclusivi pentru TradingView.</p>
+                <p>Sesiuni live saptamanale cu update de piata si ajustare de portofoliu.</p>
+                <p>Analize detaliate si comunitate activa pe Discord.</p>
+                <p className="text-white font-semibold">Locul unde invatarea devine executie reala.</p>
+              </div>
               <div className="mt-6 grid grid-cols-3 gap-3">
                 {credibilityStats.map((stat) => (
                   <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center">
