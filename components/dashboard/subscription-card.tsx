@@ -132,45 +132,42 @@ export function SubscriptionCard({
       : { href: "/dashboard/videos", label: "Vezi ce este disponibil" };
 
   return (
-    <section className="mb-8 rounded-[1.75rem] bg-emerald-gradient p-8 text-center text-crypto-dark shadow-glow">
-      <div className="mb-3 inline-flex rounded-full px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-crypto-dark/90">
-        <span className={`rounded-full px-3 py-1 ${badge.className}`}>{badge.label}</span>
+    <section className="mb-8 rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 px-6 py-5">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+        {/* Left: status + info */}
+        <div className="flex items-center gap-4">
+          <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${badge.className}`}>{badge.label}</span>
+          <div>
+            <p className="text-xl font-bold text-white">{copy.headline}</p>
+            <p className="text-sm text-slate-400">{copy.description}</p>
+          </div>
+        </div>
+        {/* Right: buttons */}
+        <div className="flex gap-3">
+          <Link className="rounded-xl bg-accent-emerald px-5 py-2.5 text-sm font-semibold text-crypto-dark hover:bg-accent-soft" href={primaryCta.href}>
+            {primaryCta.label}
+          </Link>
+          <Link className="rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/5" href={secondaryCta.href}>
+            {secondaryCta.label}
+          </Link>
+        </div>
       </div>
-      <div className="text-6xl">⏰</div>
-      <div className="mt-4 text-5xl font-bold">{copy.headline}</div>
-      <p className="mt-2 text-lg font-semibold text-crypto-dark/80">{copy.description}</p>
-      <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-        <Link className="inline-flex items-center justify-center rounded-xl bg-crypto-dark px-6 py-3 font-semibold text-white hover:bg-crypto-ink" href={primaryCta.href}>
-          {primaryCta.label}
-        </Link>
-        <Link className="inline-flex items-center justify-center rounded-xl border border-crypto-dark/20 px-6 py-3 font-semibold text-crypto-dark hover:bg-white/10" href={secondaryCta.href}>
-          {secondaryCta.label}
-        </Link>
-      </div>
-      {/* Discord status */}
+      {/* Discord status - compact inline */}
       {subscriptionTier === "elite" && (
-        <div className="mt-5 rounded-xl bg-crypto-dark/10 px-5 py-4">
+        <div className="mt-4 flex items-center gap-3 border-t border-white/5 pt-4">
           {discordConnected ? (
-            <div className="flex items-center justify-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5865F2]">
-                <span className="text-sm">💬</span>
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-semibold text-crypto-dark">Discord conectat{discordUsername ? `: ${discordUsername}` : ""}</p>
-                <p className="text-xs text-crypto-dark/60">Rol Elite sincronizat</p>
-              </div>
-              <span className="ml-auto inline-block h-2.5 w-2.5 rounded-full bg-green-500" />
-            </div>
+            <>
+              <span className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="text-xs text-slate-400">Discord: <span className="text-white">{discordUsername ?? "conectat"}</span></span>
+            </>
           ) : (
-            <div>
-              <p className="text-sm font-semibold text-crypto-dark">Conecteaza Discord pentru a primi rolul Elite</p>
-              <Link
-                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[#5865F2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4752C4]"
-                href="/auth/discord/start"
-              >
-                Conecteaza Discord
+            <>
+              <span className="h-2 w-2 rounded-full bg-amber-500" />
+              <span className="text-xs text-slate-400">Discord neconectat</span>
+              <Link className="ml-auto rounded-lg bg-[#5865F2] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#4752C4]" href="/auth/discord/start">
+                Conecteaza
               </Link>
-            </div>
+            </>
           )}
         </div>
       )}
