@@ -105,6 +105,10 @@ export function getRiskScore() {
   return readTradingData<RiskScoreData>("risk_score", "reports/risk_score.json");
 }
 
+export function getRiskScoreV2() {
+  return readTradingData<RiskScoreData>("risk_score_v2", "scripts/v2/risk_score_v2.json");
+}
+
 // ── Fleet Status ────────────────────────────────────────────
 
 export type Strategy = {

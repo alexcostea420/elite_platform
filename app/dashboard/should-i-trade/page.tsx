@@ -7,7 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { getRiskScore } from "@/lib/trading-data";
+import { getRiskScore, getRiskScoreV2 } from "@/lib/trading-data";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 import { TimeGateLock } from "@/components/dashboard/time-gate-lock";
 import { TradingViewChart } from "@/components/dashboard/tradingview-chart";
@@ -127,7 +127,7 @@ export default async function ShouldITradePage() {
     );
   }
 
-  const riskScore = await getRiskScore();
+  const riskScore = await getRiskScoreV2() ?? await getRiskScore();
 
   if (!riskScore) {
     return (

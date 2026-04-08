@@ -7,7 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { getRiskScore } from "@/lib/trading-data";
+import { getRiskScore, getRiskScoreV2 } from "@/lib/trading-data";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 import { RiskGauge } from "@/components/dashboard/risk-gauge";
 import { TimeGateLock } from "@/components/dashboard/time-gate-lock";
@@ -220,7 +220,8 @@ export default async function RiskScorePage() {
     );
   }
 
-  const riskScore = await getRiskScore();
+  // Try V2 first (on-chain data), fallback to V1 (trading bot)
+  const riskScore = await getRiskScoreV2() ?? await getRiskScore();
 
   if (!riskScore) {
     return (

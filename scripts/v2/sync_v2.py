@@ -89,8 +89,8 @@ def main():
 
     print(f"[INFO] Loading risk score v2: score={data.get('score')}, decision={data.get('decision')}")
 
-    # Sync to Supabase as 'risk_score' (overwrites old data)
-    success = upsert_supabase(env, "risk_score", data)
+    # Sync to Supabase as 'risk_score_v2' (separate from V1 trading bot data)
+    success = upsert_supabase(env, "risk_score_v2", data)
 
     if success:
         print("[INFO] Sync complete!")
