@@ -5,9 +5,7 @@ import { redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { ConnectDiscordCard } from "@/components/dashboard/connect-discord-card";
 import { QuickLinks } from "@/components/dashboard/quick-links";
-import { RecentAnalyses } from "@/components/dashboard/recent-analyses";
-import { RecentContent } from "@/components/dashboard/recent-content";
-import { StatsOverview } from "@/components/dashboard/stats-overview";
+import { MiniDashboard } from "@/components/dashboard/mini-dashboard";
 import { SubscriptionCard } from "@/components/dashboard/subscription-card";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
@@ -270,11 +268,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {isEliteUser ? (
             <>
               <QuickLinks />
-              <StatsOverview />
-              <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-                <RecentAnalyses />
-                <RecentContent />
-              </div>
+              <MiniDashboard />
             </>
           ) : (
             <>
