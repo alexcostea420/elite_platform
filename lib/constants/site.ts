@@ -22,11 +22,11 @@ type PricingPlan = {
 };
 
 export const marketingNav = [
-  { href: "#despre", label: "Despre" },
-  { href: "#beneficii", label: "Beneficii" },
-  { href: "#preturi", label: "Prețuri" },
-  { href: "#testimoniale", label: "Testimoniale" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#despre", label: "Despre" },
+  { href: "/#beneficii", label: "Beneficii" },
+  { href: "/#preturi", label: "Prețuri" },
+  { href: "/#testimoniale", label: "Testimoniale" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/blog", label: "Blog" }
 ];
 
