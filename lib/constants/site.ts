@@ -46,6 +46,7 @@ export const dashboardNav = [
 export const dashboardNavStandalone = [
   { href: "/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/bots", label: "Bot Trading", icon: "🤖" },
+  { href: "/upgrade", label: "Prelungeste", icon: "💳" },
 ];
 
 export const dashboardNavGroups = [

@@ -90,6 +90,12 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
               >
                 🤖 Bot
               </Link>
+              <Link
+                className="text-sm font-semibold text-accent-emerald hover:text-accent-soft"
+                href="/upgrade"
+              >
+                Prelungeste
+              </Link>
             </div>
 
             {/* Mobile hamburger + profile */}

@@ -210,7 +210,24 @@ export async function confirmPayment(
   }
 
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + planConfig.days * 24 * 60 * 60 * 1000);
+
+  // If user already has an active subscription, extend from current expiry date
+  const { data: currentProfile } = await supabase
+    .from("profiles")
+    .select("subscription_expires_at, subscription_status")
+    .eq("id", payment.user_id)
+    .maybeSingle();
+
+  const hasActiveSubscription =
+    currentProfile?.subscription_status === "active" &&
+    currentProfile?.subscription_expires_at &&
+    new Date(currentProfile.subscription_expires_at) > now;
+
+  const startFrom = hasActiveSubscription
+    ? new Date(currentProfile.subscription_expires_at)
+    : now;
+
+  const expiresAt = new Date(startFrom.getTime() + planConfig.days * 24 * 60 * 60 * 1000);
 
   // Update payment status
   const { error: paymentError } = await supabase

@@ -124,11 +124,11 @@ export function SubscriptionCard({
   const badge = getStatusBadge(subscriptionStatus);
   const primaryCta =
     subscriptionTier === "elite"
-      ? { href: "/dashboard/videos", label: "Vezi biblioteca video" }
+      ? { href: "/upgrade", label: "Prelungeste abonamentul" }
       : { href: "/upgrade", label: "Upgrade la Elite" };
   const secondaryCta =
     subscriptionTier === "elite"
-      ? { href: "/dashboard", label: "Rămâi în dashboard" }
+      ? { href: "/dashboard/videos", label: "Vezi biblioteca video" }
       : { href: "/dashboard/videos", label: "Vezi ce este disponibil" };
 
   return (
