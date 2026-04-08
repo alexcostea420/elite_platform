@@ -37,18 +37,6 @@ const resources: ResourceCard[] = [
     ],
   },
   {
-    icon: "📊",
-    title: "Indicatori Elite TradingView",
-    description: "4 indicatori exclusivi pentru analiza tehnică. Instalează-i pe TradingView.",
-    links: [
-      { label: "Elite Bands", href: "https://www.tradingview.com/script/5khlHMXt-Elite-Bands/", external: true },
-      { label: "Elite Momentum", href: "https://www.tradingview.com/script/AdER6U74-Elite-Momentum/", external: true },
-      { label: "Elite Levels", href: "https://www.tradingview.com/script/HAt7SrgD-Elite-Levels/", external: true },
-      { label: "Elite Fib Zones", href: "https://www.tradingview.com/script/FCvrNntd-Elite-Fib-Zones/", external: true },
-      { label: "Vezi pagina Indicatori", href: "/dashboard/indicators" },
-    ],
-  },
-  {
     icon: "🎯",
     title: "Lot Size - CEL MAI IMPORTANT Video",
     description: "Fără lot size corect, poți avea 70% win rate și tot să pierzi bani. Uită-te OBLIGATORIU.",
@@ -84,29 +72,27 @@ const resources: ResourceCard[] = [
     ],
   },
   {
-    icon: "🎥",
-    title: "Playlist Educațional Complet",
-    description: "Toate video-urile educaționale într-un singur loc. De la baze la strategii avansate.",
+    icon: "📊",
+    title: "Indicatori Elite",
+    description: "4 indicatori exclusivi pe TradingView cu tutorial video.",
     links: [
-      { label: "Playlist Complet (55+ video-uri)", href: "https://youtube.com/playlist?list=PLAgmyeArliWVzlt55d3BnGTbnOJh2PUf2", external: true },
-      { label: "Jocul De Lichiditate", href: "https://www.youtube.com/watch?v=cX2_1D35bR8&list=PLAgmyeArliWVzlt55d3BnGTbnOJh2PUf2", external: true },
-      { label: "Biblioteca Video pe Site", href: "/dashboard/videos" },
+      { label: "Vezi Indicatori", href: "/dashboard/indicators" },
+    ],
+  },
+  {
+    icon: "🎥",
+    title: "Biblioteca Video",
+    description: "55+ video-uri de analiza si educatie, cu rezumate si filtre.",
+    links: [
+      { label: "Deschide Biblioteca", href: "/dashboard/videos" },
     ],
   },
   {
     icon: "💱",
     title: "Exchange Recomandat",
-    description: "MEXC - exchange recomandat pentru tradingul de crypto. Link de referral cu beneficii.",
+    description: "MEXC - exchange recomandat pentru tradingul de crypto.",
     links: [
-      { label: "Creează Cont MEXC", href: "https://promote.mexc.com/a/GxbgCLhX", external: true },
-    ],
-  },
-  {
-    icon: "🕐",
-    title: "Timezone România",
-    description: "Setare corectă a timezone-ului pe TradingView pentru sesiunile de trading.",
-    links: [
-      { label: "UTC+3 (ora României)", href: "https://www.tradingview.com", external: true },
+      { label: "Creaza Cont MEXC", href: "https://promote.mexc.com/a/GxbgCLhX", external: true },
     ],
   },
 ];
