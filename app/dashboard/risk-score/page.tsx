@@ -8,8 +8,8 @@ import { Container } from "@/components/ui/container";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getRiskScore, getRiskScoreV2 } from "@/lib/trading-data";
+import type { RiskScoreData, RiskScoreComponent } from "@/lib/trading-data";
 import { getDisplayIdentity } from "@/lib/utils/identity";
-import { RiskGauge } from "@/components/dashboard/risk-gauge";
 import { TimeGateLock } from "@/components/dashboard/time-gate-lock";
 import { getDaysUntilUnlock, hasPassedTimeGate } from "@/lib/utils/time-gate";
 
@@ -25,7 +25,7 @@ export const metadata: Metadata = buildPageMetadata({
 
 export const revalidate = 0;
 
-/* ── Romanian translations ── */
+/* ── Romanian labels ── */
 
 const componentLabels: Record<string, string> = {
   pi_cycle_top: "Pi Cycle Top",
@@ -40,8 +40,12 @@ const componentLabels: Record<string, string> = {
   ma50w_bear: "Media 50 Saptamani",
   sopr: "SOPR (Profit/Pierdere)",
   puell_multiple: "Puell Multiple",
+  nupl: "NUPL",
+  realized_price: "Pret Realizat",
   vix: "VIX (Volatilitate)",
   fomc_proximity: "Proximitate FOMC",
+  dxy: "Indicele Dolarului",
+  m2_supply: "M2 Money Supply",
 };
 
 const componentWhyRo: Record<string, string> = {
@@ -59,21 +63,24 @@ const componentWhyRo: Record<string, string> = {
   mayer_multiple: "Sub 0.8 = zona de acumulare istorica",
   puell_multiple: "Economia minerilor - sub 0.5 = bottom de ciclu",
   stoch_rsi_weekly: "Mai precis decat RSI la extreme de ciclu",
+  nupl: "Net Unrealized Profit/Loss - >0.75 = zona de euforie",
+  realized_price: "Pretul mediu de achizitie al tuturor BTC",
+  dxy: "Dolar slab = favorabil pentru crypto",
+  m2_supply: "Lichiditate globala - expansiune = bullish",
 };
 
-/* ── Helper functions ── */
+/* ── Indicator groups for accordion ── */
 
-function getDecisionColor(decision: string) {
-  if (decision === "BUY") return "text-emerald-400";
-  if (decision === "SELL") return "text-red-400";
-  return "text-amber-400";
-}
+type IndicatorGroup = { title: string; keys: string[] };
 
-function getDecisionGlow(decision: string) {
-  if (decision === "BUY") return "shadow-[0_0_40px_rgba(52,211,153,0.3)] border-emerald-400/50 bg-emerald-400/10";
-  if (decision === "SELL") return "shadow-[0_0_40px_rgba(248,113,113,0.3)] border-red-400/50 bg-red-400/10";
-  return "shadow-[0_0_40px_rgba(251,191,36,0.3)] border-amber-400/50 bg-amber-400/10";
-}
+const indicatorGroups: IndicatorGroup[] = [
+  { title: "On-Chain", keys: ["mvrv", "sopr", "nupl", "puell_multiple", "realized_price"] },
+  { title: "Tehnice", keys: ["rsi_weekly", "macd_weekly", "stoch_rsi_weekly", "pi_cycle_top", "mayer_multiple", "ma50w_bear"] },
+  { title: "Derivate", keys: ["funding_rate"] },
+  { title: "Macro", keys: ["vix", "fomc_proximity", "dxy", "m2_supply"] },
+];
+
+/* ── Helpers ── */
 
 function getDecisionLabel(decision: string) {
   if (decision === "BUY") return "CUMPARA";
@@ -81,99 +88,181 @@ function getDecisionLabel(decision: string) {
   return "ASTEAPTA";
 }
 
-function getDecisionEmoji(decision: string) {
-  if (decision === "BUY") return "🟢";
-  if (decision === "SELL") return "🔴";
-  return "🟡";
-}
-
-function getSimpleSummary(decision: string, score: number, conviction: string): string {
-  const convictionRo = conviction === "HIGH" ? "ridicata" : conviction === "MEDIUM" ? "moderata" : "scazuta";
-  if (decision === "BUY") {
-    return `Conditiile de piata sunt favorabile pentru acumulare pe termen lung. Convingere ${convictionRo}.`;
-  }
-  if (decision === "SELL") {
-    return `Piata arata semne de supraincalzire. Prudenta la achizitii noi. Convingere ${convictionRo}.`;
-  }
-  return `Piata este in zona neutra. Nu exista un semnal clar. Convingere ${convictionRo}.`;
+function scoreColor(score: number): { css: string; hex: string; glow: string } {
+  if (score <= 30) return { css: "text-red-400", hex: "#ef4444", glow: "rgba(239,68,68,0.15)" };
+  if (score <= 50) return { css: "text-amber-400", hex: "#f59e0b", glow: "rgba(245,158,11,0.15)" };
+  return { css: "text-emerald-400", hex: "#22c55e", glow: "rgba(34,197,94,0.15)" };
 }
 
 function formatNumber(num: number) {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(num);
 }
 
-function getNormColor(norm: number) {
+function safeNum(val: unknown, fallback = 0): number {
+  return typeof val === "number" && isFinite(val) ? val : fallback;
+}
+
+function getNormColor(norm: number): string {
   const pct = Math.round(norm * 100);
-  if (pct >= 70) return "#22C55E";
-  if (pct >= 50) return "#A3E635";
-  if (pct >= 30) return "#EAB308";
-  return "#EF4444";
+  if (pct >= 70) return "#22c55e";
+  if (pct >= 50) return "#a3e635";
+  if (pct >= 30) return "#eab308";
+  return "#ef4444";
 }
 
-function getFearGreedColor(value: number): string {
-  if (value <= 25) return "text-red-400";
-  if (value <= 50) return "text-orange-400";
-  if (value <= 75) return "text-amber-400";
-  return "text-emerald-400";
+function signalIcon(norm: number): string {
+  if (norm >= 0.65) return "▲";
+  if (norm <= 0.35) return "▼";
+  return "●";
 }
 
-function getSentimentPosition(longPct: number, fundingPct: number): number {
-  // Combine long% (weight 70%) and funding direction (weight 30%) into 0-100 position
-  const longSignal = longPct; // already 0-100
-  const fundingSignal = fundingPct > 0 ? 50 + Math.min(fundingPct * 500, 50) : 50 + Math.max(fundingPct * 500, -50);
-  return Math.round(longSignal * 0.7 + fundingSignal * 0.3);
+function signalColor(norm: number): string {
+  if (norm >= 0.65) return "text-emerald-400";
+  if (norm <= 0.35) return "text-red-400";
+  return "text-amber-400";
 }
 
-function getMacroSentiment(key: string, value: number): { color: string } {
+function getSentimentPos(d: RiskScoreData["derivatives"]): number {
+  const longSig = safeNum(d.long_pct, 50);
+  const fundPct = safeNum(d.funding_pct, 0);
+  const fundSig = fundPct > 0 ? 50 + Math.min(fundPct * 500, 50) : 50 + Math.max(fundPct * 500, -50);
+  return Math.round(longSig * 0.7 + fundSig * 0.3);
+}
+
+function getMacroColor(key: string, value: number): string {
   switch (key) {
     case "vix":
-      if (value > 30) return { color: "bg-red-500" };
-      if (value > 20) return { color: "bg-amber-500" };
-      return { color: "bg-emerald-500" };
+      return value > 30 ? "bg-red-500" : value > 20 ? "bg-amber-500" : "bg-emerald-500";
     case "dxy":
-      if (value > 105) return { color: "bg-red-500" };
-      if (value > 100) return { color: "bg-amber-500" };
-      return { color: "bg-emerald-500" };
+      return value > 105 ? "bg-red-500" : value > 100 ? "bg-amber-500" : "bg-emerald-500";
     case "fed_funds_rate":
-      if (value > 5) return { color: "bg-red-500" };
-      if (value > 3) return { color: "bg-amber-500" };
-      return { color: "bg-emerald-500" };
+      return value > 5 ? "bg-red-500" : value > 3 ? "bg-amber-500" : "bg-emerald-500";
     case "fear_greed":
-      if (value <= 25) return { color: "bg-red-500" };
-      if (value <= 50) return { color: "bg-orange-500" };
-      if (value <= 75) return { color: "bg-amber-500" };
-      return { color: "bg-emerald-500" };
+      return value <= 25 ? "bg-red-500" : value <= 50 ? "bg-orange-500" : value <= 75 ? "bg-amber-500" : "bg-emerald-500";
     default:
-      return { color: "bg-slate-500" };
+      return "bg-slate-500";
   }
 }
 
-/* ── Circular Progress Ring ── */
+function fearGreedLabel(v: number): string {
+  if (v <= 20) return "Frica extrema";
+  if (v <= 40) return "Frica";
+  if (v <= 60) return "Neutru";
+  if (v <= 80) return "Lacomie";
+  return "Lacomie extrema";
+}
 
-function CircularProgress({ value, size = 48, strokeWidth = 4 }: { value: number; size?: number; strokeWidth?: number }) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const progress = value * circumference;
-  const color = getNormColor(value);
-  const center = size / 2;
+function halvingPhase(days: number | null): string {
+  if (days == null) return "N/A";
+  if (days < 180) return "Acumulare timpurie";
+  if (days < 365) return "Expansiune";
+  if (days < 540) return "Euforie / Peak";
+  return "Corectie / Bear";
+}
+
+function getConvictionRo(c: string): string {
+  if (c === "HIGH") return "ridicata";
+  if (c === "MEDIUM") return "moderata";
+  return "scazuta";
+}
+
+function getSimpleSummary(decision: string, conviction: string): string {
+  const conv = getConvictionRo(conviction);
+  if (decision === "BUY") return `Conditiile de piata sunt favorabile pentru acumulare pe termen lung. Convingere ${conv}.`;
+  if (decision === "SELL") return `Piata arata semne de supraincalzire. Prudenta la achizitii noi. Convingere ${conv}.`;
+  return `Piata este in zona neutra. Nu exista un semnal clar. Convingere ${conv}.`;
+}
+
+/* ── SVG Gauge (inline client component) ── */
+
+function HeroGaugeSVG({ score, decision }: { score: number; decision: string }) {
+  const { hex, glow } = scoreColor(score);
+  const size = 300;
+  const cx = size / 2;
+  const cy = size / 2;
+  const outerR = 138;
+  const mainR = 120;
+  const strokeW = 14;
+  const circumference = 2 * Math.PI * mainR;
+  const progress = (score / 100) * circumference;
+  const label = getDecisionLabel(decision);
+
+  // Color stops for outer ring glow
+  const gradId = "gauge-grad";
+  const glowId = "gauge-glow";
 
   return (
-    <svg height={size} width={size} className="shrink-0">
-      <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={strokeWidth} />
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto block">
+      <defs>
+        <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ef4444" />
+          <stop offset="40%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#22c55e" />
+        </linearGradient>
+        <filter id={glowId}>
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Outer glow ring */}
       <circle
-        cx={center}
-        cy={center}
-        r={radius}
+        cx={cx} cy={cy} r={outerR}
         fill="none"
-        stroke={color}
-        strokeWidth={strokeWidth}
+        stroke={`url(#${gradId})`}
+        strokeWidth="2"
+        opacity="0.4"
+        filter={`url(#${glowId})`}
+      />
+
+      {/* Track */}
+      <circle
+        cx={cx} cy={cy} r={mainR}
+        fill="none"
+        stroke="rgba(255,255,255,0.06)"
+        strokeWidth={strokeW}
+        strokeLinecap="round"
+      />
+
+      {/* Progress arc */}
+      <circle
+        cx={cx} cy={cy} r={mainR}
+        fill="none"
+        stroke={hex}
+        strokeWidth={strokeW}
         strokeDasharray={`${progress} ${circumference}`}
         strokeLinecap="round"
-        transform={`rotate(-90 ${center} ${center})`}
-        style={{ filter: `drop-shadow(0 0 4px ${color}40)`, transition: "stroke-dasharray 0.8s ease-out" }}
-      />
-      <text x={center} y={center} textAnchor="middle" dominantBaseline="central" fill="white" fontSize={size * 0.26} fontWeight="bold">
-        {Math.round(value * 100)}
+        transform={`rotate(-90 ${cx} ${cy})`}
+        style={{ filter: `drop-shadow(0 0 8px ${glow})` }}
+      >
+        <animate
+          attributeName="stroke-dasharray"
+          from={`0 ${circumference}`}
+          to={`${progress} ${circumference}`}
+          dur="1.2s"
+          fill="freeze"
+          calcMode="spline"
+          keySplines="0.25 0.1 0.25 1"
+          keyTimes="0;1"
+        />
+      </circle>
+
+      {/* Score number */}
+      <text x={cx} y={cy - 12} textAnchor="middle" dominantBaseline="central"
+        fill={hex} fontSize="64" fontWeight="900" fontFamily="var(--font-mono), monospace"
+      >
+        <animate attributeName="opacity" from="0" to="1" dur="0.6s" fill="freeze" />
+        {score}
+      </text>
+
+      {/* Decision label */}
+      <text x={cx} y={cy + 32} textAnchor="middle" dominantBaseline="central"
+        fill={hex} fontSize="16" fontWeight="700" letterSpacing="0.2em" opacity="0.85"
+      >
+        {label}
       </text>
     </svg>
   );
@@ -220,8 +309,8 @@ export default async function RiskScorePage() {
     );
   }
 
-  // Try V2 first (on-chain data), fallback to V1 (trading bot)
-  const riskScore = await getRiskScoreV2() ?? await getRiskScore();
+  // Try V2 first, fallback to V1
+  const riskScore = (await getRiskScoreV2()) ?? (await getRiskScore());
 
   if (!riskScore) {
     return (
@@ -229,8 +318,8 @@ export default async function RiskScorePage() {
         <Navbar mode="dashboard" userIdentity={identity} />
         <main className="pb-16 pt-24 md:pt-28">
           <Container>
-            <section className="panel p-8 text-center">
-              <div className="text-5xl">--</div>
+            <section className="glass-card p-8 text-center">
+              <div className="text-5xl font-data">--</div>
               <h2 className="mt-4 text-2xl font-bold text-white">Date indisponibile</h2>
               <p className="mt-3 text-slate-400">
                 Scorul de risc nu a putut fi incarcat. Incearca din nou mai tarziu.
@@ -243,62 +332,86 @@ export default async function RiskScorePage() {
     );
   }
 
+  const price = riskScore.btc_price_live ?? riskScore.btc_price;
+  const overrides = riskScore.overrides ?? [];
   const updatedAt = new Date(riskScore.timestamp);
-  const components = Object.entries(riskScore.components);
+  const { css: scoreCss, hex: scoreHex, glow: scoreGlow } = scoreColor(riskScore.score);
 
-  // Extract key data for argument cards
-  const fearGreedValue = riskScore.fear_greed.value;
-  const pctFromAth = riskScore.pct_from_ath;
-  const halvingComp = riskScore.components.halving_cycle;
+  // Argument card data
+  const fgValue = safeNum(riskScore.fear_greed?.value, 50);
+  const pctFromAth = safeNum(riskScore.pct_from_ath, 0);
+  const halvingComp = riskScore.components?.halving_cycle;
   const halvingDays = halvingComp?.raw != null && typeof halvingComp.raw === "number" ? Math.round(halvingComp.raw) : null;
 
-  // Sentiment position (0 = full bearish, 100 = full bullish)
-  const sentimentPos = getSentimentPosition(riskScore.derivatives.long_pct, riskScore.derivatives.funding_pct);
+  // Derivatives (may be empty)
+  const deriv = riskScore.derivatives ?? {} as RiskScoreData["derivatives"];
+  const longPct = safeNum(deriv.long_pct, 50);
+  const shortPct = safeNum(deriv.short_pct, 50);
+  const fundingPct = safeNum(deriv.funding_pct, 0);
+  const sentimentPos = getSentimentPos(deriv);
+
+  // Macro (may be empty)
+  const macro = riskScore.macro ?? {} as RiskScoreData["macro"];
+
+  // Components grouped
+  const allComponents = riskScore.components ?? {};
 
   return (
     <>
       <Navbar mode="dashboard" userIdentity={identity} />
-      <main className="pb-16 pt-24 md:pt-28">
-        <Container>
+
+      <main className="relative pb-16 pt-24 md:pt-28 overflow-hidden">
+        {/* Background mood glow */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            background: `radial-gradient(ellipse 60% 40% at 50% 20%, ${scoreGlow}, transparent 70%)`,
+          }}
+        />
+
+        <Container className="relative z-10">
           {/* Breadcrumb */}
           <div className="mb-8 flex items-center gap-3">
-            <Link className="text-sm text-slate-500 hover:text-accent-emerald transition-colors" href="/dashboard">
+            <Link className="text-sm text-slate-500 hover:text-emerald-400 transition-colors" href="/dashboard">
               Dashboard
             </Link>
             <span className="text-slate-700">/</span>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Risk Score</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em]" style={{ color: scoreHex }}>
+              Risk Score
+            </p>
           </div>
 
-          {/* ─── 1. HERO ─── */}
-          <section className="panel mb-8 px-6 py-10 md:px-10 md:py-14">
-            <div className="flex flex-col items-center text-center">
-              <RiskGauge score={riskScore.score} size={280} />
+          {/* ─── 1. HERO GAUGE ─── */}
+          <section
+            className="glass-card mb-8 py-10 md:py-16"
+            style={{ minHeight: "40vh", display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <div className="flex flex-col items-center text-center w-full px-4">
+              <HeroGaugeSVG score={riskScore.score} decision={riskScore.decision} />
 
-              <div className="mt-6">
-                <span
-                  className={`inline-block rounded-full border-2 px-10 py-3 text-2xl font-black tracking-widest ${getDecisionColor(riskScore.decision)} ${getDecisionGlow(riskScore.decision)}`}
-                >
-                  {getDecisionEmoji(riskScore.decision)} {getDecisionLabel(riskScore.decision)}
-                </span>
-              </div>
-
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-300">
-                {getSimpleSummary(riskScore.decision, riskScore.score, riskScore.conviction)}
+              <p className="mt-6 max-w-lg text-base leading-relaxed text-slate-300">
+                {getSimpleSummary(riskScore.decision, riskScore.conviction)}
               </p>
 
-              <p className="mt-3 text-sm text-slate-500">
-                BTC: <span className="font-semibold text-white">${formatNumber(riskScore.btc_price_live)}</span>
+              <p className="mt-3 font-data text-sm text-slate-500">
+                BTC: <span className="font-semibold text-white">${formatNumber(price)}</span>
+                {riskScore.btc_24h_change != null && (
+                  <span className={`ml-2 ${riskScore.btc_24h_change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                    {riskScore.btc_24h_change >= 0 ? "+" : ""}{riskScore.btc_24h_change.toFixed(1)}%
+                  </span>
+                )}
               </p>
             </div>
           </section>
 
-          {/* ─── Alerte (overrides) ─── */}
-          {riskScore.overrides.length > 0 && (
+          {/* Overrides / Alerte */}
+          {overrides.length > 0 && (
             <section className="mb-8 space-y-3">
-              {riskScore.overrides.map((override, i) => (
+              {overrides.map((override, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/5 px-5 py-4"
+                  className="glass-card flex items-start gap-3 px-5 py-4"
+                  style={{ borderColor: "rgba(245,158,11,0.25)", background: "rgba(245,158,11,0.05)" }}
                 >
                   <span className="mt-0.5 shrink-0 text-amber-400">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -315,189 +428,321 @@ export default async function RiskScorePage() {
             </section>
           )}
 
-          {/* ─── 2. THREE ARGUMENT CARDS ─── */}
-          <section className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+          {/* ─── 2. ARGUMENT CARDS ─── */}
+          <section className="mb-8 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
             {/* Card 1: Fear & Greed */}
-            <article className="panel px-6 py-7">
-              <div className="mb-3 text-3xl">😨</div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Frica si Lacomie</p>
-              <h3 className={`mt-2 text-5xl font-black ${getFearGreedColor(fearGreedValue)}`}>
-                {fearGreedValue}
+            <article className="glass-card flex-shrink-0 w-[85vw] snap-center px-6 py-7 md:w-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
+                  style={{
+                    background: fgValue <= 30 ? "rgba(239,68,68,0.15)" : fgValue <= 60 ? "rgba(245,158,11,0.15)" : "rgba(34,197,94,0.15)",
+                    color: fgValue <= 30 ? "#ef4444" : fgValue <= 60 ? "#f59e0b" : "#22c55e",
+                  }}
+                >
+                  {fgValue <= 30 ? "😨" : fgValue <= 60 ? "😐" : "🤑"}
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Frica si Lacomie</p>
+              </div>
+              <h3
+                className="font-data text-5xl font-black"
+                style={{ color: fgValue <= 30 ? "#ef4444" : fgValue <= 60 ? "#f59e0b" : "#22c55e" }}
+              >
+                {fgValue}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-400">
-                Istoric: frica extrema = oportunitate de cumparare
+              <p className="mt-1 text-sm font-medium" style={{ color: fgValue <= 30 ? "#ef4444" : fgValue <= 60 ? "#f59e0b" : "#22c55e" }}>
+                {fearGreedLabel(fgValue)}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                Frica extrema este istoric un semnal contrarian de cumparare.
               </p>
             </article>
 
             {/* Card 2: Distance from ATH */}
-            <article className="panel px-6 py-7">
-              <div className="mb-3 text-3xl">📉</div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Distanta de la ATH</p>
-              <h3 className={`mt-2 text-5xl font-black ${pctFromAth >= -5 ? "text-emerald-400" : pctFromAth >= -20 ? "text-amber-400" : "text-red-400"}`}>
+            <article className="glass-card flex-shrink-0 w-[85vw] snap-center px-6 py-7 md:w-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
+                  style={{
+                    background: pctFromAth >= -5 ? "rgba(34,197,94,0.15)" : pctFromAth >= -20 ? "rgba(245,158,11,0.15)" : "rgba(239,68,68,0.15)",
+                    color: pctFromAth >= -5 ? "#22c55e" : pctFromAth >= -20 ? "#f59e0b" : "#ef4444",
+                  }}
+                >
+                  📊
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Distanta de la ATH</p>
+              </div>
+              <h3
+                className="font-data text-5xl font-black"
+                style={{ color: pctFromAth >= -5 ? "#22c55e" : pctFromAth >= -20 ? "#f59e0b" : "#ef4444" }}
+              >
                 {pctFromAth >= 0 ? "ATH" : `${pctFromAth.toFixed(0)}%`}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-400">
-                BTC la ${formatNumber(riskScore.btc_price_live)} vs ${formatNumber(riskScore.btc_ath)} ATH
+              {/* Visual bar */}
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/5">
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{
+                    width: `${Math.max(0, 100 + pctFromAth)}%`,
+                    backgroundColor: pctFromAth >= -5 ? "#22c55e" : pctFromAth >= -20 ? "#f59e0b" : "#ef4444",
+                  }}
+                />
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                ${formatNumber(price)} vs ${formatNumber(safeNum(riskScore.btc_ath, 0))} ATH
               </p>
             </article>
 
             {/* Card 3: Halving Cycle */}
-            <article className="panel px-6 py-7">
-              <div className="mb-3 text-3xl">⏳</div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Zile de la Halving</p>
-              <h3 className="mt-2 text-5xl font-black text-white">
+            <article className="glass-card flex-shrink-0 w-[85vw] snap-center px-6 py-7 md:w-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
+                  style={{ background: "rgba(139,92,246,0.15)", color: "#a78bfa" }}
+                >
+                  ⏳
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Ciclul Halving</p>
+              </div>
+              <h3 className="font-data text-5xl font-black text-white">
                 {halvingDays != null ? halvingDays : "--"}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-400">
-                Istoric: bottom la ~370 zile dupa peak
+              <p className="mt-1 text-sm font-medium text-violet-400">
+                {halvingPhase(halvingDays)}
+              </p>
+              {/* Timeline bar */}
+              {halvingDays != null && (
+                <div className="mt-3 relative h-2 w-full overflow-hidden rounded-full bg-white/5">
+                  <div
+                    className="h-full rounded-full bg-violet-500 transition-all"
+                    style={{ width: `${Math.min(100, (halvingDays / 1460) * 100)}%` }}
+                  />
+                </div>
+              )}
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                Ciclul de 4 ani: peak la ~494 zile dupa halving
               </p>
             </article>
           </section>
 
           {/* ─── 3. SENTIMENT METER ─── */}
-          <section className="panel mb-8 px-6 py-7 md:px-10">
+          <section className="glass-card mb-8 px-6 py-7 md:px-10">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Sentiment derivate</p>
 
             {/* Gradient bar */}
             <div className="relative">
               <div className="h-3 w-full rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-emerald-500" />
-              {/* Marker */}
               <div
-                className="absolute -top-1 h-5 w-5 rounded-full border-2 border-white bg-white shadow-lg transition-all"
-                style={{ left: `calc(${sentimentPos}% - 10px)` }}
+                className="absolute -top-1.5 h-6 w-6 rounded-full border-2 border-white shadow-lg transition-all duration-700"
+                style={{
+                  left: `clamp(0px, calc(${sentimentPos}% - 12px), calc(100% - 24px))`,
+                  background: sentimentPos < 35 ? "#ef4444" : sentimentPos > 65 ? "#22c55e" : "#f59e0b",
+                  boxShadow: `0 0 12px ${sentimentPos < 35 ? "rgba(239,68,68,0.5)" : sentimentPos > 65 ? "rgba(34,197,94,0.5)" : "rgba(245,158,11,0.5)"}`,
+                }}
               />
             </div>
 
-            {/* Labels */}
             <div className="mt-2 flex justify-between text-xs font-semibold">
               <span className="text-red-400">BEARISH</span>
               <span className="text-amber-400">NEUTRU</span>
               <span className="text-emerald-400">BULLISH</span>
             </div>
 
-            {/* Stats */}
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-slate-400">
-              <span>
-                <span className="font-semibold text-emerald-400">{riskScore.derivatives.long_pct.toFixed(1)}%</span> Long
-                {" / "}
-                <span className="font-semibold text-red-400">{riskScore.derivatives.short_pct.toFixed(1)}%</span> Short
+            {/* Contributing factors chips */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                Long {longPct.toFixed(1)}%
               </span>
-              <span>
-                Funding: <span className="font-semibold text-white">{riskScore.derivatives.funding_pct.toFixed(4)}%</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+                Short {shortPct.toFixed(1)}%
               </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                Funding {fundingPct.toFixed(4)}%
+              </span>
+              {safeNum(deriv.ls_ratio) > 0 && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+                  L/S {safeNum(deriv.ls_ratio).toFixed(2)}
+                </span>
+              )}
             </div>
           </section>
 
           {/* ─── 4. MACRO SNAPSHOT ─── */}
-          <section className="panel mb-8 px-6 py-5 md:px-10">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              {[
-                { key: "fear_greed", label: "Fear&Greed", value: String(riskScore.fear_greed.value), rawVal: riskScore.fear_greed.value },
-                { key: "vix", label: "VIX", value: riskScore.macro.vix.toFixed(1), rawVal: riskScore.macro.vix },
-                { key: "dxy", label: "DXY", value: riskScore.macro.dxy.toFixed(1), rawVal: riskScore.macro.dxy },
-                { key: "fed_funds_rate", label: "Rata Fed", value: `${riskScore.macro.fed_funds_rate.toFixed(2)}%`, rawVal: riskScore.macro.fed_funds_rate },
-              ].map(({ key, label, value, rawVal }) => {
-                const dot = getMacroSentiment(key, rawVal);
+          <section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+            {[
+              { key: "fear_greed", label: "Fear & Greed", value: String(fgValue), rawVal: fgValue, icon: "😨" },
+              { key: "vix", label: "VIX", value: safeNum(macro.vix).toFixed(1), rawVal: safeNum(macro.vix), icon: "📉" },
+              { key: "dxy", label: "DXY", value: safeNum(macro.dxy).toFixed(1), rawVal: safeNum(macro.dxy), icon: "💵" },
+              { key: "fed_funds_rate", label: "Rata Fed", value: `${safeNum(macro.fed_funds_rate).toFixed(2)}%`, rawVal: safeNum(macro.fed_funds_rate), icon: "🏦" },
+            ].map(({ key, label, value, rawVal, icon }) => {
+              const dotColor = getMacroColor(key, rawVal);
+              return (
+                <article key={key} className="glass-card px-5 py-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-lg">{icon}</span>
+                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${dotColor}`} />
+                  </div>
+                  <p className="font-data text-2xl font-bold text-white">{value}</p>
+                  <p className="mt-1 text-xs text-slate-500">{label}</p>
+                </article>
+              );
+            })}
+          </section>
+
+          {/* ─── 5. DETALII TEHNICE (accordion) ─── */}
+          <details className="mb-8 group">
+            <summary className="glass-card cursor-pointer px-6 py-5 text-sm font-semibold text-slate-400 hover:text-white transition-colors select-none flex items-center justify-between">
+              <span>Vezi analiza detaliata</span>
+              <svg
+                className="h-4 w-4 transition-transform duration-300 group-open:rotate-180"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+
+            <div className="mt-4 space-y-4">
+              {indicatorGroups.map((group) => {
+                const items = group.keys
+                  .map((k) => ({ key: k, comp: allComponents[k] }))
+                  .filter((x): x is { key: string; comp: RiskScoreComponent } => x.comp != null);
+
+                if (items.length === 0) return null;
+
                 return (
-                  <div key={key} className="flex items-center gap-2">
-                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${dot.color}`} />
-                    <span className="text-xs text-slate-500">{label}</span>
-                    <span className="text-sm font-bold text-white">{value}</span>
+                  <div key={group.title} className="glass-card p-5 md:p-6">
+                    <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                      {group.title}
+                    </h3>
+
+                    {/* Header row */}
+                    <div className="hidden md:grid md:grid-cols-[1fr_80px_50px_60px] gap-3 mb-2 text-xs text-slate-600 px-1">
+                      <span>Indicator</span>
+                      <span className="text-right">Valoare</span>
+                      <span className="text-center">Semnal</span>
+                      <span className="text-right">Pondere</span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {items
+                        .sort((a, b) => b.comp.weight - a.comp.weight)
+                        .map(({ key, comp }) => {
+                          const normColor = getNormColor(comp.norm);
+                          const pct = Math.round(comp.norm * 100);
+                          const rawDisplay = comp.raw != null && typeof comp.raw === "number"
+                            ? comp.raw.toFixed(2)
+                            : `${pct}%`;
+
+                          return (
+                            <div key={key} className="rounded-xl bg-white/[0.02] px-3 py-3 md:px-4">
+                              <div className="flex items-center justify-between md:grid md:grid-cols-[1fr_80px_50px_60px] md:gap-3">
+                                <div className="min-w-0">
+                                  <p className="text-sm font-medium text-slate-300 truncate">
+                                    {componentLabels[key] ?? key}
+                                  </p>
+                                  <p className="text-xs text-slate-600 mt-0.5 md:hidden">
+                                    {componentWhyRo[key] ?? comp.why ?? ""}
+                                  </p>
+                                </div>
+
+                                <p className="font-data text-sm font-bold text-right" style={{ color: normColor }}>
+                                  {rawDisplay}
+                                </p>
+
+                                <p className={`text-center text-base ${signalColor(comp.norm)} hidden md:block`}>
+                                  {signalIcon(comp.norm)}
+                                </p>
+
+                                <p className="font-data text-xs text-slate-500 text-right hidden md:block">
+                                  {(comp.weight * 100).toFixed(0)}%
+                                </p>
+                              </div>
+
+                              {/* Progress bar (mobile & desktop) */}
+                              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+                                <div
+                                  className="h-full rounded-full transition-all duration-700"
+                                  style={{ width: `${pct}%`, backgroundColor: normColor }}
+                                />
+                              </div>
+
+                              {/* Why text (desktop only) */}
+                              <p className="hidden md:block mt-1.5 text-xs text-slate-600">
+                                {componentWhyRo[key] ?? comp.why ?? ""}
+                              </p>
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 );
               })}
-            </div>
-          </section>
 
-          {/* ─── 5. DETALII TEHNICE (collapsible) ─── */}
-          <details className="mb-8">
-            <summary className="panel cursor-pointer px-6 py-4 text-sm font-semibold text-slate-400 hover:text-white transition-colors select-none">
-              Vezi detalii tehnice ▾
-            </summary>
-
-            <div className="mt-4 space-y-6">
-              {/* Component bars */}
-              <div className="panel p-6">
-                <h3 className="mb-5 text-lg font-bold text-white">Toti indicatorii ({components.length})</h3>
-                <div className="space-y-4">
-                  {components
-                    .sort((a, b) => b[1].weight - a[1].weight)
-                    .map(([key, comp]) => {
-                      const pct = Math.round(comp.norm * 100);
-                      const color = getNormColor(comp.norm);
-                      return (
-                        <div key={key}>
-                          <div className="mb-1 flex items-center justify-between">
-                            <span className="text-sm font-medium text-slate-300">{componentLabels[key] ?? key}</span>
-                            <span className="text-sm font-bold" style={{ color }}>
-                              {comp.raw != null ? (typeof comp.raw === "number" ? comp.raw.toFixed(2) : String(comp.raw)) : `${pct}%`}
-                            </span>
-                          </div>
-                          <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
-                            <div
-                              className="h-full rounded-full transition-all duration-700"
-                              style={{ width: `${pct}%`, backgroundColor: color }}
-                            />
-                          </div>
-                          <p className="mt-1 text-xs text-slate-600">{componentWhyRo[key] ?? comp.why}</p>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-
-              {/* Derivatives table */}
-              <div className="panel p-6">
-                <h3 className="mb-5 text-lg font-bold text-white">Derivate</h3>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-                  <div>
-                    <p className="text-xs text-slate-500">Open Interest</p>
-                    <p className="text-lg font-bold text-white">${(riskScore.derivatives.oi_value / 1e9).toFixed(2)}B</p>
-                    <p className={`text-xs ${riskScore.derivatives.oi_delta_pct >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                      {riskScore.derivatives.oi_delta_pct >= 0 ? "+" : ""}{riskScore.derivatives.oi_delta_pct.toFixed(2)}% 4H
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">Ratio L/S</p>
-                    <p className="text-lg font-bold text-white">{riskScore.derivatives.ls_ratio.toFixed(2)}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">Basis</p>
-                    <p className={`text-lg font-bold ${riskScore.derivatives.basis_pct > 0 ? "text-emerald-400" : "text-red-400"}`}>
-                      {riskScore.derivatives.basis_pct.toFixed(3)}%
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">Taker Buy/Sell</p>
-                    <p className="text-lg font-bold text-white">{riskScore.derivatives.taker_ratio.toFixed(2)}</p>
+              {/* Derivatives detail */}
+              {safeNum(deriv.oi_value) > 0 && (
+                <div className="glass-card p-5 md:p-6">
+                  <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    Derivate (detalii)
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                    <div>
+                      <p className="text-xs text-slate-500">Open Interest</p>
+                      <p className="font-data text-lg font-bold text-white">
+                        ${(safeNum(deriv.oi_value) / 1e9).toFixed(2)}B
+                      </p>
+                      <p className={`text-xs ${safeNum(deriv.oi_delta_pct) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                        {safeNum(deriv.oi_delta_pct) >= 0 ? "+" : ""}{safeNum(deriv.oi_delta_pct).toFixed(2)}% 4H
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Ratio L/S</p>
+                      <p className="font-data text-lg font-bold text-white">{safeNum(deriv.ls_ratio).toFixed(2)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Basis</p>
+                      <p className={`font-data text-lg font-bold ${safeNum(deriv.basis_pct) > 0 ? "text-emerald-400" : "text-red-400"}`}>
+                        {safeNum(deriv.basis_pct).toFixed(3)}%
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Taker Buy/Sell</p>
+                      <p className="font-data text-lg font-bold text-white">{safeNum(deriv.taker_ratio).toFixed(2)}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Analysis text */}
-              <div className="panel p-6">
-                <h3 className="mb-5 text-lg font-bold text-white">Analiza completa</h3>
-                <div className="space-y-4 text-sm leading-relaxed text-slate-300">
-                  {riskScore.analysis
-                    .split("\n")
-                    .filter((line) => line.trim().length > 0)
-                    .map((paragraph, i) => (
-                      <p key={i} className="leading-7">
-                        {paragraph
-                          .split(/(\*\*[^*]+\*\*)/)
-                          .map((part, j) =>
-                            part.startsWith("**") && part.endsWith("**") ? (
-                              <span key={j} className="font-semibold text-white">
-                                {part.slice(2, -2)}
-                              </span>
-                            ) : (
-                              <span key={j}>{part}</span>
-                            ),
-                          )}
-                      </p>
-                    ))}
+              {riskScore.analysis && (
+                <div className="glass-card p-5 md:p-6">
+                  <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    Analiza completa
+                  </h3>
+                  <div className="space-y-4 text-sm leading-relaxed text-slate-300">
+                    {riskScore.analysis
+                      .split("\n")
+                      .filter((line) => line.trim().length > 0)
+                      .map((paragraph, i) => (
+                        <p key={i} className="leading-7">
+                          {paragraph
+                            .split(/(\*\*[^*]+\*\*)/)
+                            .map((part, j) =>
+                              part.startsWith("**") && part.endsWith("**") ? (
+                                <span key={j} className="font-semibold text-white">
+                                  {part.slice(2, -2)}
+                                </span>
+                              ) : (
+                                <span key={j}>{part}</span>
+                              ),
+                            )}
+                        </p>
+                      ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </details>
 

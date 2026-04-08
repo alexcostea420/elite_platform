@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Orbitron } from "next/font/google";
+import { Inter, Orbitron, JetBrains_Mono } from "next/font/google";
 
 import { FeedbackButton } from "@/components/ui/feedback-button";
 import { metadataBaseUrl } from "@/lib/seo";
@@ -12,6 +12,12 @@ const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -54,7 +60,7 @@ export default function RootLayout({
           </Script>
         )}
       </head>
-      <body className={`${inter.variable} ${orbitron.variable} font-sans`}>
+      <body className={`${inter.variable} ${orbitron.variable} ${jetbrainsMono.variable} font-sans`}>
         {/* GTM noscript fallback */}
         {GTM_ID && (
           <noscript>
