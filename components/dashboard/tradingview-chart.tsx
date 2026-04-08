@@ -60,7 +60,7 @@ export function TradingViewChart() {
           {showZones ? "Zones ON" : "Zones OFF"}
         </button>
       </div>
-      <div className="tradingview-widget-container overflow-hidden rounded-2xl border border-white/10" ref={containerRef} style={{ height: 500 }}>
+      <div className="tradingview-widget-container overflow-hidden rounded-2xl border border-white/10" ref={containerRef} style={{ height: "min(70vh, 650px)", minHeight: 400 }}>
         <div className="tradingview-widget-container__widget" style={{ height: "100%", width: "100%" }} />
       </div>
     </div>

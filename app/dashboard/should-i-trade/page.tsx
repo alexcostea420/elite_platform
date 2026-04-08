@@ -149,12 +149,11 @@ export default async function ShouldITradePage() {
             </div>
           </section>
 
-          {/* Big Decision Card */}
-          <section className={`panel mb-8 border p-8 text-center md:p-12 ${display.bg} ${display.glow}`}>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Decizia botului</p>
-            <h1 className={`mt-4 font-display text-8xl font-bold md:text-9xl ${display.color}`}>{display.label}</h1>
-            <p className="mt-4 text-xl text-slate-300">{display.sublabel}</p>
-            <p className="mt-3 text-sm text-slate-500">{riskScore.decision_text}</p>
+          {/* Decision Card - compact */}
+          <section className={`panel mb-8 border px-6 py-6 text-center ${display.bg}`}>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Intraday BTC</p>
+            <h1 className={`mt-2 font-display text-5xl font-bold md:text-6xl ${display.color}`}>{display.label}</h1>
+            <p className="mt-2 text-base text-slate-300">{display.sublabel}</p>
           </section>
 
           {/* Context Cards */}
