@@ -90,7 +90,7 @@ export function VideoLibraryClient({
           <div className="mt-5 space-y-3">
             <h2 className="text-2xl font-bold text-white">{selectedVideo.title}</h2>
             {selectedVideo.summary && (
-              <p className="max-w-3xl text-slate-400">{selectedVideo.summary}</p>
+              <div className="max-w-3xl whitespace-pre-line text-sm leading-relaxed text-slate-400">{selectedVideo.summary}</div>
             )}
             {selectedVideo.tags && selectedVideo.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -229,7 +229,7 @@ export function VideoLibraryClient({
                   <div className="p-5">
                     <h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3>
                     {video.summary && (
-                      <p className="mt-2 line-clamp-2 text-sm text-slate-500">{video.summary}</p>
+                      <p className="mt-2 line-clamp-2 text-sm text-slate-500">{video.summary?.split('\n')[0]}</p>
                     )}
                     <div className="mt-4">
                       <Link className="ghost-button text-sm" href="/upgrade">
@@ -279,7 +279,7 @@ export function VideoLibraryClient({
                     {video.title}
                   </h3>
                   {video.summary && (
-                    <p className="mt-2 line-clamp-2 text-sm text-slate-400">{video.summary}</p>
+                    <p className="mt-2 line-clamp-2 text-sm text-slate-400">{video.summary?.split('\n')[0]}</p>
                   )}
                   {video.tags && video.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1.5">
