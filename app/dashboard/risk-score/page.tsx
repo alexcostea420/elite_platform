@@ -61,22 +61,18 @@ const componentWhyRo: Record<string, string> = {
   stoch_rsi_weekly: "Mai precis decat RSI la extreme de ciclu",
 };
 
-// Top 6 most important components to highlight
-const TOP_COMPONENTS = [
-  "fear_greed",
-  "mvrv",
-  "rsi_weekly",
-  "mayer_multiple",
-  "pi_cycle_top",
-  "ma50w_bear",
-];
-
 /* ── Helper functions ── */
 
 function getDecisionColor(decision: string) {
-  if (decision === "BUY") return "text-emerald-400 border-emerald-400/40 bg-emerald-400/10";
-  if (decision === "SELL") return "text-red-400 border-red-400/40 bg-red-400/10";
-  return "text-amber-400 border-amber-400/40 bg-amber-400/10";
+  if (decision === "BUY") return "text-emerald-400";
+  if (decision === "SELL") return "text-red-400";
+  return "text-amber-400";
+}
+
+function getDecisionGlow(decision: string) {
+  if (decision === "BUY") return "shadow-[0_0_40px_rgba(52,211,153,0.3)] border-emerald-400/50 bg-emerald-400/10";
+  if (decision === "SELL") return "shadow-[0_0_40px_rgba(248,113,113,0.3)] border-red-400/50 bg-red-400/10";
+  return "shadow-[0_0_40px_rgba(251,191,36,0.3)] border-amber-400/50 bg-amber-400/10";
 }
 
 function getDecisionLabel(decision: string) {
@@ -85,12 +81,25 @@ function getDecisionLabel(decision: string) {
   return "ASTEAPTA";
 }
 
-function formatNumber(num: number) {
-  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(num);
+function getDecisionEmoji(decision: string) {
+  if (decision === "BUY") return "🟢";
+  if (decision === "SELL") return "🔴";
+  return "🟡";
 }
 
-function formatPercent(num: number) {
-  return `${num >= 0 ? "+" : ""}${num.toFixed(2)}%`;
+function getSimpleSummary(decision: string, score: number, conviction: string): string {
+  const convictionRo = conviction === "HIGH" ? "ridicata" : conviction === "MEDIUM" ? "moderata" : "scazuta";
+  if (decision === "BUY") {
+    return `Conditiile de piata sunt favorabile pentru acumulare pe termen lung. Convingere ${convictionRo}.`;
+  }
+  if (decision === "SELL") {
+    return `Piata arata semne de supraincalzire. Prudenta la achizitii noi. Convingere ${convictionRo}.`;
+  }
+  return `Piata este in zona neutra. Nu exista un semnal clar. Convingere ${convictionRo}.`;
+}
+
+function formatNumber(num: number) {
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(num);
 }
 
 function getNormColor(norm: number) {
@@ -101,14 +110,6 @@ function getNormColor(norm: number) {
   return "#EF4444";
 }
 
-function getFearGreedLabel(value: number): string {
-  if (value <= 20) return "Frica Extrema";
-  if (value <= 40) return "Frica";
-  if (value <= 60) return "Neutru";
-  if (value <= 80) return "Lacomie";
-  return "Lacomie Extrema";
-}
-
 function getFearGreedColor(value: number): string {
   if (value <= 25) return "text-red-400";
   if (value <= 50) return "text-orange-400";
@@ -116,38 +117,38 @@ function getFearGreedColor(value: number): string {
   return "text-emerald-400";
 }
 
-function getMacroSentiment(key: string, value: number): { color: string; label: string } {
+function getSentimentPosition(longPct: number, fundingPct: number): number {
+  // Combine long% (weight 70%) and funding direction (weight 30%) into 0-100 position
+  const longSignal = longPct; // already 0-100
+  const fundingSignal = fundingPct > 0 ? 50 + Math.min(fundingPct * 500, 50) : 50 + Math.max(fundingPct * 500, -50);
+  return Math.round(longSignal * 0.7 + fundingSignal * 0.3);
+}
+
+function getMacroSentiment(key: string, value: number): { color: string } {
   switch (key) {
     case "vix":
-      if (value > 30) return { color: "bg-red-500", label: "Risc ridicat" };
-      if (value > 20) return { color: "bg-amber-500", label: "Moderat" };
-      return { color: "bg-emerald-500", label: "Calm" };
+      if (value > 30) return { color: "bg-red-500" };
+      if (value > 20) return { color: "bg-amber-500" };
+      return { color: "bg-emerald-500" };
     case "dxy":
-      if (value > 105) return { color: "bg-red-500", label: "Dolar puternic" };
-      if (value > 100) return { color: "bg-amber-500", label: "Neutru" };
-      return { color: "bg-emerald-500", label: "Dolar slab" };
+      if (value > 105) return { color: "bg-red-500" };
+      if (value > 100) return { color: "bg-amber-500" };
+      return { color: "bg-emerald-500" };
     case "fed_funds_rate":
-      if (value > 5) return { color: "bg-red-500", label: "Restrictiv" };
-      if (value > 3) return { color: "bg-amber-500", label: "Moderat" };
-      return { color: "bg-emerald-500", label: "Acomodativ" };
-    case "m2":
-      if (value > 22) return { color: "bg-emerald-500", label: "Lichiditate mare" };
-      if (value > 20) return { color: "bg-amber-500", label: "Neutru" };
-      return { color: "bg-red-500", label: "Lichiditate scazuta" };
-    case "us10y":
-      if (value > 4.5) return { color: "bg-red-500", label: "Randament ridicat" };
-      if (value > 3.5) return { color: "bg-amber-500", label: "Moderat" };
-      return { color: "bg-emerald-500", label: "Randament scazut" };
-    case "unemployment":
-      if (value > 5) return { color: "bg-red-500", label: "Somaj ridicat" };
-      if (value > 4) return { color: "bg-amber-500", label: "Moderat" };
-      return { color: "bg-emerald-500", label: "Piata muncii solida" };
+      if (value > 5) return { color: "bg-red-500" };
+      if (value > 3) return { color: "bg-amber-500" };
+      return { color: "bg-emerald-500" };
+    case "fear_greed":
+      if (value <= 25) return { color: "bg-red-500" };
+      if (value <= 50) return { color: "bg-orange-500" };
+      if (value <= 75) return { color: "bg-amber-500" };
+      return { color: "bg-emerald-500" };
     default:
-      return { color: "bg-slate-500", label: "" };
+      return { color: "bg-slate-500" };
   }
 }
 
-/* ── Circular Progress Ring (small, for component cards) ── */
+/* ── Circular Progress Ring ── */
 
 function CircularProgress({ value, size = 48, strokeWidth = 4 }: { value: number; size?: number; strokeWidth?: number }) {
   const radius = (size - strokeWidth) / 2;
@@ -158,14 +159,7 @@ function CircularProgress({ value, size = 48, strokeWidth = 4 }: { value: number
 
   return (
     <svg height={size} width={size} className="shrink-0">
-      <circle
-        cx={center}
-        cy={center}
-        r={radius}
-        fill="none"
-        stroke="rgba(255,255,255,0.06)"
-        strokeWidth={strokeWidth}
-      />
+      <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={strokeWidth} />
       <circle
         cx={center}
         cy={center}
@@ -178,15 +172,7 @@ function CircularProgress({ value, size = 48, strokeWidth = 4 }: { value: number
         transform={`rotate(-90 ${center} ${center})`}
         style={{ filter: `drop-shadow(0 0 4px ${color}40)`, transition: "stroke-dasharray 0.8s ease-out" }}
       />
-      <text
-        x={center}
-        y={center}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill="white"
-        fontSize={size * 0.26}
-        fontWeight="bold"
-      >
+      <text x={center} y={center} textAnchor="middle" dominantBaseline="central" fill="white" fontSize={size * 0.26} fontWeight="bold">
         {Math.round(value * 100)}
       </text>
     </svg>
@@ -259,15 +245,14 @@ export default async function RiskScorePage() {
   const updatedAt = new Date(riskScore.timestamp);
   const components = Object.entries(riskScore.components);
 
-  // Get top 6 components sorted by weight
-  const topComponents = components
-    .filter(([key]) => TOP_COMPONENTS.includes(key))
-    .sort((a, b) => b[1].weight - a[1].weight)
-    .slice(0, 6);
+  // Extract key data for argument cards
+  const fearGreedValue = riskScore.fear_greed.value;
+  const pctFromAth = riskScore.pct_from_ath;
+  const halvingComp = riskScore.components.halving_cycle;
+  const halvingDays = halvingComp?.raw != null && typeof halvingComp.raw === "number" ? Math.round(halvingComp.raw) : null;
 
-  // Mayer Multiple and RSI from components
-  const mayerComp = riskScore.components.mayer_multiple;
-  const rsiComp = riskScore.components.rsi_weekly;
+  // Sentiment position (0 = full bearish, 100 = full bullish)
+  const sentimentPos = getSentimentPosition(riskScore.derivatives.long_pct, riskScore.derivatives.funding_pct);
 
   return (
     <>
@@ -283,49 +268,30 @@ export default async function RiskScorePage() {
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Risk Score</p>
           </div>
 
-          {/* ─── 1. HERO SECTION ─── */}
+          {/* ─── 1. HERO ─── */}
           <section className="panel mb-8 px-6 py-10 md:px-10 md:py-14">
-            <div className="grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
-              {/* Left side - BTC Price */}
-              <div className="flex flex-col items-center md:items-end gap-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Bitcoin</p>
-                <p className="text-3xl font-bold text-white md:text-4xl">
-                  ${formatNumber(riskScore.btc_price_live)}
-                </p>
-                <p className={`text-sm font-medium ${riskScore.pct_from_ath >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                  {formatPercent(riskScore.pct_from_ath)} de la ATH
-                </p>
+            <div className="flex flex-col items-center text-center">
+              <RiskGauge score={riskScore.score} size={280} />
+
+              <div className="mt-6">
+                <span
+                  className={`inline-block rounded-full border-2 px-10 py-3 text-2xl font-black tracking-widest ${getDecisionColor(riskScore.decision)} ${getDecisionGlow(riskScore.decision)}`}
+                >
+                  {getDecisionEmoji(riskScore.decision)} {getDecisionLabel(riskScore.decision)}
+                </span>
               </div>
 
-              {/* Center - Gauge + Decision */}
-              <div className="flex flex-col items-center">
-                <RiskGauge score={riskScore.score} size={260} />
-                <div className="mt-5">
-                  <span
-                    className={`inline-block rounded-full border-2 px-8 py-2.5 text-lg font-bold tracking-wider ${getDecisionColor(riskScore.decision)}`}
-                  >
-                    {getDecisionLabel(riskScore.decision)}
-                  </span>
-                </div>
-                <p className="mt-3 text-sm text-slate-400">
-                  Convingere: <span className="font-semibold text-white">{riskScore.conviction}</span>
-                </p>
-              </div>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-300">
+                {getSimpleSummary(riskScore.decision, riskScore.score, riskScore.conviction)}
+              </p>
 
-              {/* Right side - Fear & Greed */}
-              <div className="flex flex-col items-center md:items-start gap-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Frica & Lacomie</p>
-                <p className={`text-3xl font-bold md:text-4xl ${getFearGreedColor(riskScore.fear_greed.value)}`}>
-                  {riskScore.fear_greed.value}
-                </p>
-                <p className="text-sm text-slate-400">
-                  {getFearGreedLabel(riskScore.fear_greed.value)}
-                </p>
-              </div>
+              <p className="mt-3 text-sm text-slate-500">
+                BTC: <span className="font-semibold text-white">${formatNumber(riskScore.btc_price_live)}</span>
+              </p>
             </div>
           </section>
 
-          {/* ─── 2. WARNING SECTION (overrides) ─── */}
+          {/* ─── Alerte (overrides) ─── */}
           {riskScore.overrides.length > 0 && (
             <section className="mb-8 space-y-3">
               {riskScore.overrides.map((override, i) => (
@@ -348,236 +314,196 @@ export default async function RiskScorePage() {
             </section>
           )}
 
-          {/* ─── 3. KEY METRICS (6 cards) ─── */}
-          <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
-            {/* BTC Pret */}
-            <article className="panel px-5 py-6 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">BTC Pret</p>
-              <h3 className="mt-3 text-2xl font-bold text-white lg:text-3xl">
-                ${formatNumber(riskScore.btc_price_live)}
+          {/* ─── 2. THREE ARGUMENT CARDS ─── */}
+          <section className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* Card 1: Fear & Greed */}
+            <article className="panel px-6 py-7">
+              <div className="mb-3 text-3xl">😨</div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Frica si Lacomie</p>
+              <h3 className={`mt-2 text-5xl font-black ${getFearGreedColor(fearGreedValue)}`}>
+                {fearGreedValue}
               </h3>
-              <p className={`mt-2 text-sm font-medium ${riskScore.pct_from_ath >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                {formatPercent(riskScore.pct_from_ath)} de la ATH
+              <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                Istoric: frica extrema = oportunitate de cumparare
               </p>
             </article>
 
-            {/* Fear & Greed */}
-            <article className="panel px-5 py-6 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Frica & Lacomie</p>
-              <h3 className={`mt-3 text-2xl font-bold lg:text-3xl ${getFearGreedColor(riskScore.fear_greed.value)}`}>
-                {riskScore.fear_greed.value}
+            {/* Card 2: Distance from ATH */}
+            <article className="panel px-6 py-7">
+              <div className="mb-3 text-3xl">📉</div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Distanta de la ATH</p>
+              <h3 className={`mt-2 text-5xl font-black ${pctFromAth >= -5 ? "text-emerald-400" : pctFromAth >= -20 ? "text-amber-400" : "text-red-400"}`}>
+                {pctFromAth >= 0 ? "ATH" : `${pctFromAth.toFixed(0)}%`}
               </h3>
-              <p className="mt-2 text-sm text-slate-400">{getFearGreedLabel(riskScore.fear_greed.value)}</p>
-            </article>
-
-            {/* BTC Dominance */}
-            <article className="panel px-5 py-6 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">BTC Dominanta</p>
-              <h3 className="mt-3 text-2xl font-bold text-white lg:text-3xl">
-                {riskScore.coingecko.btc_dominance.toFixed(1)}%
-              </h3>
-              <p className="mt-2 text-sm text-slate-400">ETH: {riskScore.coingecko.eth_dominance.toFixed(1)}%</p>
-            </article>
-
-            {/* Mayer Multiple */}
-            <article className="panel px-5 py-6 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Mayer Multiple</p>
-              <h3 className="mt-3 text-2xl font-bold text-white lg:text-3xl">
-                {mayerComp?.raw != null ? (typeof mayerComp.raw === "number" ? mayerComp.raw.toFixed(2) : String(mayerComp.raw)) : "--"}
-              </h3>
-              <p className="mt-2 text-sm text-slate-400">Sub 0.8 = zona de acumulare</p>
-            </article>
-
-            {/* RSI Weekly */}
-            <article className="panel px-5 py-6 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">RSI Saptamanal</p>
-              <h3 className={`mt-3 text-2xl font-bold lg:text-3xl ${
-                rsiComp?.raw != null && typeof rsiComp.raw === "number"
-                  ? rsiComp.raw < 30
-                    ? "text-red-400"
-                    : rsiComp.raw > 70
-                      ? "text-emerald-400"
-                      : "text-white"
-                  : "text-white"
-              }`}>
-                {rsiComp?.raw != null ? (typeof rsiComp.raw === "number" ? rsiComp.raw.toFixed(1) : String(rsiComp.raw)) : "--"}
-              </h3>
-              <p className="mt-2 text-sm text-slate-400">
-                {rsiComp?.raw != null && typeof rsiComp.raw === "number"
-                  ? rsiComp.raw < 30
-                    ? "Zona de acumulare"
-                    : rsiComp.raw > 70
-                      ? "Supracumparat"
-                      : "Zona neutra"
-                  : "Indisponibil"}
+              <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                BTC la ${formatNumber(riskScore.btc_price_live)} vs ${formatNumber(riskScore.btc_ath)} ATH
               </p>
             </article>
 
-            {/* Funding Rate */}
-            <article className="panel px-5 py-6 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Rata de Finantare</p>
-              <h3 className={`mt-3 text-2xl font-bold lg:text-3xl ${
-                riskScore.derivatives.funding_pct > 0 ? "text-emerald-400" : "text-red-400"
-              }`}>
-                {riskScore.derivatives.funding_pct.toFixed(4)}%
+            {/* Card 3: Halving Cycle */}
+            <article className="panel px-6 py-7">
+              <div className="mb-3 text-3xl">⏳</div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Zile de la Halving</p>
+              <h3 className="mt-2 text-5xl font-black text-white">
+                {halvingDays != null ? halvingDays : "--"}
               </h3>
-              <p className="mt-2 text-sm text-slate-400">
-                {riskScore.derivatives.funding_pct > 0 ? "Longii platesc" : "Shortii platesc"}
+              <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                Istoric: bottom la ~370 zile dupa peak
               </p>
             </article>
           </section>
 
-          {/* ─── 4. COMPONENTE (Top 6 with circular progress) ─── */}
-          <section className="mb-8">
-            <div className="mb-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Componente</p>
-              <h2 className="mt-1 text-2xl font-bold text-white">Indicatori principali</h2>
+          {/* ─── 3. SENTIMENT METER ─── */}
+          <section className="panel mb-8 px-6 py-7 md:px-10">
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Sentiment derivate</p>
+
+            {/* Gradient bar */}
+            <div className="relative">
+              <div className="h-3 w-full rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-emerald-500" />
+              {/* Marker */}
+              <div
+                className="absolute -top-1 h-5 w-5 rounded-full border-2 border-white bg-white shadow-lg transition-all"
+                style={{ left: `calc(${sentimentPos}% - 10px)` }}
+              />
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {topComponents.map(([key, comp]) => (
-                <article key={key} className="panel flex items-start gap-4 px-5 py-5">
-                  <CircularProgress value={comp.norm} />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-white">{componentLabels[key] ?? key}</p>
-                    <p className="mt-1 text-lg font-bold text-white">
-                      {comp.raw != null ? (typeof comp.raw === "number" ? comp.raw.toFixed(2) : String(comp.raw)) : `${Math.round(comp.norm * 100)}%`}
-                    </p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                      {componentWhyRo[key] ?? comp.why}
-                    </p>
-                  </div>
-                </article>
-              ))}
+
+            {/* Labels */}
+            <div className="mt-2 flex justify-between text-xs font-semibold">
+              <span className="text-red-400">BEARISH</span>
+              <span className="text-amber-400">NEUTRU</span>
+              <span className="text-emerald-400">BULLISH</span>
+            </div>
+
+            {/* Stats */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-slate-400">
+              <span>
+                <span className="font-semibold text-emerald-400">{riskScore.derivatives.long_pct.toFixed(1)}%</span> Long
+                {" / "}
+                <span className="font-semibold text-red-400">{riskScore.derivatives.short_pct.toFixed(1)}%</span> Short
+              </span>
+              <span>
+                Funding: <span className="font-semibold text-white">{riskScore.derivatives.funding_pct.toFixed(4)}%</span>
+              </span>
             </div>
           </section>
 
-          {/* ─── 5. DERIVATE ─── */}
-          <section className="mb-8">
-            <div className="mb-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Derivate</p>
-              <h2 className="mt-1 text-2xl font-bold text-white">Futures & Finantare</h2>
-            </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {/* Open Interest */}
-              <article className="panel px-5 py-6 text-center">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Open Interest</p>
-                <h3 className="mt-3 text-2xl font-bold text-white">
-                  ${(riskScore.derivatives.oi_value / 1e9).toFixed(2)}B
-                </h3>
-                <p className="mt-2 text-sm text-slate-400">
-                  Delta 4H: <span className={riskScore.derivatives.oi_delta_pct >= 0 ? "text-emerald-400" : "text-red-400"}>
-                    {formatPercent(riskScore.derivatives.oi_delta_pct)}
-                  </span>
-                </p>
-              </article>
-
-              {/* Long vs Short */}
-              <article className="panel px-5 py-6 sm:col-span-1 lg:col-span-2">
-                <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Long vs Short</p>
-                <div className="mt-4 flex items-center justify-between text-sm font-semibold">
-                  <span className="text-emerald-400">{riskScore.derivatives.long_pct.toFixed(1)}% Long</span>
-                  <span className="text-red-400">{riskScore.derivatives.short_pct.toFixed(1)}% Short</span>
-                </div>
-                <div className="mt-2 flex h-4 w-full overflow-hidden rounded-full">
-                  <div
-                    className="rounded-l-full bg-emerald-500/80 transition-all"
-                    style={{ width: `${riskScore.derivatives.long_pct}%` }}
-                  />
-                  <div
-                    className="rounded-r-full bg-red-500/80 transition-all"
-                    style={{ width: `${riskScore.derivatives.short_pct}%` }}
-                  />
-                </div>
-                <p className="mt-3 text-center text-sm text-slate-400">
-                  Ratio: <span className="font-semibold text-white">{riskScore.derivatives.ls_ratio.toFixed(2)}</span>
-                </p>
-              </article>
-
-              {/* Basis */}
-              <article className="panel px-5 py-6 text-center">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Basis</p>
-                <h3 className={`mt-3 text-2xl font-bold ${
-                  riskScore.derivatives.basis_pct > 0 ? "text-emerald-400" : "text-red-400"
-                }`}>
-                  {riskScore.derivatives.basis_pct.toFixed(3)}%
-                </h3>
-                <p className="mt-2 text-sm text-slate-400">
-                  {riskScore.derivatives.basis_pct > 0.1
-                    ? "Contango - sentiment bullish"
-                    : riskScore.derivatives.basis_pct < -0.05
-                      ? "Backwardation - sentiment bearish"
-                      : "Neutru"}
-                </p>
-              </article>
-            </div>
-          </section>
-
-          {/* ─── 6. MACRO ─── */}
-          <section className="mb-8">
-            <div className="mb-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Macro</p>
-              <h2 className="mt-1 text-2xl font-bold text-white">Indicatori macroeconomici</h2>
-            </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {/* ─── 4. MACRO SNAPSHOT ─── */}
+          <section className="panel mb-8 px-6 py-5 md:px-10">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               {[
-                { key: "vix", label: "VIX", value: riskScore.macro.vix.toFixed(2), unit: "" },
-                { key: "dxy", label: "DXY", value: riskScore.macro.dxy.toFixed(2), unit: "" },
-                { key: "fed_funds_rate", label: "Rata Fed", value: riskScore.macro.fed_funds_rate.toFixed(2), unit: "%" },
-                { key: "m2", label: "M2 Supply", value: riskScore.macro.m2.toFixed(1), unit: "T" },
-                { key: "us10y", label: "Randament 10Y", value: riskScore.macro.us10y.toFixed(2), unit: "%" },
-              ].map(({ key, label, value, unit }) => {
-                const sentiment = getMacroSentiment(key, riskScore.macro[key as keyof typeof riskScore.macro]);
+                { key: "fear_greed", label: "Fear&Greed", value: String(riskScore.fear_greed.value), rawVal: riskScore.fear_greed.value },
+                { key: "vix", label: "VIX", value: riskScore.macro.vix.toFixed(1), rawVal: riskScore.macro.vix },
+                { key: "dxy", label: "DXY", value: riskScore.macro.dxy.toFixed(1), rawVal: riskScore.macro.dxy },
+                { key: "fed_funds_rate", label: "Rata Fed", value: `${riskScore.macro.fed_funds_rate.toFixed(2)}%`, rawVal: riskScore.macro.fed_funds_rate },
+              ].map(({ key, label, value, rawVal }) => {
+                const dot = getMacroSentiment(key, rawVal);
                 return (
-                  <article key={key} className="panel px-4 py-5 text-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">{label}</p>
-                    <h3 className="mt-3 text-xl font-bold text-white">
-                      {key === "m2" ? "$" : ""}{value}{unit}
-                    </h3>
-                    <div className="mt-3 flex items-center justify-center gap-2">
-                      <span className={`inline-block h-2 w-2 rounded-full ${sentiment.color}`} />
-                      <span className="text-xs text-slate-400">{sentiment.label}</span>
-                    </div>
-                  </article>
+                  <div key={key} className="flex items-center gap-2">
+                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${dot.color}`} />
+                    <span className="text-xs text-slate-500">{label}</span>
+                    <span className="text-sm font-bold text-white">{value}</span>
+                  </div>
                 );
               })}
             </div>
           </section>
 
-          {/* ─── 7. ANALIZA ─── */}
-          <section className="panel mb-8 p-6 md:p-10">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Analiza</p>
-            <h2 className="mb-6 text-2xl font-bold text-white">Rezumat complet</h2>
-            <div className="space-y-4 text-sm leading-relaxed text-slate-300">
-              {riskScore.analysis
-                .split("\n")
-                .filter((line) => line.trim().length > 0)
-                .map((paragraph, i) => (
-                  <p key={i} className="leading-7">
-                    {paragraph
-                      .split(/(\*\*[^*]+\*\*)/)
-                      .map((part, j) =>
-                        part.startsWith("**") && part.endsWith("**") ? (
-                          <span key={j} className="font-semibold text-white">
-                            {part.slice(2, -2)}
-                          </span>
-                        ) : (
-                          <span key={j}>{part}</span>
-                        ),
-                      )}
-                  </p>
-                ))}
-            </div>
-          </section>
+          {/* ─── 5. DETALII TEHNICE (collapsible) ─── */}
+          <details className="mb-8">
+            <summary className="panel cursor-pointer px-6 py-4 text-sm font-semibold text-slate-400 hover:text-white transition-colors select-none">
+              Vezi detalii tehnice ▾
+            </summary>
 
-          {/* ─── 8. FOOTER ─── */}
-          <div className="mb-8 space-y-2 text-center">
-            <p className="text-xs text-slate-500">
-              Ultima actualizare: {updatedAt.toLocaleString("ro-RO")}
-            </p>
-            <p className="text-xs text-slate-600">
-              Datele sunt generate automat si nu constituie sfaturi de investitii. Tradingul implica risc semnificativ.
-            </p>
-          </div>
+            <div className="mt-4 space-y-6">
+              {/* Component bars */}
+              <div className="panel p-6">
+                <h3 className="mb-5 text-lg font-bold text-white">Toti indicatorii ({components.length})</h3>
+                <div className="space-y-4">
+                  {components
+                    .sort((a, b) => b[1].weight - a[1].weight)
+                    .map(([key, comp]) => {
+                      const pct = Math.round(comp.norm * 100);
+                      const color = getNormColor(comp.norm);
+                      return (
+                        <div key={key}>
+                          <div className="mb-1 flex items-center justify-between">
+                            <span className="text-sm font-medium text-slate-300">{componentLabels[key] ?? key}</span>
+                            <span className="text-sm font-bold" style={{ color }}>
+                              {comp.raw != null ? (typeof comp.raw === "number" ? comp.raw.toFixed(2) : String(comp.raw)) : `${pct}%`}
+                            </span>
+                          </div>
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
+                            <div
+                              className="h-full rounded-full transition-all duration-700"
+                              style={{ width: `${pct}%`, backgroundColor: color }}
+                            />
+                          </div>
+                          <p className="mt-1 text-xs text-slate-600">{componentWhyRo[key] ?? comp.why}</p>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              {/* Derivatives table */}
+              <div className="panel p-6">
+                <h3 className="mb-5 text-lg font-bold text-white">Derivate</h3>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                  <div>
+                    <p className="text-xs text-slate-500">Open Interest</p>
+                    <p className="text-lg font-bold text-white">${(riskScore.derivatives.oi_value / 1e9).toFixed(2)}B</p>
+                    <p className={`text-xs ${riskScore.derivatives.oi_delta_pct >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                      {riskScore.derivatives.oi_delta_pct >= 0 ? "+" : ""}{riskScore.derivatives.oi_delta_pct.toFixed(2)}% 4H
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Ratio L/S</p>
+                    <p className="text-lg font-bold text-white">{riskScore.derivatives.ls_ratio.toFixed(2)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Basis</p>
+                    <p className={`text-lg font-bold ${riskScore.derivatives.basis_pct > 0 ? "text-emerald-400" : "text-red-400"}`}>
+                      {riskScore.derivatives.basis_pct.toFixed(3)}%
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Taker Buy/Sell</p>
+                    <p className="text-lg font-bold text-white">{riskScore.derivatives.taker_ratio.toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Analysis text */}
+              <div className="panel p-6">
+                <h3 className="mb-5 text-lg font-bold text-white">Analiza completa</h3>
+                <div className="space-y-4 text-sm leading-relaxed text-slate-300">
+                  {riskScore.analysis
+                    .split("\n")
+                    .filter((line) => line.trim().length > 0)
+                    .map((paragraph, i) => (
+                      <p key={i} className="leading-7">
+                        {paragraph
+                          .split(/(\*\*[^*]+\*\*)/)
+                          .map((part, j) =>
+                            part.startsWith("**") && part.endsWith("**") ? (
+                              <span key={j} className="font-semibold text-white">
+                                {part.slice(2, -2)}
+                              </span>
+                            ) : (
+                              <span key={j}>{part}</span>
+                            ),
+                          )}
+                      </p>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </details>
+
+          {/* ─── 6. FOOTER ─── */}
+          <p className="mb-8 text-center text-xs text-slate-600">
+            Actualizat: {updatedAt.toLocaleString("ro-RO")} · Datele nu constituie sfaturi de investitii.
+          </p>
         </Container>
       </main>
       <Footer compact />
