@@ -149,6 +149,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             subscriptionStatus={profile?.subscription_status ?? null}
             subscriptionTier={profile?.subscription_tier ?? null}
             discordConnected={!!profile?.discord_user_id}
+            discordUsername={profile?.discord_username ?? null}
           />
           {/* Expiry warning */}
           {profile?.subscription_expires_at && (() => {

@@ -8,6 +8,7 @@ type SubscriptionCardProps = {
   subscriptionStatus: SubscriptionStatus;
   subscriptionExpiresAt: string | null;
   discordConnected?: boolean;
+  discordUsername?: string | null;
 };
 
 const tierLabels: Record<Exclude<SubscriptionTier, null>, string> = {
@@ -117,6 +118,7 @@ export function SubscriptionCard({
   subscriptionStatus,
   subscriptionExpiresAt,
   discordConnected = false,
+  discordUsername = null,
 }: SubscriptionCardProps) {
   const copy = getSubscriptionCopy(subscriptionTier, subscriptionStatus, subscriptionExpiresAt);
   const badge = getStatusBadge(subscriptionStatus);
@@ -145,15 +147,31 @@ export function SubscriptionCard({
           {secondaryCta.label}
         </Link>
       </div>
-      {!discordConnected && subscriptionTier === "elite" && (
+      {/* Discord status */}
+      {subscriptionTier === "elite" && (
         <div className="mt-5 rounded-xl bg-crypto-dark/10 px-5 py-4">
-          <p className="text-sm font-semibold text-crypto-dark">Conecteaza Discord pentru a primi rolul Elite</p>
-          <Link
-            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[#5865F2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4752C4]"
-            href="/auth/discord/start"
-          >
-            Conecteaza Discord
-          </Link>
+          {discordConnected ? (
+            <div className="flex items-center justify-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5865F2]">
+                <span className="text-sm">💬</span>
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-semibold text-crypto-dark">Discord conectat{discordUsername ? `: ${discordUsername}` : ""}</p>
+                <p className="text-xs text-crypto-dark/60">Rol Elite sincronizat</p>
+              </div>
+              <span className="ml-auto inline-block h-2.5 w-2.5 rounded-full bg-green-500" />
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm font-semibold text-crypto-dark">Conecteaza Discord pentru a primi rolul Elite</p>
+              <Link
+                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-[#5865F2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4752C4]"
+                href="/auth/discord/start"
+              >
+                Conecteaza Discord
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </section>
