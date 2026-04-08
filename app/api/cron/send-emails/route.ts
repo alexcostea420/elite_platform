@@ -47,11 +47,29 @@ export async function GET(request: NextRequest) {
 
     let sent = 0;
     for (const email of pendingEmails) {
-      const html = EMAIL_TEMPLATES[email.template];
-      if (!html) {
+      // Check if user is unsubscribed
+      if (email.user_id) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("email_unsubscribed")
+          .eq("id", email.user_id)
+          .maybeSingle();
+        if (profile?.email_unsubscribed) {
+          await supabase.from("email_drip_queue").update({ status: "cancelled" }).eq("id", email.id);
+          continue;
+        }
+      }
+
+      const templateHtml = EMAIL_TEMPLATES[email.template];
+      if (!templateHtml) {
         await supabase.from("email_drip_queue").update({ status: "skipped" }).eq("id", email.id);
         continue;
       }
+
+      // Add unsubscribe footer
+      const unsubUrl = `https://app.armatadetraderi.com/api/unsubscribe?email=${encodeURIComponent(email.email)}`;
+      const unsubFooter = `<tr><td style="padding:16px 32px;text-align:center;"><a href="${unsubUrl}" style="font-size:11px;color:#5A7168;text-decoration:underline;">Dezaboneaza-te de la emailuri</a></td></tr>`;
+      const html = templateHtml.replace("</table></td></tr></table></body></html>", `${unsubFooter}</table></td></tr></table></body></html>`);
 
       try {
         await resend.emails.send({
