@@ -4,7 +4,7 @@ import { testimonials } from "@/lib/constants/site";
 
 export function TestimonialsSection() {
   return (
-    <section className="bg-surface-graphite/30 px-4 py-20" id="testimoniale">
+    <section className="px-4 py-20" id="testimoniale">
       <Container>
         <SectionHeading title={<>Ce spun <span className="gradient-text">Membrii Nostri</span></>} description="Review-uri reale de pe Discord" />
         <div className="mt-16 grid gap-6 md:grid-cols-2">
