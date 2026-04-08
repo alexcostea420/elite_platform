@@ -27,12 +27,7 @@ type InvitePageProps = {
 };
 
 function getInviteDurationLabel(invite: { plan_duration: string; subscription_days: number }) {
-  const labels: Record<string, string> = {
-    "30_days": "30 zile",
-    "90_days": "90 zile",
-    "365_days": "365 zile",
-  };
-  return labels[invite.plan_duration] ?? `${invite.subscription_days} zile`;
+  return `${invite.subscription_days} zile`;
 }
 
 export default async function InvitePage({ params, searchParams }: InvitePageProps) {
