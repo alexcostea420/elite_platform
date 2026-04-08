@@ -43,14 +43,17 @@ export type RiskScoreComponent = {
   raw?: number | null;
   norm: number;
   weight: number;
-  why: string;
+  why?: string;
+  signal?: string;
+  explanation?: string;
+  phase?: string;
   [key: string]: unknown;
 };
 
 export type RiskScoreData = {
   timestamp: string;
   score: number;
-  internal_score: number;
+  internal_score?: number;
   decision: "BUY" | "SELL" | "HOLD";
   decision_text: string;
   conviction: "HIGH" | "MEDIUM" | "LOW";
@@ -60,6 +63,8 @@ export type RiskScoreData = {
   btc_price_live: number;
   btc_ath: number;
   pct_from_ath: number;
+  btc_market_cap?: number;
+  btc_24h_change?: number;
   components: Record<string, RiskScoreComponent>;
   derivatives: {
     funding_rate: number;
@@ -93,6 +98,7 @@ export type RiskScoreData = {
     fed_funds_rate: number;
   };
   analysis: string;
+  version?: string;
 };
 
 export function getRiskScore() {

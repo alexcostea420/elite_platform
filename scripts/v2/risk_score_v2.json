@@ -1,0 +1,85 @@
+{
+  "version": "2.0",
+  "timestamp": "2026-04-08T09:14:37.554877+00:00",
+  "score": 66,
+  "decision": "BUY",
+  "decision_text": "Conditiile sunt favorabile pentru acumulare pe termen lung.",
+  "conviction": "MEDIUM",
+  "conviction_detail": "2 cumpara / 0 vinde / 2 neutru",
+  "overrides": [],
+  "btc_price": 71834,
+  "btc_price_live": 71834,
+  "btc_ath": 126208.5,
+  "pct_from_ath": -43.08,
+  "internal_score": 0.6564,
+  "btc_market_cap": 1438898949493.3567,
+  "btc_24h_change": 3.93,
+  "fear_greed": {
+    "value": 17,
+    "label": "Extreme Fear"
+  },
+  "coingecko": {
+    "total_mcap": 2533079362849.4233,
+    "btc_dominance": 56.795440446952675,
+    "eth_dominance": 10.76399789855975,
+    "mcap_change_24h": 3.736324492267938
+  },
+  "derivatives": {
+    "funding_rate": 0,
+    "funding_pct": 0,
+    "oi_value": 0,
+    "oi_delta_pct": 0,
+    "ls_ratio": 1,
+    "long_pct": 50,
+    "short_pct": 50,
+    "taker_buy_vol": 0,
+    "taker_sell_vol": 0,
+    "taker_ratio": 1,
+    "basis_pct": 0,
+    "spot_price": 71834,
+    "futures_price": 71834
+  },
+  "macro": {
+    "vix": 0,
+    "dxy": 0,
+    "us10y": 0,
+    "m2": 0,
+    "unemployment": 0,
+    "fed_funds_rate": 0
+  },
+  "indicators": {},
+  "components": {
+    "fear_greed": {
+      "raw": 17,
+      "norm": 0.83,
+      "weight": 0.06,
+      "signal": "CUMPARA",
+      "label": "Extreme Fear",
+      "explanation": "Indicele la 17 (Extreme Fear). Frica extrema = oportunitate contrarian de cumparare."
+    },
+    "drawdown": {
+      "raw": -43.08,
+      "norm": 0.539,
+      "weight": 0.08,
+      "signal": "NEUTRU",
+      "explanation": "BTC la -43.1% de la ATH ($126,208). Drawdown-uri mari = oportunitati istorice."
+    },
+    "halving_cycle": {
+      "days_since_halving": 718,
+      "days_to_next_halving": 742,
+      "norm": 0.7,
+      "weight": 0.08,
+      "phase": "Corectie / Acumulare",
+      "signal": "CUMPARA",
+      "explanation": "718 zile de la halving. Faza: Corectie / Acumulare. Urmatorul halving in ~742 zile."
+    },
+    "days_from_peak": {
+      "days_from_peak": 184,
+      "norm": 0.6,
+      "weight": 0.08,
+      "signal": "NEUTRU",
+      "explanation": "184 zile de la ATH. Istoric: bottom-ul vine la ~365 zile dupa peak."
+    }
+  },
+  "analysis": "SCOR RISC: 66/100. Decizie: CUMPARA (Conviction: MEDIUM).\n\nFear & Greed: 17 (Extreme Fear). Frica extrema = oportunitate contrarian.\nDrawdown: -43.08% de la ATH. BTC la -43.1% de la ATH ($126,208). Drawdown-uri mari = oportunitati istorice.\nCiclul Halving: 718 zile de la halving. Faza: Corectie / Acumulare. Urmatorul halving in ~742 zile.\nZile de la peak: 184 zile de la ATH. Istoric: bottom-ul vine la ~365 zile dupa peak.\n\nAceasta analiza este generata automat si nu constituie sfaturi de investitii."
+}
