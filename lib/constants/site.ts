@@ -70,6 +70,7 @@ export const dashboardNavGroups = [
     items: [
       { href: "/dashboard/risk-score", label: "Risk Score", icon: "🎯" },
       { href: "/dashboard/should-i-trade", label: "Should I Trade?", icon: "⚡" },
+      { href: "/dashboard/whale-tracker", label: "Whale Tracker", icon: "🐋" },
     ],
   },
 ];
