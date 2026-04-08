@@ -45,6 +45,25 @@ export default async function WhaleTrackerPage() {
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
 
+  if (profile?.role !== "admin") {
+    return (
+      <>
+        <Navbar mode="dashboard" userIdentity={identity} />
+        <main className="pb-16 pt-24 md:pt-28">
+          <Container>
+            <section className="glass-card p-8 text-center md:p-12">
+              <div className="mb-4 text-5xl">🚀</div>
+              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
+              <p className="mx-auto mt-4 max-w-lg text-slate-400">Aceasta sectiune va fi disponibila in curand.</p>
+              <a className="accent-button mt-6 inline-block" href="/dashboard">Inapoi la Dashboard</a>
+            </section>
+          </Container>
+        </main>
+        <Footer compact />
+      </>
+    );
+  }
+
   const whaleData = await getWhaleData();
 
   if (!whaleData) {
