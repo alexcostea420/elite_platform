@@ -309,18 +309,74 @@ def calc_days_from_peak_score():
 # Macro data
 # ──────────────────────────────────────────
 
-def get_macro_data():
-    """Get macro data from various free sources."""
-    macro = {}
+def get_derivatives_data():
+    """Get derivatives data from Binance Futures API (free, no key)."""
+    deriv = {
+        "funding_rate": 0, "funding_pct": 0,
+        "oi_value": 0, "oi_delta_pct": 0,
+        "ls_ratio": 1, "long_pct": 50, "short_pct": 50,
+        "taker_buy_vol": 0, "taker_sell_vol": 0, "taker_ratio": 1,
+        "basis_pct": 0, "spot_price": 0, "futures_price": 0,
+    }
 
-    # Fear & Greed already fetched separately
+    try:
+        # Funding rate
+        fr = fetch_json("https://fapi.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&limit=1")
+        if fr and len(fr) > 0:
+            rate = float(fr[0].get("fundingRate", 0))
+            deriv["funding_rate"] = rate
+            deriv["funding_pct"] = round(rate * 100, 6)
+            deriv["futures_price"] = float(fr[0].get("markPrice", 0))
+    except:
+        pass
 
-    # DXY approximation from CoinGecko EUR/USD
-    # (We'll use a static approach since free DXY APIs are limited)
-    # The trading bot already provides this, but for V2 independence:
-    macro["note"] = "Macro data requires manual update or trading bot sync"
+    try:
+        # Open interest
+        oi = fetch_json("https://fapi.binance.com/fapi/v1/openInterest?symbol=BTCUSDT")
+        if oi:
+            oi_btc = float(oi.get("openInterest", 0))
+            price = deriv["futures_price"] or 70000
+            deriv["oi_value"] = round(oi_btc * price, 2)
+    except:
+        pass
 
-    return macro
+    try:
+        # Long/Short ratio
+        ls = fetch_json("https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=1h&limit=1")
+        if ls and len(ls) > 0:
+            long_pct = float(ls[0].get("longAccount", 0.5))
+            short_pct = float(ls[0].get("shortAccount", 0.5))
+            ratio = float(ls[0].get("longShortRatio", 1))
+            deriv["long_pct"] = round(long_pct * 100, 2)
+            deriv["short_pct"] = round(short_pct * 100, 2)
+            deriv["ls_ratio"] = round(ratio, 4)
+    except:
+        pass
+
+    try:
+        # Taker buy/sell
+        ts = fetch_json("https://fapi.binance.com/futures/data/takerlongshortRatio?symbol=BTCUSDT&period=1h&limit=1")
+        if ts and len(ts) > 0:
+            buy_vol = float(ts[0].get("buyVol", 0))
+            sell_vol = float(ts[0].get("sellVol", 0))
+            deriv["taker_buy_vol"] = round(buy_vol, 2)
+            deriv["taker_sell_vol"] = round(sell_vol, 2)
+            deriv["taker_ratio"] = round(buy_vol / sell_vol, 4) if sell_vol > 0 else 1
+    except:
+        pass
+
+    try:
+        # Spot price for basis calculation
+        spot = fetch_json("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT")
+        if spot:
+            spot_price = float(spot.get("price", 0))
+            deriv["spot_price"] = spot_price
+            if spot_price > 0 and deriv["futures_price"] > 0:
+                deriv["basis_pct"] = round(((deriv["futures_price"] - spot_price) / spot_price) * 100, 4)
+    except:
+        pass
+
+    return deriv
 
 
 # ──────────────────────────────────────────
@@ -342,6 +398,11 @@ def calculate_risk_score():
 
     global_data = get_global_crypto()
     fg = get_fear_greed()
+
+    # Derivatives from Binance
+    print("[INFO] Fetching derivatives data from Binance...")
+    derivatives = get_derivatives_data()
+    print(f"[INFO] Derivatives: Funding={derivatives['funding_pct']:.4f}%, L/S={derivatives['ls_ratio']:.2f}, OI=${derivatives['oi_value']/1e9:.2f}B")
 
     # On-chain data
     mvrv_data = get_onchain_latest("mvrv-zscore")
@@ -445,13 +506,8 @@ def calculate_risk_score():
             "total_mcap": 0, "btc_dominance": 0, "eth_dominance": 0, "mcap_change_24h": 0,
         },
 
-        # V1 compatibility: empty derivatives and macro (no free API for these)
-        "derivatives": {
-            "funding_rate": 0, "funding_pct": 0, "oi_value": 0, "oi_delta_pct": 0,
-            "ls_ratio": 1, "long_pct": 50, "short_pct": 50,
-            "taker_buy_vol": 0, "taker_sell_vol": 0, "taker_ratio": 1,
-            "basis_pct": 0, "spot_price": price, "futures_price": price,
-        },
+        # Derivatives from Binance (real data)
+        "derivatives": derivatives,
         "macro": {
             "vix": 0, "dxy": 0, "us10y": 0, "m2": 0, "unemployment": 0, "fed_funds_rate": 0,
         },
