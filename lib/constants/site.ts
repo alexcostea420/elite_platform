@@ -262,16 +262,16 @@ export const footerLinks = {
 
 export const quickLinks = [
   {
-    icon: "🎯",
-    title: "Risk Score",
-    description: "Scor risc BTC live",
-    href: "/dashboard/risk-score"
+    icon: "🎥",
+    title: "Video-uri",
+    description: "55+ analize video",
+    href: "/dashboard/videos"
   },
   {
-    icon: "⚡",
-    title: "Should I Trade?",
-    description: "Decizia zilei",
-    href: "/dashboard/should-i-trade"
+    icon: "💹",
+    title: "Stocks",
+    description: "16 actiuni Buy/Sell",
+    href: "/dashboard/stocks"
   },
   {
     icon: "📊",
@@ -280,10 +280,10 @@ export const quickLinks = [
     href: "/dashboard/indicators"
   },
   {
-    icon: "🤖",
-    title: "Bot Trading",
-    description: "Copytrade automat",
-    href: "/bots"
+    icon: "📚",
+    title: "Resurse",
+    description: "Ghiduri si materiale",
+    href: "/dashboard/resurse"
   }
 ];
 
