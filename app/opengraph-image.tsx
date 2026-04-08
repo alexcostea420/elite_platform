@@ -15,142 +15,160 @@ export default function OpenGraphImage() {
           display: "flex",
           position: "relative",
           overflow: "hidden",
-          background:
-            "radial-gradient(circle at top right, rgba(11, 102, 35, 0.18), transparent 34%), linear-gradient(135deg, #0a0a0f 0%, #111827 50%, #1a1a2e 100%)",
+          background: "linear-gradient(135deg, #080808 0%, #0a1a0f 50%, #080808 100%)",
           color: "#ffffff",
           fontFamily: "Inter, sans-serif",
         }}
       >
+        {/* Grid pattern */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            opacity: 0.1,
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.07) 1px, transparent 1px)",
-            backgroundSize: "100% 44px",
+            opacity: 0.05,
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
           }}
         />
+
+        {/* Green glow */}
         <div
           style={{
             position: "absolute",
-            top: 46,
-            left: 54,
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            padding: "12px 18px",
-            borderRadius: 999,
-            border: "1px solid rgba(245, 158, 11, 0.35)",
-            background: "rgba(245, 158, 11, 0.08)",
-            color: "#f59e0b",
-            fontSize: 24,
-            fontWeight: 700,
-            letterSpacing: "0.28em",
-            textTransform: "uppercase",
+            top: -100,
+            right: -100,
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(11, 102, 35, 0.3), transparent 70%)",
           }}
-        >
-          Elite
-        </div>
+        />
+
+        {/* Content */}
         <div
           style={{
             display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             width: "100%",
-            padding: "120px 64px 64px",
-            flexDirection: "column",
-            justifyContent: "center",
+            padding: "60px 80px",
           }}
         >
+          {/* Left side - text */}
+          <div style={{ display: "flex", flexDirection: "column", maxWidth: 650 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 24,
+              }}
+            >
+              <span style={{ fontSize: 40 }}>🪖</span>
+              <span
+                style={{
+                  fontSize: 22,
+                  fontWeight: 700,
+                  color: "#0B6623",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Armata de Traderi
+              </span>
+            </div>
+
+            <h1
+              style={{
+                fontSize: 56,
+                fontWeight: 800,
+                lineHeight: 1.1,
+                margin: 0,
+                color: "#ffffff",
+              }}
+            >
+              Comunitate de
+              <br />
+              <span style={{ color: "#0B6623" }}>Trading Crypto</span>
+            </h1>
+
+            <p
+              style={{
+                fontSize: 22,
+                color: "#94a3b8",
+                marginTop: 20,
+                lineHeight: 1.5,
+              }}
+            >
+              Indicatori exclusivi, sesiuni live, portofoliu de actiuni
+              si comunitate activa de investitori.
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                gap: 16,
+                marginTop: 32,
+              }}
+            >
+              {["350+ Membri", "55+ Video-uri", "4+ Ani Experienta"].map((stat) => (
+                <div
+                  key={stat}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: 8,
+                    border: "1px solid rgba(11, 102, 35, 0.3)",
+                    background: "rgba(11, 102, 35, 0.1)",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: "#0B6623",
+                  }}
+                >
+                  {stat}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right side - avatar */}
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              maxWidth: 820,
+              alignItems: "center",
+              justifyContent: "center",
+              width: 340,
+              height: 340,
+              borderRadius: "50%",
+              border: "3px solid rgba(11, 102, 35, 0.3)",
+              background: "rgba(11, 102, 35, 0.05)",
+              overflow: "hidden",
             }}
           >
-            <div
-              style={{
-                fontSize: 68,
-                fontWeight: 800,
-                lineHeight: 1.05,
-                letterSpacing: "-0.04em",
-              }}
-            >
-              Armata de Traderi
-            </div>
-            <div
-              style={{
-                marginTop: 20,
-                fontSize: 32,
-                lineHeight: 1.3,
-                color: "#9ca3af",
-              }}
-            >
-              Comunitate de Trading Crypto
-            </div>
-            <div
-              style={{
-                marginTop: 26,
-                display: "flex",
-                gap: 16,
-                alignItems: "center",
-                color: "#86efac",
-                fontSize: 24,
-                fontWeight: 600,
-              }}
-            >
-              <span>Analize live</span>
-              <span style={{ color: "rgba(255,255,255,0.3)" }}>•</span>
-              <span>Context premium</span>
-              <span style={{ color: "rgba(255,255,255,0.3)" }}>•</span>
-              <span>Comunitate Elite</span>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://app.armatadetraderi.com/avatar-armata.jpg"
+              alt="Armata de Traderi"
+              width={320}
+              height={320}
+              style={{ objectFit: "cover", borderRadius: "50%" }}
+            />
           </div>
         </div>
 
-        <svg
-          height="240"
+        {/* Bottom bar */}
+        <div
           style={{
             position: "absolute",
-            right: 34,
-            bottom: 26,
-            opacity: 0.78,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            background: "linear-gradient(90deg, #0B6623, #0E7A2B, #0B6623)",
           }}
-          viewBox="0 0 420 240"
-          width="420"
-        >
-          <defs>
-            <linearGradient id="chartLine" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#0B6623" />
-              <stop offset="100%" stopColor="#f59e0b" />
-            </linearGradient>
-          </defs>
-          <g stroke="rgba(255,255,255,0.08)">
-            <line x1="0" x2="420" y1="210" y2="210" />
-            <line x1="0" x2="420" y1="150" y2="150" />
-            <line x1="0" x2="420" y1="90" y2="90" />
-            <line x1="60" x2="60" y1="0" y2="240" />
-            <line x1="160" x2="160" y1="0" y2="240" />
-            <line x1="260" x2="260" y1="0" y2="240" />
-            <line x1="360" x2="360" y1="0" y2="240" />
-          </g>
-          <polyline
-            fill="none"
-            points="14,184 74,170 126,150 178,160 228,112 282,124 330,78 394,44"
-            stroke="url(#chartLine)"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="8"
-          />
-          <g fill="#0B6623">
-            <circle cx="74" cy="170" r="7" />
-            <circle cx="178" cy="160" r="7" />
-            <circle cx="282" cy="124" r="7" />
-            <circle cx="394" cy="44" r="9" />
-          </g>
-        </svg>
+        />
       </div>
     ),
-    size,
+    { ...size }
   );
 }

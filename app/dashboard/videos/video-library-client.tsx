@@ -216,6 +216,7 @@ export function VideoLibraryClient({
                       date={video.upload_date}
                       tag={video.category}
                       thumbnailUrl={video.thumbnail_url}
+                      title={video.title}
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-crypto-ink/60">
                       <div className="text-center">
@@ -254,6 +255,7 @@ export function VideoLibraryClient({
                     date={video.upload_date}
                     tag={video.category}
                     thumbnailUrl={video.thumbnail_url}
+                    title={video.title}
                   />
                   {/* NOU badge */}
                   {videoIsNew && (

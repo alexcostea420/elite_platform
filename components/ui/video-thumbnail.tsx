@@ -10,11 +10,13 @@ export function VideoTemplateThumbnail({
   date,
   className,
   thumbnailUrl,
+  title,
 }: {
   tag: string;
   date: string;
   className?: string;
   thumbnailUrl?: string | null;
+  title?: string;
 }) {
   // Use generated thumbnail image if available
   if (thumbnailUrl) {
@@ -31,26 +33,54 @@ export function VideoTemplateThumbnail({
     );
   }
 
-  // Fallback: CSS-based template
+  // Branded fallback with avatar
   return (
     <div
-      className={`relative flex aspect-video items-center justify-center overflow-hidden ${className ?? ""}`}
+      className={`relative flex aspect-video items-end overflow-hidden ${className ?? ""}`}
       style={{
-        background: "linear-gradient(135deg, #0D1713 0%, #06110D 40%, #030806 100%)",
+        background: "linear-gradient(135deg, #080808 0%, #0a1a0f 50%, #080808 100%)",
       }}
     >
+      {/* Grid pattern */}
       <div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-20"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
+            "linear-gradient(rgba(11, 102, 35, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(11, 102, 35, 0.15) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
         }}
       />
-      <div className="relative text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{tag}</p>
-        <p className="mt-2 text-lg font-bold text-white/80">{formatUploadDate(date)}</p>
+
+      {/* Avatar in top-right corner */}
+      <div className="absolute right-3 top-3 h-12 w-12 overflow-hidden rounded-full border border-white/10">
+        <Image
+          alt="Armata de Traderi"
+          className="object-cover"
+          fill
+          sizes="48px"
+          src="/avatar-armata.jpg"
+        />
       </div>
+
+      {/* Green accent glow */}
+      <div
+        className="absolute bottom-0 left-0 h-1/2 w-full"
+        style={{
+          background: "linear-gradient(to top, rgba(11, 102, 35, 0.15), transparent)",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative w-full p-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-accent-emerald">{tag}</p>
+        {title && (
+          <p className="mt-1 line-clamp-2 text-sm font-bold leading-tight text-white">{title}</p>
+        )}
+        <p className="mt-1.5 text-[10px] text-slate-500">{formatUploadDate(date)}</p>
+      </div>
+
+      {/* Bottom accent line */}
+      <div className="absolute bottom-0 left-0 h-0.5 w-full bg-gradient-to-r from-transparent via-accent-emerald to-transparent opacity-50" />
     </div>
   );
 }
