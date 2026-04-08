@@ -362,37 +362,66 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </section>
             </>
           )}
-          <section className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]" id="setari">
-            <ConnectDiscordCard
-              discordAvatar={profile?.discord_avatar ?? null}
-              discordConnectedAt={profile?.discord_connected_at ?? null}
-              discordRoleLabel={desiredDiscordRole}
-              discordRoleSyncedAt={profile?.discord_role_synced_at ?? null}
-              discordUsername={profile?.discord_username ?? null}
-              isConnected={Boolean(profile?.discord_user_id)}
-              notice={
-                searchParams?.discord_error
-                  ? searchParams.discord_error
-                  : searchParams?.discord === "connected"
-                    ? `Discord a fost conectat și rolul ${searchParams.discord_role ?? desiredDiscordRole} a fost sincronizat.`
-                    : null
-              }
-              noticeTone={searchParams?.discord_error ? "error" : searchParams?.discord === "connected" ? "success" : null}
-            />
-            <section className="panel px-6 py-8 text-center md:px-8">
-              <h3 className="text-2xl font-bold text-white">Ai nevoie de ajutor? 💡</h3>
-              <p className="mx-auto mt-4 max-w-2xl text-slate-300">
-                Comunitatea noastră Discord este activă 24/7. Pune întrebări, schimbă idei și învață de la alți traderi.
-              </p>
-              <div className="mt-6 flex flex-col justify-center gap-4 sm:flex-row">
-                <a className="accent-button" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">
+          <section className="mt-12 glass-card p-6 md:p-8" id="setari">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              {/* Left: Discord status */}
+              <div className="flex items-center gap-4">
+                {profile?.discord_user_id ? (
+                  <>
+                    {profile.discord_avatar ? (
+                      <img
+                        alt={profile.discord_username ?? "Discord"}
+                        className="h-12 w-12 rounded-full border border-white/10"
+                        src={profile.discord_avatar}
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#5865F2] text-lg font-bold text-white">
+                        {(profile.discord_username ?? "D")[0].toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-semibold text-white">{profile.discord_username ?? "Discord conectat"}</p>
+                      <p className="text-xs text-slate-500">Rol: {desiredDiscordRole} - sincronizat</p>
+                    </div>
+                    <span className="ml-1 h-2.5 w-2.5 rounded-full bg-green-500" />
+                  </>
+                ) : (
+                  <>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#5865F2]/20 text-xl">
+                      💬
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">Conecteaza Discord</p>
+                      <p className="text-xs text-slate-400">Primesti rolul Elite automat</p>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Right: Actions */}
+              <div className="flex flex-wrap gap-3">
+                {!profile?.discord_user_id && (
+                  <a className="inline-flex items-center gap-2 rounded-xl bg-[#5865F2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4752C4]" href="/auth/discord/start">
+                    Conecteaza Discord
+                  </a>
+                )}
+                <a className="ghost-button text-sm" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">
                   Deschide Discord
                 </a>
-                <a className="ghost-button" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">
-                  Contactează Suportul
-                </a>
               </div>
-            </section>
+            </div>
+
+            {/* Notice */}
+            {searchParams?.discord === "connected" && (
+              <div className="mt-4 rounded-xl border border-green-500/20 bg-green-500/5 px-4 py-3 text-sm text-green-400">
+                Discord conectat si rolul {searchParams.discord_role ?? desiredDiscordRole} sincronizat.
+              </div>
+            )}
+            {searchParams?.discord_error && (
+              <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">
+                {searchParams.discord_error}
+              </div>
+            )}
           </section>
         </Container>
       </main>
