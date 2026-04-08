@@ -16,6 +16,7 @@ type NavbarProps = {
     displayName: string;
     initials: string;
   };
+  isAdmin?: boolean;
 };
 
 function Brand({ href }: { href: string }) {
@@ -30,7 +31,7 @@ function Brand({ href }: { href: string }) {
   );
 }
 
-export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) {
+export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false }: NavbarProps) {
   const requestHeaders = headers();
   const hostRole = getHostRole(requestHeaders.get("host") ?? "");
   let marketingAuthHref = "/login";
@@ -96,6 +97,28 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
               >
                 Prelungeste
               </Link>
+              {isAdmin && (
+                <>
+                  <Link
+                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
+                    href="/admin/invites"
+                  >
+                    ⚙️ Invites
+                  </Link>
+                  <Link
+                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
+                    href="/admin/videos"
+                  >
+                    ⚙️ Videos
+                  </Link>
+                  <Link
+                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
+                    href="/admin/payments"
+                  >
+                    ⚙️ Payments
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile hamburger + profile */}

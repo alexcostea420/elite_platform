@@ -95,7 +95,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     supabase
       .from("profiles")
       .select(
-        "full_name, subscription_tier, subscription_status, subscription_expires_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
+        "full_name, role, subscription_tier, subscription_status, subscription_expires_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
       )
       .eq("id", user.id)
       .maybeSingle(),
@@ -108,6 +108,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   ]);
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
+  const isAdmin = profile?.role === "admin";
   const isEliteUser = profile?.subscription_tier === "elite";
   const membershipLabel = getMembershipLabel(profile?.subscription_tier ?? null);
   const statusLabel = getStatusLabel(profile?.subscription_status ?? null);
@@ -132,6 +133,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     <>
       <Navbar
         mode="dashboard"
+        isAdmin={isAdmin}
         userIdentity={{
           displayName: identity.displayName,
           initials: identity.initials,
