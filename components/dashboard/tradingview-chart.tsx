@@ -20,7 +20,8 @@ export function TradingViewChart() {
     script.type = "text/javascript";
     script.async = true;
     script.innerHTML = JSON.stringify({
-      autosize: true,
+      width: "100%",
+      height: 550,
       symbol: "BINANCE:BTCUSDT",
       interval: "15",
       timezone: "Europe/Bucharest",
@@ -60,8 +61,8 @@ export function TradingViewChart() {
           {showZones ? "Zones ON" : "Zones OFF"}
         </button>
       </div>
-      <div className="tradingview-widget-container overflow-hidden rounded-2xl border border-white/10" ref={containerRef} style={{ height: "min(70vh, 650px)", minHeight: 400 }}>
-        <div className="tradingview-widget-container__widget" style={{ height: "100%", width: "100%" }} />
+      <div className="tradingview-widget-container overflow-hidden rounded-2xl border border-white/10" ref={containerRef} style={{ height: 550, width: "100%" }}>
+        <div className="tradingview-widget-container__widget" style={{ height: 550, width: "100%" }} />
       </div>
     </div>
   );
