@@ -124,11 +124,16 @@ export async function redeemInvite(token: string, userId: string) {
     .eq("id", userId)
     .maybeSingle();
 
-  const updateData: Record<string, string> = {
+  const updateData: Record<string, unknown> = {
     subscription_tier: "elite",
     subscription_status: "active",
     subscription_expires_at: expiresAt.toISOString(),
   };
+
+  // Set veteran flag if invite is marked as veteran
+  if (invite.is_veteran_invite) {
+    updateData.is_veteran = true;
+  }
 
   // Only set elite_since on first activation (never reset)
   // Longer plans bypass the 31-day time-gate
