@@ -51,7 +51,7 @@ export function NavDropdown({ label, items }: NavDropdownProps) {
         </svg>
       </button>
       {open && (
-        <div className="absolute left-0 top-[calc(100%+0.5rem)] z-50 min-w-[180px] rounded-xl border border-white/10 bg-surface-graphite/95 p-1.5 shadow-card backdrop-blur-sm">
+        <div className="absolute left-0 top-[calc(100%+0.5rem)] z-50 min-w-[180px] rounded-xl border border-white/10 bg-crypto-dark/95 p-1.5 shadow-card backdrop-blur-sm">
           {items.map((item) => (
             <Link
               key={item.href}

@@ -61,7 +61,7 @@ export function ProfileMenu({
       </button>
 
       {isOpen ? (
-        <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 min-w-[220px] rounded-2xl border border-white/10 bg-surface-graphite/95 p-2 shadow-card backdrop-blur-sm">
+        <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 min-w-[220px] rounded-2xl border border-white/10 bg-crypto-dark/95 p-2 shadow-card backdrop-blur-sm">
           <Link
             className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-accent-emerald"
             href={dashboardHref}

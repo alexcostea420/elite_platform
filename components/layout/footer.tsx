@@ -11,7 +11,7 @@ type FooterProps = {
 export function Footer({ compact = false }: FooterProps) {
   if (compact) {
     return (
-      <footer className="mt-12 border-t border-white/10 bg-surface-graphite py-8">
+      <footer className="mt-12 border-t border-white/5 bg-crypto-dark py-8">
         <Container className="text-center text-sm text-slate-400">
           <p className="mb-2">© 2026 {siteConfig.name} by {siteConfig.creator}</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -34,7 +34,7 @@ export function Footer({ compact = false }: FooterProps) {
   }
 
   return (
-    <footer className="border-t border-white/10 bg-surface-graphite px-4 py-12">
+    <footer className="border-t border-white/5 bg-crypto-dark px-4 py-12">
       <Container>
         <div className="mb-8 grid gap-8 md:grid-cols-4">
           <div className="md:col-span-2">

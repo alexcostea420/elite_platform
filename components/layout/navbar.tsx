@@ -62,7 +62,7 @@ export async function Navbar({ mode = "marketing", userIdentity }: NavbarProps) 
   return (
     <nav
       aria-label={mode === "marketing" ? "Navigare principala publica" : "Navigare principala cont"}
-      className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-surface-graphite/95 backdrop-blur-sm"
+      className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-crypto-dark/95 backdrop-blur-sm"
     >
       <Container className="flex items-center justify-between py-2.5 md:py-4">
         <Brand href={brandHref} />
