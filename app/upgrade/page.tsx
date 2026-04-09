@@ -55,17 +55,6 @@ const veteranPrices: Record<string, string> = {
   "12 Luni": "$300",
 };
 
-const lemonCheckoutUrls: Record<string, string> = {
-  "30 Zile": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/c5b11a0b-137c-4397-b1ae-d5cf7fd37ac3",
-  "3 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/4e16c5e6-29d1-47cd-9734-5ed140f95bb6",
-  "12 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/a10a9126-3bda-45a6-a90d-e6052ab2f741",
-};
-
-const lemonVeteranCheckoutUrls: Record<string, string> = {
-  "30 Zile": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/643b9e4b-1df5-48eb-b7ee-64b19281c5bd",
-  "3 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/a0270e09-0451-4176-9d2e-11698732c787",
-  "12 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/8dcdc931-67b4-4b58-b7bd-9dc2a3d662eb",
-};
 
 const binancePayUrls: Record<string, string> = {
   "30 Zile": "https://s.binance.com/ZJYlR2d9",

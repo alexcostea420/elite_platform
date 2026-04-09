@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { PlyrPlayer } from "@/components/ui/plyr-player";
 import { VideoTemplateThumbnail } from "@/components/ui/video-thumbnail";
 
 type VideoRow = {

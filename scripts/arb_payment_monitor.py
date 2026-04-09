@@ -29,9 +29,10 @@ TOKENS = {
 }
 
 # Arbiscan API (free, 5 calls/sec)
-ARBISCAN_API = "https://api.arbiscan.io/api"
+ARBISCAN_API = "https://api.etherscan.io/v2/api"
+ARBISCAN_CHAIN_ID = "42161"  # Arbitrum One
 CHECK_INTERVAL = 30
-AMOUNT_TOLERANCE = 0.05  # $0.05 tolerance
+AMOUNT_TOLERANCE = 0.20  # $0.20 tolerance (exchange fees)
 
 
 def load_env():
@@ -86,6 +87,7 @@ def get_token_transfers(wallet, token_contract, start_block=0, api_key=""):
             "page": 1,
             "offset": 50,
         }
+        params["chainid"] = ARBISCAN_CHAIN_ID
         if api_key:
             params["apikey"] = api_key
 
