@@ -253,16 +253,18 @@ export default async function UpgradePage() {
                     ))}
                   </ul>
                   <div className="mt-8 space-y-3">
-                    <a
-                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
-                      href={`${isVeteran && lemonVeteranCheckoutUrls[plan.name] ? lemonVeteranCheckoutUrls[plan.name] : lemonCheckoutUrls[plan.name]}${isLoggedIn ? "?checkout[email]=" + encodeURIComponent("") : ""}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      💳 Plateste cu cardul
-                    </a>
+                    {plan.name === "30 Zile" && (
+                      <a
+                        className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                        href="https://www.patreon.com/c/armatadetraderi"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        💳 Plateste cu cardul (lunar)
+                      </a>
+                    )}
                     <Link
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-3 font-bold text-slate-300 hover:bg-white/10"
+                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.name !== "30 Zile" && plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}
                       href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
                     >
                       Plateste cu crypto (USDT)
@@ -275,6 +277,9 @@ export default async function UpgradePage() {
                     >
                       Plateste cu Binance
                     </a>
+                    {plan.name === "30 Zile" && (
+                      <p className="text-center text-xs text-slate-600">Plata cu cardul este procesata prin Patreon</p>
+                    )}
                   </div>
                 </article>
               ))}
