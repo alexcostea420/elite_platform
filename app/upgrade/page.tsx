@@ -256,7 +256,7 @@ export default async function UpgradePage() {
                     {plan.name === "30 Zile" && !isVeteran && (
                       <a
                         className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
-                        href="https://www.patreon.com/c/armatadetraderi"
+                        href="https://www.patreon.com/cw/armatadetraderi"
                         target="_blank"
                         rel="noreferrer"
                       >
