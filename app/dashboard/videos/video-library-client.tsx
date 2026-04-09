@@ -267,6 +267,7 @@ export function VideoLibraryClient({
                     date={video.upload_date}
                     tag={video.category}
                     thumbnailUrl={video.thumbnail_url}
+                    youtubeId={video.youtube_id}
                     title={video.title}
                   />
                   {/* NOU badge */}

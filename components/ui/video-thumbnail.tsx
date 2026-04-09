@@ -10,16 +10,21 @@ export function VideoTemplateThumbnail({
   date,
   className,
   thumbnailUrl,
+  youtubeId,
   title,
 }: {
   tag: string;
   date: string;
   className?: string;
   thumbnailUrl?: string | null;
+  youtubeId?: string;
   title?: string;
 }) {
-  // Use generated thumbnail image if available
-  if (thumbnailUrl) {
+  // Use YouTube maxresdefault if we have a youtube ID
+  const resolvedThumb = thumbnailUrl
+    ?? (youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null);
+
+  if (resolvedThumb) {
     return (
       <div className={`relative aspect-video overflow-hidden ${className ?? ""}`}>
         <Image
@@ -27,7 +32,8 @@ export function VideoTemplateThumbnail({
           className="object-cover"
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          src={thumbnailUrl}
+          src={resolvedThumb}
+          unoptimized
         />
       </div>
     );
