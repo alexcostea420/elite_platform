@@ -52,7 +52,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
       .maybeSingle(),
     supabase
       .from("videos")
-      .select("id, youtube_id, title, description, summary, tags, category, tier_required, duration_seconds, thumbnail_url, upload_date")
+      .select("id, youtube_id, title, description, summary, tags, category, tier_required, duration_seconds, thumbnail_url, upload_date, r2_url")
       .eq("is_published", true)
       .order("upload_date", { ascending: false }),
   ]);

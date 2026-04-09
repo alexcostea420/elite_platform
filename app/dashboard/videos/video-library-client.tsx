@@ -17,6 +17,7 @@ type VideoRow = {
   duration_seconds: number | null;
   thumbnail_url: string | null;
   upload_date: string;
+  r2_url: string | null;
 };
 
 function formatDuration(seconds: number): string {
@@ -79,16 +80,29 @@ export function VideoLibraryClient({
       {selectedVideo && (
         <section className="glass-card mb-10 overflow-hidden p-4 md:p-6">
           <div className="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-crypto-ink">
-            <iframe
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="h-full w-full"
-              referrerPolicy="strict-origin-when-cross-origin"
-              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?rel=0&fs=1`}
-              title={selectedVideo.title}
-            />
+            {selectedVideo.r2_url ? (
+              <video
+                controls
+                className="h-full w-full"
+                playsInline
+                preload="metadata"
+                src={selectedVideo.r2_url}
+              >
+                Browserul tau nu suporta redarea video.
+              </video>
+            ) : (
+              <iframe
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="h-full w-full"
+                referrerPolicy="strict-origin-when-cross-origin"
+                src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?rel=0&fs=1`}
+                title={selectedVideo.title}
+              />
+            )}
           </div>
           <div className="mt-3">
+            {!selectedVideo.r2_url && (
             <a
               href={`https://www.youtube.com/watch?v=${selectedVideo.youtube_id}`}
               target="_blank"
@@ -97,6 +111,7 @@ export function VideoLibraryClient({
             >
               Nu merge? Deschide pe YouTube ↗
             </a>
+            )}
           </div>
           <div className="mt-5 space-y-3">
             <h2 className="text-2xl font-bold text-white">{selectedVideo.title}</h2>
