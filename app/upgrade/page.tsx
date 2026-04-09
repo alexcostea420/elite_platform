@@ -55,6 +55,18 @@ const veteranPrices: Record<string, string> = {
   "12 Luni": "$300",
 };
 
+const lemonCheckoutUrls: Record<string, string> = {
+  "30 Zile": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/c5b11a0b-137c-4397-b1ae-d5cf7fd37ac3",
+  "3 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/4e16c5e6-29d1-47cd-9734-5ed140f95bb6",
+  "12 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/a10a9126-3bda-45a6-a90d-e6052ab2f741",
+};
+
+const lemonVeteranCheckoutUrls: Record<string, string> = {
+  "30 Zile": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/643b9e4b-1df5-48eb-b7ee-64b19281c5bd",
+  "3 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/a0270e09-0451-4176-9d2e-11698732c787",
+  "12 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/8dcdc931-67b4-4b58-b7bd-9dc2a3d662eb",
+};
+
 export default async function UpgradePage() {
   const offerSchema = getUpgradeOfferSchema();
 
@@ -228,13 +240,22 @@ export default async function UpgradePage() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    className={`mt-8 inline-flex w-full items-center justify-center rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
-                    href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
-                  >
-                    {plan.cta}
-                  </Link>
-                  <div className="mt-3 text-center text-sm text-slate-500">USDT / USDC pe Arbitrum</div>
+                  <div className="mt-8 space-y-3">
+                    <a
+                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                      href={`${isVeteran && lemonVeteranCheckoutUrls[plan.name] ? lemonVeteranCheckoutUrls[plan.name] : lemonCheckoutUrls[plan.name]}${isLoggedIn ? "?checkout[email]=" + encodeURIComponent("") : ""}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      💳 Plateste cu cardul
+                    </a>
+                    <Link
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-3 font-bold text-slate-300 hover:bg-white/10"
+                      href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
+                    >
+                      Plateste cu crypto (USDT)
+                    </Link>
+                  </div>
                 </article>
               ))}
             </div>
