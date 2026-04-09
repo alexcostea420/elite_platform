@@ -253,9 +253,9 @@ export default async function UpgradePage() {
                     ))}
                   </ul>
                   <div className="mt-8 space-y-3">
-                    {plan.name === "30 Zile" && (
+                    {plan.name === "30 Zile" && !isVeteran && (
                       <a
-                        className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "bg-slate-700 text-white hover:bg-slate-600"}`}
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
                         href="https://www.patreon.com/c/armatadetraderi"
                         target="_blank"
                         rel="noreferrer"
@@ -264,10 +264,10 @@ export default async function UpgradePage() {
                       </a>
                     )}
                     <Link
-                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.name !== "30 Zile" && plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}
+                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}
                       href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
                     >
-                      Plateste cu crypto (USDT)
+                      Plateste cu crypto (USDT/USDC)
                     </Link>
                     <a
                       className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-yellow-500/20 bg-yellow-500/5 py-3 font-bold text-yellow-400 hover:bg-yellow-500/10"
@@ -277,7 +277,7 @@ export default async function UpgradePage() {
                     >
                       Plateste cu Binance
                     </a>
-                    {plan.name === "30 Zile" && (
+                    {plan.name === "30 Zile" && !isVeteran && (
                       <p className="text-center text-xs text-slate-600">Plata cu cardul este procesata prin Patreon</p>
                     )}
                   </div>
