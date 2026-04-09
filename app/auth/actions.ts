@@ -149,12 +149,28 @@ export async function signupWithInviteAction(formData: FormData) {
   if (data.user) {
     await upsertProfile(data.user.id, fullName, discordUsername);
 
+    // Small delay to ensure profile is created before redeeming
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     // Redeem invite - activate Elite subscription
     const redeemResult = await redeemInvite(inviteToken, data.user.id);
 
     if (redeemResult.error) {
       // Account created but invite failed - they can try redeem later
       redirect(`/dashboard?invite_error=${encodeURIComponent(redeemResult.error)}`);
+    }
+
+    // Verify subscription was set correctly (guard against race conditions)
+    const serviceSupabase = createServiceRoleSupabaseClient();
+    const { data: verifyProfile } = await serviceSupabase
+      .from("profiles")
+      .select("subscription_tier")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (verifyProfile?.subscription_tier !== "elite" && !redeemResult.error) {
+      // Race condition detected - force re-apply
+      await redeemInvite(inviteToken, data.user.id);
     }
   }
 
