@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
+import { PlyrPlayer } from "@/components/ui/plyr-player";
 import { VideoTemplateThumbnail } from "@/components/ui/video-thumbnail";
 
 type VideoRow = {
@@ -77,27 +78,16 @@ export function VideoLibraryClient({
       {/* VIDEO PLAYER */}
       {selectedVideo && (
         <section className="glass-card mb-10 overflow-hidden p-4 md:p-6">
-          <div className="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-crypto-ink">
-            <iframe
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="h-full w-full"
-              referrerPolicy="strict-origin-when-cross-origin"
-              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?modestbranding=1&rel=0&showinfo=0&vq=hd1080&fs=1`}
-              title={selectedVideo.title}
-            />
-          </div>
-          <div className="mt-3 flex items-center gap-3">
+          <PlyrPlayer youtubeId={selectedVideo.youtube_id} title={selectedVideo.title} />
+          <div className="mt-3">
             <a
               href={`https://www.youtube.com/watch?v=${selectedVideo.youtube_id}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-white/10"
+              className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-300"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-              Deschide pe YouTube
+              Deschide pe YouTube ↗
             </a>
-            <span className="text-xs text-slate-600">Nu se incarca? Deschide direct pe YouTube</span>
           </div>
           <div className="mt-5 space-y-3">
             <h2 className="text-2xl font-bold text-white">{selectedVideo.title}</h2>

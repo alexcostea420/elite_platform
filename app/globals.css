@@ -87,4 +87,23 @@ button {
       linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     background-size: 42px 42px;
   }
+
+  /* Plyr player - dark theme */
+  .plyr-container {
+    --plyr-color-main: #0B6623;
+    --plyr-video-background: #080808;
+    --plyr-menu-background: #111916;
+    --plyr-menu-color: #e2e8f0;
+    --plyr-badge-background: #0B6623;
+    --plyr-badge-text-color: #080808;
+    --plyr-control-icon-size: 18px;
+    --plyr-range-thumb-background: #0B6623;
+    --plyr-range-fill-background: #0B6623;
+    --plyr-tooltip-background: #111916;
+    --plyr-tooltip-color: #e2e8f0;
+  }
+
+  .plyr-container .plyr {
+    border-radius: 16px;
+  }
 }
