@@ -131,6 +131,40 @@ export function VideoLibraryClient({
         </section>
       )}
 
+      {/* FEATURED LATEST VIDEO */}
+      {!selectedVideo && videos.length > 0 && (
+        <Link
+          href={`/dashboard/videos?video=${videos[0].id}`}
+          className="glass-card group mb-8 block overflow-hidden transition-all hover:border-accent-emerald"
+        >
+          <div className="flex flex-col md:flex-row">
+            <div className="relative aspect-video md:w-1/2">
+              <VideoTemplateThumbnail
+                date={videos[0].upload_date}
+                tag={videos[0].category}
+                thumbnailUrl={videos[0].thumbnail_url}
+                youtubeId={videos[0].youtube_id}
+                title={videos[0].title}
+              />
+              <div className="absolute left-3 top-3 rounded-md bg-accent-emerald px-3 py-1 text-xs font-bold uppercase tracking-wider text-crypto-dark">
+                Ultimul Video
+              </div>
+            </div>
+            <div className="flex flex-col justify-center p-5 md:w-1/2 md:p-8">
+              <h2 className="text-xl font-bold text-white md:text-2xl">{videos[0].title}</h2>
+              {videos[0].summary && (
+                <p className="mt-3 line-clamp-3 text-sm text-slate-400">{videos[0].summary}</p>
+              )}
+              <div className="mt-4">
+                <span className="inline-flex items-center gap-2 rounded-xl bg-accent-emerald/10 px-4 py-2 text-sm font-semibold text-accent-emerald group-hover:bg-accent-emerald/20">
+                  Vizionează acum →
+                </span>
+              </div>
+            </div>
+          </div>
+        </Link>
+      )}
+
       {/* SEARCH + FILTER BAR */}
       <section className="glass-card mb-8 p-4 md:p-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
