@@ -83,7 +83,7 @@ export function VideoLibraryClient({
               allowFullScreen
               className="h-full w-full"
               referrerPolicy="strict-origin-when-cross-origin"
-              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?modestbranding=1&rel=0&showinfo=0`}
+              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?modestbranding=1&rel=0&showinfo=0&vq=hd1080&fs=1`}
               title={selectedVideo.title}
             />
           </div>
