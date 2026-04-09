@@ -101,6 +101,12 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
                 <>
                   <Link
                     className="text-sm font-medium text-amber-400 hover:text-amber-300"
+                    href="/admin/dashboard"
+                  >
+                    ⚙️ Admin
+                  </Link>
+                  <Link
+                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
                     href="/admin/invites"
                   >
                     ⚙️ Invites

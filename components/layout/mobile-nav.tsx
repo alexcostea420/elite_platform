@@ -29,8 +29,19 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
   useEffect(() => {
     const navbar = document.querySelector("nav");
     if (navbar) {
-      setNavbarHeight(navbar.getBoundingClientRect().height);
+      const h = navbar.getBoundingClientRect().height;
+      if (h > 0) setNavbarHeight(h);
     }
+    // Also re-measure on resize
+    const handleResize = () => {
+      const nav = document.querySelector("nav");
+      if (nav) {
+        const h = nav.getBoundingClientRect().height;
+        if (h > 0) setNavbarHeight(h);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Prevent body scroll when open
@@ -75,8 +86,8 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
           />
           {/* Menu */}
           <div
-            className="fixed inset-x-0 bottom-0 z-[55] overflow-y-auto bg-crypto-dark"
-            style={{ top: navbarHeight }}
+            className="fixed inset-x-0 bottom-0 z-[55] overflow-y-auto"
+            style={{ top: navbarHeight, backgroundColor: '#080808' }}
           >
             <div className="mx-auto max-w-md space-y-1 p-4 pb-20">
               {/* Standalone items first */}
