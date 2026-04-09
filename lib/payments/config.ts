@@ -75,7 +75,7 @@ export const planDurations: Record<PlanDuration, { days: number; label: string }
 /**
  * Generate a unique reference amount by adding a single decimal (0.1 - 0.9)
  * derived from a hash of the payment ID. Simple and easy to send.
- * 9 unique values per plan — enough for small community.
+ * 99 unique values per plan — two decimal places for better collision avoidance.
  */
 export function generateReferenceAmount(
   basePrice: number,
@@ -89,7 +89,7 @@ export function generateReferenceAmount(
     hash = (hash << 5) - hash + char;
     hash = hash & hash;
   }
-  // Generate single decimal between 0.1 and 0.9
-  const uniqueTenth = (Math.abs(hash) % 9) + 1;
-  return Number((basePrice + uniqueTenth / 10).toFixed(1));
+  // Generate two decimal places between 0.01 and 0.99
+  const uniqueCents = (Math.abs(hash) % 99) + 1;
+  return Number((basePrice + uniqueCents / 100).toFixed(2));
 }

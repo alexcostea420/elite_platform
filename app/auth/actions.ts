@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { redeemInvite, validateInviteToken } from "@/lib/invites/server";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
+import { checkRateLimit } from "@/lib/utils/rate-limit";
 
 function getTrimmedValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -29,9 +30,14 @@ export async function loginAction(formData: FormData) {
   const email = getTrimmedValue(formData, "email");
   const password = getTrimmedValue(formData, "password");
   const rawNextPath = getTrimmedValue(formData, "next") || "/dashboard";
-  // Validate redirect path: must be a safe relative path (no protocol-relative //evil.com)
   const isSafePath = /^\/[a-zA-Z0-9\-_\/?.&=%]*$/.test(rawNextPath);
   const nextPath = isSafePath ? rawNextPath : "/dashboard";
+
+  // Rate limit: 10 login attempts per minute per email
+  const { allowed } = checkRateLimit(`login:${email}`, 10, 60_000);
+  if (!allowed) {
+    redirect(`/login?error=${encodeURIComponent("Prea multe încercări. Așteaptă un minut.")}&next=${encodeURIComponent(nextPath)}`);
+  }
 
   if (!email || !password) {
     redirect(`/login?error=${encodeURIComponent("Completează email-ul și parola.")}&next=${encodeURIComponent(nextPath)}`);
@@ -61,6 +67,12 @@ export async function signupAction(formData: FormData) {
   const discordUsername = getTrimmedValue(formData, "discord_username");
   const email = getTrimmedValue(formData, "email");
   const password = getTrimmedValue(formData, "password");
+
+  // Rate limit: 3 signups per hour per email
+  const { allowed } = checkRateLimit(`signup:${email}`, 3, 3_600_000);
+  if (!allowed) {
+    redirect(`/signup?error=${encodeURIComponent("Prea multe încercări. Așteaptă o oră.")}`);
+  }
 
   if (!fullName || !discordUsername || !email || !password) {
     redirect(`/signup?error=${encodeURIComponent("Completează toate câmpurile obligatorii.")}`);
