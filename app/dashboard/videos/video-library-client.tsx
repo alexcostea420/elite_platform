@@ -78,7 +78,16 @@ export function VideoLibraryClient({
       {/* VIDEO PLAYER */}
       {selectedVideo && (
         <section className="glass-card mb-10 overflow-hidden p-4 md:p-6">
-          <PlyrPlayer youtubeId={selectedVideo.youtube_id} title={selectedVideo.title} />
+          <div className="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-crypto-ink">
+            <iframe
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="h-full w-full"
+              referrerPolicy="strict-origin-when-cross-origin"
+              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtube_id}?rel=0&fs=1`}
+              title={selectedVideo.title}
+            />
+          </div>
           <div className="mt-3">
             <a
               href={`https://www.youtube.com/watch?v=${selectedVideo.youtube_id}`}
@@ -86,7 +95,7 @@ export function VideoLibraryClient({
               rel="noreferrer"
               className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-300"
             >
-              Deschide pe YouTube ↗
+              Nu merge? Deschide pe YouTube ↗
             </a>
           </div>
           <div className="mt-5 space-y-3">
