@@ -67,6 +67,18 @@ const lemonVeteranCheckoutUrls: Record<string, string> = {
   "12 Luni": "https://armatadetraderi.lemonsqueezy.com/checkout/buy/8dcdc931-67b4-4b58-b7bd-9dc2a3d662eb",
 };
 
+const binancePayUrls: Record<string, string> = {
+  "30 Zile": "https://s.binance.com/ZJYlR2d9",
+  "3 Luni": "https://s.binance.com/6ArLRVaz",
+  "12 Luni": "https://s.binance.com/h0SDNHLp",
+};
+
+const binanceVeteranPayUrls: Record<string, string> = {
+  "30 Zile": "https://s.binance.com/85wDO6eU",
+  "3 Luni": "https://s.binance.com/MLpqdcAB",
+  "12 Luni": "https://s.binance.com/DCSyNtVA",
+};
+
 export default async function UpgradePage() {
   const offerSchema = getUpgradeOfferSchema();
 
@@ -255,6 +267,14 @@ export default async function UpgradePage() {
                     >
                       Plateste cu crypto (USDT)
                     </Link>
+                    <a
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-yellow-500/20 bg-yellow-500/5 py-3 font-bold text-yellow-400 hover:bg-yellow-500/10"
+                      href={isVeteran && binanceVeteranPayUrls[plan.name] ? binanceVeteranPayUrls[plan.name] : binancePayUrls[plan.name]}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Plateste cu Binance
+                    </a>
                   </div>
                 </article>
               ))}
