@@ -154,11 +154,11 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
               <div className="hidden sm:block">
                 <MarketingDiscordButton href={siteConfig.discordUrl} />
               </div>
-              <Link className="ghost-button flex min-h-[44px] items-center justify-center px-4 py-2.5 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingAuthHref}>
-                Intra in cont
+              <Link className="ghost-button flex min-h-[36px] items-center justify-center whitespace-nowrap px-3 py-1.5 text-[11px] md:min-h-[44px] md:px-5 md:py-3 md:text-sm" href={marketingAuthHref}>
+                Cont
               </Link>
-              <Link className="accent-button flex min-h-[44px] items-center justify-center px-4 py-2.5 text-center text-xs md:px-5 md:py-3 md:text-sm" href={marketingPrimaryHref}>
-                Alatura-te
+              <Link className="accent-button flex min-h-[36px] items-center justify-center whitespace-nowrap px-3 py-1.5 text-[11px] md:min-h-[44px] md:px-5 md:py-3 md:text-sm" href={marketingPrimaryHref}>
+                Intra
               </Link>
             </div>
           </>
