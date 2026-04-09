@@ -204,6 +204,13 @@ export async function confirmPayment(
     return { success: false, error: "Payment not found or already processed." };
   }
 
+  // Validate amount matches expected (tolerance $0.20)
+  const tolerance = 0.2;
+  if (Math.abs(amountReceived - payment.reference_amount) > tolerance) {
+    console.error(`Payment amount mismatch: expected ${payment.reference_amount}, received ${amountReceived}`);
+    return { success: false, error: "Amount mismatch." };
+  }
+
   const planConfig = planDurations[payment.plan_duration as PlanDuration];
   if (!planConfig) {
     return { success: false, error: "Invalid plan duration." };

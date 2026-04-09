@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Find user by email
-      const { data: users } = await supabase.auth.admin.listUsers();
+      const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
       const user = users?.users?.find((u) => u.email === email);
 
       if (!user) {
@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
 
     if (eventName === "subscription_payment_success") {
       // Recurring payment - extend subscription by 30 days
-      const { data: users } = await supabase.auth.admin.listUsers();
+      const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
       const user = users?.users?.find((u) => u.email === email);
 
       if (user) {
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
 
     if (eventName === "order_refunded") {
       // Downgrade user
-      const { data: users } = await supabase.auth.admin.listUsers();
+      const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
       const user = users?.users?.find((u) => u.email === email);
 
       if (user) {

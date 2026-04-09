@@ -1,21 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
+import { generateUnsubToken } from "@/lib/utils/unsubscribe";
 
 export async function GET(request: NextRequest) {
   const email = request.nextUrl.searchParams.get("email");
+  const token = request.nextUrl.searchParams.get("token");
 
-  if (!email) {
-    return new NextResponse(html("Link invalid", "Emailul nu a fost gasit in link."), {
+  if (!email || !token) {
+    return new NextResponse(html("Link invalid", "Link-ul de dezabonare nu este valid."), {
       status: 400,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
+  }
+
+  // Verify signed token
+  const expectedToken = generateUnsubToken(email);
+  if (token !== expectedToken) {
+    return new NextResponse(html("Link invalid", "Link-ul de dezabonare nu este valid sau a expirat."), {
+      status: 403,
       headers: { "Content-Type": "text/html; charset=utf-8" },
     });
   }
 
   const supabase = createServiceRoleSupabaseClient();
 
-  // Find user by email
-  const { data: users } = await supabase.auth.admin.listUsers();
+  // Find user by email via profiles join
+  const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
   const user = users?.users?.find((u) => u.email === email);
 
   if (user) {
@@ -25,7 +36,7 @@ export async function GET(request: NextRequest) {
       .eq("id", user.id);
   }
 
-  // Also cancel all pending emails for this address
+  // Cancel all pending emails
   await supabase
     .from("email_drip_queue")
     .update({ status: "cancelled" })
@@ -35,7 +46,7 @@ export async function GET(request: NextRequest) {
   return new NextResponse(
     html(
       "Te-ai dezabonat cu succes",
-      "Nu vei mai primi emailuri automate de la Armata de Traderi.<br><br>Daca te-ai dezabonat din greseala, scrie-i lui Alex pe Discord.",
+      "Nu vei mai primi emailuri automate de la Armata de Traderi.<br>Daca te-ai dezabonat din greseala, scrie-i lui Alex pe Discord.",
     ),
     { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } },
   );
