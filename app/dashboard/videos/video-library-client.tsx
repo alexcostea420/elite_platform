@@ -83,7 +83,9 @@ export function VideoLibraryClient({
             {selectedVideo.r2_url ? (
               <video
                 controls
+                controlsList="nodownload"
                 className="h-full w-full"
+                onContextMenu={(e) => e.preventDefault()}
                 playsInline
                 preload="metadata"
                 src={selectedVideo.r2_url}
