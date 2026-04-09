@@ -11,14 +11,14 @@ export function LeadMagnetSection() {
         <div className="mx-auto max-w-3xl rounded-3xl border border-accent-emerald/20 bg-surface-graphite/80 p-8 text-center backdrop-blur-sm md:p-12">
           <div className="mb-4 text-4xl">🪖</div>
           <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-            3 zile gratuit
+            7 zile gratuit
           </p>
           <h2 className="text-2xl font-bold text-white md:text-3xl">
             Testeaza totul. Fara card. Fara obligatii.
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-slate-400">
             Acces complet la Discord Elite, video-uri, indicatori, analize si portofoliul live.
-            Dupa 3 zile decizi daca merita.
+            Dupa 7 zile decizi daca merita.
           </p>
 
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 sm:flex-row sm:justify-center">

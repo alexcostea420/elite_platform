@@ -56,7 +56,7 @@ export function TrialPopup() {
 
         <div className="mb-3 text-4xl">🪖</div>
         <h3 className="text-xl font-bold text-white">
-          3 zile gratuit. Zero risc.
+          7 zile gratuit. Zero risc.
         </h3>
         <p className="mx-auto mt-3 max-w-sm text-sm text-slate-400">
           Acces complet la Discord Elite, video-uri, indicatori si portofoliul live.

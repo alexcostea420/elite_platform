@@ -51,7 +51,7 @@ export function HeroSection() {
                   <br className="hidden sm:block" />
                   Portofoliu live, indicatori exclusivi, sesiuni de ajustare saptamanale.
                   <br className="hidden sm:block" />
-                  Incepe gratuit - 3 zile acces complet.
+                  Incepe gratuit - 7 zile acces complet.
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

@@ -60,9 +60,9 @@ export async function POST() {
       }
     }
 
-    // Activate 3-day trial with trial_used_at timestamp
+    // Activate 7-day trial with trial_used_at timestamp
     const now = new Date();
-    const trialExpires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+    const trialExpires = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     await serviceSupabase.from("profiles").update({
       subscription_tier: "elite",
       subscription_status: "trial",

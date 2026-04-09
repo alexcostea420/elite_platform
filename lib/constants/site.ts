@@ -121,12 +121,12 @@ export const pricingPlans: PricingPlan[] = [
     name: "Încearcă Gratis!",
     price: "$0",
     period: "",
-    details: "3 zile acces complet",
+    details: "7 zile acces complet",
     cta: "Începe Acum - Gratis",
     highlighted: false,
     badge: "🎁 GRATIS",
     perks: [
-      "Acces complet 3 zile",
+      "Acces complet 7 zile",
       "Portofoliu Elite live",
       "Chat cu Alex și membrii Elite",
       "Canale Discord Elite",
@@ -234,11 +234,11 @@ export const faqs = [
   },
   {
     question: "Există trial gratuit?",
-    answer: "Da! La signup primești automat 3 zile de acces complet gratuit. Fără card, fără obligații. După 3 zile, poți alege un plan sau contul revine la Free."
+    answer: "Da! La signup primești automat 7 zile de acces complet gratuit. Fără card, fără obligații. După 7 zile, poți alege un plan sau contul revine la Free."
   },
   {
     question: "Ce se întâmplă dacă nu sunt mulțumit?",
-    answer: "Ai 3 zile gratuit să testezi totul. Dacă nu ești convins, nu plătești nimic. Nu există contracte sau obligații pe termen lung."
+    answer: "Ai 7 zile gratuit să testezi totul. Dacă nu ești convins, nu plătești nimic. Nu există contracte sau obligații pe termen lung."
   }
 ];
 

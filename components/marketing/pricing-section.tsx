@@ -13,14 +13,14 @@ export function PricingSection() {
           <div className="rounded-[1.75rem] border border-accent-emerald/20 bg-surface-graphite/80 p-8 text-center backdrop-blur-sm md:p-10">
             <div className="mb-3 text-3xl">🪖</div>
             <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-              3 zile gratuit
+              7 zile gratuit
             </p>
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
               Testeaza totul. Fara card. Fara obligatii.
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-slate-400">
               Acces complet la Discord Elite, video-uri, indicatori, analize si portofoliul live.
-              Dupa 3 zile decizi daca merita.
+              Dupa 7 zile decizi daca merita.
             </p>
             <Link
               className="accent-button mt-6 inline-block rounded-xl px-8 py-4 text-base font-semibold"
@@ -70,7 +70,7 @@ export function PricingSection() {
             <span className="text-2xl">🛡️</span>
             <div className="text-left">
               <p className="text-sm font-semibold text-white">Satisfacție Garantată</p>
-              <p className="text-xs text-slate-400">Încearcă 3 zile gratuit. Dacă nu ești mulțumit, nu plătești nimic.</p>
+              <p className="text-xs text-slate-400">Încearcă 7 zile gratuit. Dacă nu ești mulțumit, nu plătești nimic.</p>
             </div>
           </div>
         </div>
