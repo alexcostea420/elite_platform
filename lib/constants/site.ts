@@ -156,6 +156,7 @@ export const pricingPlans: PricingPlan[] = [
     cta: "Vreau să intru în grup",
     highlighted: true,
     badge: "CEL MAI POPULAR",
+    savings: "Economisești 7% față de plata lunară",
     perks: [
       "Acces Discord Elite",
       "Indicator ELITE TradingView",
@@ -172,6 +173,7 @@ export const pricingPlans: PricingPlan[] = [
     details: "",
     cta: "Vreau să intru în grup",
     highlighted: false,
+    savings: "Economisești 15% față de plata lunară",
     perks: [
       "Acces Discord Elite",
       "Indicator ELITE TradingView",
