@@ -43,6 +43,7 @@ export function VideoLibraryClient({
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [showNewOnly, setShowNewOnly] = useState(false);
+  const [showOldVideos, setShowOldVideos] = useState(false);
 
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -261,11 +262,63 @@ export function VideoLibraryClient({
         )}
       </section>
 
-      {/* GRID */}
-      {filtered.length > 0 ? (
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((video) => {
-            const locked = !canAccess(video.tier_required);
+      {/* GRID - R2 videos (main) + YouTube videos (collapsed) */}
+      {(() => {
+        const r2Videos = filtered.filter(v => v.r2_url);
+        const ytVideos = filtered.filter(v => !v.r2_url);
+        return (
+          <>
+          {r2Videos.length > 0 && (
+            <div className="mb-8 grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+              {r2Videos.map((video) => {
+                const locked = !canAccess(video.tier_required);
+                const isSelected = video.id === selectedVideoId;
+                const videoIsNew = isNew(video.upload_date);
+                return locked ? (
+                  <div key={video.id} className="glass-card overflow-hidden opacity-60">
+                    <div className="relative overflow-hidden">
+                      <VideoTemplateThumbnail className="opacity-40" date={video.upload_date} tag={video.category} thumbnailUrl={video.thumbnail_url} youtubeId={video.youtube_id} title={video.title} />
+                      <div className="absolute inset-0 flex items-center justify-center bg-crypto-ink/60">
+                        <div className="text-center">
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-emerald">Elite</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-5"><h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3></div>
+                  </div>
+                ) : (
+                  <Link key={video.id} href={`/dashboard/videos?video=${video.id}`} className={`glass-card group overflow-hidden transition-all ${isSelected ? "border-accent-emerald shadow-glow" : ""}`}>
+                    <div className="relative overflow-hidden">
+                      <VideoTemplateThumbnail date={video.upload_date} tag={video.category} thumbnailUrl={video.thumbnail_url} youtubeId={video.youtube_id} title={video.title} />
+                      {videoIsNew && <div className="absolute right-3 top-3 rounded-md bg-accent-emerald px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-crypto-dark">NOU</div>}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3>
+                      {video.summary && <p className="mt-2 line-clamp-2 text-sm text-slate-400">{video.summary.split("\n")[0]}</p>}
+                      {video.tags && video.tags.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-1.5">{video.tags.map(tag => <span key={tag} className="rounded-full border border-accent-emerald/20 bg-accent-emerald/10 px-2.5 py-0.5 text-xs text-accent-emerald">{tag}</span>)}</div>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* YouTube videos - collapsed */}
+          {ytVideos.length > 0 && (
+            <div className="mt-4">
+              <button
+                onClick={() => setShowOldVideos(!showOldVideos)}
+                className="mb-4 flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-left transition hover:bg-white/10"
+              >
+                <span className="text-sm font-semibold text-slate-300">Video-uri mai vechi ({ytVideos.length})</span>
+                <svg className={`h-5 w-5 text-slate-500 transition-transform ${showOldVideos ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              {showOldVideos && (
+                <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+                  {ytVideos.map((video) => {
+                    const locked = !canAccess(video.tier_required);
             const isSelected = video.id === selectedVideoId;
             const videoIsNew = isNew(video.upload_date);
 
@@ -373,15 +426,22 @@ export function VideoLibraryClient({
               </Link>
             );
           })}
-        </div>
-      ) : (
-        <div className="glass-card p-10 text-center">
-          <p className="text-lg font-semibold text-white">Niciun rezultat gasit</p>
-          <p className="mt-2 text-sm text-slate-400">
-            Incearca alte cuvinte cheie sau reseteaza filtrele.
-          </p>
-        </div>
-      )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {r2Videos.length === 0 && ytVideos.length === 0 && (
+            <div className="glass-card p-10 text-center">
+              <p className="text-lg font-semibold text-white">Niciun rezultat găsit</p>
+              <p className="mt-2 text-sm text-slate-400">
+                Încearcă alte cuvinte cheie sau resetează filtrele.
+              </p>
+            </div>
+          )}
+          </>
+        );
+      })()}
     </>
   );
 }

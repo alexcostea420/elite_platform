@@ -45,16 +45,16 @@ export function HeroSection() {
               </div>
               <div className="space-y-6">
                 <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl animate-scale-in">
-                  Investeste si tranzactioneaza
+                  Investește și tranzacționează
                   <br />
                   <span className="gradient-text">cu un plan clar</span>
                 </h1>
                 <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl md:text-2xl">
-                  Comunitate de investitori si traderi cu rezultate reale.
+                  Comunitate de investitori și traderi cu rezultate reale.
                   <br className="hidden sm:block" />
-                  Portofoliu live, indicatori exclusivi, sesiuni de ajustare saptamanale.
+                  Portofoliu live, indicatori exclusivi, sesiuni de ajustare săptămânale.
                   <br className="hidden sm:block" />
-                  Incepe gratuit - 7 zile acces complet.
+                  Începe gratuit - 7 zile acces complet.
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
