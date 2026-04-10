@@ -30,7 +30,36 @@ export default async function BotSubscribePage() {
     redirect("/login?next=/bots/subscribe");
   }
 
-  // Check if user already has active bot subscription
+  // Only allow users with existing bot subscription to access this page
+  // Everyone else sees Coming Soon
+  const { data: adminCheck } = await supabase
+    .from("profiles")
+    .select("role, bot_active")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!adminCheck?.bot_active && adminCheck?.role !== "admin") {
+    const identity = getDisplayIdentity(null, user.email);
+    return (
+      <>
+        <Navbar mode="dashboard" userIdentity={{ displayName: identity.displayName, initials: identity.initials }} />
+        <main className="pb-16 pt-24 md:pt-28">
+          <Container>
+            <div className="mx-auto max-w-lg py-20 text-center">
+              <div className="text-5xl">🤖</div>
+              <h1 className="mt-6 text-3xl font-bold text-white">Bot Trading - Coming Soon</h1>
+              <p className="mt-4 text-slate-400">Botul de copytrade este in dezvoltare. Vei primi o notificare cand va fi disponibil.</p>
+              <a className="mt-8 inline-block rounded-xl bg-accent-emerald px-6 py-3 font-semibold text-crypto-dark hover:bg-accent-soft" href="/dashboard">
+                Inapoi la Dashboard
+              </a>
+            </div>
+          </Container>
+        </main>
+        <Footer compact />
+      </>
+    );
+  }
+
   const [{ data: profile }, { data: activeSub }] = await Promise.all([
     supabase
       .from("profiles")

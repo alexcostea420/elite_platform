@@ -54,7 +54,27 @@ export default async function BotDashboardPage() {
     .order("created_at", { ascending: false })
     .limit(10);
 
-  if (!wallet && !botSub) redirect("/bots/subscribe");
+  // Only users with active bot subscription see the dashboard
+  if (!botSub) {
+    return (
+      <>
+        <Navbar mode="dashboard" userIdentity={{ displayName: identity.displayName, initials: identity.initials }} />
+        <main className="pb-16 pt-24 md:pt-28">
+          <Container>
+            <div className="mx-auto max-w-lg py-20 text-center">
+              <div className="text-5xl">🤖</div>
+              <h1 className="mt-6 text-3xl font-bold text-white">Bot Trading - Coming Soon</h1>
+              <p className="mt-4 text-slate-400">Botul de copytrade este in dezvoltare. Vei primi o notificare cand va fi disponibil.</p>
+              <Link className="mt-8 inline-block rounded-xl bg-accent-emerald px-6 py-3 font-semibold text-crypto-dark hover:bg-accent-soft" href="/dashboard">
+                Inapoi la Dashboard
+              </Link>
+            </div>
+          </Container>
+        </main>
+        <Footer compact />
+      </>
+    );
+  }
 
   const now = new Date();
   const isExpired = botSub?.expires_at && new Date(botSub.expires_at) < now;
