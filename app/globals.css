@@ -132,6 +132,30 @@ button {
   .stagger-9 { animation-delay: 0.45s; }
   .stagger-10 { animation-delay: 0.5s; }
 
+  /* Text reveal with glow */
+  .animate-text-reveal span {
+    opacity: 0;
+    display: inline-block;
+    animation: textRevealGlow 0.4s ease-out forwards;
+    text-shadow: 0 0 0px transparent;
+  }
+
+  @keyframes textRevealGlow {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+      text-shadow: 0 0 0px transparent;
+    }
+    60% {
+      text-shadow: 0 0 20px rgba(11, 102, 35, 0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      text-shadow: 0 0 0px transparent;
+    }
+  }
+
   /* Scale-in for hero elements */
   .animate-scale-in {
     opacity: 0;

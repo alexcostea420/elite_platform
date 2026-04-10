@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Container } from "@/components/ui/container";
+import { ParticlesBg } from "@/components/ui/particles-bg";
+import { TextReveal } from "@/components/ui/text-reveal";
 import { siteConfig } from "@/lib/constants/site";
 
 export function HeroSection() {
@@ -34,6 +36,7 @@ export function HeroSection() {
       <section className="relative overflow-hidden px-4 pb-20 pt-32">
         <div className="absolute inset-0 bg-hero-radial opacity-90" />
         <div className="absolute inset-0 grid-glow opacity-20" />
+        <ParticlesBg className="z-[1]" />
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl text-center">
             <div className="flex flex-col items-center gap-6 md:gap-8">
@@ -42,9 +45,9 @@ export function HeroSection() {
               </div>
               <div className="space-y-6">
                 <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl">
-                  Investeste si tranzactioneaza
+                  <TextReveal text="Investeste si tranzactioneaza" />
                   <br />
-                  <span className="gradient-text">cu un plan clar</span>
+                  <span className="gradient-text"><TextReveal text="cu un plan clar" /></span>
                 </h1>
                 <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl md:text-2xl">
                   Comunitate de investitori si traderi cu rezultate reale.
