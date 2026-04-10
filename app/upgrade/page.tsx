@@ -84,11 +84,11 @@ export default async function UpgradePage() {
       isLoggedIn = true;
       const { data: profile } = await supabase
         .from("profiles")
-        .select("is_veteran, full_name, subscription_status")
+        .select("is_veteran, full_name, trial_used_at")
         .eq("id", user.id)
         .maybeSingle();
       isVeteran = profile?.is_veteran ?? false;
-      hasUsedTrial = !!profile?.subscription_status; // any status means they've had an account
+      hasUsedTrial = !!profile?.trial_used_at;
       const name = profile?.full_name ?? user.email ?? "Membru";
       userIdentity = {
         displayName: name,

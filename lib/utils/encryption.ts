@@ -5,9 +5,9 @@ import { createCipheriv, createDecipheriv, randomBytes, createHash } from "crypt
 const ALGORITHM = "aes-256-gcm";
 
 function getEncryptionKey(): Buffer {
-  const key = process.env.ENCRYPTION_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.ENCRYPTION_KEY;
   if (!key) {
-    throw new Error("ENCRYPTION_KEY or SUPABASE_SERVICE_ROLE_KEY must be set");
+    throw new Error("ENCRYPTION_KEY env var is required");
   }
   // Derive a 32-byte key from whatever key is provided
   return createHash("sha256").update(key).digest();

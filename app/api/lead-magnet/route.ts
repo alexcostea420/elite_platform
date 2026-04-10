@@ -6,7 +6,7 @@ import { checkRateLimit } from "@/lib/utils/rate-limit";
 export async function POST(request: Request) {
   try {
     const ip = request.headers.get("x-forwarded-for") ?? "unknown";
-    const { allowed } = checkRateLimit(`lead:${ip}`, 5, 60_000);
+    const { allowed } = await checkRateLimit(`lead:${ip}`, 5, 60_000);
     if (!allowed) {
       return NextResponse.json({ error: "Prea multe incercari. Asteapta un minut." }, { status: 429 });
     }

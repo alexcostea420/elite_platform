@@ -210,11 +210,11 @@ export function SubscribeFlow({
       {step === 3 && (
         <div className="panel p-8">
           <h3 className="mb-2 text-lg font-bold text-white">
-            Conecteaza Wallet Hyperliquid
+            Conecteaza contul MEXC
           </h3>
           <p className="mb-6 text-slate-300">
-            Introdu datele API pentru a permite botului sa execute tranzactii pe
-            contul tau.
+            Introdu datele API de pe MEXC pentru a permite botului să execute
+            tranzacții pe contul tău.
           </p>
 
           <form
@@ -226,12 +226,12 @@ export function SubscribeFlow({
           >
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                Adresa Wallet Hyperliquid
+                MEXC API Key (read + trade only)
               </label>
               <input
-                name="hl_address"
+                name="mexc_api_key"
                 type="text"
-                placeholder="0x..."
+                placeholder="mx0v..."
                 required
                 className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
               />
@@ -239,26 +239,25 @@ export function SubscribeFlow({
 
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                API Key (read + trade only)
+                MEXC Secret Key
               </label>
               <input
-                name="hl_api_key"
-                type="text"
-                placeholder="API Key"
-                required
-                className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                API Secret
-              </label>
-              <input
-                name="hl_api_secret"
+                name="mexc_secret"
                 type="password"
-                placeholder="API Secret"
+                placeholder="Secret Key"
                 required
+                className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                MEXC Passphrase
+              </label>
+              <input
+                name="mexc_passphrase"
+                type="password"
+                placeholder="Passphrase (optional)"
                 className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
               />
             </div>

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { HeroSection } from "@/components/marketing/hero-section";
 import { StatsSection } from "@/components/marketing/stats-section";
+import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 const AboutSection = dynamic(() => import("@/components/marketing/about-section").then(m => m.AboutSection));
 const BenefitsSection = dynamic(() => import("@/components/marketing/benefits-section").then(m => m.BenefitsSection));
@@ -37,9 +38,23 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/",
 });
 
-export default function HomePage() {
+export default async function HomePage() {
   const organizationSchema = getHomepageOrganizationSchema();
   const faqSchema = getHomepageFaqSchema();
+
+  // Query real counts for stats
+  const supabase = createServiceRoleSupabaseClient();
+  const [{ count: memberCount }, { count: videoCount }] = await Promise.all([
+    supabase.from("profiles").select("*", { count: "exact", head: true }),
+    supabase.from("videos").select("*", { count: "exact", head: true }).eq("is_published", true),
+  ]);
+
+  const liveStats = [
+    { value: `${memberCount ?? 350}+`, label: "Membri in Comunitate", tone: "gold" },
+    { value: `${videoCount ?? 55}+`, label: "Video-uri Elite", tone: "green" },
+    { value: "4+", label: "Ani de Experienta", tone: "gold" },
+    { value: "7 ZILE", label: "Trial Gratuit", tone: "green" },
+  ];
 
   return (
     <>
@@ -54,7 +69,7 @@ export default function HomePage() {
       <Navbar mode="marketing" />
       <main>
         <HeroSection />
-        <StatsSection />
+        <StatsSection stats={liveStats} />
         <AboutSection />
         <BenefitsSection />
         {/* How It Works */}

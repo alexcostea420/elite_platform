@@ -52,7 +52,7 @@ const nextConfig = {
           { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
           { key: "X-DNS-Prefetch-Control", value: "on" },
-          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.plyr.io https://connect.facebook.net https://plausible.io; style-src 'self' 'unsafe-inline' https://cdn.plyr.io; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://armatadetraderi.lemonsqueezy.com https://s.binance.com; connect-src 'self' https://vyeouffsgdjoclblodmy.supabase.co https://www.google-analytics.com https://plausible.io https://cdn.plyr.io; media-src 'self' https:;" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.plyr.io https://connect.facebook.net https://plausible.io https://s.tradingview.com; style-src 'self' 'unsafe-inline' https://cdn.plyr.io; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://s.binance.com https://s.tradingview.com; connect-src 'self' https://vyeouffsgdjoclblodmy.supabase.co https://www.google-analytics.com https://plausible.io https://cdn.plyr.io; media-src 'self' https:;" },
         ],
       },
     ];

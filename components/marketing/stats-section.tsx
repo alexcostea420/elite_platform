@@ -1,6 +1,11 @@
 import { Container } from "@/components/ui/container";
-import { heroStats } from "@/lib/constants/site";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
+
+type StatItem = {
+  value: string;
+  label: string;
+  tone: string;
+};
 
 function parseStatValue(value: string): { num: number; prefix: string; suffix: string } {
   const match = value.match(/^([^\d]*)(\d+)(.*)$/);
@@ -8,12 +13,19 @@ function parseStatValue(value: string): { num: number; prefix: string; suffix: s
   return { num: parseInt(match[2], 10), prefix: match[1], suffix: match[3] };
 }
 
-export function StatsSection() {
+export function StatsSection({ stats }: { stats?: StatItem[] }) {
+  const items = stats ?? [
+    { value: "350+", label: "Membri in Comunitate", tone: "gold" },
+    { value: "55+", label: "Video-uri Elite", tone: "green" },
+    { value: "4+", label: "Ani de Experienta", tone: "gold" },
+    { value: "7 ZILE", label: "Trial Gratuit", tone: "green" },
+  ];
+
   return (
     <section className="border-y border-white/5 py-12">
       <Container>
         <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-          {heroStats.map((stat, i) => {
+          {items.map((stat, i) => {
             const { num, prefix, suffix } = parseStatValue(stat.value);
             return (
               <div key={stat.label} className={`animate-fade-in-up stagger-${i + 1}`}>

@@ -68,7 +68,7 @@ export async function loginAction(formData: FormData) {
   const nextPath = isSafePath ? rawNextPath : "/dashboard";
 
   // Rate limit: 10 login attempts per minute per email
-  const { allowed } = checkRateLimit(`login:${email}`, 10, 60_000);
+  const { allowed } = await checkRateLimit(`login:${email}`, 10, 60_000);
   if (!allowed) {
     redirect(`/login?error=${encodeURIComponent("Prea multe încercări. Așteaptă un minut.")}&next=${encodeURIComponent(nextPath)}`);
   }
@@ -103,7 +103,7 @@ export async function signupAction(formData: FormData) {
   const password = getTrimmedValue(formData, "password");
 
   // Rate limit: 3 signups per hour per email
-  const { allowed } = checkRateLimit(`signup:${email}`, 3, 3_600_000);
+  const { allowed } = await checkRateLimit(`signup:${email}`, 3, 3_600_000);
   if (!allowed) {
     redirect(`/signup?error=${encodeURIComponent("Prea multe încercări. Așteaptă o oră.")}`);
   }

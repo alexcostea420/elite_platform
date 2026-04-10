@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
-import { generateUnsubToken } from "@/lib/utils/unsubscribe";
+import { verifyUnsubToken } from "@/lib/utils/unsubscribe";
 
 export async function GET(request: NextRequest) {
   const email = request.nextUrl.searchParams.get("email");
@@ -14,9 +14,8 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // Verify signed token
-  const expectedToken = generateUnsubToken(email);
-  if (token !== expectedToken) {
+  // Verify signed token with expiry
+  if (!verifyUnsubToken(email, token)) {
     return new NextResponse(html("Link invalid", "Link-ul de dezabonare nu este valid sau a expirat."), {
       status: 403,
       headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -25,9 +24,15 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceRoleSupabaseClient();
 
-  // Find user by email via profiles join
-  const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
-  const user = users?.users?.find((u) => u.email === email);
+  // Find user by email — paginate through all users
+  let user: { id: string; email?: string } | undefined;
+  let page = 1;
+  while (!user) {
+    const { data: batch } = await supabase.auth.admin.listUsers({ page, perPage: 100 });
+    if (!batch?.users?.length) break;
+    user = batch.users.find((u) => u.email === email);
+    page++;
+  }
 
   if (user) {
     await supabase

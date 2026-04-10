@@ -13,7 +13,7 @@ export async function POST() {
     }
 
     // Rate limit: 1 trial attempt per user per 24h
-    const { allowed } = checkRateLimit(`trial:${user.id}`, 1, 24 * 60 * 60 * 1000);
+    const { allowed } = await checkRateLimit(`trial:${user.id}`, 1, 24 * 60 * 60 * 1000);
     if (!allowed) {
       return NextResponse.json({ error: "Prea multe incercari. Incearca maine." }, { status: 429 });
     }

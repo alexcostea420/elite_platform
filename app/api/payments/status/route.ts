@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     const identifier = user.id ?? request.headers.get("x-forwarded-for") ?? "anon";
-    const { allowed } = checkRateLimit(`status:${identifier}`, 30, 60_000);
+    const { allowed } = await checkRateLimit(`status:${identifier}`, 30, 60_000);
     if (!allowed) {
       return NextResponse.json({ error: "Too many requests." }, { status: 429 });
     }

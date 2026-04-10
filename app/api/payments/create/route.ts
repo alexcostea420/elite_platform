@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Neautentificat." }, { status: 401 });
     }
 
-    const { allowed } = checkRateLimit(`create:${user.id}`, 10, 60_000);
+    const { allowed } = await checkRateLimit(`create:${user.id}`, 10, 60_000);
     if (!allowed) {
       return NextResponse.json({ error: "Too many requests." }, { status: 429 });
     }
