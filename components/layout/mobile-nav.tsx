@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 type NavGroup = {
   label: string;
@@ -17,51 +17,21 @@ type MobileNavProps = {
 export function MobileNav({ groups, standalone }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const [navbarHeight, setNavbarHeight] = useState(56);
 
-  // Close on route change
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
-  // Measure navbar height
   useEffect(() => {
-    const navbar = document.querySelector("nav");
-    if (navbar) {
-      const h = navbar.getBoundingClientRect().height;
-      if (h > 0) setNavbarHeight(h);
-    }
-    // Also re-measure on resize
-    const handleResize = () => {
-      const nav = document.querySelector("nav");
-      if (nav) {
-        const h = nav.getBoundingClientRect().height;
-        if (h > 0) setNavbarHeight(h);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Prevent body scroll when open
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   return (
     <div className="lg:hidden">
       <button
-        ref={buttonRef}
         aria-label={open ? "Inchide meniu" : "Deschide meniu"}
-        className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10"
+        className="relative z-[60] flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10"
         onClick={() => setOpen((v) => !v)}
         type="button"
       >
@@ -77,20 +47,16 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
       </button>
 
       {open && (
-        <>
-          {/* Backdrop */}
+        <div className="fixed inset-0 top-0 z-[56]">
+          {/* Full screen backdrop */}
+          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
+
+          {/* Menu panel - slides from top, below navbar */}
           <div
-            className="fixed inset-0 z-[54] bg-black/50"
-            onClick={() => setOpen(false)}
-            style={{ top: navbarHeight }}
-          />
-          {/* Menu */}
-          <div
-            className="fixed inset-x-0 bottom-0 z-[55] overflow-y-auto"
-            style={{ top: navbarHeight, backgroundColor: '#080808' }}
+            className="absolute inset-x-0 top-14 bottom-0 overflow-y-auto"
+            style={{ backgroundColor: '#0A0E0C' }}
           >
-            <div className="mx-auto max-w-md space-y-1 p-4 pb-20">
-              {/* Standalone items first */}
+            <div className="mx-auto max-w-md space-y-1 px-4 pb-20 pt-4">
               {standalone.map((item) => (
                 <Link
                   key={item.href}
@@ -107,7 +73,6 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
                 </Link>
               ))}
 
-              {/* Grouped items */}
               {groups.map((group) => (
                 <div key={group.label} className="pt-3">
                   <div className="px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -132,7 +97,7 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
