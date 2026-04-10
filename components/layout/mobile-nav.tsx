@@ -18,9 +18,7 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -31,7 +29,7 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
     <div className="lg:hidden">
       <button
         aria-label={open ? "Inchide meniu" : "Deschide meniu"}
-        className="relative z-[60] flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10"
+        className="relative z-[70] flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10"
         onClick={() => setOpen((v) => !v)}
         type="button"
       >
@@ -47,20 +45,20 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 top-0 z-[56]">
-          {/* Full screen backdrop */}
-          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
+        <div
+          className="fixed inset-0 z-[60] flex flex-col"
+          style={{ backgroundColor: "#0A0E0C" }}
+        >
+          {/* Spacer for navbar height */}
+          <div className="h-14 shrink-0" />
 
-          {/* Menu panel - slides from top, below navbar */}
-          <div
-            className="absolute inset-x-0 top-14 bottom-0 overflow-y-auto"
-            style={{ backgroundColor: '#0A0E0C' }}
-          >
-            <div className="mx-auto max-w-md space-y-1 px-4 pb-20 pt-4">
+          {/* Scrollable menu */}
+          <div className="flex-1 overflow-y-auto px-4 pb-20 pt-2">
+            <div className="mx-auto max-w-md space-y-1">
               {standalone.map((item) => (
                 <Link
                   key={item.href}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3.5 text-base font-medium transition-colors ${
+                  className={`flex items-center gap-3 rounded-xl px-4 py-4 text-lg font-medium transition-colors ${
                     pathname === item.href
                       ? "bg-accent-emerald/10 text-accent-emerald"
                       : "text-slate-200 active:bg-white/10"
@@ -68,20 +66,20 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
                   href={item.href}
                   onClick={() => setOpen(false)}
                 >
-                  {item.icon && <span className="text-lg">{item.icon}</span>}
+                  {item.icon && <span className="text-xl">{item.icon}</span>}
                   {item.label}
                 </Link>
               ))}
 
               {groups.map((group) => (
-                <div key={group.label} className="pt-3">
+                <div key={group.label} className="pt-4">
                   <div className="px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
                     {group.label}
                   </div>
                   {group.items.map((item) => (
                     <Link
                       key={item.href}
-                      className={`flex items-center gap-3 rounded-xl px-4 py-3.5 text-base font-medium transition-colors ${
+                      className={`flex items-center gap-3 rounded-xl px-4 py-4 text-lg font-medium transition-colors ${
                         pathname.startsWith(item.href)
                           ? "bg-accent-emerald/10 text-accent-emerald"
                           : "text-slate-200 active:bg-white/10"
@@ -89,7 +87,7 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
                       href={item.href}
                       onClick={() => setOpen(false)}
                     >
-                      {item.icon && <span className="text-lg">{item.icon}</span>}
+                      {item.icon && <span className="text-xl">{item.icon}</span>}
                       {item.label}
                     </Link>
                   ))}
