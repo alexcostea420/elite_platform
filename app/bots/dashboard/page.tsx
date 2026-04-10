@@ -180,33 +180,50 @@ export default async function BotDashboardPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-slate-500">
-                      <th className="pb-3 pr-4">Asset</th>
-                      <th className="pb-3 pr-4">Side</th>
-                      <th className="pb-3 pr-4">Pret</th>
-                      <th className="pb-3 pr-4">PnL</th>
+                      <th className="pb-3 pr-3">Asset</th>
+                      <th className="pb-3 pr-3">Side</th>
+                      <th className="pb-3 pr-3">Entry</th>
+                      <th className="pb-3 pr-3">SL</th>
+                      <th className="pb-3 pr-3">TP</th>
+                      <th className="pb-3 pr-3">PnL</th>
+                      <th className="pb-3 pr-3">Fees</th>
+                      <th className="pb-3 pr-3">Durata</th>
                       <th className="pb-3">Data</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {trades.map((trade: Record<string, unknown>, i: number) => (
-                      <tr key={i} className="border-b border-white/5">
-                        <td className="py-3 pr-4 font-medium text-white">{String(trade.asset ?? "-")}</td>
-                        <td className="py-3 pr-4">
-                          <span className={trade.side === "long" ? "text-green-400" : "text-red-400"}>
-                            {String(trade.side ?? "-")}
-                          </span>
-                        </td>
-                        <td className="py-3 pr-4 text-slate-400">${String(trade.entry_price ?? "-")}</td>
-                        <td className="py-3 pr-4">
-                          <span className={Number(trade.pnl ?? 0) >= 0 ? "text-green-400" : "text-red-400"}>
-                            ${Number(trade.pnl ?? 0).toFixed(2)}
-                          </span>
-                        </td>
-                        <td className="py-3 text-slate-500">
-                          {trade.created_at ? new Date(String(trade.created_at)).toLocaleDateString("ro-RO") : "-"}
-                        </td>
-                      </tr>
-                    ))}
+                    {trades.map((trade: Record<string, unknown>, i: number) => {
+                      const openedAt = trade.opened_at ? new Date(String(trade.opened_at)) : null;
+                      const closedAt = trade.closed_at ? new Date(String(trade.closed_at)) : null;
+                      let duration = "-";
+                      if (openedAt && closedAt) {
+                        const diffH = Math.round((closedAt.getTime() - openedAt.getTime()) / (1000 * 60 * 60));
+                        duration = diffH < 1 ? `${Math.round((closedAt.getTime() - openedAt.getTime()) / (1000 * 60))}m` : diffH < 24 ? `${diffH}h` : `${Math.round(diffH / 24)}d`;
+                      }
+                      return (
+                        <tr key={i} className="border-b border-white/5">
+                          <td className="py-3 pr-3 font-medium text-white">{String(trade.asset ?? "-")}</td>
+                          <td className="py-3 pr-3">
+                            <span className={trade.direction === "long" ? "text-green-400" : "text-red-400"}>
+                              {String(trade.direction ?? "-")}
+                            </span>
+                          </td>
+                          <td className="py-3 pr-3 text-slate-300">${Number(trade.entry_price ?? 0).toLocaleString()}</td>
+                          <td className="py-3 pr-3 text-red-400/70">${Number(trade.sl_price ?? 0).toLocaleString()}</td>
+                          <td className="py-3 pr-3 text-green-400/70">${Number(trade.tp_price ?? 0).toLocaleString()}</td>
+                          <td className="py-3 pr-3">
+                            <span className={Number(trade.pnl_usd ?? 0) >= 0 ? "font-semibold text-green-400" : "font-semibold text-red-400"}>
+                              {Number(trade.pnl_usd ?? 0) >= 0 ? "+" : ""}${Number(trade.pnl_usd ?? 0).toFixed(2)}
+                            </span>
+                          </td>
+                          <td className="py-3 pr-3 text-slate-500">${Number(trade.fees_usd ?? 0).toFixed(2)}</td>
+                          <td className="py-3 pr-3 text-slate-400">{duration}</td>
+                          <td className="py-3 text-slate-500">
+                            {closedAt ? closedAt.toLocaleDateString("ro-RO") : openedAt ? openedAt.toLocaleDateString("ro-RO") : "-"}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
