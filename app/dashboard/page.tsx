@@ -141,11 +141,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       />
       <main className="pb-16 pt-24 md:pt-28">
         <Container>
+          <div className="animate-fade-in-up stagger-1">
           <DashboardHeader
             firstName={identity.firstName}
             membershipLabel={membershipLabel}
             statusLabel={statusLabel}
           />
+          </div>
+          <div className="animate-fade-in-up stagger-2">
           <SubscriptionCard
             subscriptionExpiresAt={profile?.subscription_expires_at ?? null}
             subscriptionStatus={profile?.subscription_status ?? null}
@@ -153,6 +156,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             discordConnected={!!profile?.discord_user_id}
             discordUsername={profile?.discord_username ?? null}
           />
+          </div>
           {/* Expiry warning */}
           {profile?.subscription_expires_at && (() => {
             const expiresAt = new Date(profile.subscription_expires_at);
@@ -210,7 +214,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </article>
           </section>
 
-          <section className="mb-8">
+          <section className="mb-8 animate-fade-in-up stagger-3">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Noutăți</p>
@@ -270,8 +274,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </section>
           {isEliteUser ? (
             <>
-              <QuickLinks />
-              <MiniDashboard />
+              <div className="animate-fade-in-up stagger-4"><QuickLinks /></div>
+              <div className="animate-fade-in-up stagger-5"><MiniDashboard /></div>
             </>
           ) : (
             <>
