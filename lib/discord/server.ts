@@ -252,7 +252,7 @@ export async function syncDiscordRole({
  * Queue Discord DM drip messages for a newly connected user.
  * Messages are sent by a cron/script that processes the queue.
  */
-const ANTI_SCAM_FOOTER = "\n\n—\n\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP).\n\nNu trimite niciodata parole, crypto sau date personale nimanui pe Discord.\nDaca primesti DM-uri suspecte de la conturi similare, raporteaza-le lui Alex.";
+const ANTI_SCAM_FOOTER = "\n\n—\n\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP).\n\nBotul NU cere bani si NU proceseaza plati. Toate platile se fac DOAR pe website:\nhttps://app.armatadetraderi.com/upgrade\n\nNu trimite niciodata parole, crypto sau date personale nimanui pe Discord.\nDaca primesti DM-uri suspecte de la conturi similare, raporteaza-le lui Alex.";
 
 export async function queueDiscordDripMessages(userId: string, discordUserId: string, isElite: boolean) {
   const supabase = createServiceRoleSupabaseClient();

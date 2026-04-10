@@ -475,7 +475,7 @@ export async function expireOverdueProfiles(): Promise<number> {
           await fetch(`${baseUrl}/channels/${dmChannel.id}/messages`, {
             method: "POST", headers,
             body: JSON.stringify({
-              content: "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.",
+              content: "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.\n\n—\n\n🔒 Acest bot NU cere bani si NU proceseaza plati.\nToate platile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\nFii atent la DM-uri suspecte - raporteaza-le lui Alex.",
             }),
           });
         }

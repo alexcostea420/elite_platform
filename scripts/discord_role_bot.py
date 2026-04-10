@@ -180,7 +180,11 @@ def process_role_queue(env):
                     f"🎉 **Bine ai venit în Elite!**\n\n"
                     f"Abonamentul tău **{plan}** a fost activat.\n"
                     f"Acum ai acces la toate canalele Elite.\n\n"
-                    f"Dacă ai întrebări, scrie în #general.",
+                    f"Dacă ai întrebări, scrie în #general.\n\n"
+                    f"—\n\n"
+                    f"🔒 Acest bot NU cere bani si NU proceseaza plati.\n"
+                    f"Toate platile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\n"
+                    f"Fii atent la DM-uri suspecte - raporteaza-le lui Alex.",
                     env
                 )
                 # Telegram notification
@@ -192,7 +196,11 @@ def process_role_queue(env):
             remove_elite_role(discord_id, env)
             send_dm(discord_id,
                 "⏰ Abonamentul tău Elite a expirat.\n"
-                "Reinnoiește pe armatadetraderi.com pentru a păstra accesul.",
+                "Reinnoieste pe https://app.armatadetraderi.com/upgrade pentru a pastra accesul.\n\n"
+                "—\n\n"
+                "🔒 Acest bot NU cere bani si NU proceseaza plati.\n"
+                "Toate platile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\n"
+                "Fii atent la DM-uri suspecte - raporteaza-le lui Alex.",
                 env
             )
 
