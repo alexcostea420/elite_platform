@@ -19,19 +19,11 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get("x-patreon-signature") ?? "";
     const event = request.headers.get("x-patreon-event") ?? "";
 
-    // Verify signature - log for debugging
+    // Verify signature
     const isValid = verifySignature(rawBody, signature);
-    console.log(`Patreon webhook sig check: valid=${isValid}, sig=${signature?.slice(0, 8)}..., bodyLen=${rawBody.length}, secretSet=${!!WEBHOOK_SECRET}`);
-    if (!isValid && signature) {
-      // Log expected vs received for debugging
-      const expected = crypto.createHmac("md5", WEBHOOK_SECRET).update(rawBody).digest("hex");
-      console.log(`Expected sig: ${expected}, Received: ${signature}`);
-    }
     if (!isValid) {
       console.error("Patreon webhook: invalid signature");
-      // Temporarily accept all requests while debugging signature issue
-      // TODO: re-enable after fixing
-      // return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const payload = JSON.parse(rawBody);
@@ -82,7 +74,7 @@ export async function POST(request: NextRequest) {
           subscription_tier: "elite",
           subscription_status: "active",
           subscription_expires_at: finalExpiry.toISOString(),
-          is_veteran: isVeteran || undefined,
+          is_veteran: isVeteran,
           elite_since: profile?.subscription_expires_at
             ? undefined
             : new Date(now.getTime() - 32 * 24 * 60 * 60 * 1000).toISOString(),

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { signupWithInviteAction } from "@/app/auth/actions";
+import { logoutAction, signupWithInviteAction } from "@/app/auth/actions";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
@@ -77,7 +77,9 @@ export default async function InvitePage({ params, searchParams }: InvitePagePro
               <p className="mt-2 text-sm text-slate-400">
                 Acest link este pentru un cont nou. Deschide link-ul într-o fereastră incognito sau deloghează-te mai întâi.
               </p>
-              <a href="/api/auth/logout" className="ghost-button mt-3 inline-block text-sm">Deloghează-te</a>
+              <form action={logoutAction} className="mt-3 inline-block">
+                <button type="submit" className="ghost-button text-sm">Deloghează-te</button>
+              </form>
             </section>
           )}
 

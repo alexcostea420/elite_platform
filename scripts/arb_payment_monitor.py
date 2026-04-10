@@ -203,6 +203,59 @@ def activate_subscription(payment, env):
         return False
 
 
+def upgrade_profile(payment, env):
+    """Upgrade user profile to elite after payment confirmed."""
+    supabase_url = env.get("NEXT_PUBLIC_SUPABASE_URL", "")
+    service_key = env.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    if not supabase_url or not service_key:
+        return False
+
+    user_id = payment.get("user_id", "")
+    if not user_id:
+        return False
+
+    duration_days = {"30_days": 30, "90_days": 90, "365_days": 365}.get(
+        payment.get("plan_duration", ""), 30
+    )
+    now = datetime.now(timezone.utc)
+
+    try:
+        # Get current profile to check existing expiry
+        url = f"{supabase_url}/rest/v1/profiles?id=eq.{user_id}&select=subscription_expires_at"
+        req = urllib.request.Request(url, headers={
+            "apikey": service_key,
+            "Authorization": f"Bearer {service_key}",
+        })
+        resp = urllib.request.urlopen(req, timeout=10)
+        profiles = json.loads(resp.read())
+        current_expiry = now
+        if profiles and profiles[0].get("subscription_expires_at"):
+            ce = datetime.fromisoformat(profiles[0]["subscription_expires_at"].replace("Z", "+00:00"))
+            if ce > now:
+                current_expiry = ce
+
+        new_expiry = current_expiry + timedelta(days=duration_days)
+
+        url = f"{supabase_url}/rest/v1/profiles?id=eq.{user_id}"
+        data = json.dumps({
+            "subscription_tier": "elite",
+            "subscription_status": "active",
+            "subscription_expires_at": new_expiry.isoformat(),
+        }).encode()
+        req = urllib.request.Request(url, data=data, headers={
+            "apikey": service_key,
+            "Authorization": f"Bearer {service_key}",
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal",
+        }, method="PATCH")
+        urllib.request.urlopen(req, timeout=10)
+        log(f"Profile upgraded to elite for user {user_id[:8]}..., expires {new_expiry.isoformat()}")
+        return True
+    except Exception as e:
+        log(f"Profile upgrade error: {e}", "ERROR")
+        return False
+
+
 ROLE_QUEUE = BASE_DIR / "data" / "role_queue.json"
 
 def queue_discord_role(payment, env):
@@ -290,6 +343,7 @@ def main():
 
                             if confirm_payment(payment["id"], transfer["tx_hash"], transfer["amount"], transfer["token"], env):
                                 activate_subscription(payment, env)
+                                upgrade_profile(payment, env)
                                 # Queue Discord role assignment
                                 queue_discord_role(payment, env)
                                 notify_telegram(

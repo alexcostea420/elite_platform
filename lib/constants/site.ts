@@ -291,54 +291,6 @@ export const quickLinks = [
   }
 ];
 
-export const dashboardStats = [
-  {
-    title: "Video-uri Văzute",
-    icon: "🎬",
-    value: "27 / 103",
-    progress: 26,
-    tone: "gold"
-  },
-  {
-    title: "Sesiuni Participare",
-    icon: "📡",
-    value: "8 / 12",
-    progress: 67,
-    tone: "green"
-  },
-  {
-    title: "Analize Citite",
-    icon: "📝",
-    value: "6 / 6",
-    progress: 100,
-    tone: "gold"
-  }
-];
-
-export const recentAnalyses = [
-  {
-    title: "BTC/USDT - Analiza Săptămânii",
-    published: "Publicat acum 2 ore",
-    sentiment: "Bullish",
-    sentimentTone: "green",
-    summary: "Bitcoin arată semne clare de consolidare în zona $65,000. Următorul target: $68,500...",
-    featured: true
-  },
-  {
-    title: "ETH/USDT - Setup pentru Long",
-    published: "Publicat acum 1 zi",
-    sentiment: "Bullish",
-    sentimentTone: "green",
-    summary: "Ethereum a spart rezistența de la $3,200. Urmează un posibil retest și continuare..."
-  },
-  {
-    title: "SOL/USDT - Atenție la Break",
-    published: "Publicat acum 3 zile",
-    sentiment: "Neutral",
-    sentimentTone: "amber",
-    summary: "Solana este în zonă critică. Un break peste $140 ar confirma continuarea bullish..."
-  }
-];
 
 export const recentVideos = [
   {

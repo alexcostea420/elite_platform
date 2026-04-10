@@ -63,13 +63,18 @@ export async function POST() {
     // Activate 7-day trial with trial_used_at timestamp
     const now = new Date();
     const trialExpires = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    await serviceSupabase.from("profiles").update({
+    const { error: updateError } = await serviceSupabase.from("profiles").update({
       subscription_tier: "elite",
       subscription_status: "trial",
       subscription_expires_at: trialExpires.toISOString(),
       elite_since: now.toISOString(),
       trial_used_at: now.toISOString(),
     }).eq("id", user.id);
+
+    if (updateError) {
+      console.error("Trial activation failed:", updateError);
+      return NextResponse.json({ error: "Activarea trial-ului a esuat. Incearca din nou." }, { status: 500 });
+    }
 
     // Queue email drip sequence
     await serviceSupabase.from("email_drip_queue").insert([

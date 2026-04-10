@@ -22,25 +22,27 @@ export async function POST(request: NextRequest) {
 
   if (action === "extend") {
     const daysToAdd = parseInt(days) || 30;
+
+    // Find the latest subscription for this user
     const { data: sub } = await serviceSupabase
       .from("bot_subscriptions")
-      .select("expires_at")
+      .select("id, expires_at")
       .eq("user_id", user_id)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
+    if (!sub) return NextResponse.json({ error: "No subscription found" }, { status: 404 });
+
     const now = new Date();
-    const currentExpiry = sub?.expires_at ? new Date(sub.expires_at) : now;
+    const currentExpiry = sub.expires_at ? new Date(sub.expires_at) : now;
     const startFrom = currentExpiry > now ? currentExpiry : now;
     const newExpiry = new Date(startFrom.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
 
     await serviceSupabase
       .from("bot_subscriptions")
       .update({ expires_at: newExpiry.toISOString(), status: "active" })
-      .eq("user_id", user_id)
-      .order("created_at", { ascending: false })
-      .limit(1);
+      .eq("id", sub.id);
 
     await serviceSupabase
       .from("profiles")
@@ -51,12 +53,21 @@ export async function POST(request: NextRequest) {
   }
 
   if (action === "disable") {
-    await serviceSupabase
+    // Find the latest subscription for this user
+    const { data: sub } = await serviceSupabase
       .from("bot_subscriptions")
-      .update({ status: "disabled" })
+      .select("id")
       .eq("user_id", user_id)
       .order("created_at", { ascending: false })
-      .limit(1);
+      .limit(1)
+      .maybeSingle();
+
+    if (sub) {
+      await serviceSupabase
+        .from("bot_subscriptions")
+        .update({ status: "disabled" })
+        .eq("id", sub.id);
+    }
 
     await serviceSupabase
       .from("profiles")

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { LeadMagnetForm } from "@/components/ui/lead-magnet-form";
 import { pricingPlans } from "@/lib/constants/site";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -283,23 +284,7 @@ export default async function UpgradePage() {
               <p className="mx-auto mt-4 max-w-lg text-slate-300">
                 Lasa-mi emailul tau si te contactez personal sa te ajut cu plata. Raspund in maxim 24h.
               </p>
-              <form action="/api/lead-magnet" method="POST" className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
-                <input type="hidden" name="source" value="payment_help" />
-                <input
-                  aria-label="Adresa ta de email"
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:border-accent-emerald/50"
-                  name="email"
-                  placeholder="email@exemplu.com"
-                  required
-                  type="email"
-                />
-                <button
-                  className="accent-button whitespace-nowrap rounded-xl px-6 py-3 text-sm font-semibold"
-                  type="submit"
-                >
-                  Contacteaza-ma
-                </button>
-              </form>
+              <LeadMagnetForm source="payment_help" />
               <p className="mt-3 text-xs text-slate-600">
                 Plata se face in USDT sau USDC pe reteaua Arbitrum One.
               </p>

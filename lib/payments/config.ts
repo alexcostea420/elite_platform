@@ -32,7 +32,7 @@ export function getWalletForChain(chain: PaymentChain): string | null {
   return process.env[cfg.envKey] ?? null;
 }
 
-export function getPaymentConfig(chain: PaymentChain = "TRC-20") {
+export function getPaymentConfig(chain: PaymentChain = "ARB") {
   const wallet = getWalletForChain(chain);
 
   if (!wallet) {

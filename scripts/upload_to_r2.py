@@ -9,10 +9,27 @@ import boto3
 import os
 import sys
 
-R2_ENDPOINT = os.environ.get("R2_ENDPOINT", "https://17c9556f942f7433e51a7dce681a4bb8.r2.cloudflarestorage.com")
-R2_ACCESS_KEY = os.environ.get("R2_ACCESS_KEY_ID", "e9914f648fd84301c3686a5810dcbcaf")
-R2_SECRET_KEY = os.environ.get("R2_SECRET_ACCESS_KEY", "0063561c21aa580b8c24e58351369327ac8b2c92a34823af136b37140e021548")
+R2_ENDPOINT = os.environ.get("R2_ENDPOINT", "")
+R2_ACCESS_KEY = os.environ.get("R2_ACCESS_KEY_ID", "")
+R2_SECRET_KEY = os.environ.get("R2_SECRET_ACCESS_KEY", "")
 R2_BUCKET = os.environ.get("R2_BUCKET", "elite-videos")
+
+if not R2_ENDPOINT or not R2_ACCESS_KEY or not R2_SECRET_KEY:
+    # Try loading from .env.local
+    env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env.local")
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                line = line.strip()
+                if "=" in line and not line.startswith("#"):
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip())
+        R2_ENDPOINT = os.environ.get("R2_ENDPOINT", "")
+        R2_ACCESS_KEY = os.environ.get("R2_ACCESS_KEY_ID", "")
+        R2_SECRET_KEY = os.environ.get("R2_SECRET_ACCESS_KEY", "")
+    if not R2_ENDPOINT or not R2_ACCESS_KEY or not R2_SECRET_KEY:
+        print("ERROR: R2_ENDPOINT, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY must be set in env or .env.local")
+        sys.exit(1)
 R2_PUBLIC_URL = "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev"
 VIDEO_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "videos")
 

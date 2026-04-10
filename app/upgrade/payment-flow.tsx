@@ -42,7 +42,7 @@ const chainOptions: ChainOption[] = [
 ];
 
 function formatAmount(amount: number): string {
-  return amount.toFixed(1);
+  return amount.toFixed(2);
 }
 
 export function PaymentFlow() {
