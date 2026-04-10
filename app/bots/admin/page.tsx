@@ -34,18 +34,15 @@ export default async function BotAdminPage() {
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
 
   // Get all bot subscribers with their data
-  const { data: subs } = await supabase
-    .from("bot_subscriptions")
-    .select("*, profiles(full_name, discord_username, bot_active)")
-    .order("created_at", { ascending: false });
-
-  const { data: wallets } = await supabase
-    .from("bot_wallets")
-    .select("user_id, hl_address, max_risk_pct, paused, is_verified");
+  const [{ data: subs }, { data: wallets }, { data: allProfiles }] = await Promise.all([
+    supabase.from("bot_subscriptions").select("*").order("created_at", { ascending: false }),
+    supabase.from("bot_wallets").select("user_id, hl_address, max_risk_pct, paused, is_verified"),
+    supabase.from("profiles").select("id, full_name, discord_username, bot_active"),
+  ]);
 
   const subscribers = (subs ?? []).map((sub: Record<string, unknown>) => {
-    const w = (wallets ?? []).find((w: Record<string, unknown>) => w.user_id === sub.user_id);
-    const p = sub.profiles as Record<string, unknown> | null;
+    const w = (wallets ?? []).find((wl: Record<string, unknown>) => wl.user_id === sub.user_id);
+    const p = (allProfiles ?? []).find((pr: Record<string, unknown>) => pr.id === sub.user_id) as Record<string, unknown> | undefined;
     const now = new Date();
     const expiresAt = sub.expires_at ? new Date(String(sub.expires_at)) : null;
     const daysLeft = expiresAt ? Math.max(0, Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0;
