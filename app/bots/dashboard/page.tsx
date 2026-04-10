@@ -43,7 +43,7 @@ export default async function BotDashboardPage() {
 
   const { data: wallet } = await supabase
     .from("bot_wallets")
-    .select("exchange, max_risk_pct, paused, is_verified, created_at")
+    .select("hl_address, max_risk_pct, paused, is_verified, created_at")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -84,7 +84,7 @@ export default async function BotDashboardPage() {
                   <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase ${isExpired ? "bg-red-500/20 text-red-400" : "bg-accent-emerald/20 text-accent-emerald"}`}>
                     {isExpired ? "Expirat" : "Activ"}
                   </span>
-                  <span className="text-sm text-slate-400">{wallet?.exchange ?? "MEXC"}</span>
+                  <span className="text-sm text-slate-400">{"MEXC"}</span>
                 </div>
                 <p className="mt-2 text-xl font-bold text-white">
                   {isExpired ? "Subscriptia bot a expirat" : `${daysLeft} zile ramase`}

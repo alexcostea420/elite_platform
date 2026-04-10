@@ -60,10 +60,8 @@ export async function POST(request: NextRequest) {
       .upsert(
         {
           user_id: user.id,
-          exchange,
-          api_key_encrypted: encrypt(apiKey),
-          api_secret_encrypted: encrypt(apiSecret),
-          passphrase_encrypted: passphrase ? encrypt(passphrase) : null,
+          hl_address: `mexc_${user.id.slice(0, 8)}`,
+          hl_api_private_key_encrypted: encrypt(`${apiKey}:${apiSecret}${passphrase ? `:${passphrase}` : ""}`),
           max_risk_pct: riskLevel,
           auto_sizing: true,
           paused: false,
@@ -109,7 +107,7 @@ export async function POST(request: NextRequest) {
           plan,
           price_usd: priceUsd,
           status: "active",
-          starts_at: now.toISOString(),
+          started_at: now.toISOString(),
           expires_at: expiresAt.toISOString(),
         });
 

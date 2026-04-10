@@ -41,7 +41,7 @@ export default async function BotAdminPage() {
 
   const { data: wallets } = await supabase
     .from("bot_wallets")
-    .select("user_id, exchange, max_risk_pct, paused, is_verified");
+    .select("user_id, hl_address, max_risk_pct, paused, is_verified");
 
   const subscribers = (subs ?? []).map((sub: Record<string, unknown>) => {
     const w = (wallets ?? []).find((w: Record<string, unknown>) => w.user_id === sub.user_id);
@@ -55,7 +55,7 @@ export default async function BotAdminPage() {
       id: String(sub.id),
       user_id: String(sub.user_id),
       name: String(p?.discord_username ?? p?.full_name ?? "?"),
-      exchange: String(w?.exchange ?? "-"),
+      exchange: String("MEXC"),
       risk: Number(w?.max_risk_pct ?? 0),
       paused: Boolean(w?.paused),
       verified: Boolean(w?.is_verified),
