@@ -47,10 +47,10 @@ export function MobileNav({ groups, standalone }: MobileNavProps) {
       {open && (
         <div
           className="fixed inset-0 z-[60] flex flex-col"
-          style={{ backgroundColor: "#0A0E0C" }}
+          style={{ backgroundColor: "#080808", top: 0, left: 0, right: 0, bottom: 0, position: "fixed", width: "100vw", height: "100vh" }}
         >
-          {/* Spacer for navbar height */}
-          <div className="h-14 shrink-0" />
+          {/* Spacer for navbar */}
+          <div className="h-[56px] shrink-0" />
 
           {/* Scrollable menu */}
           <div className="flex-1 overflow-y-auto px-4 pb-20 pt-2">
