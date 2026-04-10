@@ -95,19 +95,19 @@ function getSubscriptionCopy(
 
 function getStatusBadge(subscriptionStatus: SubscriptionStatus) {
   if (subscriptionStatus === "active") {
-    return { label: "Activ", className: "bg-crypto-dark/10 text-crypto-dark" };
+    return { label: "Activ", className: "bg-accent-emerald/20 text-accent-emerald" };
   }
 
   if (subscriptionStatus === "trial") {
-    return { label: "Trial", className: "bg-white/30 text-crypto-dark" };
+    return { label: "Trial", className: "bg-white/20 text-white" };
   }
 
   if (subscriptionStatus === "cancelled") {
-    return { label: "Anulat", className: "bg-amber-500/20 text-crypto-dark" };
+    return { label: "Anulat", className: "bg-amber-500/20 text-amber-400" };
   }
 
   if (subscriptionStatus === "expired") {
-    return { label: "Expirat", className: "bg-red-500/20 text-crypto-dark" };
+    return { label: "Expirat", className: "bg-red-500/20 text-red-400" };
   }
 
   return { label: "Necunoscut", className: "bg-white/25 text-crypto-dark" };
