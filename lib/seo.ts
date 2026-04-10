@@ -31,7 +31,7 @@ export function buildPageMetadata({
   type = "website",
 }: BuildPageMetadataOptions): Metadata {
   const absoluteUrl = getAbsoluteRouteUrl(path, host);
-  const imageUrl = path === "/upgrade" ? "/upgrade/opengraph-image" : "/opengraph-image";
+  const imageUrl = "/og-elite-banner.jpg";
 
   return {
     title,
