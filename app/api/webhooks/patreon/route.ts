@@ -19,7 +19,15 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get("x-patreon-signature") ?? "";
     const event = request.headers.get("x-patreon-event") ?? "";
 
-    if (!verifySignature(rawBody, signature)) {
+    // Verify signature - log for debugging
+    const isValid = verifySignature(rawBody, signature);
+    console.log(`Patreon webhook sig check: valid=${isValid}, sig=${signature?.slice(0, 8)}..., bodyLen=${rawBody.length}, secretSet=${!!WEBHOOK_SECRET}`);
+    if (!isValid && signature) {
+      // Log expected vs received for debugging
+      const expected = crypto.createHmac("md5", WEBHOOK_SECRET).update(rawBody).digest("hex");
+      console.log(`Expected sig: ${expected}, Received: ${signature}`);
+    }
+    if (!isValid) {
       console.error("Patreon webhook: invalid signature");
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
