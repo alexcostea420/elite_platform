@@ -80,7 +80,7 @@ export const heroStats = [
   { value: "350+", label: "Membri in Comunitate", tone: "gold" },
   { value: "55+", label: "Video-uri Elite", tone: "green" },
   { value: "4+", label: "Ani de Experienta", tone: "gold" },
-  { value: "3 ZILE", label: "Trial Gratuit", tone: "green" }
+  { value: "7 ZILE", label: "Trial Gratuit", tone: "green" }
 ];
 
 export const benefits = [
