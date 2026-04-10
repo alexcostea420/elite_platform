@@ -128,33 +128,35 @@ export default async function UpgradePage() {
           </section>
 
           <section className="mb-10">
-            <article className="panel p-6 md:p-8">
+            <article className="panel p-4 sm:p-6 md:p-8">
               <h2 className="text-2xl font-bold text-white">Free vs Elite</h2>
-              <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
-                <div className="grid grid-cols-[1.2fr_0.9fr_0.9fr] bg-white/5 text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">
-                  <div className="px-4 py-4">Acces</div>
-                  <div className="px-4 py-4 text-center">Free</div>
-                  <div className="px-4 py-4 text-center text-accent-emerald">Elite</div>
-                </div>
-                {comparisonRows.map((row) => (
-                  <div key={row.label} className="grid grid-cols-[1.2fr_0.9fr_0.9fr] border-t border-white/10 text-sm">
-                    <div className="px-4 py-3 text-slate-200">{row.label}</div>
-                    <div className="px-4 py-3 text-center">
-                      {row.free ? (
-                        <span className="text-green-400">✓</span>
-                      ) : (
-                        <span className="text-red-400/60">✗</span>
-                      )}
-                    </div>
-                    <div className="px-4 py-3 text-center">
-                      {row.elite ? (
-                        <span className="font-semibold text-accent-emerald">✓</span>
-                      ) : (
-                        <span className="text-red-400/60">✗</span>
-                      )}
-                    </div>
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+                <div className="min-w-[420px]">
+                  <div className="grid grid-cols-[1.2fr_0.9fr_0.9fr] bg-white/5 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">
+                    <div className="px-3 py-3 sm:px-4 sm:py-4">Acces</div>
+                    <div className="px-3 py-3 sm:px-4 sm:py-4 text-center">Free</div>
+                    <div className="px-3 py-3 sm:px-4 sm:py-4 text-center text-accent-emerald">Elite</div>
                   </div>
-                ))}
+                  {comparisonRows.map((row) => (
+                    <div key={row.label} className="grid grid-cols-[1.2fr_0.9fr_0.9fr] border-t border-white/10 text-xs sm:text-sm">
+                      <div className="px-3 py-2.5 sm:px-4 sm:py-3 text-slate-200">{row.label}</div>
+                      <div className="px-3 py-2.5 sm:px-4 sm:py-3 text-center">
+                        {row.free ? (
+                          <span className="text-green-400">✓</span>
+                        ) : (
+                          <span className="text-red-400/60">✗</span>
+                        )}
+                      </div>
+                      <div className="px-3 py-2.5 sm:px-4 sm:py-3 text-center">
+                        {row.elite ? (
+                          <span className="font-semibold text-accent-emerald">✓</span>
+                        ) : (
+                          <span className="text-red-400/60">✗</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </article>
           </section>
@@ -214,9 +216,9 @@ export default async function UpgradePage() {
             )}
 
             {/* Paid Plans */}
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
               {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => (
-                <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
+                <article key={plan.name} className={`relative rounded-[1.5rem] p-6 sm:p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
                   {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
                   <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
                   <div className="mb-6 mt-3">
@@ -284,6 +286,7 @@ export default async function UpgradePage() {
               <form action="/api/lead-magnet" method="POST" className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
                 <input type="hidden" name="source" value="payment_help" />
                 <input
+                  aria-label="Adresa ta de email"
                   className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none focus:border-accent-emerald/50"
                   name="email"
                   placeholder="email@exemplu.com"

@@ -87,32 +87,32 @@ export const benefits = [
   {
     icon: "💬",
     title: "Discord Elite",
-    description: "Canale private cu analize in timp real, discutii de piata si suport direct de la Alex."
+    description: "Analize in timp real, discutii de piata si raspunsuri directe de la Alex. Nu mai tradezi singur."
   },
   {
     icon: "📊",
     title: "4 Indicatori Elite",
-    description: "Indicatori exclusivi pe TradingView: Elite Bands, Momentum, Levels si Fib Zones."
+    description: "Semnale clare pe TradingView: Elite Bands, Momentum, Levels si Fib Zones. Setup-uri vizuale, nu ghiceli."
   },
   {
     icon: "🎥",
     title: "Sesiuni Live",
-    description: "Update de piata saptamanal cu ajustare de portofoliu. Vezi exact cum se iau deciziile."
+    description: "Update saptamanal cu ajustare de portofoliu. Vezi in timp real cum se iau deciziile si de ce."
   },
   {
     icon: "📈",
     title: "Portofoliu Live",
-    description: "16 actiuni cu zone de Buy/Sell actualizate. Stii mereu unde suntem pozitionati si de ce."
+    description: "16 actiuni cu zone de Buy/Sell actualizate. Stii exact unde intram, unde iesim si motivul din spate."
   },
   {
     icon: "📚",
     title: "55+ Video-uri",
-    description: "Biblioteca completa: de la bazele investitiilor pana la strategii avansate de executie."
+    description: "De la bazele pietei pana la executie avansata. Fiecare video te duce un pas mai aproape de consistenta."
   },
   {
     icon: "🤝",
-    title: "Comunitate",
-    description: "Investitori si traderi activi care impart idei, rezultate si se sustin reciproc."
+    title: "Comunitate Activa",
+    description: "350+ traderi care impart idei, rezultate si se trag reciproc in sus. Mediul conteaza."
   }
 ];
 
@@ -212,35 +212,35 @@ export const testimonials = [
 export const faqs = [
   {
     question: "Ce primesc imediat după activare?",
-    answer: "Imediat după plată primești acces la serverul Discord Elite, indicatorul TradingView, biblioteca video și anunțurile pentru următoarea sesiune live."
+    answer: "Acces la Discord Elite, indicatorul TradingView, biblioteca video completa si anunturile pentru sesiunile live. Totul in mai putin de 2 minute."
   },
   {
     question: "Cum funcționează accesul?",
-    answer: "Fiecare plan oferă acces pentru o perioadă fixă. După expirare, poți alege un nou plan de acces. Pentru planurile de 3 și 12 luni nu există reînnoire automată, iar rambursările nu sunt disponibile după primele 7 zile."
+    answer: "Alegi durata (30 zile, 3 luni sau 12 luni), platesti si primesti acces instant. Fara reinnoire automata, fara surprize. Dupa expirare, alegi daca continui."
   },
   {
     question: "Este potrivit pentru începători?",
-    answer: "Da. Conținutul începe de la fundamente, iar comunitatea Discord este activă și prietenoasă cu cei aflați la început."
+    answer: "Da. Biblioteca incepe de la zero, iar comunitatea te ajuta activ. Multi membri au inceput fara experienta si acum tranzactioneaza consistent."
   },
   {
     question: "Ce este indicatorul ELITE?",
-    answer: "Este un indicator exclusiv pentru TradingView, dezvoltat pentru a oferi contexte clare de intrare și ieșire pe baza analizei tehnice și volumului."
+    answer: "Un set de 4 indicatori exclusivi pe TradingView care iti arata zone clare de intrare si iesire. Construiti pe analiza tehnica si volum, testati pe piata reala."
   },
   {
     question: "Cât de des sunt sesiunile live?",
-    answer: "Sunt organizate 2-3 sesiuni live pe săptămână, plus analize săptămânale detaliate. Toate sesiunile sunt înregistrate."
+    answer: "2-3 sesiuni pe saptamana plus analize detaliate. Toate sunt inregistrate, deci le poti urmari oricand."
   },
   {
     question: "Pot plăti cu crypto?",
-    answer: "Da. Sunt acceptate plăți în USDT pentru planurile de 3 luni și 12 luni. Detaliile de plată se oferă direct în comunitate."
+    answer: "Da. Acceptam USDT si USDC pe Arbitrum, plus plata prin Binance Pay. Pentru planul lunar, poti plati si cu cardul prin Patreon."
   },
   {
     question: "Există trial gratuit?",
-    answer: "Da! La signup primești automat 7 zile de acces complet gratuit. Fără card, fără obligații. După 7 zile, poți alege un plan sau contul revine la Free."
+    answer: "Da! 7 zile acces complet, fara card, fara obligatii. Dupa 7 zile decizi daca meriti - contul revine automat la Free daca nu faci nimic."
   },
   {
     question: "Ce se întâmplă dacă nu sunt mulțumit?",
-    answer: "Ai 7 zile gratuit să testezi totul. Dacă nu ești convins, nu plătești nimic. Nu există contracte sau obligații pe termen lung."
+    answer: "Ai 7 zile gratuit sa testezi totul. Daca nu te convinge, nu platesti nimic. Zero risc."
   }
 ];
 

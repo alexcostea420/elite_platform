@@ -55,9 +55,9 @@ export function AboutSection() {
                     onClick={() => setIsVideoOpen(true)}
                     type="button"
                   >
-                    <div className="relative overflow-hidden rounded-[1.35rem] border border-white/10 bg-crypto-ink">
+                    <div className="relative aspect-video overflow-hidden rounded-[1.35rem] border border-white/10 bg-crypto-ink">
                       <Image
-                        alt={`Prezentare video ${siteConfig.creator} pentru comunitate trading crypto din România`}
+                        alt={`Prezentare video ${siteConfig.creator} pentru comunitate trading crypto din Romania`}
                         className="object-cover transition duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -146,6 +146,7 @@ export function AboutSection() {
                 <h2 className="mt-1 text-xl font-bold text-white md:text-2xl">Vezi prezentarea comunității</h2>
               </div>
               <button
+                aria-label="Inchide prezentarea"
                 className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-2xl text-white transition-colors hover:bg-white/10"
                 onClick={() => setIsVideoOpen(false)}
                 type="button"

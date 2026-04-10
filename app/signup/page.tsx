@@ -115,9 +115,12 @@ export default function SignupPage({ searchParams }: SignupPageProps) {
                   type="password"
                 />
               </div>
-              <button className="accent-button w-full" type="submit">
-                Creează cont
+              <button className="accent-button w-full py-3.5 text-base font-bold" type="submit">
+                Creează cont gratuit →
               </button>
+              <p className="mt-2 text-center text-xs text-slate-500">
+                7 zile acces complet gratuit. Fara card de credit.
+              </p>
             </form>
 
             <p className="mt-6 text-center text-sm text-slate-400">

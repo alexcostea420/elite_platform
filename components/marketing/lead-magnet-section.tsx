@@ -23,10 +23,10 @@ export function LeadMagnetSection() {
 
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
-              className="accent-button rounded-xl px-8 py-4 text-center text-base font-semibold"
+              className="accent-button rounded-xl px-8 py-4 text-center text-base font-bold"
               href="/signup"
             >
-              Incepe acum - gratuit
+              Creeaza Cont Gratuit →
             </Link>
           </div>
 

@@ -23,10 +23,10 @@ export function PricingSection() {
               Dupa 7 zile decizi daca merita.
             </p>
             <Link
-              className="accent-button mt-6 inline-block rounded-xl px-8 py-4 text-base font-semibold"
+              className="accent-button mt-6 inline-block rounded-xl px-8 py-4 text-base font-bold"
               href="/signup"
             >
-              Incepe acum - gratuit
+              Creeaza Cont Gratuit →
             </Link>
             <div className="mx-auto mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
               <span>Fara card de credit</span>
@@ -39,7 +39,7 @@ export function PricingSection() {
         {/* Paid plans - 3 columns below */}
         <div className="mt-16" />
         <SectionHeading title={<>Alege <span className="gradient-text">Planul Tau</span></>} description="Alege durata de acces potrivita pentru nivelul tau." />
-        <div className="mx-auto mt-10 grid max-w-5xl gap-8 md:grid-cols-3">
+        <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:gap-8 md:grid-cols-3">
           {pricingPlans.filter((plan) => plan.price !== "$0").map((plan) => (
             <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
               {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}

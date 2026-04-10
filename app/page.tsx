@@ -65,9 +65,9 @@ export default function HomePage() {
               <h2 className="text-3xl font-bold text-white md:text-4xl">Cum <span className="gradient-text">funcționează</span></h2>
               <p className="mx-auto mt-4 max-w-2xl text-slate-400">De la signup la acces complet - în mai puțin de 5 minute.</p>
             </div>
-            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-4">
+            <div className="mx-auto grid max-w-4xl gap-6 grid-cols-2 md:gap-8 md:grid-cols-4">
               {[
-                { step: "1", icon: "📝", title: "Creează cont", desc: "Signup gratuit cu 3 zile trial. Fără card." },
+                { step: "1", icon: "📝", title: "Creează cont", desc: "Signup gratuit cu 7 zile trial. Fără card." },
                 { step: "2", icon: "💬", title: "Intră pe Discord", desc: "Conectează Discord și primești rolul Elite automat." },
                 { step: "3", icon: "📊", title: "Explorează resursele", desc: "Analize, portofoliu Elite, video-uri educaționale și ghiduri." },
                 { step: "4", icon: "🚀", title: "Învață și investește", desc: "Analizează chart-urile, cere sfaturi și aplică ce înveți." },

@@ -58,8 +58,8 @@ export function HeroSection() {
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link className="accent-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="#preturi">
-                  Începe Acum →
+                <Link className="accent-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="/signup">
+                  Incepe Gratuit - 7 Zile →
                 </Link>
                 <button
                   className="ghost-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
@@ -96,6 +96,7 @@ export function HeroSection() {
                 <h2 className="mt-1 text-xl font-bold text-white md:text-2xl">Vezi cum funcționează comunitatea</h2>
               </div>
               <button
+                aria-label="Inchide prezentarea"
                 className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-2xl text-white transition-colors hover:bg-white/10"
                 onClick={() => setIsVideoOpen(false)}
                 type="button"

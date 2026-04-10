@@ -187,6 +187,7 @@ export function VideoLibraryClient({
           {/* Search */}
           <div className="relative flex-1">
             <svg
+              aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="18"
               height="18"
@@ -202,6 +203,7 @@ export function VideoLibraryClient({
               <path d="m21 21-4.3-4.3" />
             </svg>
             <input
+              aria-label="Cauta video dupa titlu"
               type="text"
               placeholder="Cauta video..."
               value={search}
@@ -212,6 +214,8 @@ export function VideoLibraryClient({
 
           {/* NOU toggle */}
           <button
+            aria-label="Filtreaza doar video-urile noi"
+            aria-pressed={showNewOnly}
             onClick={() => setShowNewOnly(!showNewOnly)}
             className={`rounded-xl border px-4 py-2.5 text-sm font-semibold transition ${
               showNewOnly

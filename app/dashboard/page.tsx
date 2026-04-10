@@ -190,7 +190,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             }
             return null;
           })()}
-          <section className="mb-8 grid gap-4 md:grid-cols-3">
+          <section className="mb-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             <article className="panel px-5 py-5">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Acces curent</p>
               <h3 className="mt-3 text-2xl font-bold text-white">{membershipLabel}</h3>
