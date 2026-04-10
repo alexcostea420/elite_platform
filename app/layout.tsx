@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Inter, Orbitron, JetBrains_Mono } from "next/font/google";
 
 import { FeedbackButton } from "@/components/ui/feedback-button";
+import { SplashScreen } from "@/components/ui/splash-screen";
 import { metadataBaseUrl } from "@/lib/seo";
 
 import "./globals.css";
@@ -72,6 +73,7 @@ export default function RootLayout({
             />
           </noscript>
         )}
+        <SplashScreen />
         {children}
         <FeedbackButton />
       </body>
