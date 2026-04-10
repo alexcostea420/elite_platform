@@ -80,6 +80,11 @@ export async function middleware(request: NextRequest) {
   // This must happen BEFORE any redirects so cookies are set
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Logged-in user on marketing landing page → redirect to dashboard
+  if (user && hostRole === "marketing" && pathname === "/") {
+    return createRedirectWithCookies(response, getAbsoluteHostUrl("app", "/dashboard"));
+  }
+
   // Admin role check
   if (hostRole === "admin" && pathname.startsWith("/admin")) {
     if (!user) {
