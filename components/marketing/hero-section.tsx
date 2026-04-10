@@ -44,10 +44,10 @@ export function HeroSection() {
                 <span className="font-semibold text-accent-emerald">🎯 350+ membri activi · 50+ Elite</span>
               </div>
               <div className="space-y-6">
-                <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl">
-                  <TextReveal text="Investeste si tranzactioneaza" />
+                <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl animate-scale-in">
+                  Investeste si tranzactioneaza
                   <br />
-                  <span className="gradient-text"><TextReveal text="cu un plan clar" /></span>
+                  <span className="gradient-text">cu un plan clar</span>
                 </h1>
                 <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl md:text-2xl">
                   Comunitate de investitori si traderi cu rezultate reale.
