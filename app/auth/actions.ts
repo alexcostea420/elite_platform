@@ -26,6 +26,40 @@ async function upsertProfile(userId: string, fullName: string, discordUsername: 
   return error;
 }
 
+async function grantTrial(userId: string) {
+  const supabase = createServiceRoleSupabaseClient();
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  // Retry up to 3 times to handle auth trigger race condition
+  // (Supabase Auth trigger may overwrite profile to defaults after signup)
+  const delays = [500, 1000, 1500];
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        subscription_tier: "elite",
+        subscription_status: "trial",
+        subscription_expires_at: expiresAt,
+        elite_since: new Date().toISOString(),
+        trial_used_at: new Date().toISOString(),
+      })
+      .eq("id", userId);
+
+    if (error) continue;
+
+    // Verify it stuck (auth trigger may have reset it)
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("subscription_tier")
+      .eq("id", userId)
+      .single();
+
+    if (profile?.subscription_tier === "elite") return;
+
+    await new Promise((r) => setTimeout(r, delays[attempt]));
+  }
+}
+
 export async function loginAction(formData: FormData) {
   const email = getTrimmedValue(formData, "email");
   const password = getTrimmedValue(formData, "password");
@@ -111,8 +145,7 @@ export async function signupAction(formData: FormData) {
       );
     }
 
-    // New accounts start as free - trial is opt-in from /upgrade
-    // No auto-grant of trial
+    // Trial is opt-in — user activates from dashboard
   }
 
   if (data.user && data.session) {
@@ -180,6 +213,35 @@ export async function signupWithInviteAction(formData: FormData) {
   redirect(
     `/login?message=${encodeURIComponent("Cont creat cu acces Elite. Verifică email-ul pentru confirmare.")}`,
   );
+}
+
+export async function activateTrialAction() {
+  const supabase = createServerSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const serviceClient = createServiceRoleSupabaseClient();
+
+  // Check if trial already used
+  const { data: profile } = await serviceClient
+    .from("profiles")
+    .select("trial_used_at, subscription_tier")
+    .eq("id", user.id)
+    .single();
+
+  if (profile?.trial_used_at) {
+    redirect("/dashboard?error=" + encodeURIComponent("Ai folosit deja perioada de probă."));
+  }
+
+  if (profile?.subscription_tier === "elite") {
+    redirect("/dashboard?error=" + encodeURIComponent("Ai deja acces Elite."));
+  }
+
+  await grantTrial(user.id);
+  redirect("/dashboard?trial=activated");
 }
 
 export async function logoutAction() {

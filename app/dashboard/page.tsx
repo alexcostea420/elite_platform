@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { activateTrialAction } from "@/app/auth/actions";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { ConnectDiscordCard } from "@/components/dashboard/connect-discord-card";
 import { QuickLinks } from "@/components/dashboard/quick-links";
@@ -95,7 +96,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     supabase
       .from("profiles")
       .select(
-        "full_name, role, subscription_tier, subscription_status, subscription_expires_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
+        "full_name, role, subscription_tier, subscription_status, subscription_expires_at, trial_used_at, discord_user_id, discord_username, discord_avatar, discord_connected_at, discord_role_synced_at",
       )
       .eq("id", user.id)
       .maybeSingle(),
@@ -110,6 +111,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isAdmin = profile?.role === "admin";
   const isEliteUser = profile?.subscription_tier === "elite";
+  const canActivateTrial = !isEliteUser && !profile?.trial_used_at;
   const membershipLabel = getMembershipLabel(profile?.subscription_tier ?? null);
   const statusLabel = getStatusLabel(profile?.subscription_status ?? null);
   const desiredDiscordRole = getDiscordRoleLabel(profile?.subscription_tier ?? null);
@@ -279,27 +281,50 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </>
           ) : (
             <>
-              <section className="panel mb-8 border border-accent-emerald/30 px-6 py-8 md:px-8">
-                <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                      Cont Free
-                    </p>
-                    <h2 className="text-3xl font-bold text-white">Ai acces la conținutul gratuit și la preview-urile premium</h2>
-                    <p className="mt-3 max-w-2xl text-slate-300">
-                      Explorează resursele gratuite disponibile acum și vezi exact ce deblochezi când treci la Elite.
-                    </p>
+              {canActivateTrial ? (
+                <section className="panel mb-8 border border-accent-emerald/30 bg-accent-emerald/5 px-6 py-8 md:px-8">
+                  <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                        Free Trial
+                      </p>
+                      <h2 className="text-3xl font-bold text-white">Vrei 7 zile gratuit?</h2>
+                      <p className="mt-3 max-w-2xl text-slate-300">
+                        Activează perioada de probă și primești acces complet la tot ce oferă Elite:
+                        biblioteca video, indicatori TradingView, Discord Elite și sesiuni live.
+                        Fără card, fără obligații — se dezactivează automat.
+                      </p>
+                    </div>
+                    <form action={activateTrialAction}>
+                      <button className="accent-button whitespace-nowrap px-8 py-4 text-lg font-bold" type="submit">
+                        Activează 7 Zile Gratuit →
+                      </button>
+                    </form>
                   </div>
-                  <div className="flex flex-wrap gap-3">
-                    <Link className="accent-button whitespace-nowrap" href="/upgrade">
-                      Upgrade la Elite
-                    </Link>
-                    <Link className="ghost-button whitespace-nowrap" href="/dashboard/videos">
-                      Vezi preview-urile
-                    </Link>
+                </section>
+              ) : (
+                <section className="panel mb-8 border border-accent-emerald/30 px-6 py-8 md:px-8">
+                  <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                        Cont Free
+                      </p>
+                      <h2 className="text-3xl font-bold text-white">Ai acces la conținutul gratuit și la preview-urile premium</h2>
+                      <p className="mt-3 max-w-2xl text-slate-300">
+                        Explorează resursele gratuite disponibile acum și vezi exact ce deblochezi când treci la Elite.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <Link className="accent-button whitespace-nowrap" href="/upgrade">
+                        Upgrade la Elite
+                      </Link>
+                      <Link className="ghost-button whitespace-nowrap" href="/dashboard/videos">
+                        Vezi preview-urile
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              )}
 
               <section className="mb-8 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
                 <article className="panel p-6 md:p-8">

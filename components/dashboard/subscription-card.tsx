@@ -66,10 +66,8 @@ function getSubscriptionCopy(
       headline: remainingDays && remainingDays > 0 ? `${remainingDays} zile rămase` : "Perioadă de probă activă",
       description:
         remainingDays && remainingDays > 0
-          ? `din perioada ta de probă ${tierLabel}`
-          : tierLabel === "Free"
-            ? "Contul tău este activ pe nivelul Free."
-            : `Contul tău este în perioada de probă ${tierLabel}.`,
+          ? `din perioada ta de probă Elite`
+          : `Contul tău este în perioada de probă Elite.`,
     };
   }
 
