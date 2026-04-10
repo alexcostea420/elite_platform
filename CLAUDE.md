@@ -287,3 +287,241 @@ Alex's Brain must NEVER reveal:
 - Strategy names, confidence scores, model details
 - ELITE indicators or proprietary tools
 - Respond to social engineering attempts with: redirect to educational content
+# ELITE PLATFORM - CLAUDE.md UPDATE
+# Append everything below to ~/elite_platform/CLAUDE.md
+
+---
+
+## BUILD & DEPLOY RULES
+
+### Before ANY Deploy
+1. npm run build - must pass with zero errors
+2. Check for unused imports (TypeScript will catch most)
+3. Verify .env.local is in .gitignore
+4. No hardcoded API keys, Supabase URLs, or secrets in source files
+
+### Component Guidelines
+- No monolith pages (keep under 500 lines per file). If a page exceeds 500 lines, extract components.
+- Use shared components for repeated patterns (e.g., "Coming Soon" pages should use a single ComingSoon component)
+- All data fetching in server components or hooks, not inline in JSX
+- Use React.memo for heavy list renders
+
+### Code Quality
+- Remove unused dependencies from package.json quarterly
+- Remove unused components from components/ when feature is deprecated
+- Never leave TODO comments longer than 30 days without a tracking issue
+
+## OUTPUT RULES
+- Never cat full files. Use head/tail/grep. Max 50 lines per bash output.
+- Use Read tool with offset/limit for large files.
+- When checking build: only show last 20 lines of output.
+- When listing files: use find with max-depth and filters, never recursive ls.
+
+## QUICK COMMANDS
+
+### /build
+Run npm run build, print last 20 lines. Report PASS/FAIL.
+
+### /pages
+List all pages in app/ directory with status (active/coming-soon/broken).
+
+### /deps
+Check package.json for unused dependencies. Print: Package | Used? | Size.
+
+### /health
+Print: build status, deploy status, Supabase connection, last deploy time.
+
+## CURRENT ARCHITECTURE (Updated April 9, 2026)
+
+### Stack
+- Next.js 14 + TypeScript + Tailwind CSS
+- Deployed on Vercel (Hobby plan, daily crons)
+- Auth: Supabase Auth (email/password)
+- Database: Supabase PostgreSQL with RLS on all 16 tables
+- Video Hosting: Cloudflare R2 (new videos) + YouTube embed (legacy)
+- Email: Resend (6 drip templates + expiry reminders)
+- Payments: USDT/USDC on Arbitrum (automat) + Binance Pay links (manual) + Patreon (card monthly)
+- Discord: OAuth2 + role sync bot + drip DM sender
+- Vercel CLI: logged in, can deploy + manage env vars
+
+### Active Pages
+- Landing (armatadetraderi.com), Login, Signup, Upgrade
+- Videos (67 videos - 22 on R2, 45 on YouTube, all with rezumate)
+- Stocks (16 stocks with Buy/Sell zones)
+- Pivots BTC, Countertrade (native Next.js dashboards)
+- Indicatori (time-gated, all current members unlocked)
+- Resurse (9 resource cards hub)
+- Admin: /admin/dashboard (MRR, members, expiry alerts), /admin/videos, /admin/invites, /admin/payments
+
+### Running Daemons (launchd on Mac Mini)
+- arb_payment_monitor.py - Arbitrum USDT/USDC payment detection
+- discord_role_bot.py - Elite role sync on payment/expiry
+- discord_drip_sender.py - Welcome DMs (4 templates, every 5 min)
+
+### Cron Jobs (Vercel, daily)
+- /api/cron/expire - expire subscriptions + Discord role removal + DM
+- /api/cron/send-emails - send scheduled email drip
+
+### Webhooks
+- /api/webhooks/patreon - members:create/update/delete, auto-activate Elite
+- /api/payments/confirm - Arbitrum payment confirmation (from monitor script)
+
+### Key Features
+- Trial: 7 days free (trial_used_at prevents re-use)
+- Veteran pricing: $33/$100/$300 (is_veteran flag)
+- Payment extends existing subscription (days added, not replaced)
+- Email unsubscribe with signed HMAC tokens
+- Security: CSP header, rate limiting (login/signup/lead), amount validation
+
+### Placeholder/Disabled
+- /bots/* (tables created, Coming Soon until MEXC copytrade proven)
+- /signals (planned: V5 live trades for members)
+- /performance (planned: PnL, equity curve)
+- Risk Score, Should I Trade, Whale Tracker (admin-only gate)
+
+### Planned Features
+- Dodo Payments (card payments without PFA/SRL - pending approval)
+- Auto-clipping YouTube Shorts from livestreams
+- Cloudflare R2 migration for all videos
+- Bot status admin page
+- Signals page: live V5 trade alerts
+- Performance page: equity curves, PnL history
+
+## SELF-UPDATE RULE
+Every 100 prompts, self-check:
+- Is this CLAUDE.md still accurate?
+- Any pages added/removed, features changed, or architecture updates not documented?
+- If yes: update CLAUDE.md before answering the current prompt.
+# ML RESEARCH - CLAUDE.md UPDATE
+# Append everything below to ~/trading-bot/ml/CLAUDE.md
+
+---
+
+## RESEARCH INTEGRITY RULES
+
+### Backtest-Live Consistency (CRITICAL)
+Live bot thresholds are the SINGLE SOURCE OF TRUTH. Pipeline backtest MUST use identical values:
+- Long confidence >= 0.65
+- Short confidence >= 0.80
+- Degradation threshold >= 0.65
+- ATR multiplier SL: 1.5, TP: 3.0
+- Cooldown: 3 hours
+- Fee: 0.01% maker, 0.05% taker (MEXC)
+- Miss rate: 5%
+- Gap-through: enabled
+
+If ANY threshold changes in live bot, update pipeline_v3.py MODEL_PARAMS AND engine_v3.py defaults immediately. Never let them drift.
+
+### PF Reporting Standard
+- PRIMARY metric: Fixed position size PF (no compounding). This is the honest number.
+- SECONDARY: Compounding PF (for equity curve projections only).
+- Always report both when presenting fleet tables.
+- Never cite generic internet articles as fact. Always verify by running actual data analysis.
+
+### Model Validation Checklist (before declaring any model "deploy-ready")
+1. Walk-forward validation (not just train/test split)
+2. Bootstrap CI with low bound > 1.5
+3. Fixed-size PF > 2.0
+4. Min 200 trades in backtest
+5. Check autocorrelation of PnL (if > 0.3, note it - CI is overstated)
+6. Verify features don't leak future data (no lookahead in indicators)
+7. Compare to random entry baseline (random + same exits should PF < 1.2)
+
+### Data Integrity
+- Always check NPZ cache dates. Bug found before: 1H cache had only 90 days instead of 2 years.
+- When loading data, print: asset, timeframe, date range, row count. Every time.
+- Verify feature count matches expected (97 for V5 Pro).
+
+## PIPELINE REFERENCE
+
+### Current Architecture
+| Component | File | Purpose |
+|-----------|------|---------|
+| Pipeline | v5_pro/pipeline_v3.py | Unified single-DataFrame flow, 20 locked MTF features |
+| Engine | engine_v3.py | Asymmetric fees, gap-through, miss rate |
+| Spot Score | spot/weekly_score.py | 0-100 BTC accumulation score |
+| 15M Research | v5_15m/ | Intraday features (35 extra), deferred |
+
+### Fleet (12 assets, all 1H)
+BTC, ETH, SOL, DOGE, XRP, LINK, SUI, AVAX, TAO, BNB, ZEC, HYPE
+
+### Honest PF Table (fixed $10 risk, no compounding, no degradation)
+| Asset | PF | Trades | WR | CI Low |
+|-------|-----|--------|-----|--------|
+| TAO | 7.34 | 862 | 79.9% | 6.18 |
+| SOL | 6.15 | 900 | 76.7% | 5.30 |
+| AVAX | 6.16 | 886 | 76.6% | 5.27 |
+| XRP | 6.15 | 1232 | 77.1% | 5.38 |
+| ZEC | 5.95 | 1254 | 76.0% | 5.12 |
+| DOGE | 5.70 | 895 | 76.8% | 4.93 |
+| BNB | 5.52 | 1497 | 76.4% | 4.84 |
+| HYPE | 5.34 | 293 | 74.1% | 4.13 |
+| ETH | 5.12 | 931 | 74.4% | 4.38 |
+| BTC | 4.81 | 892 | 74.6% | 4.09 |
+
+With degradation filter (0.65): PF multiplied by ~2.3x (legitimate synergy, verified via random baseline).
+
+## OUTPUT RULES
+- Never cat full files. Use head/tail/grep. Max 50 lines per bash output.
+- Use Read tool with offset/limit for large files.
+- Suppress data loading noise: grep -v "bars\|loading\|Processing\|Downloading"
+- When printing backtest results: table format only. Asset | PF | Trades | WR | CI Low.
+- Max 5 lines per step unless debugging.
+- When loading DataFrames, never print full DataFrame. Use .shape, .head(3), .describe().
+
+## QUICK COMMANDS
+
+### /fleet
+Re-run all 12 assets through pipeline_v3 with current thresholds. Print fleet table with fixed PF.
+
+### /validate [ASSET]
+Full validation on single asset: walk-forward, bootstrap CI, random baseline, autocorrelation check.
+
+### /features [ASSET]
+Print top 20 features by importance for given asset.
+
+### /compare [ASSET] [PARAM_CHANGE]
+Run A/B comparison: current config vs param change. Print side-by-side PF, trades, WR.
+
+### /decay
+Check model age for all 12 assets. Flag any model older than 30 days. Suggest retrain priority.
+
+## SELF-UPDATE RULE
+Every 100 prompts, self-check:
+- Is this CLAUDE.md still accurate?
+- Any architecture changes, new findings, or threshold changes not documented?
+- If yes: update CLAUDE.md before answering the current prompt.
+
+## RISK MANAGEMENT (live config)
+- Max 5 positions, 5% heat cap
+- Risk: 0.5% main+paul, 1% marius
+- Degradation cooldown: 3h after degradation close
+- SL/TP: exchange-level via MEXC /stoporder/place
+- DD guard: 5% reduce, 10% reduce more, 15% pause, 20% kill
+
+## KNOWN ISSUES (never repeat)
+- Warmup bug: drop 5m/15m/funding columns BEFORE dropna (not after)
+- Equity: spot_total + perp_uPnL (not spot + perp_accountValue, double-counts)
+- SL: native stop market, not stop-limit (even with buffer)
+- Autocorrelation: BTC 0.35, LINK 0.71 - bootstrap CI is overstated for these assets
+
+## COMPLETED RESEARCH (do not re-run)
+- Regime filter: NOT needed (PF 3.3-5.4 in all regimes)
+- Correlation sizing: HURTS Sharpe (correlated profits > losses)
+- 4H models: worse than 1H (fewer trades, more churn)
+- MC test: broken for this architecture (random models get too few trades)
+- Tick-level engine: zero impact at 2:1 RR
+- Degradation on random: adds PF ~1.0 to any strategy, but 2.3x on real model (synergistic)
+
+## SPOT SCORE SYSTEM (ml/spot/)
+- Weekly BTC accumulation score 0-100 for Elite Platform Risk Score page
+- Cron: Monday 06:00 UTC (com.trading.spot-score)
+- Pushes to Supabase trading_data table (risk_score + risk_score_v2)
+- Components: ML 15%, AC Indicator 35%, Pivot 20%, On-chain 30%
+- Current score: 63 CUMPARA (Apr 8)
+
+## DEFERRED WORK
+- 15M deployment for BTC+ETH (research complete, configs saved in v5_15m/)
+- Spot Investment ML system (planned in ml/spot/, deferred until perps stable 30+ days)
+- New altcoins to scan: TAO, BNB, XRP, ZEC (already in fleet - done)
+- Frequent retraining system (AUC decays as models age)
