@@ -113,7 +113,7 @@ export default async function BotDashboardPage() {
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Exchange</p>
-              <p className="mt-2 text-2xl font-bold text-white">{wallet?.exchange ?? "-"}</p>
+              <p className="mt-2 text-2xl font-bold text-white">{"MEXC"}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Trades</p>
