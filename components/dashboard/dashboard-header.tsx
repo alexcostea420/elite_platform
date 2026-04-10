@@ -15,7 +15,7 @@ export function DashboardHeader({ firstName, membershipLabel, statusLabel }: Das
     <section className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/5 px-6 py-8 shadow-card md:px-8">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-white">
             {today}
           </p>
           <h1 className="text-4xl font-bold text-white">
