@@ -164,5 +164,31 @@ export async function redeemInvite(token: string, userId: string) {
     status: "active",
   });
 
+  // Guard against Supabase Auth trigger race condition:
+  // The auth trigger may create/reset the profile AFTER our update.
+  // Retry up to 3 times with increasing delay to ensure elite is set.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+    const { data: check } = await supabase
+      .from("profiles")
+      .select("subscription_tier")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (check?.subscription_tier === "elite") break;
+
+    // Re-apply the update
+    await supabase
+      .from("profiles")
+      .update({
+        subscription_tier: "elite",
+        subscription_status: "active",
+        subscription_expires_at: expiresAt.toISOString(),
+        ...(updateData.is_veteran ? { is_veteran: true } : {}),
+        ...(updateData.elite_since ? { elite_since: updateData.elite_since as string } : {}),
+      })
+      .eq("id", userId);
+  }
+
   return { success: true, expiresAt };
 }
