@@ -109,17 +109,20 @@ export default async function StocksPage() {
 
           {/* Signal summary */}
           <section className="mb-8 grid gap-4 md:grid-cols-3">
-            <article className="panel px-5 py-5 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-green-400">BUY Signals</p>
-              <h3 className="mt-3 text-3xl font-bold text-green-400">{buySignals}</h3>
+            <article className="glass-card px-5 py-6 text-center">
+              <div className="mb-2 text-2xl">🟢</div>
+              <h3 className="font-mono text-4xl font-bold text-accent-emerald">{buySignals}</h3>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-accent-emerald/70">Buy Signals</p>
             </article>
-            <article className="panel px-5 py-5 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">HOLD</p>
-              <h3 className="mt-3 text-3xl font-bold text-slate-400">{holdSignals}</h3>
+            <article className="glass-card px-5 py-6 text-center">
+              <div className="mb-2 text-2xl">⚪</div>
+              <h3 className="font-mono text-4xl font-bold text-slate-400">{holdSignals}</h3>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Hold</p>
             </article>
-            <article className="panel px-5 py-5 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-400">SELL Signals</p>
-              <h3 className="mt-3 text-3xl font-bold text-orange-400">{sellSignals}</h3>
+            <article className="glass-card px-5 py-6 text-center">
+              <div className="mb-2 text-2xl">🟠</div>
+              <h3 className="font-mono text-4xl font-bold text-orange-400">{sellSignals}</h3>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-orange-400/70">Sell Signals</p>
             </article>
           </section>
 
@@ -128,13 +131,13 @@ export default async function StocksPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/5 text-left text-xs uppercase tracking-wider text-slate-500">
-                  <th className="px-5 py-4">Ticker</th>
-                  <th className="px-5 py-4">Pret</th>
-                  <th className="px-5 py-4">Buy 1</th>
-                  <th className="px-5 py-4">Buy 2</th>
-                  <th className="px-5 py-4">Sell 1</th>
-                  <th className="px-5 py-4">Sell 2</th>
-                  <th className="px-5 py-4">% ATH</th>
+                  <th className="sticky left-0 z-10 bg-surface-graphite px-5 py-4">Ticker</th>
+                  <th className="px-5 py-4 font-mono">Pret</th>
+                  <th className="px-5 py-4 font-mono">Buy 1</th>
+                  <th className="px-5 py-4 font-mono">Buy 2</th>
+                  <th className="px-5 py-4 font-mono">Sell 1</th>
+                  <th className="px-5 py-4 font-mono">Sell 2</th>
+                  <th className="px-5 py-4 font-mono">% ATH</th>
                   <th className="px-5 py-4">Semnal</th>
                 </tr>
               </thead>
@@ -145,14 +148,14 @@ export default async function StocksPage() {
 
                   return (
                     <tr key={stock.ticker} className="border-b border-white/5 transition hover:bg-white/[0.02]">
-                      <td className="px-5 py-4">
+                      <td className="sticky left-0 z-10 bg-surface-graphite px-5 py-4">
                         <span className="font-bold text-white">{stock.ticker}</span>
                       </td>
-                      <td className="px-5 py-4 font-semibold text-white">{formatPrice(stock.currentPrice)}</td>
-                      <td className="px-5 py-4 text-green-400">{formatPrice(stock.buy1)}</td>
-                      <td className="px-5 py-4 text-green-400/60">{formatPrice(stock.buy2)}</td>
-                      <td className="px-5 py-4 text-orange-400">{formatPrice(stock.sell1)}</td>
-                      <td className="px-5 py-4 text-orange-400/60">{formatPrice(stock.sell2)}</td>
+                      <td className="px-5 py-4 font-mono font-semibold text-white">{formatPrice(stock.currentPrice)}</td>
+                      <td className="px-5 py-4 font-mono text-green-400">{formatPrice(stock.buy1)}</td>
+                      <td className="px-5 py-4 font-mono text-green-400/60">{formatPrice(stock.buy2)}</td>
+                      <td className="px-5 py-4 font-mono text-orange-400">{formatPrice(stock.sell1)}</td>
+                      <td className="px-5 py-4 font-mono text-orange-400/60">{formatPrice(stock.sell2)}</td>
                       <td className="px-5 py-4">
                         <span className={stock.pctFromATH > -20 ? "text-yellow-400" : "text-red-400"}>
                           {stock.pctFromATH.toFixed(1)}%
