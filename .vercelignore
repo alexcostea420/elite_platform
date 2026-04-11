@@ -1,0 +1,8 @@
+node_modules
+.next
+data/
+logs/
+.env*
+*.swp
+scripts/
+.DS_Store
