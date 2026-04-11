@@ -78,9 +78,9 @@ export const dashboardNavGroups = [
 ];
 
 export const heroStats = [
-  { value: "350+", label: "Membri in Comunitate", tone: "gold" },
-  { value: "55+", label: "Video-uri Elite", tone: "green" },
-  { value: "4+", label: "Ani de Experienta", tone: "gold" },
+  { value: "350+", label: "Traderi Activi", tone: "gold" },
+  { value: "17", label: "Strategii ML", tone: "green" },
+  { value: "55+", label: "Video-uri Educaționale", tone: "gold" },
   { value: "7 ZILE", label: "Trial Gratuit", tone: "green" }
 ];
 
@@ -114,6 +114,11 @@ export const benefits = [
     icon: "🤝",
     title: "Comunitate Activa",
     description: "350+ traderi care împart idei, rezultate și se trag reciproc în sus. Mediul contează."
+  },
+  {
+    icon: "🤖",
+    title: "Bot AI Trading",
+    description: "17 strategii ML executate automat pe MEXC. Copytrade fără intervenție. Elite members: $45/lună în loc de $98."
   }
 ];
 
@@ -242,6 +247,14 @@ export const faqs = [
   {
     question: "Ce se întâmplă dacă nu sunt mulțumit?",
     answer: "Ai 7 zile gratuit sa testezi totul. Daca nu te convinge, nu platesti nimic. Zero risc."
+  },
+  {
+    question: "Ce este botul AI?",
+    answer: "Un sistem automat cu 17 strategii ML care tranzactioneaza pe MEXC in numele tau. Tu nu faci nimic — botul executa. Disponibil ca addon la $98/luna, sau $45/luna pentru membrii Elite."
+  },
+  {
+    question: "Pot pierde bani?",
+    answer: "Da. Tradingul implica risc real. Nu garantam profituri si nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces — diferenta o face cum le gestionezi."
   }
 ];
 
