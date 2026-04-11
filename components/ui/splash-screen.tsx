@@ -63,7 +63,7 @@ export function SplashScreen() {
           </linearGradient>
           <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="rgba(11,102,35,0.4)" />
-            <stop offset="100%" stopColor="#0B6623" />
+            <stop offset="100%" stopColor="#10B981" />
           </linearGradient>
         </defs>
 
@@ -95,7 +95,7 @@ export function SplashScreen() {
           cx={width}
           cy={points[points.length - 1]?.split(",")[1] || "20"}
           r="5"
-          fill="#0B6623"
+          fill="#10B981"
           style={{
             opacity: 0,
             animation: "glowDot 0.6s ease-out 2s forwards",

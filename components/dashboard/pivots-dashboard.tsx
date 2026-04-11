@@ -1041,8 +1041,8 @@ function HeaderBadges() {
     pivotBorder = "rgba(245,158,11,.3)";
   } else if (sc.active.length > 0) {
     pivotText = `\u26A1 Pivot activ: ${sc.active[0].name}`;
-    pivotColor = "#0B6623";
-    pivotBorder = "rgba(11,102,35,.3)";
+    pivotColor = "#10B981";
+    pivotBorder = "rgba(16,185,129,.3)";
   }
 
   return (

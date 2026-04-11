@@ -290,7 +290,7 @@ function ScoresTable() {
                 : s < 35
                   ? "#d95555"
                   : s > 65
-                    ? "#0B6623"
+                    ? "#10B981"
                     : "#c88c0a";
 
             let trend: React.ReactNode = (
@@ -526,7 +526,7 @@ function MainChart() {
           {
             label: "BTC Price",
             data: allDates.map((d) => pm[d] ?? null),
-            borderColor: "#0B6623",
+            borderColor: "#10B981",
             backgroundColor: "rgba(11,102,35,.04)",
             fill: true,
             borderWidth: 2,
