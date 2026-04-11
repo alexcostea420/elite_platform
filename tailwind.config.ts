@@ -5,24 +5,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "accent-emerald": "#0B6623",       // Forest green - primary accent
-        "accent-soft": "#0E7A2B",           // Slightly lighter - hover
-        "crypto-green": "#0B6623",          // Same forest green for profit
-        "crypto-dark": "#080808",           // Pure dark
-        "surface-graphite": "#121212",      // Neutral dark surface
-        "crypto-ink": "#050505",            // Deepest dark
+        "accent-emerald": "#10B981",
+        "accent-soft": "#34D399",
+        "crypto-green": "#10B981",
+        "crypto-dark": "#09090B",
+        "surface-graphite": "#111113",
+        "crypto-ink": "#09090B",
+        // Semantic
+        danger: "#EF4444",
+        warning: "#F59E0B",
+        info: "#3B82F6",
       },
       boxShadow: {
-        glow: "0 0 28px rgba(11, 102, 35, 0.12)",
-        card: "0 18px 38px rgba(0, 0, 0, 0.5)",
+        glow: "0 0 24px rgba(16, 185, 129, 0.1)",
+        "glow-strong": "0 0 40px rgba(16, 185, 129, 0.18)",
+        card: "0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3)",
+        "card-hover": "0 8px 30px rgba(0, 0, 0, 0.5), 0 0 1px rgba(16, 185, 129, 0.1)",
       },
       backgroundImage: {
-        "emerald-gradient": "linear-gradient(135deg, #0B6623 0%, #0E7A2B 100%)",
-        "hero-radial": "radial-gradient(circle at top, rgba(11, 102, 35, 0.08), transparent 38%)",
+        "emerald-gradient": "linear-gradient(135deg, #10B981 0%, #34D399 100%)",
+        "hero-radial": "radial-gradient(circle at top, rgba(16, 185, 129, 0.06), transparent 38%)",
       },
       fontFamily: {
-        display: ["var(--font-orbitron)"],
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-inter)"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
     },
   },

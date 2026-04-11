@@ -5,21 +5,18 @@
 :root {
   color-scheme: dark;
 
-  /* Dashboard PRO theme */
-  --bg-primary: #0a0a0f;
+  --bg-primary: #09090B;
   --bg-card: rgba(255, 255, 255, 0.03);
   --bg-card-hover: rgba(255, 255, 255, 0.06);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --text-primary: #e4e4e7;
-  --text-secondary: #71717a;
-  --text-muted: #3f3f46;
-  --accent-green: #22c55e;
-  --accent-red: #ef4444;
-  --accent-amber: #f59e0b;
-  --accent-blue: #3b82f6;
-  --glow-green: rgba(34, 197, 94, 0.15);
-  --glow-red: rgba(239, 68, 68, 0.15);
-  --glow-amber: rgba(245, 158, 11, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #52525B;
+  --accent: #10B981;
+  --accent-glow: rgba(16, 185, 129, 0.15);
+  --danger: #EF4444;
+  --warning: #F59E0B;
 }
 
 html {
@@ -28,12 +25,12 @@ html {
 
 body {
   @apply bg-crypto-dark text-slate-100 antialiased;
-  background-color: #080808;
+  background-color: #09090B;
 }
 
 a,
 button {
-  @apply transition-all duration-300;
+  @apply transition-all duration-200;
 }
 
 *:focus-visible {
@@ -45,40 +42,48 @@ button {
     @apply bg-emerald-gradient bg-clip-text text-transparent;
   }
 
-  
-.card-hover {
-    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-card;
+  .card-hover {
+    @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
   }
 
   .panel {
-  @apply rounded-2xl border bg-surface-graphite backdrop-blur-sm;
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 18px 40px rgba(3, 8, 6, 0.42);
-}
+    @apply rounded-2xl border bg-surface-graphite backdrop-blur-sm;
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+  .panel:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 
   .accent-button {
-    @apply inline-flex items-center justify-center rounded-xl bg-accent-emerald px-6 py-3 font-semibold text-crypto-dark shadow-glow hover:bg-accent-soft;
+    @apply inline-flex items-center justify-center rounded-xl bg-accent-emerald px-6 py-3 text-sm font-semibold text-crypto-dark shadow-glow transition-all duration-150 hover:bg-accent-soft hover:shadow-glow-strong;
+  }
+  .accent-button:active {
+    transform: scale(0.98);
   }
 
   .ghost-button {
-    @apply inline-flex items-center justify-center rounded-xl border border-white/20 px-6 py-3 font-semibold text-white hover:border-accent-emerald hover:text-accent-emerald;
+    @apply inline-flex items-center justify-center rounded-xl border border-white/10 px-6 py-3 text-sm font-medium text-white/80 transition-all duration-150 hover:border-white/20 hover:bg-white/[0.03] hover:text-white;
   }
 
   .glass-card {
     background: var(--bg-card);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    transition: all 0.2s ease;
   }
-
   .glass-card:hover {
     background: var(--bg-card-hover);
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--border-hover);
   }
 
   .font-data {
-    font-family: var(--font-mono), "JetBrains Mono", monospace;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-[0.12em] text-accent-emerald;
   }
 
   .grid-glow {
@@ -90,19 +95,18 @@ button {
 
   /* Plyr player - dark theme */
   .plyr-container {
-    --plyr-color-main: #0B6623;
-    --plyr-video-background: #080808;
-    --plyr-menu-background: #111916;
+    --plyr-color-main: #10B981;
+    --plyr-video-background: #09090B;
+    --plyr-menu-background: #111113;
     --plyr-menu-color: #e2e8f0;
-    --plyr-badge-background: #0B6623;
-    --plyr-badge-text-color: #080808;
+    --plyr-badge-background: #10B981;
+    --plyr-badge-text-color: #09090B;
     --plyr-control-icon-size: 18px;
-    --plyr-range-thumb-background: #0B6623;
-    --plyr-range-fill-background: #0B6623;
-    --plyr-tooltip-background: #111916;
+    --plyr-range-thumb-background: #10B981;
+    --plyr-range-fill-background: #10B981;
+    --plyr-tooltip-background: #111113;
     --plyr-tooltip-color: #e2e8f0;
   }
-
   .plyr-container .plyr {
     border-radius: 16px;
   }
@@ -110,8 +114,8 @@ button {
   /* Fade-in-up animation for staggered reveals */
   .animate-fade-in-up {
     opacity: 0;
-    transform: translateY(24px);
-    animation: fadeInUp 0.6s ease-out forwards;
+    transform: translateY(16px);
+    animation: fadeInUp 0.5s ease-out forwards;
   }
 
   @keyframes fadeInUp {
@@ -122,39 +126,11 @@ button {
   }
 
   .stagger-1 { animation-delay: 0.05s; }
-  .stagger-2 { animation-delay: 0.1s; }
-  .stagger-3 { animation-delay: 0.15s; }
-  .stagger-4 { animation-delay: 0.2s; }
-  .stagger-5 { animation-delay: 0.25s; }
-  .stagger-6 { animation-delay: 0.3s; }
-  .stagger-7 { animation-delay: 0.35s; }
-  .stagger-8 { animation-delay: 0.4s; }
-  .stagger-9 { animation-delay: 0.45s; }
-  .stagger-10 { animation-delay: 0.5s; }
-
-  /* Text reveal with glow */
-  .animate-text-reveal span {
-    opacity: 0;
-    display: inline-block;
-    animation: textRevealGlow 0.4s ease-out forwards;
-    text-shadow: 0 0 0px transparent;
-  }
-
-  @keyframes textRevealGlow {
-    0% {
-      opacity: 0;
-      transform: translateY(8px);
-      text-shadow: 0 0 0px transparent;
-    }
-    60% {
-      text-shadow: 0 0 20px rgba(11, 102, 35, 0.8);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-      text-shadow: 0 0 0px transparent;
-    }
-  }
+  .stagger-2 { animation-delay: 0.125s; }
+  .stagger-3 { animation-delay: 0.2s; }
+  .stagger-4 { animation-delay: 0.275s; }
+  .stagger-5 { animation-delay: 0.35s; }
+  .stagger-6 { animation-delay: 0.425s; }
 
   /* Scale-in for hero elements */
   .animate-scale-in {
@@ -168,5 +144,18 @@ button {
       opacity: 1;
       transform: scale(1);
     }
+  }
+
+  /* Shimmer skeleton */
+  .skeleton {
+    @apply rounded-lg;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 }

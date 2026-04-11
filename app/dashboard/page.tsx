@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { activateTrialAction } from "@/app/auth/actions";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { TrialButton } from "@/components/dashboard/trial-button";
 import { ConnectDiscordCard } from "@/components/dashboard/connect-discord-card";
 import { QuickLinks } from "@/components/dashboard/quick-links";
 import { MiniDashboard } from "@/components/dashboard/mini-dashboard";
@@ -295,11 +295,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         Fără card, fără obligații — se dezactivează automat.
                       </p>
                     </div>
-                    <form action={activateTrialAction}>
-                      <button className="accent-button whitespace-nowrap px-8 py-4 text-lg font-bold" type="submit">
-                        Activează 7 Zile Gratuit →
-                      </button>
-                    </form>
+                    <TrialButton />
                   </div>
                 </section>
               ) : (
