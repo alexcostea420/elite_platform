@@ -27,7 +27,6 @@ export const marketingNav = [
   { href: "/#preturi", label: "Prețuri" },
   { href: "/#testimoniale", label: "Testimoniale" },
   { href: "/#faq", label: "FAQ" },
-  { href: "/track-record", label: "Track Record" },
   { href: "/blog", label: "Blog" }
 ];
 
