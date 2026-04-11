@@ -300,7 +300,7 @@ export default async function ShouldITradePage() {
                   </span>
                 ))
               ) : (
-                <span className="text-[11px] text-slate-600">Fara alerte active</span>
+                <span className="text-[11px] text-slate-600">Niciun eveniment major detectat. Conditii normale de tranzactionare.</span>
               )}
             </div>
           </section>
@@ -347,6 +347,9 @@ export default async function ShouldITradePage() {
                   {fundingPct > 0 ? "+" : ""}{fundingPct.toFixed(4)}%
                 </p>
                 <p className={`text-[11px] font-semibold ${funding.color}`}>{funding.word}</p>
+                <p className="mt-1 text-[10px] text-slate-600">
+                  {fundingPct < 0 ? "Funding negativ = shorts platesc = bullish bias" : fundingPct > 0.03 ? "Funding ridicat = risc de long squeeze" : "Funding normal = fara presiune"}
+                </p>
               </article>
 
               {/* Card 3: Volum 24h */}

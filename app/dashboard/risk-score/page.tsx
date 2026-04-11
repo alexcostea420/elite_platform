@@ -361,7 +361,11 @@ export default async function RiskScorePage() {
   const fgValue = safeNum(riskScore.fear_greed?.value, 50);
   const pctFromAth = safeNum(riskScore.pct_from_ath, 0);
   const halvingComp = riskScore.components?.halving_cycle;
-  const halvingDays = halvingComp?.raw != null && typeof halvingComp.raw === "number" ? Math.round(halvingComp.raw) : null;
+  // Calculate days since halving if data unavailable (halving: April 19, 2024)
+  const halvingDate = new Date("2024-04-19T00:00:00Z");
+  const halvingDays = halvingComp?.raw != null && typeof halvingComp.raw === "number"
+    ? Math.round(halvingComp.raw)
+    : Math.round((Date.now() - halvingDate.getTime()) / (24 * 60 * 60 * 1000));
 
   // Derivatives (may be empty)
   const deriv = riskScore.derivatives ?? {} as RiskScoreData["derivatives"];
@@ -594,9 +598,9 @@ export default async function RiskScorePage() {
           <section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
             {[
               { key: "fear_greed", label: "Fear & Greed", value: String(fgValue), rawVal: fgValue, icon: "😨" },
-              { key: "vix", label: "VIX", value: safeNum(macro.vix).toFixed(1), rawVal: safeNum(macro.vix), icon: "📉" },
-              { key: "dxy", label: "DXY", value: safeNum(macro.dxy).toFixed(1), rawVal: safeNum(macro.dxy), icon: "💵" },
-              { key: "fed_funds_rate", label: "Rata Fed", value: `${safeNum(macro.fed_funds_rate).toFixed(2)}%`, rawVal: safeNum(macro.fed_funds_rate), icon: "🏦" },
+              { key: "vix", label: "VIX", value: safeNum(macro.vix) > 0 ? safeNum(macro.vix).toFixed(1) : "Actualizare...", rawVal: safeNum(macro.vix), icon: "📉" },
+              { key: "dxy", label: "DXY", value: safeNum(macro.dxy) > 0 ? safeNum(macro.dxy).toFixed(1) : "Actualizare...", rawVal: safeNum(macro.dxy), icon: "💵" },
+              { key: "fed_funds_rate", label: "Rata Fed", value: safeNum(macro.fed_funds_rate) > 0 ? `${safeNum(macro.fed_funds_rate).toFixed(2)}%` : "Actualizare...", rawVal: safeNum(macro.fed_funds_rate), icon: "🏦" },
             ].map(({ key, label, value, rawVal, icon }) => {
               const dotColor = getMacroColor(key, rawVal);
               return (
