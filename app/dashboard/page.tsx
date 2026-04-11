@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { OnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
 import { TrialButton } from "@/components/dashboard/trial-button";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
@@ -158,6 +159,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {isEliteUser ? (
             /* ═══ ELITE DASHBOARD ═══ */
             <>
+              {/* Onboarding checklist for new users */}
+              <OnboardingChecklist />
+
               {/* Quick access grid */}
               <section className="mb-8 grid gap-3 grid-cols-2 md:grid-cols-4 animate-fade-in-up stagger-2">
                 {[
