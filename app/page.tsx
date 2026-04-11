@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 
 import { Footer } from "@/components/layout/footer";
@@ -10,7 +11,6 @@ import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 const AboutSection = dynamic(() => import("@/components/marketing/about-section").then(m => m.AboutSection));
 const BenefitsSection = dynamic(() => import("@/components/marketing/benefits-section").then(m => m.BenefitsSection));
-const CtaSection = dynamic(() => import("@/components/marketing/cta-section").then(m => m.CtaSection));
 const FaqSection = dynamic(() => import("@/components/marketing/faq-section").then(m => m.FaqSection));
 const LeadMagnetSection = dynamic(() => import("@/components/marketing/lead-magnet-section").then(m => m.LeadMagnetSection));
 const PricingSection = dynamic(() => import("@/components/marketing/pricing-section").then(m => m.PricingSection));
@@ -56,6 +56,34 @@ export default async function HomePage() {
     { value: "7 ZILE", label: "Trial Gratuit", tone: "green" },
   ];
 
+  const features = [
+    {
+      label: "ANALIZA SAPTAMANALA",
+      title: "Stii exact cand sa cumperi",
+      desc: "Un scor de la 0 la 100 bazat pe Fear & Greed, distanta de ATH, sentiment si cicluri. Actualizat saptamanal.",
+    },
+    {
+      label: "16 ACTIUNI MONITORIZATE",
+      title: "Zone clare de Buy si Sell",
+      desc: "Fiecare actiune cu 2 zone de cumparare si 2 zone de vanzare. Stii exact unde intri si unde iesi.",
+    },
+    {
+      label: "TIMING RESEARCH",
+      title: "9 metode. Un singur calendar.",
+      desc: "Eclipse, Fibonacci, Gann, Halving, Blood Moon - toate analizate si combinate intr-un scor de convergenta.",
+    },
+    {
+      label: "55+ VIDEO-URI",
+      title: "De la zero la executie",
+      desc: "Fiecare video te duce cu un pas mai aproape de consistenta. Analiza tehnica, risk management, psihologie.",
+    },
+    {
+      label: "350+ TRADERI",
+      title: "Nu mai tranzactionezi singur",
+      desc: "Intreaba orice, primesti raspuns. Discutii zilnice, analize, si sesiuni live saptamanale cu Alex.",
+    },
+  ];
+
   return (
     <>
       <script
@@ -68,11 +96,197 @@ export default async function HomePage() {
       />
       <Navbar mode="marketing" />
       <main>
+        {/* 1. Hero */}
         <HeroSection />
+
+        {/* 2. Stats */}
         <StatsSection stats={liveStats} />
+
+        {/* 3. Live Data Strip */}
+        <section className="py-4">
+          <Container>
+            <div className="glass-card mx-auto flex flex-wrap items-center justify-center gap-4 rounded-2xl px-6 py-3 text-xs md:gap-8">
+              <span className="flex items-center gap-2">
+                <span className="text-slate-400">Risk Score:</span>
+                <span className="font-mono font-bold text-accent-emerald">67</span>
+                <span className="rounded bg-accent-emerald/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-accent-emerald">CUMPARA</span>
+              </span>
+              <span className="hidden h-4 w-px bg-slate-700 sm:block" />
+              <span className="flex items-center gap-2">
+                <span className="text-slate-400">BTC:</span>
+                <span className="font-mono font-bold text-white">$84,250</span>
+              </span>
+              <span className="hidden h-4 w-px bg-slate-700 sm:block" />
+              <span className="flex items-center gap-2">
+                <span className="text-slate-400">Fear &amp; Greed:</span>
+                <span className="font-mono font-bold text-red-400">15</span>
+              </span>
+              <span className="hidden h-4 w-px bg-slate-700 sm:block" />
+              <span className="flex items-center gap-2">
+                <span className="text-slate-400">Distanta ATH:</span>
+                <span className="font-mono font-bold text-red-400">-42%</span>
+              </span>
+            </div>
+          </Container>
+        </section>
+
+        {/* 4. Feature Sections - Instrumentele Tale */}
+        <section className="py-20" id="instrumente">
+          <Container>
+            <div className="mb-16 text-center">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Tot ce ai nevoie</p>
+              <h2 className="text-3xl font-bold text-white md:text-4xl">
+                Instrumentele <span className="gradient-text">Tale</span>
+              </h2>
+            </div>
+
+            <div className="space-y-24">
+              {/* Feature 1: Risk Score - text left, preview right */}
+              <div className="flex flex-col items-center gap-10 md:flex-row">
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[0].label}</p>
+                  <h3 className="text-2xl font-bold text-white md:text-3xl">{features[0].title}</h3>
+                  <p className="text-slate-400">{features[0].desc}</p>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="glass-card flex h-48 w-48 flex-col items-center justify-center rounded-full border border-accent-emerald/30">
+                    <span className="text-5xl font-bold text-accent-emerald">67</span>
+                    <span className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent-emerald/80">CUMPARA</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature 2: Stocks - preview left, text right */}
+              <div className="flex flex-col-reverse items-center gap-10 md:flex-row">
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="glass-card w-full max-w-xs space-y-2 rounded-2xl p-5">
+                    <div className="flex items-center justify-between border-b border-slate-700/50 pb-2 text-xs text-slate-500">
+                      <span>Actiune</span><span>Status</span>
+                    </div>
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="font-mono text-sm font-bold text-white">TSLA</span>
+                      <span className="rounded bg-yellow-500/10 px-2 py-0.5 text-xs font-semibold text-yellow-400">HOLD</span>
+                    </div>
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="font-mono text-sm font-bold text-white">MSFT</span>
+                      <span className="rounded bg-accent-emerald/10 px-2 py-0.5 text-xs font-semibold text-accent-emerald">BUY</span>
+                    </div>
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="font-mono text-sm font-bold text-white">GOOG</span>
+                      <span className="rounded bg-red-500/10 px-2 py-0.5 text-xs font-semibold text-red-400">SELL</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[1].label}</p>
+                  <h3 className="text-2xl font-bold text-white md:text-3xl">{features[1].title}</h3>
+                  <p className="text-slate-400">{features[1].desc}</p>
+                </div>
+              </div>
+
+              {/* Feature 3: Pivot Dashboard - text left, preview right */}
+              <div className="flex flex-col items-center gap-10 md:flex-row">
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[2].label}</p>
+                  <h3 className="text-2xl font-bold text-white md:text-3xl">{features[2].title}</h3>
+                  <p className="text-slate-400">{features[2].desc}</p>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="glass-card w-full max-w-xs space-y-4 rounded-2xl p-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-white">Convergenta Pivoti</span>
+                      <span className="font-mono text-xs text-accent-emerald">3/9</span>
+                    </div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-slate-700">
+                      <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-accent-emerald to-emerald-400" />
+                    </div>
+                    <p className="text-xs text-slate-500">3 metode active din 9 analizate</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature 4: Educatie - preview left, text right */}
+              <div className="flex flex-col-reverse items-center gap-10 md:flex-row">
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="flex w-full max-w-xs gap-2">
+                    <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
+                      <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">📊</div>
+                      <p className="text-[11px] font-medium leading-tight text-slate-300">Fibonacci Retracement</p>
+                    </div>
+                    <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
+                      <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">🧠</div>
+                      <p className="text-[11px] font-medium leading-tight text-slate-300">Psihologia Tradingului</p>
+                    </div>
+                    <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
+                      <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">⚖️</div>
+                      <p className="text-[11px] font-medium leading-tight text-slate-300">Risk Management</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[3].label}</p>
+                  <h3 className="text-2xl font-bold text-white md:text-3xl">{features[3].title}</h3>
+                  <p className="text-slate-400">{features[3].desc}</p>
+                </div>
+              </div>
+
+              {/* Feature 5: Comunitate - text left, preview right */}
+              <div className="flex flex-col items-center gap-10 md:flex-row">
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[4].label}</p>
+                  <h3 className="text-2xl font-bold text-white md:text-3xl">{features[4].title}</h3>
+                  <p className="text-slate-400">{features[4].desc}</p>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="glass-card w-full max-w-xs space-y-3 rounded-2xl p-5">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-xs font-bold text-indigo-400">A</div>
+                      <div className="space-y-1">
+                        <p className="text-xs font-semibold text-indigo-400">Alex</p>
+                        <p className="rounded-lg rounded-tl-none bg-slate-800 px-3 py-2 text-xs text-slate-300">BTC arata bine pe weekly. Zona de buy intre 80-82k.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-400">M</div>
+                      <div className="space-y-1">
+                        <p className="text-xs font-semibold text-emerald-400">Mihai</p>
+                        <p className="rounded-lg rounded-tl-none bg-slate-800 px-3 py-2 text-xs text-slate-300">Multumesc! Am intrat cu DCA la 81k.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* 5. Social Proof Stats */}
+        <section className="py-20">
+          <Container>
+            <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
+              <div className="text-center">
+                <p className="text-5xl font-bold text-white md:text-7xl">85%</p>
+                <p className="mt-4 text-sm text-slate-400">spun ca au inteles mai bine piata dupa primele 2 saptamani</p>
+              </div>
+              <div className="text-center">
+                <p className="text-5xl font-bold text-white md:text-7xl">70%</p>
+                <p className="mt-4 text-sm text-slate-400">spun ca au evitat cel putin o decizie proasta datorita Risk Score-ului</p>
+              </div>
+              <div className="text-center">
+                <p className="text-5xl font-bold text-accent-emerald md:text-7xl">350+</p>
+                <p className="mt-4 text-sm text-slate-400">traderi activi care invata si cresc impreuna</p>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* 6. About */}
         <AboutSection />
+
+        {/* 7. Benefits */}
         <BenefitsSection />
-        {/* How It Works */}
+
+        {/* 8. How It Works */}
         <section className="py-20" id="cum-functioneaza">
           <Container>
             <div className="mb-12 text-center">
@@ -97,11 +311,37 @@ export default async function HomePage() {
             </div>
           </Container>
         </section>
+
+        {/* 9. Trial CTA */}
+        <LeadMagnetSection />
+
+        {/* 10. Pricing */}
         <PricingSection />
+
+        {/* 11. Testimonials */}
         <TestimonialsSection />
+
+        {/* 12. FAQ */}
         <FaqSection />
-        <CtaSection />
+
+        {/* 13. Final CTA */}
+        <section className="relative py-20">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-emerald/5 to-transparent" />
+          <Container className="relative text-center">
+            <h2 className="text-3xl font-bold text-white md:text-4xl">
+              Inca te gandesti?
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-slate-400">
+              Incepe cu 7 zile gratuit. Fara card, fara obligatii. Daca nu merita, nu platesti nimic.
+            </p>
+            <Link className="accent-button mt-8 inline-block px-10 py-4 text-lg font-bold" href="/signup">
+              Incepe Gratuit →
+            </Link>
+          </Container>
+        </section>
       </main>
+
+      {/* 14. Footer */}
       <Footer />
       <TrialPopup />
     </>
