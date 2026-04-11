@@ -40,35 +40,43 @@ export function HeroSection() {
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl text-center">
             <div className="flex flex-col items-center gap-6 md:gap-8">
-              <div className="inline-flex rounded-full border border-accent-emerald/20 bg-white/[0.03] px-4 py-2 text-xs">
-                <span className="font-medium text-slate-300">17 strategii ML · Track record live · Risk Score săptămânal</span>
+              <div className="inline-flex rounded-full border border-accent-emerald/30 bg-surface-graphite px-4 py-2">
+                <span className="font-semibold text-accent-emerald">350+ traderi activi · Peste 50 membri Elite</span>
               </div>
               <div className="space-y-6">
                 <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl animate-scale-in">
-                  Tradingul tău.
+                  Investește și tranzacționează
                   <br />
-                  <span className="gradient-text">Automatizat.</span>
+                  <span className="gradient-text">cu un plan clar.</span>
                 </h1>
-                <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg md:text-xl">
-                  Boturi ML cu 17 strategii active pe MEXC. Risk Score săptămânal.
+                <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl md:text-2xl">
+                  Comunitate de investitori și traderi cu rezultate reale.
                   <br className="hidden sm:block" />
-                  Analiză macro completă. Totul într-o singură platformă.
+                  Risk Score săptămânal, analize live, indicatori exclusivi și portofoliu transparent.
+                  <br className="hidden sm:block" />
+                  Începe gratuit — 7 zile acces complet.
                 </p>
               </div>
-              <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link className="accent-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="/signup">
                   Începe Gratuit — 7 Zile →
                 </Link>
-                <Link className="ghost-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="/track-record">
-                  Vezi Track Record
-                </Link>
+                <button
+                  className="ghost-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
+                  onClick={() => setIsVideoOpen(true)}
+                  type="button"
+                >
+                  Vezi prezentarea
+                </button>
               </div>
               <div className="mt-4 flex items-center gap-6 text-sm text-slate-500">
-                <span><span className="font-mono font-semibold text-white">350+</span> traderi</span>
+                <span><span className="font-semibold text-white">350+</span> Traderi</span>
                 <span className="h-3 w-px bg-white/10" />
-                <span><span className="font-mono font-semibold text-white">17</span> strategii ML</span>
+                <span><span className="font-semibold text-white">55+</span> Video-uri</span>
                 <span className="h-3 w-px bg-white/10" />
-                <span><span className="font-mono font-semibold text-white">7</span> zile trial</span>
+                <span><span className="font-semibold text-white">4+</span> Ani Experiență</span>
+                <span className="h-3 w-px bg-white/10" />
+                <span><span className="font-semibold text-white">7</span> Zile Trial</span>
               </div>
             </div>
           </div>

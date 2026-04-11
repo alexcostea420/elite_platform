@@ -79,8 +79,8 @@ export const dashboardNavGroups = [
 
 export const heroStats = [
   { value: "350+", label: "Traderi Activi", tone: "gold" },
-  { value: "17", label: "Strategii ML", tone: "green" },
-  { value: "55+", label: "Video-uri Educaționale", tone: "gold" },
+  { value: "55+", label: "Video-uri Educaționale", tone: "green" },
+  { value: "4+", label: "Ani Experiență", tone: "gold" },
   { value: "7 ZILE", label: "Trial Gratuit", tone: "green" }
 ];
 
@@ -114,11 +114,6 @@ export const benefits = [
     icon: "🤝",
     title: "Comunitate Activa",
     description: "350+ traderi care împart idei, rezultate și se trag reciproc în sus. Mediul contează."
-  },
-  {
-    icon: "🤖",
-    title: "Bot AI Trading",
-    description: "17 strategii ML executate automat pe MEXC. Copytrade fără intervenție. Elite members: $45/lună în loc de $98."
   }
 ];
 
@@ -249,8 +244,8 @@ export const faqs = [
     answer: "Ai 7 zile gratuit sa testezi totul. Daca nu te convinge, nu platesti nimic. Zero risc."
   },
   {
-    question: "Ce este botul AI?",
-    answer: "Un sistem automat cu 17 strategii ML care tranzactioneaza pe MEXC in numele tau. Tu nu faci nimic — botul executa. Disponibil ca addon la $98/luna, sau $45/luna pentru membrii Elite."
+    question: "Ce este botul de copytrade?",
+    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul executa tranzactii automat pe contul tau. Disponibil in curand — $45/luna pentru membrii Elite."
   },
   {
     question: "Pot pierde bani?",

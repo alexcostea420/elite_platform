@@ -313,22 +313,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 </section>
               )}
 
-              {/* Blurred previews for free users */}
-              <section className="mb-8 grid gap-4 grid-cols-2 md:grid-cols-3 animate-fade-in-up stagger-3">
-                {[
-                  { label: "Risk Score", value: "67", sub: "CUMPĂRĂ" },
-                  { label: "Bot PnL Azi", value: "+$47", sub: "12 tranzacții" },
-                  { label: "Win Rate", value: "77%", sub: "ultimele 30 zile" },
-                ].map((card) => (
-                  <div key={card.label} className="glass-card relative p-5 select-none">
-                    <p className="text-xs text-slate-500">{card.label}</p>
-                    <p className="mt-2 font-mono text-2xl font-bold text-white blur-sm">{card.value}</p>
-                    <p className="mt-1 text-xs text-slate-500 blur-sm">{card.sub}</p>
-                    <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-crypto-ink/40">
-                      <Link className="text-xs font-medium text-accent-emerald hover:underline" href="/upgrade">Disponibil cu Elite →</Link>
-                    </div>
+              {/* Blurred Risk Score preview */}
+              <section className="mb-8 animate-fade-in-up stagger-3">
+                <div className="glass-card relative p-6 select-none text-center">
+                  <p className="text-xs text-slate-500 mb-2">Risk Score Săptămânal</p>
+                  <p className="font-mono text-5xl font-bold text-white blur-sm">67</p>
+                  <p className="mt-2 text-sm text-accent-emerald blur-sm">CUMPĂRĂ</p>
+                  <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-crypto-ink/40">
+                    <Link className="text-sm font-medium text-accent-emerald hover:underline" href="/upgrade">Upgrade la Elite pentru analiza completă →</Link>
                   </div>
-                ))}
+                </div>
               </section>
 
               {/* Videos section */}
