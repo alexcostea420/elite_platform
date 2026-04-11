@@ -87,7 +87,7 @@ button {
   }
 
   h1, h2, h3 {
-    font-family: 'Satoshi', var(--font-sans), system-ui, sans-serif;
+    font-family: 'General Sans', var(--font-sans), system-ui, sans-serif;
   }
 
   .grid-glow {
