@@ -6,7 +6,6 @@ import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { HeroSection } from "@/components/marketing/hero-section";
-import { StatsSection } from "@/components/marketing/stats-section";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 const AboutSection = dynamic(() => import("@/components/marketing/about-section").then(m => m.AboutSection));
@@ -42,19 +41,21 @@ export default async function HomePage() {
   const organizationSchema = getHomepageOrganizationSchema();
   const faqSchema = getHomepageFaqSchema();
 
-  // Query real counts for stats
+  // Fetch live risk score data for landing strip
   const supabase = createServiceRoleSupabaseClient();
-  const [{ count: memberCount }, { count: videoCount }] = await Promise.all([
-    supabase.from("profiles").select("*", { count: "exact", head: true }),
-    supabase.from("videos").select("*", { count: "exact", head: true }).eq("is_published", true),
-  ]);
-
-  const liveStats = [
-    { value: `${memberCount ?? 350}+`, label: "Membri in Comunitate", tone: "gold" },
-    { value: `${videoCount ?? 55}+`, label: "Video-uri Elite", tone: "green" },
-    { value: "4+", label: "Ani de Experienta", tone: "gold" },
-    { value: "7 ZILE", label: "Trial Gratuit", tone: "green" },
-  ];
+  const { data: riskRow } = await supabase
+    .from("trading_data")
+    .select("data")
+    .or("key.eq.risk_score_v2,key.eq.risk_score")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const rs = riskRow?.data as { score?: number; decision?: string; btc_price_live?: number; btc_price?: number; fear_greed?: { value?: number }; pct_from_ath?: number } | null;
+  const riskScore = rs?.score ?? 67;
+  const riskDecision = rs?.decision === "BUY" ? "CUMPARA" : rs?.decision === "SELL" ? "VINDE" : "ASTEAPTA";
+  const btcPrice = rs?.btc_price_live ?? rs?.btc_price ?? 0;
+  const fearGreed = rs?.fear_greed?.value ?? 0;
+  const pctAth = rs?.pct_from_ath ?? 0;
 
   const features = [
     {
@@ -99,39 +100,42 @@ export default async function HomePage() {
         {/* 1. Hero */}
         <HeroSection />
 
-        {/* 2. Stats */}
-        <StatsSection stats={liveStats} />
-
-        {/* 3. Live Data Strip */}
+        {/* 2. Live Data Strip */}
         <section className="py-4">
           <Container>
             <div className="glass-card mx-auto flex flex-wrap items-center justify-center gap-4 rounded-2xl px-6 py-3 text-xs md:gap-8">
               <span className="flex items-center gap-2">
                 <span className="text-slate-400">Risk Score:</span>
-                <span className="font-mono font-bold text-accent-emerald">67</span>
-                <span className="rounded bg-accent-emerald/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-accent-emerald">CUMPARA</span>
+                <span className={`font-mono font-bold ${riskScore >= 55 ? "text-accent-emerald" : riskScore >= 40 ? "text-yellow-400" : "text-red-400"}`}>{riskScore}</span>
+                <span className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold ${riskScore >= 55 ? "bg-accent-emerald/10 text-accent-emerald" : riskScore >= 40 ? "bg-yellow-400/10 text-yellow-400" : "bg-red-400/10 text-red-400"}`}>{riskDecision}</span>
               </span>
-              <span className="hidden h-4 w-px bg-slate-700 sm:block" />
-              <span className="flex items-center gap-2">
-                <span className="text-slate-400">BTC:</span>
-                <span className="font-mono font-bold text-white">$84,250</span>
-              </span>
-              <span className="hidden h-4 w-px bg-slate-700 sm:block" />
-              <span className="flex items-center gap-2">
-                <span className="text-slate-400">Fear &amp; Greed:</span>
-                <span className="font-mono font-bold text-red-400">15</span>
-              </span>
-              <span className="hidden h-4 w-px bg-slate-700 sm:block" />
-              <span className="flex items-center gap-2">
-                <span className="text-slate-400">Distanta ATH:</span>
-                <span className="font-mono font-bold text-red-400">-42%</span>
-              </span>
+              {btcPrice > 0 && (<>
+                <span className="hidden h-4 w-px bg-slate-700 sm:block" />
+                <span className="flex items-center gap-2">
+                  <span className="text-slate-400">BTC:</span>
+                  <span className="font-mono font-bold text-white">${btcPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+                </span>
+              </>)}
+              {fearGreed > 0 && (<>
+                <span className="hidden h-4 w-px bg-slate-700 sm:block" />
+                <span className="flex items-center gap-2">
+                  <span className="text-slate-400">Fear &amp; Greed:</span>
+                  <span className={`font-mono font-bold ${fearGreed <= 25 ? "text-red-400" : fearGreed <= 50 ? "text-yellow-400" : "text-accent-emerald"}`}>{fearGreed}</span>
+                </span>
+              </>)}
+              {pctAth < 0 && (<>
+                <span className="hidden h-4 w-px bg-slate-700 sm:block" />
+                <span className="flex items-center gap-2">
+                  <span className="text-slate-400">Distanta ATH:</span>
+                  <span className="font-mono font-bold text-red-400">{pctAth.toFixed(0)}%</span>
+                </span>
+              </>)}
             </div>
           </Container>
         </section>
 
         {/* 4. Feature Sections - Instrumentele Tale */}
-        <section className="py-20" id="instrumente">
+        <section className="py-12 md:py-20" id="instrumente">
           <Container>
             <div className="mb-16 text-center">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Tot ce ai nevoie</p>
@@ -261,7 +265,7 @@ export default async function HomePage() {
         </section>
 
         {/* 5. Social Proof Stats */}
-        <section className="py-20">
+        <section className="py-12 md:py-20">
           <Container>
             <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
               <div className="text-center">
