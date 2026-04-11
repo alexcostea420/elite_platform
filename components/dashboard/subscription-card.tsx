@@ -108,7 +108,7 @@ function getStatusBadge(subscriptionStatus: SubscriptionStatus) {
     return { label: "Expirat", className: "bg-red-500/20 text-red-400" };
   }
 
-  return { label: "Necunoscut", className: "bg-white/25 text-crypto-dark" };
+  return { label: "Free", className: "bg-white/10 text-slate-400" };
 }
 
 export function SubscriptionCard({
