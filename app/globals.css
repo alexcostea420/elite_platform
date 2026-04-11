@@ -86,6 +86,10 @@ button {
     @apply text-xs font-semibold uppercase tracking-[0.12em] text-accent-emerald;
   }
 
+  h1, h2, h3 {
+    font-family: 'Satoshi', var(--font-sans), system-ui, sans-serif;
+  }
+
   .grid-glow {
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),

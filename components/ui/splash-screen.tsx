@@ -11,8 +11,8 @@ export function SplashScreen() {
     setVisible(true);
     sessionStorage.setItem("splash_seen", "1");
 
-    const t1 = setTimeout(() => setFadeOut(true), 2400);
-    const t2 = setTimeout(() => setVisible(false), 3000);
+    const t1 = setTimeout(() => setFadeOut(true), 300);
+    const t2 = setTimeout(() => setVisible(false), 500);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 

@@ -105,6 +105,7 @@ export default async function StocksPage() {
             <p className="mt-3 max-w-3xl text-slate-400">
               Zone de Buy si Sell pentru actiuni tech + crypto stocks. Targets setate de Alex.
             </p>
+            <p className="mt-2 text-xs text-slate-600">Ultima actualizare: {new Date().toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" })}</p>
           </section>
 
           {/* Signal summary */}

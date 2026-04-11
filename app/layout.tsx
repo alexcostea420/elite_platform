@@ -42,6 +42,8 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <head>
+        {/* Satoshi font from Fontshare */}
+        <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet" />
         {/* Plausible Analytics */}
         {process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <script

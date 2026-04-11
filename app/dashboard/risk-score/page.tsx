@@ -617,7 +617,7 @@ export default async function RiskScorePage() {
           </section>
 
           {/* ─── 5. DETALII TEHNICE (accordion) ─── */}
-          <details className="mb-8 group">
+          <details className="mb-8 group" open>
             <summary className="glass-card cursor-pointer px-6 py-5 text-sm font-semibold text-slate-400 hover:text-white transition-colors select-none flex items-center justify-between">
               <span>Vezi analiza detaliata</span>
               <svg
