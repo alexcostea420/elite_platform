@@ -343,7 +343,6 @@ export default async function HomePage() {
                 ].map((s) => (
                   <div key={s.caption} className="overflow-hidden rounded-xl border border-white/5">
                     <Image alt={s.caption} className="w-full" height={300} src={s.img} width={500} />
-                    <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-500">{s.caption}</p>
                   </div>
                 ))}
               </div>
