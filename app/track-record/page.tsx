@@ -1,318 +1,108 @@
-import type { Metadata } from "next";
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
-import { Container } from "@/components/ui/container";
-
-export const metadata: Metadata = {
-  title: "Track Record | Armata de Traderi",
-  description:
-    "Fiecare decizie de trading, documentata public pe Discord din August 2025. Zero editare, zero stergere. Screenshot-uri reale.",
+const fadeIn = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.4, 0.25, 1] as const } },
 };
 
-/* ── badge variants ───────────────────────────────────────────────────── */
-type BadgeColor = "red" | "green" | "amber" | "gray";
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={onClose}>
+      <button className="absolute right-4 top-4 text-2xl text-white/60 hover:text-white" onClick={onClose} type="button">x</button>
+      <Image alt={alt} className="max-h-[90vh] max-w-full rounded-lg object-contain" height={900} src={src} width={800} />
+    </div>
+  );
+}
 
-const badgeStyles: Record<BadgeColor, string> = {
-  red: "bg-red-500/15 text-red-400 border border-red-500/30",
-  green: "bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/30",
-  amber: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
-  gray: "bg-white/5 text-slate-400 border border-white/10",
-};
+function ClickableImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button className={`overflow-hidden rounded-lg border border-white/[0.06] transition-all hover:border-white/[0.15] hover:-translate-y-0.5 ${className ?? ""}`} onClick={() => setOpen(true)} type="button">
+        <Image alt={alt} className="w-full" height={300} loading="lazy" src={src} width={400} />
+      </button>
+      {open && <Lightbox alt={alt} onClose={() => setOpen(false)} src={src} />}
+    </>
+  );
+}
 
-const dotColors: Record<BadgeColor, string> = {
-  red: "bg-red-500",
-  green: "bg-accent-emerald",
-  amber: "bg-amber-500",
-  gray: "bg-slate-500",
-};
-
-/* ── timeline data ────────────────────────────────────────────────────── */
-type TimelineEntry = {
-  id: number;
-  date: string;
-  label: string;
-  badgeColor: BadgeColor;
-  title: string;
-  text: string;
-  image: string;
-  highlight?: boolean;
-};
-
-const entries: TimelineEntry[] = [
-  {
-    id: 1,
-    date: "5 August 2025",
-    label: "START",
-    badgeColor: "gray",
-    title: "Saptamana 1 - 55% USDT",
-    text: "Primul update de portofoliu. Deja defensiv - 55% cash. Strategia: astept confirmari, nu FOMO.",
-    image: "01-aug05-saptamana1-55pct-usdt.jpg",
-  },
-  {
-    id: 2,
-    date: "21-23 August 2025",
-    label: "DEFENSIV",
-    badgeColor: "amber",
-    title: "Cresc cash-ul la 72%",
-    text: "Saptamana 3: 72% USDT. 'Risc sa pierd trenul spectaculos' - dar disciplina > FOMO.",
-    image: "03-aug21-saptamana3-72pct-usdt.jpg",
-  },
-  {
-    id: 3,
-    date: "25 August 2025",
-    label: "AVERTIZARE",
-    badgeColor: "red",
-    title: "92% USDT - 'Aveti mare grija'",
-    text: "Am crescut la 92% cash. Mesaj catre comunitate: 'Au performat ca un rahat monedele si topul local e aproape. Aveti mare grija saptamana asta.'",
-    image: "04-aug25-92pct-usdt-avertizare.jpg",
-  },
-  {
-    id: 4,
-    date: "4-6 Septembrie 2025",
-    label: "EXIT TOTAL",
-    badgeColor: "red",
-    title: "'AM VANDUT TOT' - 93% USDC",
-    text: "7 sept sanse mari de top local. Am vandut tot ENA. 'FAKE PUMP.' Portofoliu: 93% stablecoins.",
-    image: "06-sep06-vandut-tot-ena-93pct.jpg",
-  },
-  {
-    id: 5,
-    date: "12-13 Septembrie 2025",
-    label: "REBALANSARE",
-    badgeColor: "gray",
-    title: "Saptamana 6 - Intrat in alts",
-    text: "Alocare noua: 40% CRV, 28% ALGO, 24% DOGE, 7% IOTA. Pivot important pe 21 septembrie.",
-    image: "07-sep12-saptamana6-crv-algo-doge.jpg",
-  },
-  {
-    id: 6,
-    date: "30 Septembrie 2025",
-    label: "HOLD",
-    badgeColor: "gray",
-    title: "De la +18% la 0",
-    text: "'Nu am schimbat nimic, portofelul este pe 0. Am trecut de la 18% profit care s-a evaporat.' Portofoliu: $10,024.",
-    image: "08-sep30-oct06-portofoliu-10k.jpg",
-  },
-  {
-    id: 7,
-    date: "10 Octombrie 2025",
-    label: "CRASH",
-    badgeColor: "red",
-    title: "'E BEARMARKET' - Am vandut tot",
-    text: "'Am vandut tot acum 10 minute. -60% tot in 5 minute. Nu inteleg ce se intampla. E bearmarket.' Piata a picat -13% BTC, alts -30% pana la -73% in aceeasi zi.",
-    image: "09-oct10-crash-vandut-tot.jpg",
-    highlight: true,
-  },
-  {
-    id: 8,
-    date: "11 Octombrie 2025",
-    label: "AFTERMATH",
-    badgeColor: "red",
-    title: "'Cine a dormit nu poate sa inteleaga'",
-    text: "BTC -13.78%, ETH -17.41%, TOTAL3 -30%, IOTA -55%, FIL -66%, ENA -69%, LINK -59%, SOL -18%, AVAX -68%. Alex era deja in USDC.",
-    image: "10-oct11-aftermath-minus60.jpg",
-  },
-  {
-    id: 9,
-    date: "12 Octombrie 2025",
-    label: "CONFIRMARE",
-    badgeColor: "green",
-    title: "'Dead cat bounce' - 99.99% USDC",
-    text: "'Mi se pare totul fake fix in dead cat bounce.' A lichidat tot. 99.99% USDC. Chart-ul confirma analiza.",
-    image: "12-oct12-dead-cat-bounce-99pct.jpg",
-  },
-  {
-    id: 10,
-    date: "27-28 Octombrie 2025",
-    label: "INCA CASH",
-    badgeColor: "amber",
-    title: "Vandut SOL si BTC",
-    text: "'Vand tot solana si o parte din btc.' 'Ma pregatesc sa vand daca inchide in 30 min asa.' Chart cu analiza tehnica.",
-    image: "13-oct27-vand-sol-btc.jpg",
-  },
-  {
-    id: 11,
-    date: "30 Octombrie 2025",
-    label: "100% CASH",
-    badgeColor: "red",
-    title: "'Sunt 100% USDC'",
-    text: "'Nu imi place ce vad a schimbat si structura si pe 4hr si pe daily. Nu cred ca dam comeback in 2-3 zile.' Chart cu bear flag pe BTC.",
-    image: "14-oct30-100pct-usdc-bearflag.jpg",
-  },
-  {
-    id: 12,
-    date: "9 Decembrie 2025",
-    label: "ANALIZE",
-    badgeColor: "gray",
-    title: "POPCAT -> ENA, analize cu chart-uri",
-    text: "Modifica portofoliul. POPCAT downtrend vizibil. ENA spargere de trendline cu mic uptrend pe daily.",
-    image: "15-dec09-popcat-ena-charts.jpg",
-  },
-  {
-    id: 13,
-    date: "11-14 Decembrie 2025",
-    label: "TIMING",
-    badgeColor: "amber",
-    title: "De la BTC 56% la 99.95% USDC",
-    text: "'19 decembrie BOJ meeting, probabil sa mareasca ratele = foarte bearish short term.' A iesit complet.",
-    image: "17-dec11-14-btc56-usdc99.jpg",
-  },
-  {
-    id: 14,
-    date: "25 Ianuarie 2026",
-    label: "RE-ENTRY",
-    badgeColor: "green",
-    title: "79.9% USDC + 20% XMR",
-    text: "Prima pozitie dupa luni in cash. XMR cu target 600$, stoploss sub 410$ weekly close.",
-    image: "18-jan25-79pct-usdc-xmr.jpg",
-  },
-  {
-    id: 15,
-    date: "31 Ianuarie 2026",
-    label: "ETH CALL",
-    badgeColor: "green",
-    title: "ETH 2250-2350, target 2700-2900",
-    text: "'De luni incolo vanam 2250-2350 ETH sa pana pe 14-17 februarie cam 2700-2900$.' 12 thumbs up.",
-    image: "19-jan31-eth-call-2250.jpg",
-  },
-  {
-    id: 16,
-    date: "2 Februarie 2026",
-    label: "EXECUTIE",
-    badgeColor: "green",
-    title: "59.56% USDC + 40.4% ETH",
-    text: "A intrat in ETH conform planului. 13 thumbs up de la comunitate.",
-    image: "20-feb02-59pct-usdc-40pct-eth.jpg",
-  },
-];
-
-/* ── page ──────────────────────────────────────────────────────────────── */
 export default function TrackRecordPage() {
   return (
-    <main className="min-h-screen bg-crypto-ink pb-20 pt-28">
-      <Container className="max-w-5xl">
-        {/* ── Header ─────────────────────────────────────────────────── */}
-        <div className="mb-20 text-center">
-          <p className="section-label mb-4">Dovada reala</p>
-          <h1 className="mb-6 text-3xl font-bold text-white sm:text-5xl">
-            Track Record
+    <main className="min-h-screen bg-[#09090B] pb-20 pt-28">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        {/* Header */}
+        <motion.div className="mb-16 text-center" initial="hidden" animate="visible" variants={fadeIn}>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-[#10B981]">Track Record</p>
+          <h1 className="text-2xl font-bold text-white sm:text-4xl">
+            De la protejarea profitului la urmatoarea oportunitate
           </h1>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-400">
-            Fiecare decizie, documentata public pe Discord din August 2025.
-            <br />
-            Zero editare, zero stergere.
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-500">
+            Toate deciziile de mai jos au fost postate public pe Discord, in timp real, cu timestamp imuabil. Asta nu e o poveste scrisa dupa - e o poveste traita in fata comunitatii.
           </p>
-        </div>
+        </motion.div>
 
-        {/* ── Timeline ───────────────────────────────────────────────── */}
-        <div className="relative">
-          {/* Vertical line - left side */}
-          <div className="absolute left-3 top-0 h-full w-[2px] bg-white/[0.08] sm:left-4" />
-
-          <div className="flex flex-col gap-12">
-            {entries.map((entry, i) => {
-              const isOdd = i % 2 === 0; // 0-indexed: first entry is "odd" (index 0)
-              const isHighlight = entry.highlight;
-
-              return (
-                <div key={entry.id} className="relative pl-10 sm:pl-14">
-                  {/* Timeline dot */}
-                  <div
-                    className={`absolute left-1.5 top-1.5 z-10 h-4 w-4 rounded-full border-2 border-crypto-ink sm:left-2.5 ${dotColors[entry.badgeColor]} ${
-                      isHighlight ? "animate-pulse" : ""
-                    }`}
-                  />
-
-                  {/* Card */}
-                  <div
-                    className={`glass-card overflow-hidden rounded-xl p-0 ${
-                      isHighlight
-                        ? "border-red-500/20 bg-red-500/[0.02]"
-                        : ""
-                    }`}
-                  >
-                    {/* Content grid: alternating image position on desktop */}
-                    <div
-                      className={`flex flex-col ${
-                        isOdd ? "md:flex-row" : "md:flex-row-reverse"
-                      }`}
-                    >
-                      {/* Text side */}
-                      <div className="flex flex-1 flex-col justify-center p-5 sm:p-6">
-                        {/* Date + Label */}
-                        <div className="mb-3 flex flex-wrap items-center gap-2">
-                          <span className="text-xs font-medium text-slate-500">
-                            {entry.date}
-                          </span>
-                          <span
-                            className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
-                              badgeStyles[entry.badgeColor]
-                            } ${isHighlight ? "animate-pulse" : ""}`}
-                          >
-                            {entry.label}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <h3
-                          className={`mb-2 text-lg font-bold sm:text-xl ${
-                            isHighlight ? "text-red-400" : "text-white"
-                          }`}
-                        >
-                          {entry.title}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="text-sm leading-relaxed text-slate-400">
-                          {entry.text}
-                        </p>
-                      </div>
-
-                      {/* Image side */}
-                      <div className="flex-1 p-3 sm:p-4">
-                        <Image
-                          alt={`Screenshot Discord - ${entry.title}`}
-                          className="rounded-lg w-full"
-                          height={400}
-                          loading="lazy"
-                          src={`/track-record/${entry.image}`}
-                          width={600}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+        {/* ACT 1 */}
+        <motion.section className="mb-16" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+          <h2 className="text-lg font-bold text-white sm:text-xl">Am simtit ca vine ceva</h2>
+          <p className="mb-1 text-xs text-slate-600">August - Septembrie 2025</p>
+          <p className="mt-4 text-sm leading-relaxed text-slate-400">
+            Din prima saptamana in care am creat grupul, ceva nu se simtea bine. Chart-urile pe weekly si monthly aratau structura bearish, indicatorii erau in zona de pericol, iar stirile macro nu confirmau continuarea bullish. Asa ca am facut ce fac mereu cand nu sunt sigur: am crescut cash-ul. De la 55% la 72% la 92%. Comunitatea vedea fiecare miscare in timp real.
+          </p>
+          <div className="mt-6 grid grid-cols-3 gap-3">
+            <ClickableImage src="/track-record/01-aug05-saptamana1-55pct-usdt.jpg" alt="5 Aug 2025 - 55% USDT" />
+            <ClickableImage src="/track-record/03-aug21-saptamana3-72pct-usdt.jpg" alt="23 Aug 2025 - 72% USDT" />
+            <ClickableImage src="/track-record/04-aug25-92pct-usdt-avertizare.jpg" alt="25 Aug 2025 - 92% USDT" />
           </div>
+        </motion.section>
 
-          {/* Timeline end dot */}
-          <div className="absolute -bottom-2 left-1.5 h-4 w-4 rounded-full border-2 border-crypto-ink bg-accent-emerald sm:left-2.5" />
-        </div>
+        {/* ACT 2 */}
+        <motion.section
+          className="mb-16 rounded-xl border-l-[3px] border-red-500 bg-red-500/[0.03] py-8 pl-6 pr-4 sm:py-10 sm:pl-8 sm:pr-6"
+          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
+        >
+          <h2 className="text-lg font-bold text-white sm:text-xl">A venit. Si eram pregatit.</h2>
+          <p className="mb-1 text-xs text-slate-600">Octombrie 2025</p>
+          <p className="mt-4 text-sm leading-relaxed text-slate-400">
+            Pe 10 octombrie piata a picat -60% in 5 minute. Alts -30% pana la -73%. Eu vandusem tot. Nu pentru ca am ghicit - pentru ca am urmarit semnalele si am actionat cand nimeni altcineva nu voia sa vanda. Pe 12 octombrie eram 99.99% USDC in timp ce piata facea &quot;dead cat bounce&quot;. Pe 30 octombrie - 100% cash, cu convingerea ca nu dam comeback in 2-3 zile.
+          </p>
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <ClickableImage src="/track-record/09-oct10-crash-vandut-tot.jpg" alt="10 Oct - am vandut tot, e bearmarket" />
+            <ClickableImage src="/track-record/10-oct11-aftermath-minus60.jpg" alt="11 Oct - alts -13% la -73%" />
+            <ClickableImage src="/track-record/12-oct12-dead-cat-bounce-99pct.jpg" alt="12 Oct - dead cat bounce, 99.99% USDC" />
+            <ClickableImage src="/track-record/14-oct30-100pct-usdc-bearflag.jpg" alt="30 Oct - 100% USDC, bear flag" />
+          </div>
+        </motion.section>
 
-        {/* ── Bottom section: De ce conteaza ─────────────────────────── */}
-        <div className="mt-20 rounded-2xl border border-accent-emerald/20 bg-surface-graphite p-8 text-center sm:p-12">
-          <h2 className="mb-4 text-2xl font-bold text-white sm:text-3xl">
-            De ce conteaza
-          </h2>
-          <p className="mx-auto mb-4 max-w-2xl leading-relaxed text-slate-400">
-            Oricine poate spune &quot;am stiut&quot; dupa ce s-a intamplat.
-            Diferenta e cand ai dovada ca ai actionat INAINTE.
+        {/* ACT 3 */}
+        <motion.section className="mb-16" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+          <h2 className="text-lg font-bold text-white sm:text-xl">Acum ma pregatesc pentru ce urmeaza.</h2>
+          <p className="mb-1 text-xs text-slate-600">Ianuarie - Februarie 2026</p>
+          <p className="mt-4 text-sm leading-relaxed text-slate-400">
+            Dupa 3 luni in cash, am inceput sa reintru. Prima pozitie: XMR cu target clar si stop loss definit. Apoi ETH - vanat la 2250-2350 cu target 2700-2900. Comunitatea a votat cu 12 thumbs up. Executie conform planului.
           </p>
-          <p className="mx-auto mb-8 max-w-2xl leading-relaxed text-slate-400">
-            Fiecare screenshot de mai sus e real, needitat, cu timestamp din
-            Discord. Nu e vorba de noroc - e vorba de un sistem de analiza care
-            functioneaza. Si poti avea acces la el.
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <ClickableImage src="/track-record/19-jan31-eth-call-2250.jpg" alt="31 Jan - ETH call 2250-2350, 12 thumbs up" />
+            <ClickableImage src="/track-record/20-feb02-59pct-usdc-40pct-eth.jpg" alt="2 Feb - 59.56% USDC + 40.4% ETH" />
+          </div>
+        </motion.section>
+
+        {/* CLOSE */}
+        <motion.section className="text-center py-10" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+          <h2 className="text-xl font-bold text-white sm:text-2xl">Si acum?</h2>
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-400">
+            Portofoliul actual e vizibil doar pentru membrii Elite. Fiecare miscare, fiecare decizie, in timp real - exact ca cele de mai sus. Daca vrei sa vezi cum ma pozitionez pentru perioada care urmeaza, locul e in grup.
           </p>
-          <Link
-            className="accent-button inline-block px-8 py-4 text-lg font-bold"
-            href="/signup"
-          >
-            Incepe Gratuit - 7 Zile
+          <Link className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#10B981] px-8 py-4 text-base font-bold text-[#09090B] shadow-[0_0_24px_rgba(16,185,129,0.1)] transition-all hover:bg-[#34D399] hover:shadow-[0_0_40px_rgba(16,185,129,0.18)]" href="/signup">
+            Incepe Gratuit - 7 Zile →
           </Link>
-        </div>
-      </Container>
+          <p className="mt-3 text-xs text-slate-600">Acces complet la portofoliul live si toate analizele</p>
+        </motion.section>
+      </div>
     </main>
   );
 }
