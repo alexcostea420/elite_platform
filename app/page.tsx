@@ -280,42 +280,20 @@ export default async function HomePage() {
                   <p className="text-white font-medium">Ca si cum l-ai avea pe Alex langa tine non-stop.</p>
                 </div>
               </div>
-              <div className="grid gap-4 md:grid-cols-3 mb-10">
-                {[
-                  { icon: "📊", title: "Analiza chart-uri", text: "Pune o poza cu chart-ul. Primesti structura, niveluri, pattern-uri, bias." },
-                  { icon: "🎯", title: "Validare trade-uri", text: "Spune entry si SL. Primesti PRO/CONTRA, risk/reward, si plan complet." },
-                  { icon: "🧪", title: "Quiz-uri dupa video", text: "Testeaza ce ai invatat. Intrebari practice din metodologie." },
-                ].map((c) => (
-                  <div key={c.title} className="glass-card p-5 text-center">
-                    <div className="text-2xl mb-2">{c.icon}</div>
-                    <h3 className="text-sm font-semibold text-white mb-1">{c.title}</h3>
-                    <p className="text-xs text-slate-400">{c.text}</p>
-                  </div>
-                ))}
+              <div className="mb-6 flex items-center justify-center gap-8 text-xs text-slate-500">
+                <span className="flex items-center gap-2">📊 <span>Analiza chart-uri</span></span>
+                <span className="flex items-center gap-2">🎯 <span>Validare trade-uri</span></span>
+                <span className="flex items-center gap-2">🧪 <span>Quiz-uri practice</span></span>
               </div>
-              <div className="grid gap-4 md:grid-cols-2 mb-8">
-                {[
-                  { src: "/alexs-brain/ab5-cvx-trade-analysis.jpg", alt: "CVX trade analysis", caption: "Validare trade cu PRO/CONTRA si strategie" },
-                  { src: "/alexs-brain/ab8-eth-pdh-strategy.jpg", alt: "ETH PDH strategy", caption: "Setup complet: entry, TP, SL, invalidare" },
-                  { src: "/alexs-brain/ab3-hype-long-or-short.jpg", alt: "HYPE long or short", caption: "Analiza completa: long sau short pe HYPE?" },
-                  { src: "/alexs-brain/ab4-eth-trade-management.jpg", alt: "ETH trade management", caption: "Trade management cu 3 optiuni de exit" },
-                  { src: "/alexs-brain/ab6-eth-breakout-structura.jpg", alt: "ETH breakout structura", caption: "Analiza structura si niveluri pe ETH" },
-                  { src: "/alexs-brain/ab2-quiz-suporti-rezistente.jpg", alt: "Quiz suporti si rezistente", caption: "Quiz interactiv dupa un video educativ" },
-                  { src: "/alexs-brain/ab7-video-links-rsi-fibonacci.jpg", alt: "Video links RSI Fibonacci", caption: "Gaseste instant video-ul relevant" },
-                  { src: "/alexs-brain/ab1-intro-salut.jpg", alt: "Alex Brain intro", caption: "Ce poate face Alex's Brain" },
-                ].map((img) => (
-                  <div key={img.src} className="overflow-hidden rounded-xl border border-white/[0.06] transition-all hover:border-white/[0.15]">
-                    <Image alt={img.alt} className="w-full" height={400} loading="lazy" src={img.src} width={500} />
-                    <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-600">{img.caption}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center justify-center gap-6 text-xs text-slate-500 mb-8">
-                <span><span className="font-mono font-semibold text-white">55+</span> video-uri invatate</span>
-                <span className="h-3 w-px bg-white/10" />
-                <span>Raspuns in <span className="font-semibold text-white">secunde</span></span>
-                <span className="h-3 w-px bg-white/10" />
-                <span>Disponibil <span className="font-semibold text-white">24/7</span></span>
+              <div className="grid gap-3 md:grid-cols-2 mb-6">
+                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+                  <Image alt="CVX trade analysis - PRO/CONTRA" className="w-full" height={400} loading="lazy" src="/alexs-brain/ab5-cvx-trade-analysis.jpg" width={500} />
+                  <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-600">Validare trade cu PRO/CONTRA si strategie</p>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+                  <Image alt="ETH PDH strategy - setup complet" className="w-full" height={400} loading="lazy" src="/alexs-brain/ab8-eth-pdh-strategy.jpg" width={500} />
+                  <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-600">Setup complet: entry, TP, SL, invalidare</p>
+                </div>
               </div>
               <div className="text-center">
                 <p className="text-sm text-slate-400 mb-4">Alex&apos;s Brain este disponibil exclusiv pentru membrii Elite pe Discord.</p>
