@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const images = [
-  { src: "/alexs-brain/ab5-cvx-trade-analysis.jpg", alt: "Validare trade cu PRO/CONTRA" },
-  { src: "/alexs-brain/ab8-eth-pdh-strategy.jpg", alt: "Setup complet: entry, TP, SL" },
-  { src: "/alexs-brain/ab3-hype-long-or-short.jpg", alt: "Analiza: long sau short?" },
-  { src: "/alexs-brain/ab4-eth-trade-management.jpg", alt: "Trade management - 3 optiuni exit" },
-  { src: "/alexs-brain/ab6-eth-breakout-structura.jpg", alt: "Analiza structura si niveluri" },
-  { src: "/alexs-brain/ab2-quiz-suporti-rezistente.jpg", alt: "Quiz interactiv" },
-  { src: "/alexs-brain/ab7-video-links-rsi-fibonacci.jpg", alt: "Gaseste video-ul relevant" },
-  { src: "/alexs-brain/ab1-intro-salut.jpg", alt: "Ce poate face Alex's Brain" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab5-cvx-trade-analysis.jpg", alt: "Validare trade cu PRO/CONTRA" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab8-eth-pdh-strategy.jpg", alt: "Setup complet: entry, TP, SL" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab3-hype-long-or-short.jpg", alt: "Analiza: long sau short?" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab4-eth-trade-management.jpg", alt: "Trade management - 3 optiuni exit" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab6-eth-breakout-structura.jpg", alt: "Analiza structura si niveluri" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab2-quiz-suporti-rezistente.jpg", alt: "Quiz interactiv" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab7-video-links-rsi-fibonacci.jpg", alt: "Gaseste video-ul relevant" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab1-intro-salut.jpg", alt: "Ce poate face Alex's Brain" },
 ];
 
 export function AlexsBrainSection() {

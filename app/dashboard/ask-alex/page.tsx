@@ -21,14 +21,14 @@ export const metadata: Metadata = buildPageMetadata({
 
 // Gallery images data
 const gallery = [
-  { src: "/alexs-brain/ab5-cvx-trade-analysis.jpg", alt: "CVX trade analysis - PRO/CONTRA complet" },
-  { src: "/alexs-brain/ab8-eth-pdh-strategy.jpg", alt: "ETH PDH strategy - setup complet" },
-  { src: "/alexs-brain/ab3-hype-long-or-short.jpg", alt: "HYPE 4H - Long or Short analiza" },
-  { src: "/alexs-brain/ab4-eth-trade-management.jpg", alt: "ETH trade management - 3 optiuni exit" },
-  { src: "/alexs-brain/ab6-eth-breakout-structura.jpg", alt: "ETH breakout - structura si niveluri" },
-  { src: "/alexs-brain/ab2-quiz-suporti-rezistente.jpg", alt: "Quiz suporti si rezistente" },
-  { src: "/alexs-brain/ab7-video-links-rsi-fibonacci.jpg", alt: "Video links - RSI, Fibonacci, Elliott Wave" },
-  { src: "/alexs-brain/ab1-intro-salut.jpg", alt: "Intro - Ce poate face Alex Brain" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab5-cvx-trade-analysis.jpg", alt: "CVX trade analysis - PRO/CONTRA complet" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab8-eth-pdh-strategy.jpg", alt: "ETH PDH strategy - setup complet" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab3-hype-long-or-short.jpg", alt: "HYPE 4H - Long or Short analiza" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab4-eth-trade-management.jpg", alt: "ETH trade management - 3 optiuni exit" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab6-eth-breakout-structura.jpg", alt: "ETH breakout - structura si niveluri" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab2-quiz-suporti-rezistente.jpg", alt: "Quiz suporti si rezistente" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab7-video-links-rsi-fibonacci.jpg", alt: "Video links - RSI, Fibonacci, Elliott Wave" },
+  { src: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab1-intro-salut.jpg", alt: "Intro - Ce poate face Alex Brain" },
 ];
 
 export default async function AskAlexPage() {
@@ -71,9 +71,9 @@ export default async function AskAlexPage() {
           {/* 3 capability cards */}
           <div className="grid gap-4 md:grid-cols-3 mb-10">
             {[
-              { title: "Analizeaza chart-uri", text: "Pune o poza cu chart-ul tau si primesti analiza completa: structura, niveluri cheie, S/R, pattern-uri.", img: "/alexs-brain/ab6-eth-breakout-structura.jpg" },
-              { title: "Valideaza trade-uri", text: "Spune-i entry, SL, si TP. Primesti PRO/CONTRA, risk/reward, si strategie recomandata.", img: "/alexs-brain/ab5-cvx-trade-analysis.jpg" },
-              { title: "Quiz-uri practice", text: "Cere un quiz dupa orice video si testeaza ce ai invatat.", img: "/alexs-brain/ab2-quiz-suporti-rezistente.jpg" },
+              { title: "Analizeaza chart-uri", text: "Pune o poza cu chart-ul tau si primesti analiza completa: structura, niveluri cheie, S/R, pattern-uri.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab6-eth-breakout-structura.jpg" },
+              { title: "Valideaza trade-uri", text: "Spune-i entry, SL, si TP. Primesti PRO/CONTRA, risk/reward, si strategie recomandata.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab5-cvx-trade-analysis.jpg" },
+              { title: "Quiz-uri practice", text: "Cere un quiz dupa orice video si testeaza ce ai invatat.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab2-quiz-suporti-rezistente.jpg" },
             ].map((card) => (
               <div key={card.title} className="glass-card overflow-hidden">
                 <div className="p-5">

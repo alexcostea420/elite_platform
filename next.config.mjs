@@ -17,6 +17,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "cdn.discordapp.com",
       },
+      {
+        protocol: "https",
+        hostname: "pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev",
+      },
     ],
   },
   ...(isDev
