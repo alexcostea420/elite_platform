@@ -103,9 +103,12 @@ export default function TrackRecordPage() {
           className="mb-10 rounded-xl border-l-[3px] border-[#10B981] bg-white/[0.02] px-5 py-4 sm:px-6"
           initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
         >
-          <p className="text-sm leading-relaxed text-slate-400">
-            Pe 10 octombrie 2025, crypto a suferit cel mai mare crash din ultimii ani. Majoritatea traderilor au ramas in monede - ghidati de influenceri si FOMO, nu de propria analiza. Grupul nostru a iesit complet in urmatoarele 2 zile, la cel mai bun pret posibil - marcand inceputul unui bear market care a dus la scaderi de -70%. Rezultatul? Membrii au suferit doar -10% drawdown, pentru ca am avut curajul sa fim contra intregului internet.
-          </p>
+          <div className="space-y-3 text-sm leading-relaxed text-slate-400">
+            <p>Pe 10 octombrie 2025, crypto a suferit cel mai mare crash din ultimii ani.</p>
+            <p>Majoritatea traderilor au ramas in monede - ghidati de influenceri si FOMO, nu de propria analiza.</p>
+            <p>Grupul nostru a iesit complet in urmatoarele 2 zile, la cel mai bun pret posibil - marcand inceputul unui bear market care a dus la scaderi de -70%.</p>
+            <p>Rezultatul? <span className="text-white font-medium">Membrii au suferit doar -10% drawdown</span>, pentru ca am avut curajul sa fim contra intregului internet.</p>
+          </div>
         </motion.div>
 
         {/* Timeline */}
