@@ -243,12 +243,10 @@ export default async function HomePage() {
                     ))}
                   </ul>
                 </div>
-                <div className="relative mx-auto w-[220px] shrink-0 md:w-[280px]">
+                <div className="mx-auto w-[240px] shrink-0 md:w-[280px]">
                   <div className="overflow-hidden rounded-xl border border-white/[0.08] md:rotate-2" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)", maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
-                    <Image alt="Discord Elite Privat - structura canalelor" className="w-full object-contain" height={500} src="/images/discord-sidebar.jpg" width={280} unoptimized />
+                    <Image alt="Discord Elite Privat - structura canalelor" className="w-full object-contain" height={500} src="https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/discord-sidebar.jpg" width={280} unoptimized />
                   </div>
-                  <span className="absolute -right-2 top-3 flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ backgroundColor: "#ED4245", animation: "badgePulse 2s ease-in-out infinite" }}>12</span>
-                  <span className="absolute -right-2 top-[60%] flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ backgroundColor: "#ED4245", animation: "badgePulse 2s ease-in-out infinite 0.5s" }}>5</span>
                 </div>
               </div>
             </div>
