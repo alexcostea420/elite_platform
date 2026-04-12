@@ -202,18 +202,21 @@ export default async function HomePage() {
               <div className="flex flex-col-reverse items-center gap-10 md:flex-row">
                 <div className="flex flex-1 items-center justify-center">
                   <div className="flex w-full max-w-sm gap-2">
-                    <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
-                      <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">📊</div>
-                      <p className="text-[11px] font-medium leading-tight text-slate-300">Fibonacci Retracement</p>
-                    </div>
-                    <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
-                      <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">🧠</div>
-                      <p className="text-[11px] font-medium leading-tight text-slate-300">Psihologia Tradingului</p>
-                    </div>
-                    <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
-                      <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">⚖️</div>
-                      <p className="text-[11px] font-medium leading-tight text-slate-300">Risk Management</p>
-                    </div>
+                    {[
+                      { tag: "ANALIZA", title: "BTC ETH bullish, blackswan cu razboiul?", date: "8 apr. 2026" },
+                      { tag: "UPDATE", title: "Platforma noua + Trade pe BITCOIN", date: "8 apr. 2026" },
+                      { tag: "EDUCATIE", title: "Cum să folosești indicatorii Elite", date: "1 apr. 2026" },
+                    ].map((v) => (
+                      <div key={v.title} className="glass-card flex-1 overflow-hidden rounded-xl">
+                        <div className="relative flex h-20 items-center justify-center bg-gradient-to-br from-accent-emerald/10 to-surface-graphite">
+                          <span className="absolute left-2 top-2 rounded bg-crypto-ink/80 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white">{v.tag}</span>
+                        </div>
+                        <div className="p-2">
+                          <p className="text-[10px] text-accent-emerald">{v.date}</p>
+                          <p className="mt-0.5 text-[11px] font-medium leading-tight text-slate-300 line-clamp-2">{v.title}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="flex-1 space-y-4">
