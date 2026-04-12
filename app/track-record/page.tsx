@@ -31,13 +31,13 @@ type Entry = {
 
 const entries: Entry[] = [
   { date: "5 Aug 2025", title: "Saptamana 1 - deja 55% cash", context: "Structura bearish pe weekly. Astept confirmari.", cash: 55, dot: "gray", image: "/track-record/01-aug05-saptamana1-55pct-usdt.jpg" },
-  { date: "23 Aug 2025", title: "Cresc la 70% cash", context: "'Risc sa pierd trenul, dar disciplina > FOMO.'", cash: 70, dot: "amber", image: "/track-record/03-aug21-saptamana3-72pct-usdt.jpg" },
-  { date: "25 Aug 2025", title: "90% cash - 'Aveti mare grija'", context: "Mesaj catre comunitate: topul local e aproape.", cash: 90, dot: "amber", image: "/track-record/04-aug25-92pct-usdt-avertizare.jpg" },
-  { date: "6 Sep 2025", title: "'AM VANDUT TOT' - 95% stablecoins", context: "'FAKE PUMP.' Iesire completa din alts.", cash: 95, dot: "red", image: "/track-record/06-sep06-vandut-tot-ena-93pct.jpg" },
+  { date: "23 Aug 2025", title: "Cresc la 72% cash", context: "'Risc sa pierd trenul, dar disciplina > FOMO.'", cash: 72, dot: "amber", image: "/track-record/03-aug21-saptamana3-72pct-usdt.jpg" },
+  { date: "25 Aug 2025", title: "92% cash - 'Aveti mare grija'", context: "Mesaj catre comunitate: topul local e aproape.", cash: 92, dot: "amber", image: "/track-record/04-aug25-92pct-usdt-avertizare.jpg" },
+  { date: "6 Sep 2025", title: "'AM VANDUT TOT' - 93% stablecoins", context: "'FAKE PUMP.' Iesire completa din alts.", cash: 93, dot: "red", image: "/track-record/06-sep06-vandut-tot-ena-93pct.jpg" },
   { date: "12 Sep 2025", title: "Re-entry in alts", context: "CRV, ALGO, DOGE, IOTA. Pivot important 21 septembrie.", cash: 0, dot: "gray", image: "/track-record/07-sep12-saptamana6-crv-algo-doge.jpg" },
   { date: "30 Sep 2025", title: "De la +18% la zero", context: "'Profitul s-a evaporat.' $10,024 in portofoliu.", cash: 0, dot: "gray", image: "/track-record/08-sep30-oct06-portofoliu-10k.jpg" },
   { date: "10 Oct 2025", title: "'E BEARMARKET. Am vandut tot.'", context: "-60% in 5 minute. Alts -30% pana la -73%. Alex era pregatit.", cash: 70, dot: "red", image: "/track-record/09-oct10-crash-vandut-tot.jpg", highlight: true },
-  { date: "11 Oct 2025", title: "'Cine a dormit nu poate sa inteleaga'", context: "BTC -13%, alts pana la -73%. Portofoliu: 70% USDC.", cash: 70, dot: "red", image: "/track-record/10-oct11-aftermath-minus60.jpg" },
+  { date: "11 Oct 2025", title: "'Cine a dormit nu poate sa inteleaga'", context: "BTC -13%, alts pana la -73%. Portofoliu: 68% USDC.", cash: 68, dot: "red", image: "/track-record/10-oct11-aftermath-minus60.jpg" },
   { date: "12 Oct 2025", title: "100% USDC - 'Dead cat bounce'", context: "'Astept sa vad ce se intampla. Ma urc in tren daca pleaca.'", cash: 100, dot: "green", image: "/track-record/12-oct12-dead-cat-bounce-99pct.jpg" },
   { date: "30 Oct 2025", title: "100% cash - 'Nu dam comeback'", context: "'Nu imi place ce vad pe structura 4hr si daily.' Bear flag confirmat.", cash: 100, dot: "red", image: "/track-record/14-oct30-100pct-usdc-bearflag.jpg" },
   { date: "14 Dec 2025", title: "100% USDC", context: "'BOJ meeting bearish.' A iesit complet din nou.", cash: 100, dot: "gray", image: "/track-record/17-dec11-14-btc56-usdc99.jpg" },
@@ -85,7 +85,7 @@ export default function TrackRecordPage() {
         {/* Impact Stats */}
         <motion.div className="glass-card mb-8 grid grid-cols-3 gap-4 px-6 py-6 text-center" initial="hidden" animate="visible" variants={fadeIn}>
           <div>
-            <p className="font-mono text-3xl font-bold text-white sm:text-4xl">90%</p>
+            <p className="font-mono text-3xl font-bold text-white sm:text-4xl">92%</p>
             <p className="mt-1 text-xs text-slate-500">cash inainte de crash</p>
           </div>
           <div>
