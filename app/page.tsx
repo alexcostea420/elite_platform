@@ -12,9 +12,7 @@ import { HeroSection } from "@/components/marketing/hero-section";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 const AboutSection = dynamic(() => import("@/components/marketing/about-section").then(m => m.AboutSection));
-const BenefitsSection = dynamic(() => import("@/components/marketing/benefits-section").then(m => m.BenefitsSection));
 const FaqSection = dynamic(() => import("@/components/marketing/faq-section").then(m => m.FaqSection));
-const LeadMagnetSection = dynamic(() => import("@/components/marketing/lead-magnet-section").then(m => m.LeadMagnetSection));
 const PricingSection = dynamic(() => import("@/components/marketing/pricing-section").then(m => m.PricingSection));
 const TestimonialsSection = dynamic(() => import("@/components/marketing/testimonials-section").then(m => m.TestimonialsSection));
 const TrialPopup = dynamic(() => import("@/components/marketing/trial-popup").then(m => m.TrialPopup));
@@ -137,7 +135,29 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        {/* 4. Feature Sections - Instrumentele Tale */}
+        {/* 3. About */}
+        <AboutSection />
+
+        {/* 4. Track Record Teaser */}
+        <section className="py-12 md:py-20" style={{ background: "linear-gradient(180deg, transparent, rgba(239,68,68,0.02) 50%, transparent)" }}>
+          <Container>
+            <div className="mx-auto max-w-4xl text-center">
+              <p className="section-label mb-3">TRACK RECORD PUBLIC</p>
+              <h2 className="text-2xl font-bold text-white md:text-4xl">
+                Am iesit din piata inainte de crash-ul din Octombrie 2025.
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
+                Fiecare decizie documentata pe Discord, cu timestamp imuabil. De la 55% cash in August la 100% USDC pe 30 Octombrie - inainte ca piata sa piarda -60%.
+              </p>
+              <TrackRecordTeaser />
+              <Link className="ghost-button mt-8 inline-block" href="/track-record">
+                Vezi tot Track Record-ul →
+              </Link>
+            </div>
+          </Container>
+        </section>
+
+        {/* 5. Feature Sections - Instrumentele Tale */}
         <section className="py-12 md:py-20" id="instrumente">
           <Container>
             <div className="mb-16 text-center">
@@ -267,7 +287,7 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        {/* Alex's Brain AI Mentor */}
+        {/* 6. Alex's Brain AI Mentor */}
         <section className="py-12 md:py-20">
           <Container>
             <div className="mx-auto max-w-5xl">
@@ -276,7 +296,7 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        {/* 5. Social Proof Stats */}
+        {/* 7. Social Proof Stats */}
         <section className="py-12 md:py-20">
           <Container>
             <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
@@ -296,67 +316,16 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        {/* 6. Track Record Teaser */}
-        <section className="py-12 md:py-20" style={{ background: "linear-gradient(180deg, transparent, rgba(239,68,68,0.02) 50%, transparent)" }}>
-          <Container>
-            <div className="mx-auto max-w-4xl text-center">
-              <p className="section-label mb-3">TRACK RECORD PUBLIC</p>
-              <h2 className="text-2xl font-bold text-white md:text-4xl">
-                Am iesit din piata inainte de crash-ul din Octombrie 2025.
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
-                Fiecare decizie documentata pe Discord, cu timestamp imuabil. De la 55% cash in August la 100% USDC pe 30 Octombrie - inainte ca piata sa piarda -60%.
-              </p>
-              <TrackRecordTeaser />
-              <Link className="ghost-button mt-8 inline-block" href="/track-record">
-                Vezi tot Track Record-ul →
-              </Link>
-            </div>
-          </Container>
-        </section>
-
-        {/* 7. About */}
-        <AboutSection />
-
-        {/* 7. Benefits */}
-        <BenefitsSection />
-
-        {/* 8. How It Works */}
-        <section className="py-20" id="cum-functioneaza">
-          <Container>
-            <div className="mb-12 text-center">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Simplu și rapid</p>
-              <h2 className="text-3xl font-bold text-white md:text-4xl">Cum <span className="gradient-text">funcționează</span></h2>
-              <p className="mx-auto mt-4 max-w-2xl text-slate-400">De la signup la acces complet - în mai puțin de 5 minute.</p>
-            </div>
-            <div className="mx-auto grid max-w-4xl gap-6 grid-cols-2 md:gap-8 md:grid-cols-4">
-              {[
-                { step: "1", icon: "📝", title: "Creează cont", desc: "Signup gratuit cu 7 zile trial. Fără card." },
-                { step: "2", icon: "💬", title: "Intră pe Discord", desc: "Conectează Discord și primești rolul Elite automat." },
-                { step: "3", icon: "📊", title: "Explorează resursele", desc: "Analize, portofoliu Elite, video-uri educaționale și ghiduri." },
-                { step: "4", icon: "🚀", title: "Învață și investește", desc: "Analizează chart-urile, cere sfaturi și aplică ce înveți." },
-              ].map((item) => (
-                <div key={item.step} className="text-center">
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 text-2xl">{item.icon}</div>
-                  <div className="mb-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-accent-emerald text-sm font-bold text-crypto-dark">{item.step}</div>
-                  <h3 className="mt-2 text-lg font-bold text-white">{item.title}</h3>
-                  <p className="mt-2 text-sm text-slate-400">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </section>
-
-        {/* 10. Pricing */}
-        <PricingSection />
-
-        {/* 11. Testimonials */}
+        {/* 8. Testimonials */}
         <TestimonialsSection />
 
-        {/* 12. FAQ */}
+        {/* 9. Pricing */}
+        <PricingSection />
+
+        {/* 10. FAQ */}
         <FaqSection />
 
-        {/* 13. Final CTA */}
+        {/* 11. Final CTA */}
         <section className="relative py-20">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-emerald/5 to-transparent" />
           <Container className="relative text-center">
@@ -373,7 +342,7 @@ export default async function HomePage() {
         </section>
       </main>
 
-      {/* 14. Footer */}
+      {/* Footer */}
       <Footer />
       <TrialPopup />
     </>
