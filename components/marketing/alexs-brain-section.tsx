@@ -30,19 +30,26 @@ export function AlexsBrainSection() {
       <div className="text-center mb-8">
         <p className="text-xs font-semibold uppercase tracking-[0.15em] text-accent-emerald mb-3">EXCLUSIV ELITE</p>
         <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tău personal de trading. Disponibil <span className="text-accent-emerald">24/7</span>.</h2>
-        <div className="mx-auto mt-6 max-w-xl space-y-2 text-sm leading-relaxed text-slate-400 md:text-base">
-          <p>Alex&apos;s Brain - un asistent AI antrenat pe toată metodologia, video-urile și analizele lui Alex.</p>
-          <p>Îi pui o <span className="font-semibold text-white">întrebare</span>, îți dă răspunsul.</p>
-          <p>Îi arăți un <span className="font-semibold text-white">chart</span>, îți spune ce vede.</p>
-          <p>Îi dai un <span className="font-semibold text-white">trade</span>, îți zice dacă e bun sau nu.</p>
-          <p className="text-white font-medium">Ca și cum l-ai avea pe Alex lângă tine non-stop.</p>
-        </div>
+        <p className="mx-auto mt-4 max-w-xl text-sm text-slate-400 md:text-base">
+          Alex&apos;s Brain - un asistent AI antrenat pe toată metodologia, video-urile și analizele lui Alex.
+        </p>
       </div>
-      <div className="mb-6 flex items-center justify-center gap-8 text-xs text-slate-500">
-        <span className="flex items-center gap-2">📊 <span>Analiza chart-uri</span></span>
-        <span className="flex items-center gap-2">🎯 <span>Validare trade-uri</span></span>
-        <span className="flex items-center gap-2">🧪 <span>Quiz-uri practice</span></span>
+      <div className="grid gap-4 md:grid-cols-3 mb-6">
+        {[
+          { icon: "💬", title: "Întreabă orice", desc: "Pune orice întrebare despre trading, metodologie sau piață. Primești răspuns instant bazat pe experiența lui Alex." },
+          { icon: "📊", title: "Trimite un chart", desc: "Uploadează orice chart și primești analiză completă - structură, niveluri cheie, bias și setup-uri posibile." },
+          { icon: "🎯", title: "Validează trade-uri", desc: "Arată-i un trade înainte să intri. Îți spune dacă e bun, ce risc ai și ce ar schimba." },
+        ].map((c) => (
+          <div key={c.title} className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-white/[0.15] hover:bg-white/[0.05]">
+            <div className="text-3xl mb-3">{c.icon}</div>
+            <h3 className="text-lg font-semibold text-white mb-2">{c.title}</h3>
+            <p className="text-sm text-slate-400 leading-relaxed">{c.desc}</p>
+          </div>
+        ))}
       </div>
+      <p className="text-center text-base font-medium text-white/80 italic mb-8">
+        Ca și cum l-ai avea pe Alex lângă tine non-stop.
+      </p>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 mb-6">
         {images.map((img) => (
           <button
