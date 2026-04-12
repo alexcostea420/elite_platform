@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { DiscordConnectPrompt } from "@/components/dashboard/discord-connect-prompt";
 import { OnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
 import { TrialButton } from "@/components/dashboard/trial-button";
 import { Footer } from "@/components/layout/footer";
@@ -159,6 +160,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {isEliteUser ? (
             /* ═══ ELITE DASHBOARD ═══ */
             <>
+              {/* Discord connect prompt for users without Discord */}
+              {!profile?.discord_user_id && <DiscordConnectPrompt />}
+
               {/* Onboarding checklist for new users */}
               <OnboardingChecklist />
 
