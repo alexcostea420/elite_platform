@@ -356,9 +356,6 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        {/* 9. Trial CTA */}
-        <LeadMagnetSection />
-
         {/* 10. Pricing */}
         <PricingSection />
 
