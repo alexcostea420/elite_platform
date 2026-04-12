@@ -42,8 +42,8 @@ const entries: Entry[] = [
   { date: "30 Oct 2025", title: "100% cash - 'Nu dam comeback'", context: "'Nu imi place ce vad pe structura 4hr si daily.' Bear flag confirmat.", cash: 100, dot: "red", image: "/track-record/14-oct30-100pct-usdc-bearflag.jpg" },
   { date: "14 Dec 2025", title: "100% USDC", context: "'BOJ meeting bearish.' A iesit complet din nou.", cash: 100, dot: "gray", image: "/track-record/17-dec11-14-btc56-usdc99.jpg" },
   { date: "25 Jan 2026", title: "Prima pozitie dupa 3 luni", context: "80% USDC + 20% XMR. Target $600, SL sub $410.", cash: 80, dot: "green", image: "/track-record/18-jan25-79pct-usdc-xmr.jpg" },
-  { date: "31 Jan 2026", title: "ETH call: 2250-2350, target 2700-2900", context: "12 thumbs up de la comunitate.", cash: 80, dot: "green", image: "/track-record/19-jan31-eth-call-2250.jpg" },
-  { date: "2 Feb 2026", title: "40% ETH - executie conform planului", context: "13 thumbs up. A intrat exact unde a zis.", cash: 60, dot: "green", image: "/track-record/20-feb02-59pct-usdc-40pct-eth.jpg" },
+  { date: "31 Jan 2026", title: "ETH call: 2250-2350, target 2700-2900", context: "Entry planificat pe zona de suport. Target pe 14-17 februarie.", cash: 80, dot: "green", image: "/track-record/19-jan31-eth-call-2250.jpg" },
+  { date: "2 Feb 2026", title: "40% ETH - executie conform planului", context: "59% USDC + 40% ETH. Intrat exact in zona anuntata.", cash: 60, dot: "green", image: "/track-record/20-feb02-59pct-usdc-40pct-eth.jpg" },
   { date: "Feb - Azi", title: "Povestea continua...", context: "Restul miscarilor sunt vizibile doar pentru membrii Elite.", cash: -1, dot: "gray", image: "" },
 ];
 
