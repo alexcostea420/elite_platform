@@ -23,7 +23,7 @@ export function TrackRecordTeaser() {
 
   return (
     <>
-      <div className="mx-auto mt-8 grid max-w-5xl gap-4 grid-cols-3">
+      <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4">
         {screenshots.map((s) => (
           <button
             key={s.alt}
@@ -31,7 +31,7 @@ export function TrackRecordTeaser() {
             onClick={() => setLightbox(s.src)}
             type="button"
           >
-            <Image alt={s.alt} className="w-full" height={500} src={s.src} width={500} unoptimized />
+            <Image alt={s.alt} className="w-full" height={600} src={s.src} width={800} unoptimized />
           </button>
         ))}
       </div>
