@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { AlexsBrainSection } from "@/components/marketing/alexs-brain-section";
 import { HeroSection } from "@/components/marketing/hero-section";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
@@ -269,37 +270,7 @@ export default async function HomePage() {
         <section className="py-12 md:py-20">
           <Container>
             <div className="mx-auto max-w-5xl">
-              <div className="text-center mb-10">
-                <p className="section-label mb-3">EXCLUSIV ELITE</p>
-                <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tau personal de trading. Disponibil 24/7.</h2>
-                <div className="mx-auto mt-6 max-w-xl space-y-2 text-sm leading-relaxed text-slate-400 md:text-base">
-                  <p>Alex&apos;s Brain - un asistent AI antrenat pe toata metodologia, video-urile si analizele lui Alex.</p>
-                  <p>Ii pui o intrebare, iti da raspunsul.</p>
-                  <p>Ii arati un chart, iti spune ce vede.</p>
-                  <p>Ii dai un trade, iti zice daca e bun sau nu.</p>
-                  <p className="text-white font-medium">Ca si cum l-ai avea pe Alex langa tine non-stop.</p>
-                </div>
-              </div>
-              <div className="mb-6 flex items-center justify-center gap-8 text-xs text-slate-500">
-                <span className="flex items-center gap-2">📊 <span>Analiza chart-uri</span></span>
-                <span className="flex items-center gap-2">🎯 <span>Validare trade-uri</span></span>
-                <span className="flex items-center gap-2">🧪 <span>Quiz-uri practice</span></span>
-              </div>
-              <div className="grid gap-3 md:grid-cols-2 mb-6">
-                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
-                  <Image alt="CVX trade analysis - PRO/CONTRA" className="w-full" height={400} loading="lazy" src="/alexs-brain/ab5-cvx-trade-analysis.jpg" width={500} />
-                  <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-600">Validare trade cu PRO/CONTRA si strategie</p>
-                </div>
-                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
-                  <Image alt="ETH PDH strategy - setup complet" className="w-full" height={400} loading="lazy" src="/alexs-brain/ab8-eth-pdh-strategy.jpg" width={500} />
-                  <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-600">Setup complet: entry, TP, SL, invalidare</p>
-                </div>
-              </div>
-              <div className="text-center">
-                <p className="text-sm text-slate-400 mb-4">Alex&apos;s Brain este disponibil exclusiv pentru membrii Elite pe Discord.</p>
-                <Link className="accent-button" href="/signup">Incepe Gratuit - 7 Zile →</Link>
-                <p className="mt-3 text-xs text-slate-600">Acces complet la Alex&apos;s Brain inclus in orice plan Elite</p>
-              </div>
+              <AlexsBrainSection />
             </div>
           </Container>
         </section>
