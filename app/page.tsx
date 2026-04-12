@@ -152,7 +152,7 @@ export default async function HomePage() {
               {/* Feature 2: Stocks - preview left, text right */}
               <div className="flex flex-col-reverse items-center gap-10 md:flex-row">
                 <div className="flex flex-1 items-center justify-center">
-                  <div className="glass-card w-full max-w-xs space-y-2 rounded-2xl p-5">
+                  <div className="glass-card w-full max-w-sm space-y-2 rounded-2xl p-5">
                     <div className="flex items-center justify-between border-b border-slate-700/50 pb-2 text-xs text-slate-500">
                       <span>Acțiune</span><span>Status</span>
                     </div>
@@ -185,7 +185,7 @@ export default async function HomePage() {
                   <p className="text-slate-400">{features[2].desc}</p>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
-                  <div className="glass-card w-full max-w-xs space-y-4 rounded-2xl p-6">
+                  <div className="glass-card w-full max-w-sm space-y-4 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-white">Convergență Pivoți</span>
                       <span className="font-mono text-xs text-accent-emerald">3/9</span>
@@ -201,7 +201,7 @@ export default async function HomePage() {
               {/* Feature 4: Educatie - preview left, text right */}
               <div className="flex flex-col-reverse items-center gap-10 md:flex-row">
                 <div className="flex flex-1 items-center justify-center">
-                  <div className="flex w-full max-w-xs gap-2">
+                  <div className="flex w-full max-w-sm gap-2">
                     <div className="glass-card flex-1 space-y-2 rounded-xl p-3">
                       <div className="flex h-16 items-center justify-center rounded-lg bg-accent-emerald/5 text-2xl">📊</div>
                       <p className="text-[11px] font-medium leading-tight text-slate-300">Fibonacci Retracement</p>
