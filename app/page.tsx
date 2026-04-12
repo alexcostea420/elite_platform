@@ -61,27 +61,27 @@ export default async function HomePage() {
   const features = [
     {
       label: "ANALIZA SAPTAMANALA",
-      title: "Stii exact cand sa cumperi",
-      desc: "Un scor de la 0 la 100 bazat pe Fear & Greed, distanta de ATH, sentiment si cicluri. Actualizat săptămânal.",
+      title: "Știi exact când să cumperi",
+      desc: "Un scor de la 0 la 100 bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri. Actualizat săptămânal.",
     },
     {
       label: "16 ACTIUNI MONITORIZATE",
-      title: "Zone clare de Buy si Sell",
-      desc: "Fiecare actiune cu 2 zone de cumparare si 2 zone de vanzare. Stii exact unde intri si unde iesi.",
+      title: "Zone clare de Buy și Sell",
+      desc: "Fiecare acțiune cu 2 zone de cumpărare și 2 zone de vânzare. Știi exact unde intri și unde ieși.",
     },
     {
       label: "TIMING RESEARCH",
       title: "9 metode. Un singur calendar.",
-      desc: "Eclipse, Fibonacci, Gann, Halving, Blood Moon - toate analizate si combinate intr-un scor de convergenta.",
+      desc: "Eclipse, Fibonacci, Gann, Halving, Blood Moon - toate analizate și combinate într-un scor de convergență.",
     },
     {
       label: "55+ VIDEO-URI",
-      title: "De la zero la executie",
-      desc: "Fiecare video te duce cu un pas mai aproape de consistenta. Analiza tehnica, risk management, psihologie.",
+      title: "De la zero la execuție",
+      desc: "Fiecare video te duce cu un pas mai aproape de consistență. Analiză tehnică, risk management, psihologie.",
     },
     {
       label: "350+ TRADERI",
-      title: "Nu mai tranzactionezi singur",
+      title: "Nu mai tranzacționezi singur",
       desc: "Întreabă orice, primești răspuns. Discuții zilnice, analize și sesiuni live săptămânale cu Alex.",
     },
   ];
@@ -110,10 +110,10 @@ export default async function HomePage() {
             <div className="mx-auto max-w-4xl text-center">
               <p className="section-label mb-3">TRACK RECORD PUBLIC</p>
               <h2 className="text-2xl font-bold text-white md:text-4xl">
-                Am iesit din piata inainte de crash-ul din Octombrie 2025.
+                Am ieșit din piață înainte de crash-ul din Octombrie 2025.
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
-                Fiecare decizie documentata pe Discord, cu timestamp imuabil. De la 55% cash in August la 100% USDC pe 30 Octombrie - inainte ca piata sa piarda -60%.
+                Fiecare decizie documentată pe Discord, cu timestamp imuabil. De la 55% cash in August la 100% USDC pe 30 Octombrie - înainte ca piața să piardă -60%.
               </p>
               <TrackRecordTeaser />
               <Link className="ghost-button mt-8 inline-block" href="/track-record">
@@ -268,15 +268,15 @@ export default async function HomePage() {
             <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
               <div className="text-center">
                 <p className="text-5xl font-bold text-white md:text-7xl">85%</p>
-                <p className="mt-4 text-sm text-slate-400">spun ca au inteles mai bine piata dupa primele 2 saptamani</p>
+                <p className="mt-4 text-sm text-slate-400">spun că au înțeles mai bine piața după primele 2 săptămâni</p>
               </div>
               <div className="text-center">
                 <p className="text-5xl font-bold text-white md:text-7xl">70%</p>
-                <p className="mt-4 text-sm text-slate-400">spun ca au evitat cel putin o decizie proasta datorita Risk Score-ului</p>
+                <p className="mt-4 text-sm text-slate-400">spun că au evitat cel puțin o decizie proastă datorită Risk Score-ului</p>
               </div>
               <div className="text-center">
                 <p className="text-5xl font-bold text-accent-emerald md:text-7xl">350+</p>
-                <p className="mt-4 text-sm text-slate-400">traderi activi care invata si cresc impreuna</p>
+                <p className="mt-4 text-sm text-slate-400">traderi activi care învață și cresc împreună</p>
               </div>
             </div>
           </Container>
@@ -296,13 +296,13 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-emerald/5 to-transparent" />
           <Container className="relative text-center">
             <h2 className="text-3xl font-bold text-white md:text-4xl">
-              Inca te gandesti?
+              Încă te gândești?
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-slate-400">
-              Incepe cu 7 zile gratuit. Fara card, fara obligatii. Daca nu merita, nu platesti nimic.
+              Începe cu 7 zile gratuit. Fără card, fără obligații. Dacă nu merită, nu plătești nimic.
             </p>
             <Link className="accent-button mt-8 inline-block px-10 py-4 text-lg font-bold" href="/signup">
-              Incepe Gratuit →
+              Începe Gratuit →
             </Link>
           </Container>
         </section>

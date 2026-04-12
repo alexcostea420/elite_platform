@@ -35,7 +35,7 @@ export function AlexsBrainSection() {
           <p>Îi pui o întrebare, îți dă răspunsul.</p>
           <p>Îi arăți un chart, îți spune ce vede.</p>
           <p>Îi dai un trade, îți zice dacă e bun sau nu.</p>
-          <p className="text-white font-medium">Ca si cum l-ai avea pe Alex langa tine non-stop.</p>
+          <p className="text-white font-medium">Ca și cum l-ai avea pe Alex lângă tine non-stop.</p>
         </div>
       </div>
       <div className="mb-6 flex items-center justify-center gap-8 text-xs text-slate-500">

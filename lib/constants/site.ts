@@ -225,11 +225,11 @@ export const faqs = [
   },
   {
     question: "Ce este indicatorul ELITE?",
-    answer: "Un set de 4 indicatori exclusivi pe TradingView care iti arata zone clare de intrare si iesire. Construiti pe analiza tehnica si volum, testati pe piata reala."
+    answer: "Un set de 4 indicatori exclusivi pe TradingView care îți arată zone clare de intrare și ieșire. Construiți pe analiză tehnică și volum, testați pe piața reală."
   },
   {
     question: "Cât de des sunt sesiunile live?",
-    answer: "2-3 sesiuni pe saptamana plus analize detaliate. Toate sunt inregistrate, deci le poti urmari oricand."
+    answer: "2-3 sesiuni pe săptămână plus analize detaliate. Toate sunt înregistrate, deci le poți urmări oricând."
   },
   {
     question: "Pot plăti cu crypto?",
@@ -245,11 +245,11 @@ export const faqs = [
   },
   {
     question: "Ce este botul de copytrade?",
-    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul executa tranzactii automat pe contul tau. Disponibil in curand - $45/luna pentru membrii Elite."
+    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul executa tranzactii automat pe contul tau. Disponibil în curând - $45/luna pentru membrii Elite."
   },
   {
     question: "Pot pierde bani?",
-    answer: "Da. Tradingul implica risc real. Nu garantam profituri si nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces - diferenta o face cum le gestionezi."
+    answer: "Da. Tradingul implica risc real. Nu garantăm profituri și nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces - diferența o face cum le gestionezi."
   }
 ];
 
