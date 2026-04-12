@@ -29,12 +29,12 @@ export function AlexsBrainSection() {
     <>
       <div className="text-center mb-8">
         <p className="text-xs font-semibold uppercase tracking-[0.15em] text-accent-emerald mb-3">EXCLUSIV ELITE</p>
-        <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tau personal de trading. Disponibil 24/7.</h2>
+        <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tău personal de trading. Disponibil <span className="text-accent-emerald">24/7</span>.</h2>
         <div className="mx-auto mt-6 max-w-xl space-y-2 text-sm leading-relaxed text-slate-400 md:text-base">
-          <p>Alex&apos;s Brain - un asistent AI antrenat pe toata metodologia, video-urile si analizele lui Alex.</p>
-          <p>Îi pui o întrebare, îți dă răspunsul.</p>
-          <p>Îi arăți un chart, îți spune ce vede.</p>
-          <p>Îi dai un trade, îți zice dacă e bun sau nu.</p>
+          <p>Alex&apos;s Brain - un asistent AI antrenat pe toată metodologia, video-urile și analizele lui Alex.</p>
+          <p>Îi pui o <span className="font-semibold text-white">întrebare</span>, îți dă răspunsul.</p>
+          <p>Îi arăți un <span className="font-semibold text-white">chart</span>, îți spune ce vede.</p>
+          <p>Îi dai un <span className="font-semibold text-white">trade</span>, îți zice dacă e bun sau nu.</p>
           <p className="text-white font-medium">Ca și cum l-ai avea pe Alex lângă tine non-stop.</p>
         </div>
       </div>
@@ -57,15 +57,15 @@ export function AlexsBrainSection() {
       </div>
       <div className="text-center">
         <p className="text-sm text-slate-400 mb-4">Alex&apos;s Brain este disponibil exclusiv pentru membrii Elite pe Discord.</p>
-        <Link className="accent-button" href="/signup">Incepe Gratuit - 7 Zile →</Link>
-        <p className="mt-3 text-xs text-slate-600">Acces complet la Alex&apos;s Brain inclus in orice plan Elite</p>
+        <Link className="accent-button" href="/signup">Începe Gratuit - 7 Zile →</Link>
+        <p className="mt-3 text-xs text-slate-600">Acces complet la Alex&apos;s Brain inclus în orice plan Elite</p>
       </div>
 
       {/* Lightbox */}
       {lightbox && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setLightbox(null)}>
           <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
-            <button className="absolute -top-10 right-0 text-sm text-white/50 hover:text-white" onClick={() => setLightbox(null)} type="button">Inchide</button>
+            <button className="absolute -top-10 right-0 text-sm text-white/50 hover:text-white" onClick={() => setLightbox(null)} type="button">Închide</button>
             <Image alt="Alex's Brain screenshot" className="w-full rounded-xl border border-white/10" height={800} src={lightbox} width={700} />
           </div>
         </div>

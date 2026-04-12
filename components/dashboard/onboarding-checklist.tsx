@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "elite_onboarding_completed";
 
 const checklistItems = [
-  { id: "watch_video", label: "Uita-te la primul video", description: "Incepe cu o analiza recenta - dureaza 10 minute", link: "/dashboard/videos", icon: "▶" },
-  { id: "check_risk", label: "Verifica Risk Score-ul BTC", description: "Vezi daca e moment bun de acumulare", link: "/dashboard/risk-score", icon: "📊" },
-  { id: "explore_stocks", label: "Exploreaza Buy/Sell zones", description: "16 actiuni cu zone clare de intrare si iesire", link: "/dashboard/stocks", icon: "📈" },
-  { id: "connect_discord", label: "Conecteaza-te pe Discord", description: "Intra in comunitate si pune prima intrebare", link: "/auth/discord/start", icon: "💬" },
-  { id: "explore_resurse", label: "Citeste ghidul de start rapid", description: "Tot ce trebuie sa stii ca sa incepi", link: "/dashboard/resurse", icon: "📖" },
+  { id: "watch_video", label: "Uită-te la primul video", description: "Începe cu o analiză recentă - durează 10 minute", link: "/dashboard/videos", icon: "▶" },
+  { id: "check_risk", label: "Verifică Risk Score-ul BTC", description: "Vezi dacă e moment bun de acumulare", link: "/dashboard/risk-score", icon: "📊" },
+  { id: "explore_stocks", label: "Explorează Buy/Sell zones", description: "16 acțiuni cu zone clare de intrare și ieșire", link: "/dashboard/stocks", icon: "📈" },
+  { id: "connect_discord", label: "Conectează-te pe Discord", description: "Intră în comunitate și pune prima întrebare", link: "/auth/discord/start", icon: "💬" },
+  { id: "explore_resurse", label: "Citește ghidul de start rapid", description: "Tot ce trebuie să știi ca să începi", link: "/dashboard/resurse", icon: "📖" },
 ];
 
 export function OnboardingChecklist() {
@@ -54,8 +54,8 @@ export function OnboardingChecklist() {
   if (completed.length >= 5) {
     return (
       <section className="mb-6 glass-card p-6 text-center">
-        <p className="text-lg font-semibold text-accent-emerald">Esti pregatit!</p>
-        <p className="mt-1 text-sm text-slate-400">Exploreaza platforma in ritmul tau.</p>
+        <p className="text-lg font-semibold text-accent-emerald">Ești pregătit!</p>
+        <p className="mt-1 text-sm text-slate-400">Explorează platforma în ritmul tău.</p>
       </section>
     );
   }
@@ -64,7 +64,7 @@ export function OnboardingChecklist() {
     <section className="mb-6 glass-card p-5">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-white">Primii pasi in Elite</h3>
+          <h3 className="text-sm font-semibold text-white">Primii pași în Elite</h3>
           <p className="text-xs text-slate-500">{completed.length}/{checklistItems.length} completate</p>
         </div>
         <button
@@ -72,7 +72,7 @@ export function OnboardingChecklist() {
           onClick={dismissAll}
           type="button"
         >
-          Inchide
+          Închide
         </button>
       </div>
       {/* Progress bar */}

@@ -98,7 +98,7 @@ export function HeroSection() {
                 <h2 className="mt-1 text-xl font-bold text-white md:text-2xl">Vezi cum funcționează comunitatea</h2>
               </div>
               <button
-                aria-label="Inchide prezentarea"
+                aria-label="Închide prezentarea"
                 className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-2xl text-white transition-colors hover:bg-white/10"
                 onClick={() => setIsVideoOpen(false)}
                 type="button"

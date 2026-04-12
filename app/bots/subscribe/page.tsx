@@ -11,9 +11,9 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Abonare Bot Trading | Conecteaza MEXC",
+  title: "Abonare Bot Trading | Conectează MEXC",
   description:
-    "Conecteaza-ti contul MEXC si activeaza botul de trading automat.",
+    "Conectează-ți contul MEXC și activează botul de trading automat.",
   keywords: ["abonare bot trading", "copytrade", "MEXC bot"],
   path: "/bots/subscribe",
   host: "app",
@@ -95,8 +95,8 @@ export default async function BotSubscribePage() {
           <div className="mx-auto max-w-2xl">
             <SectionHeading
               eyebrow="Pasul 1"
-              title="Conecteaza contul MEXC"
-              description="Introdu cheile API pentru a activa copytrade-ul automat pe contul tau."
+              title="Conectează contul MEXC"
+              description="Introdu cheile API pentru a activa copytrade-ul automat pe contul tău."
             />
           </div>
           <div className="mt-10">

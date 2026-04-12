@@ -28,52 +28,52 @@ const features = [
     icon: "📐",
     title: "Sizing Automat",
     description:
-      "Marimea pozitiei se ajusteaza automat in functie de balanta ta si volatilitatea pietei. Nu trebuie sa calculezi nimic.",
+      "Mărimea poziției se ajustează automat în funcție de balanța ta și volatilitatea pieței. Nu trebuie să calculezi nimic.",
   },
   {
     icon: "⏰",
     title: "Activ 24/7",
     description:
-      "Botul tranzactioneaza non-stop, indiferent daca dormi, lucrezi sau esti in vacanta. Nicio oportunitate pierduta.",
+      "Botul tranzacționează non-stop, indiferent dacă dormi, lucrezi sau ești în vacanță. Nicio oportunitate pierdută.",
   },
   {
     icon: "🔒",
     title: "Zero Acces la Fonduri",
     description:
-      "API-ul MEXC pe care il conectezi nu permite retrageri. Fondurile raman in totalitate sub controlul tau.",
+      "API-ul MEXC pe care îl conectezi nu permite retrageri. Fondurile rămân în totalitate sub controlul tău.",
   },
   {
     icon: "🏦",
     title: "MEXC Exchange",
     description:
-      "Conectare directa la MEXC, unul dintre cele mai mari exchange-uri de crypto. Setup simplu in cateva minute.",
+      "Conectare directă la MEXC, unul dintre cele mai mari exchange-uri de crypto. Setup simplu în câteva minute.",
   },
 ];
 
 const faqItems = [
   {
-    q: "Cum functioneaza copytrade-ul?",
-    a: "Conectezi contul MEXC prin API (read-only + trade). Botul nostru copiaza automat tranzactiile pe contul tau, cu sizing ajustat la balanta ta.",
+    q: "Cum funcționează copytrade-ul?",
+    a: "Conectezi contul MEXC prin API (read-only + trade). Botul nostru copiază automat tranzacțiile pe contul tău, cu sizing ajustat la balanța ta.",
   },
   {
     q: "Este sigur? Poate botul sa retraga fonduri?",
-    a: "Nu. API-ul MEXC pe care il configurezi nu permite retrageri. Fondurile tale raman 100% sub controlul tau.",
+    a: "Nu. API-ul MEXC pe care îl configurezi nu permite retrageri. Fondurile tale rămân 100% sub controlul tău.",
   },
   {
     q: "Care e balanta minima recomandata?",
     a: "$100 este minimul recomandat pentru a beneficia de diversificarea completa.",
   },
   {
-    q: "Ce se intampla daca piata scade?",
-    a: "Botul are management de risc integrat: stop-loss pe fiecare pozitie, limita maxima de expunere, si reducere automata in perioadele de volatilitate extrema.",
+    q: "Ce se întâmplă dacă piața scade?",
+    a: "Botul are management de risc integrat: stop-loss pe fiecare poziție, limită maximă de expunere, și reducere automată în perioadele de volatilitate extremă.",
   },
   {
     q: "Pot opri botul oricand?",
-    a: "Da, poti dezactiva copytrade-ul instant din dashboard. Pozitiile deschise pot fi inchise manual sau automat.",
+    a: "Da, poți dezactiva copytrade-ul instant din dashboard. Pozițiile deschise pot fi închise manual sau automat.",
   },
   {
     q: "De ce e mai ieftin pentru membrii Elite?",
-    a: "Membrii Elite sustin deja comunitatea. Botul este un beneficiu suplimentar la pret redus, ca multumire pentru loialitate.",
+    a: "Membrii Elite susțin deja comunitatea. Botul este un beneficiu suplimentar la preț redus, ca mulțumire pentru loialitate.",
   },
 ];
 
@@ -89,17 +89,17 @@ export default function BotsPage() {
             <h1 className="text-3xl font-bold text-white">Bot Trading Automat</h1>
             <h2 className="mt-2 text-xl font-semibold text-accent-emerald">Coming Soon</h2>
             <p className="mx-auto mt-4 max-w-lg text-slate-400">
-              Un bot care tranzactioneaza pentru tine, non-stop. Tu setezi riscul, el executa.
+              Un bot care tranzacționează pentru tine, non-stop. Tu setezi riscul, el execută.
             </p>
             <p className="mt-4 text-sm font-semibold text-accent-emerald">
-              Membrii Elite vor primi acces prioritar si pret redus.
+              Membrii Elite vor primi acces prioritar și preț redus.
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <Link className="accent-button px-6 py-3" href="/upgrade">
-                Intra in Elite
+                Intră în Elite
               </Link>
               <Link className="ghost-button px-6 py-3" href="/">
-                Inapoi acasa
+                Înapoi acasă
               </Link>
             </div>
           </section>
@@ -124,14 +124,14 @@ export default function BotsPage() {
               Bot Trading Automat
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-300 md:text-xl">
-              Copiaza tranzactiile automat pe contul tau MEXC. Tu setezi riscul, botul executa. Non-stop, fara interventie manuala.
+              Copiază tranzacțiile automat pe contul tău MEXC. Tu setezi riscul, botul execută. Non-stop, fără intervenție manuală.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
               <Link className="accent-button px-8 py-3.5 text-lg font-bold" href="/bots/subscribe">
-                Incepe acum
+                Începe acum
               </Link>
               <a className="ghost-button px-8 py-3.5" href="#preturi">
-                Vezi preturile
+                Vezi prețurile
               </a>
             </div>
           </section>
@@ -140,7 +140,7 @@ export default function BotsPage() {
         {/* Features */}
         <Container className="mt-20">
           <SectionHeading
-            eyebrow="De ce sa folosesti botul"
+            eyebrow="De ce să folosești botul"
             title="Trading automat, risc controlat"
           />
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -158,7 +158,7 @@ export default function BotsPage() {
         <Container className="mt-20">
           <div id="preturi" />
           <SectionHeading
-            eyebrow="Preturi simple"
+            eyebrow="Prețuri simple"
             title="Alege planul potrivit"
           />
           <div className="mx-auto mt-12 grid max-w-3xl gap-6 md:grid-cols-2">
@@ -170,7 +170,7 @@ export default function BotsPage() {
                 <span className="text-slate-400">/luna</span>
               </div>
               <p className="mt-3 text-sm text-slate-400">
-                Pentru traderi care vor sa automatizeze fara abonament Elite.
+                Pentru traderi care vor să automatizeze fără abonament Elite.
               </p>
               <ul className="mt-6 space-y-3">
                 {[
@@ -186,7 +186,7 @@ export default function BotsPage() {
                 ))}
               </ul>
               <Link className="ghost-button mt-8 block w-full py-3 text-center font-bold" href="/bots/subscribe">
-                Incepe acum
+                Începe acum
               </Link>
             </article>
 
@@ -200,7 +200,7 @@ export default function BotsPage() {
                 <span className="text-4xl font-bold text-white">$45</span>
                 <span className="text-slate-400">/luna</span>
               </div>
-              <p className="mt-1 text-sm text-green-400">Economisesti $53/luna fata de Standard</p>
+              <p className="mt-1 text-sm text-green-400">Economisești $53/lună față de Standard</p>
               <p className="mt-2 text-sm text-slate-400">
                 Pret redus exclusiv pentru membrii cu abonament Elite activ.
               </p>
@@ -219,7 +219,7 @@ export default function BotsPage() {
                 ))}
               </ul>
               <Link className="accent-button mt-8 block w-full py-3 text-center font-bold" href="/bots/subscribe">
-                Incepe acum
+                Începe acum
               </Link>
             </article>
           </div>
@@ -228,8 +228,8 @@ export default function BotsPage() {
         {/* FAQ */}
         <Container className="mt-20">
           <SectionHeading
-            eyebrow="Intrebari frecvente"
-            title="Tot ce trebuie sa stii"
+            eyebrow="Întrebări frecvente"
+            title="Tot ce trebuie să știi"
           />
           <div className="mx-auto mt-12 max-w-3xl space-y-4">
             {faqItems.map((item) => (
@@ -245,7 +245,7 @@ export default function BotsPage() {
         <Container className="mt-16">
           <div className="mx-auto max-w-3xl rounded-2xl border border-yellow-500/20 bg-yellow-500/5 px-6 py-5 text-center">
             <p className="text-xs text-yellow-200/70">
-              <span className="font-semibold">Disclaimer:</span> Trading-ul de criptomonede implica riscuri semnificative. Performanta trecuta nu garanteaza rezultate viitoare. Nu investi mai mult decat iti permiti sa pierzi. Botul este un instrument de automatizare, nu o garantie de profit.
+              <span className="font-semibold">Disclaimer:</span> Trading-ul de criptomonede implică riscuri semnificative. Performanța trecută nu garantează rezultate viitoare. Nu investi mai mult decât îți permiți să pierzi. Botul este un instrument de automatizare, nu o garanție de profit.
             </p>
           </div>
         </Container>

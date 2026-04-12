@@ -14,11 +14,11 @@ export function LeadMagnetSection() {
             7 zile gratuit
           </p>
           <h2 className="text-2xl font-bold text-white md:text-3xl">
-            Testeaza totul. Fara card. Fara obligatii.
+            Testează totul. Fără card. Fără obligații.
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-slate-400">
-            Acces complet la Discord Elite, video-uri, indicatori, analize si portofoliul live.
-            Dupa 7 zile decizi daca merita.
+            Acces complet la Discord Elite, video-uri, indicatori, analize și portofoliul live.
+            După 7 zile decizi dacă merită.
           </p>
 
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-3 sm:flex-row sm:justify-center">
@@ -26,13 +26,13 @@ export function LeadMagnetSection() {
               className="accent-button rounded-xl px-8 py-4 text-center text-base font-bold"
               href="/signup"
             >
-              Creeaza Cont Gratuit →
+              Creează Cont Gratuit →
             </Link>
           </div>
 
           <div className="mx-auto mt-6 flex max-w-md flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
-            <span>Fara card de credit</span>
-            <span>Se anuleaza automat</span>
+            <span>Fără card de credit</span>
+            <span>Se anulează automat</span>
             <span>Acces complet</span>
           </div>
         </div>

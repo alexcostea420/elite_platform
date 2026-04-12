@@ -60,12 +60,12 @@ export default async function HomePage() {
 
   const features = [
     {
-      label: "ANALIZA SAPTAMANALA",
+      label: "ANALIZĂ SĂPTĂMÂNALĂ",
       title: "Știi exact când să cumperi",
       desc: "Un scor de la 0 la 100 bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri. Actualizat săptămânal.",
     },
     {
-      label: "16 ACTIUNI MONITORIZATE",
+      label: "16 ACȚIUNI MONITORIZATE",
       title: "Zone clare de Buy și Sell",
       desc: "Fiecare acțiune cu 2 zone de cumpărare și 2 zone de vânzare. Știi exact unde intri și unde ieși.",
     },
@@ -154,7 +154,7 @@ export default async function HomePage() {
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card w-full max-w-xs space-y-2 rounded-2xl p-5">
                     <div className="flex items-center justify-between border-b border-slate-700/50 pb-2 text-xs text-slate-500">
-                      <span>Actiune</span><span>Status</span>
+                      <span>Acțiune</span><span>Status</span>
                     </div>
                     <div className="flex items-center justify-between py-1.5">
                       <span className="font-mono text-sm font-bold text-white">TSLA</span>
@@ -187,7 +187,7 @@ export default async function HomePage() {
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card w-full max-w-xs space-y-4 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-white">Convergenta Pivoti</span>
+                      <span className="text-sm font-semibold text-white">Convergență Pivoți</span>
                       <span className="font-mono text-xs text-accent-emerald">3/9</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-slate-700">
@@ -236,14 +236,14 @@ export default async function HomePage() {
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-xs font-bold text-indigo-400">A</div>
                       <div className="space-y-1">
                         <p className="text-xs font-semibold text-indigo-400">Alex</p>
-                        <p className="rounded-lg rounded-tl-none bg-slate-800 px-3 py-2 text-xs text-slate-300">BTC arata bine pe weekly. Zona de buy intre 80-82k.</p>
+                        <p className="rounded-lg rounded-tl-none bg-slate-800 px-3 py-2 text-xs text-slate-300">BTC arată bine pe weekly. Zona de buy între 80-82k.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-400">M</div>
                       <div className="space-y-1">
                         <p className="text-xs font-semibold text-emerald-400">Mihai</p>
-                        <p className="rounded-lg rounded-tl-none bg-slate-800 px-3 py-2 text-xs text-slate-300">Multumesc! Am intrat cu DCA la 81k.</p>
+                        <p className="rounded-lg rounded-tl-none bg-slate-800 px-3 py-2 text-xs text-slate-300">Mulțumesc! Am intrat cu DCA la 81k.</p>
                       </div>
                     </div>
                   </div>
@@ -268,15 +268,15 @@ export default async function HomePage() {
             <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
               <div className="text-center">
                 <p className="text-5xl font-bold text-white md:text-7xl">85%</p>
-                <p className="mt-4 text-sm text-slate-400">spun că au înțeles mai bine piața după primele 2 săptămâni</p>
+                <p className="mt-4 text-sm text-slate-400">spun că au înțeles mai bine <span className="font-semibold text-white">piața</span> după primele <span className="font-semibold text-white">2 săptămâni</span></p>
               </div>
               <div className="text-center">
                 <p className="text-5xl font-bold text-white md:text-7xl">70%</p>
-                <p className="mt-4 text-sm text-slate-400">spun că au evitat cel puțin o decizie proastă datorită Risk Score-ului</p>
+                <p className="mt-4 text-sm text-slate-400">spun că au evitat cel puțin o decizie proastă datorită <span className="font-semibold text-white">Risk Score</span>-ului</p>
               </div>
               <div className="text-center">
                 <p className="text-5xl font-bold text-accent-emerald md:text-7xl">350+</p>
-                <p className="mt-4 text-sm text-slate-400">traderi activi care învață și cresc împreună</p>
+                <p className="mt-4 text-sm text-slate-400">traderi activi care <span className="font-semibold text-white">învață</span> și <span className="font-semibold text-white">cresc împreună</span></p>
               </div>
             </div>
           </Container>
@@ -299,7 +299,7 @@ export default async function HomePage() {
               Încă te gândești?
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-slate-400">
-              Începe cu 7 zile gratuit. Fără card, fără obligații. Dacă nu merită, nu plătești nimic.
+              Începe cu <span className="font-semibold text-white">7 zile gratuit</span>. <span className="font-semibold text-white">Fără card</span>, fără obligații. Dacă nu merită, nu plătești nimic.
             </p>
             <Link className="accent-button mt-8 inline-block px-10 py-4 text-lg font-bold" href="/signup">
               Începe Gratuit →

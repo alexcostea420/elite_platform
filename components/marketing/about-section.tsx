@@ -14,9 +14,9 @@ const bulletPoints = [
 ];
 
 const credibilityStats = [
-  { value: "4+", label: "Ani de experienta", icon: "📈" },
+  { value: "4+", label: "Ani de experiență", icon: "📈" },
   { value: "350+", label: "Membri în comunitate", icon: "👥" },
-  { value: "16", label: "Actiuni monitorizate", icon: "📊" },
+  { value: "16", label: "Acțiuni monitorizate", icon: "📊" },
 ];
 
 export function AboutSection() {
@@ -101,13 +101,13 @@ export function AboutSection() {
             <div>
               <SectionHeading align="left" title={<>Despre <span className="gradient-text">{siteConfig.creator}</span></>} />
               <div className="mt-6 space-y-4 text-lg leading-relaxed text-slate-300">
-                <p><strong className="text-white">4 ani de experienta in trading si investitii crypto.</strong></p>
-                <p>O comunitate de peste 350 de investitori și traderi activi.</p>
+                <p><strong className="text-white">4 ani de experiență în trading și investiții crypto.</strong></p>
+                <p>O comunitate de peste <span className="font-semibold text-white">350</span> de investitori și traderi activi.</p>
                 <p>Strategii practice, nu teorie.</p>
                 <p>Indicatori exclusivi pentru TradingView.</p>
-                <p>Sesiuni live saptamanale cu update de piata si ajustare de portofoliu.</p>
+                <p>Sesiuni live săptămânale cu update de piață și ajustare de portofoliu.</p>
                 <p>Analize detaliate și comunitate activă pe Discord.</p>
-                <p className="text-white font-semibold">Locul unde invatarea devine executie reala.</p>
+                <p className="text-white font-semibold">Locul unde învățarea devine execuție reală.</p>
               </div>
               <div className="mt-6 grid grid-cols-3 gap-3">
                 {credibilityStats.map((stat) => (
@@ -146,7 +146,7 @@ export function AboutSection() {
                 <h2 className="mt-1 text-xl font-bold text-white md:text-2xl">Vezi prezentarea comunității</h2>
               </div>
               <button
-                aria-label="Inchide prezentarea"
+                aria-label="Închide prezentarea"
                 className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-2xl text-white transition-colors hover:bg-white/10"
                 onClick={() => setIsVideoOpen(false)}
                 type="button"

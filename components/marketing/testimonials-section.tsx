@@ -23,10 +23,10 @@ export function TestimonialsSection() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <p className="text-sm text-slate-400">Nu ne crezi pe cuvant? Intra pe Discord si vorbeste direct cu membrii Elite.</p>
+          <p className="text-sm text-slate-400">Nu ne crezi pe cuvânt? Intră pe Discord și vorbește direct cu membrii Elite.</p>
           <div className="mt-3 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a className="ghost-button text-sm" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">Intra pe Discord</a>
-            <a className="accent-button text-sm" href="/signup">Incearca Gratis 7 Zile →</a>
+            <a className="ghost-button text-sm" href="https://discord.gg/ecNNcV5GD9" rel="noreferrer" target="_blank">Intră pe Discord</a>
+            <a className="accent-button text-sm" href="/signup">Încearcă Gratis 7 Zile →</a>
           </div>
         </div>
       </Container>

@@ -8,7 +8,7 @@ const R2 = "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images";
 const screenshots = [
   { src: `${R2}/track-record/01-aug05-saptamana1-55pct-usdt.jpg`, alt: "5 Aug 2025 - Crearea grupului, 55% USDT" },
   { src: `${R2}/track-record/09-oct10-crash-vandut-tot.jpg`, alt: "10 Oct 2025 - Am vandut tot, e bearmarket" },
-  { src: `${R2}/track-record/20-feb02-59pct-usdc-40pct-eth.jpg`, alt: "2 Feb 2026 - 40% ETH, executie conform planului" },
+  { src: `${R2}/track-record/20-feb02-59pct-usdc-40pct-eth.jpg`, alt: "2 Feb 2026 - 40% ETH, execuție conform planului" },
 ];
 
 export function TrackRecordTeaser() {
@@ -39,7 +39,7 @@ export function TrackRecordTeaser() {
       {lightbox && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setLightbox(null)}>
           <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
-            <button className="absolute -top-10 right-0 text-sm text-white/50 hover:text-white" onClick={() => setLightbox(null)} type="button">Inchide</button>
+            <button className="absolute -top-10 right-0 text-sm text-white/50 hover:text-white" onClick={() => setLightbox(null)} type="button">Închide</button>
             <Image alt="Screenshot Discord" className="w-full rounded-xl border border-white/10" height={800} src={lightbox} width={700} unoptimized />
           </div>
         </div>

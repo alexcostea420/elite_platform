@@ -119,7 +119,7 @@ export default function SignupPage({ searchParams }: SignupPageProps) {
                 Creează cont gratuit →
               </button>
               <p className="mt-2 text-center text-xs text-slate-500">
-                7 zile acces complet gratuit. Fara card de credit.
+                7 zile acces complet gratuit. Fără card de credit.
               </p>
             </form>
 

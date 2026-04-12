@@ -157,15 +157,15 @@ export function PaymentFlow() {
         ) : null}
 
         <div className="mt-6 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-5">
-          <p className="text-base font-semibold text-white">Conecteaza Discord</p>
+          <p className="text-base font-semibold text-white">Conectează Discord</p>
           <p className="mt-2 text-sm text-slate-400">
-            Primesti automat rolul Elite si acces la canalele private.
+            Primești automat rolul Elite și acces la canalele private.
           </p>
           <a
             className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#5865F2] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#4752C4]"
             href="/auth/discord/start"
           >
-            Conecteaza Discord
+            Conectează Discord
           </a>
         </div>
 
@@ -173,7 +173,7 @@ export function PaymentFlow() {
           className="mt-4 inline-block text-sm text-slate-500 underline hover:text-slate-300"
           href="/dashboard"
         >
-          Mergi la Dashboard fara Discord
+          Mergi la Dashboard fără Discord
         </a>
       </section>
     );
@@ -233,13 +233,13 @@ export function PaymentFlow() {
               onClick={() => copyToClipboard(paymentData.wallet_address, "address")}
               type="button"
             >
-              {copied === "address" ? "Copiat!" : "Copiaza adresa"}
+              {copied === "address" ? "Copiat!" : "Copiază adresa"}
             </button>
           </div>
 
           <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-4 md:p-5">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-              Suma exacta de trimis
+              Suma exactă de trimis
             </p>
             <span className="block text-2xl font-bold text-accent-emerald sm:text-3xl">
               {formatAmount(paymentData.amount)} {paymentData.currency}
@@ -249,10 +249,10 @@ export function PaymentFlow() {
               onClick={() => copyToClipboard(formatAmount(paymentData.amount), "amount")}
               type="button"
             >
-              {copied === "amount" ? "Copiat!" : "Copiaza suma"}
+              {copied === "amount" ? "Copiat!" : "Copiază suma"}
             </button>
             <p className="mt-3 text-xs text-slate-400 sm:text-sm">
-              Suma include un identificator unic. Trimite exact aceasta suma.
+              Suma include un identificator unic. Trimite exact această sumă.
             </p>
           </div>
 

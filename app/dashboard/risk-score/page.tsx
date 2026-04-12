@@ -342,7 +342,7 @@ export default async function RiskScorePage() {
               <div className="text-5xl font-data">--</div>
               <h2 className="mt-4 text-2xl font-bold text-white">Date indisponibile</h2>
               <p className="mt-3 text-slate-400">
-                Scorul de risc nu a putut fi incarcat. Incearca din nou mai tarziu.
+                Scorul de risc nu a putut fi încărcat. Încearcă din nou mai târziu.
               </p>
             </section>
           </Container>

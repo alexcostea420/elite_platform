@@ -37,7 +37,7 @@ export const dashboardNav = [
   { href: "/dashboard/resurse", label: "Resurse" },
   { href: "/dashboard/indicators", label: "Indicatori" },
   { href: "/dashboard/stocks", label: "Stocks" },
-  { href: "/dashboard/pivots", label: "Pivoti" },
+  { href: "/dashboard/pivots", label: "Pivoți" },
   { href: "/dashboard/countertrade", label: "Countertrade" },
   { href: "/dashboard/risk-score", label: "Risk Score" },
   { href: "/dashboard/should-i-trade", label: "Trade?" },
@@ -47,12 +47,12 @@ export const dashboardNav = [
 export const dashboardNavStandalone = [
   { href: "/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/bots", label: "Bot Trading", icon: "🤖" },
-  { href: "/upgrade", label: "Prelungeste", icon: "💳" },
+  { href: "/upgrade", label: "Prelungește", icon: "💳" },
 ];
 
 export const dashboardNavGroups = [
   {
-    label: "Educatie",
+    label: "Educație",
     items: [
       { href: "/dashboard/videos", label: "Video-uri", icon: "🎥" },
       { href: "/dashboard/resurse", label: "Resurse", icon: "📚" },
@@ -64,7 +64,7 @@ export const dashboardNavGroups = [
     label: "Research",
     items: [
       { href: "/dashboard/stocks", label: "Stocks", icon: "💹" },
-      { href: "/dashboard/pivots", label: "Pivoti BTC", icon: "🔮" },
+      { href: "/dashboard/pivots", label: "Pivoți BTC", icon: "🔮" },
       { href: "/dashboard/countertrade", label: "Countertrade", icon: "📺" },
     ],
   },
@@ -112,7 +112,7 @@ export const benefits = [
   },
   {
     icon: "🤝",
-    title: "Comunitate Activa",
+    title: "Comunitate Activă",
     description: "350+ traderi care împart idei, rezultate și se trag reciproc în sus. Mediul contează."
   }
 ];
@@ -237,19 +237,19 @@ export const faqs = [
   },
   {
     question: "Există trial gratuit?",
-    answer: "Da! 7 zile acces complet, fara card, fara obligatii. Dupa 7 zile decizi daca meriti - contul revine automat la Free daca nu faci nimic."
+    answer: "Da! 7 zile acces complet, fără card, fără obligații. După 7 zile decizi dacă merită - contul revine automat la Free dacă nu faci nimic."
   },
   {
     question: "Ce se întâmplă dacă nu sunt mulțumit?",
-    answer: "Ai 7 zile gratuit sa testezi totul. Daca nu te convinge, nu platesti nimic. Zero risc."
+    answer: "Ai 7 zile gratuit să testezi totul. Dacă nu te convinge, nu plătești nimic. Zero risc."
   },
   {
     question: "Ce este botul de copytrade?",
-    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul executa tranzactii automat pe contul tau. Disponibil în curând - $45/luna pentru membrii Elite."
+    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul execută tranzacții automat pe contul tău. Disponibil în curând - $45/lună pentru membrii Elite."
   },
   {
     question: "Pot pierde bani?",
-    answer: "Da. Tradingul implica risc real. Nu garantăm profituri și nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces - diferența o face cum le gestionezi."
+    answer: "Da. Tradingul implică risc real. Nu garantăm profituri și nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces - diferența o face cum le gestionezi."
   }
 ];
 
@@ -282,7 +282,7 @@ export const quickLinks = [
   {
     icon: "💹",
     title: "Stocks",
-    description: "16 actiuni Buy/Sell",
+    description: "16 acțiuni Buy/Sell",
     href: "/dashboard/stocks"
   },
   {
@@ -294,7 +294,7 @@ export const quickLinks = [
   {
     icon: "📚",
     title: "Resurse",
-    description: "Ghiduri si materiale",
+    description: "Ghiduri și materiale",
     href: "/dashboard/resurse"
   }
 ];

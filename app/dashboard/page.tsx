@@ -290,10 +290,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <div>
                       <p className="section-label mb-2">Free Trial</p>
-                      <h2 className="text-2xl font-bold text-white">Testează TOTUL gratuit. 7 zile. Zero obligații.</h2>
+                      <h2 className="text-2xl font-bold text-white">Testează TOTUL gratuit. <span className="text-accent-emerald">7 zile</span>. Zero obligații.</h2>
                       <p className="mt-3 max-w-xl text-sm text-slate-300">
-                        Vei debloca: Risk Score, Should I Trade, {videoCount ?? 55}+ video-uri, Discord Elite, Indicatori TradingView.
-                        Fără card - se dezactivează automat.
+                        Vei debloca: <span className="font-semibold text-white">Risk Score</span>, <span className="font-semibold text-white">Should I Trade</span>, {videoCount ?? 55}+ video-uri, <span className="font-semibold text-white">Discord Elite</span>, Indicatori TradingView.
+                        <span className="font-semibold text-white">Fără card</span> - se dezactivează automat.
                       </p>
                     </div>
                     <TrialButton />

@@ -175,11 +175,11 @@ export default async function UpgradePage() {
                   </div>
                   <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-white md:text-3xl">Activeaza Trial Gratuit</h3>
+                      <h3 className="text-2xl font-bold text-white md:text-3xl">Activează Trial Gratuit</h3>
                       <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - $0</p>
                       <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
-                        {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fara card"].map((perk) => (
+                        {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
                           <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
                         ))}
                       </div>
@@ -196,18 +196,18 @@ export default async function UpgradePage() {
                   </div>
                   <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-white md:text-3xl">Incearca Gratis!</h3>
+                      <h3 className="text-2xl font-bold text-white md:text-3xl">Încearcă Gratis!</h3>
                       <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - $0</p>
                       <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
-                        {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fara card"].map((perk) => (
+                        {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
                           <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
                         ))}
                       </div>
                     </div>
                     <div className="shrink-0">
                       <span className="inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-8 py-4 text-lg font-bold text-crypto-dark transition-colors group-hover:bg-accent-soft">
-                        Creeaza Cont Gratuit →
+                        Creează Cont Gratuit →
                       </span>
                     </div>
                   </div>
@@ -252,14 +252,14 @@ export default async function UpgradePage() {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        💳 Plateste cu cardul (lunar)
+                        💳 Plătește cu cardul (lunar)
                       </a>
                     )}
                     <Link
                       className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}
                       href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
                     >
-                      Plateste cu crypto (USDT/USDC)
+                      Plătește cu crypto (USDT/USDC)
                     </Link>
                     <a
                       className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-yellow-500/20 bg-yellow-500/5 py-3 font-bold text-yellow-400 hover:bg-yellow-500/10"
@@ -267,10 +267,10 @@ export default async function UpgradePage() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Plateste cu Binance
+                      Plătește cu Binance
                     </a>
                     {plan.name === "30 Zile" && !isVeteran && (
-                      <p className="text-center text-xs text-slate-600">Plata cu cardul este procesata prin Patreon</p>
+                      <p className="text-center text-xs text-slate-600">Plata cu cardul este procesată prin Patreon</p>
                     )}
                   </div>
                 </article>
@@ -280,13 +280,13 @@ export default async function UpgradePage() {
 
           <section className="panel px-6 py-8 md:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-bold text-white sm:text-3xl">Vrei sa platesti dar nu stii cum?</h2>
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">Vrei să plătești dar nu știi cum?</h2>
               <p className="mx-auto mt-4 max-w-lg text-slate-300">
-                Lasa-mi emailul tau si te contactez personal sa te ajut cu plata. Raspund in maxim 24h.
+                Lasă-mi emailul tău și te contactez personal să te ajut cu plata. Răspund în maxim <span className="font-semibold text-white">24h</span>.
               </p>
               <LeadMagnetForm source="payment_help" />
               <p className="mt-3 text-xs text-slate-600">
-                Plata se face in USDT sau USDC pe reteaua Arbitrum One.
+                Plata se face în USDT sau USDC pe rețeaua Arbitrum One.
               </p>
             </div>
           </section>

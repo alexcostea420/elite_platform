@@ -59,8 +59,8 @@ export function TrialPopup() {
           7 zile gratuit. Zero risc.
         </h3>
         <p className="mx-auto mt-3 max-w-sm text-sm text-slate-400">
-          Acces complet la Discord Elite, video-uri, indicatori si portofoliul live.
-          Fara card. Se anuleaza automat.
+          Acces complet la Discord Elite, video-uri, indicatori și portofoliul live.
+          Fără card. Se anulează automat.
         </p>
 
         <Link
@@ -68,7 +68,7 @@ export function TrialPopup() {
           href="/signup"
           onClick={dismiss}
         >
-          Incepe acum - gratuit
+          Începe acum - gratuit
         </Link>
 
         <button

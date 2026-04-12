@@ -99,12 +99,12 @@ export default async function AskAlexPage() {
 
           {/* CTA */}
           <div className="glass-card p-6 md:p-8 text-center">
-            <h2 className="text-xl font-bold text-white mb-3">Incearca acum pe Discord</h2>
+            <h2 className="text-xl font-bold text-white mb-3">Încearcă acum pe Discord</h2>
             <p className="text-sm text-slate-400 mb-6 max-w-lg mx-auto">
-              Deschide canalul #alex-brain si scrie &apos;@Alex&apos;s Brain&apos; urmat de intrebarea ta. Raspunde in secunde.
+              Deschide canalul #alex-brain și scrie &apos;@Alex&apos;s Brain&apos; urmat de întrebarea ta. Răspunde în secunde.
             </p>
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center mb-6">
-              {["Deschide #alex-brain pe Discord", "Scrie @Alex's Brain + intrebarea ta", "Primesti raspuns instant"].map((step, i) => (
+              {["Deschide #alex-brain pe Discord", "Scrie @Alex's Brain + întrebarea ta", "Primești răspuns instant"].map((step, i) => (
                 <div key={step} className="flex items-center gap-2 text-xs text-slate-400">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-emerald/15 text-accent-emerald font-bold text-[10px]">{i + 1}</span>
                   {step}

@@ -172,7 +172,7 @@ export function SubscriptionCard({
               <span className="h-2 w-2 rounded-full bg-amber-500" />
               <span className="text-xs text-slate-400">Discord neconectat</span>
               <Link className="ml-auto rounded-lg bg-[#5865F2] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#4752C4]" href="/auth/discord/start">
-                Conecteaza
+                Conectează
               </Link>
             </>
           )}

@@ -16,21 +16,21 @@ export function PricingSection() {
               7 zile gratuit
             </p>
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Testeaza totul. Fara card. Fara obligatii.
+              Testează totul. <span className="text-accent-emerald">Fără card</span>. Fără obligații.
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-slate-400">
-              Acces complet la Discord Elite, video-uri, indicatori, analize si portofoliul live.
-              Dupa 7 zile decizi daca merita.
+              Acces complet la Discord Elite, video-uri, indicatori, analize și portofoliul live.
+              După 7 zile decizi dacă merită.
             </p>
             <Link
               className="accent-button mt-6 inline-block rounded-xl px-8 py-4 text-base font-bold"
               href="/signup"
             >
-              Creeaza Cont Gratuit →
+              Creează Cont Gratuit →
             </Link>
             <div className="mx-auto mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
-              <span>Fara card de credit</span>
-              <span>Se anuleaza automat</span>
+              <span>Fără card de credit</span>
+              <span>Se anulează automat</span>
               <span>Acces complet</span>
             </div>
           </div>
@@ -38,7 +38,7 @@ export function PricingSection() {
 
         {/* Paid plans - 3 columns below */}
         <div className="mt-16" />
-        <SectionHeading title={<>Alege <span className="gradient-text">Planul Tau</span></>} description="Alege durata de acces potrivita pentru nivelul tau." />
+        <SectionHeading title={<>Alege <span className="gradient-text">Planul Tău</span></>} description="Alege durata de acces potrivită pentru nivelul tău." />
         <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:gap-8 md:grid-cols-3">
           {pricingPlans.filter((plan) => plan.price !== "$0").map((plan) => (
             <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
@@ -75,7 +75,7 @@ export function PricingSection() {
           </div>
         </div>
         <div className="mt-8 space-y-4 text-center">
-          <p className="text-slate-400">Plati securizate prin Crypto (USDT)</p>
+          <p className="text-slate-400">Plăți securizate prin Crypto (USDT)</p>
           <div className="flex items-center justify-center gap-4 text-3xl">
             <span>💳</span>
             <span>🔐</span>
