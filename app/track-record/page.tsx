@@ -44,6 +44,7 @@ const entries: Entry[] = [
   { date: "25 Jan 2026", title: "Prima pozitie dupa 3 luni", context: "80% USDC + 20% XMR. Target $600, SL sub $410.", cash: 80, dot: "green", image: "/track-record/18-jan25-79pct-usdc-xmr.jpg" },
   { date: "31 Jan 2026", title: "ETH call: 2250-2350, target 2700-2900", context: "12 thumbs up de la comunitate.", cash: 80, dot: "green", image: "/track-record/19-jan31-eth-call-2250.jpg" },
   { date: "2 Feb 2026", title: "40% ETH - executie conform planului", context: "13 thumbs up. A intrat exact unde a zis.", cash: 60, dot: "green", image: "/track-record/20-feb02-59pct-usdc-40pct-eth.jpg" },
+  { date: "Feb - Azi", title: "Povestea continua...", context: "Restul miscarilor sunt vizibile doar pentru membrii Elite.", cash: -1, dot: "gray", image: "" },
 ];
 
 function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
@@ -117,13 +118,15 @@ export default function TrackRecordPage() {
           <div className="absolute left-[11px] top-0 h-full w-[2px] bg-white/[0.06] sm:left-[15px]" />
 
           <div className="flex flex-col gap-1">
-            {entries.map((entry) => (
+            {entries.map((entry) => {
+              const isTeaser = entry.cash === -1;
+              return (
               <button
                 key={entry.date}
-                className={`group relative flex w-full items-start gap-3 rounded-lg px-1 py-2.5 text-left transition-colors hover:bg-white/[0.03] sm:items-center sm:gap-4 sm:px-2 sm:py-2 ${
+                className={`group relative flex w-full items-start gap-3 rounded-lg px-1 py-2.5 text-left transition-colors sm:items-center sm:gap-4 sm:px-2 sm:py-2 ${
                   entry.highlight ? "bg-red-500/[0.05] border-l-[3px] border-red-500 pl-2 shadow-[inset_0_0_30px_rgba(239,68,68,0.04)]" : ""
-                }`}
-                onClick={() => setLightbox(entry.image)}
+                } ${isTeaser ? "border border-dashed border-accent-emerald/20 bg-accent-emerald/[0.03] cursor-default" : "hover:bg-white/[0.03]"}`}
+                onClick={() => !isTeaser && entry.image && setLightbox(entry.image)}
                 type="button"
               >
                 {/* Dot */}
@@ -141,17 +144,22 @@ export default function TrackRecordPage() {
                 </div>
 
                 {/* Cash Bar */}
-                <div className="hidden shrink-0 items-center gap-2 sm:flex">
-                  <div className="h-1.5 w-20 overflow-hidden rounded-full bg-white/[0.06]">
-                    <div className="h-full rounded-full bg-[#10B981] transition-all" style={{ width: `${entry.cash}%` }} />
+                {!isTeaser && (
+                  <div className="hidden shrink-0 items-center gap-2 sm:flex">
+                    <div className="h-1.5 w-20 overflow-hidden rounded-full bg-white/[0.06]">
+                      <div className="h-full rounded-full bg-[#10B981] transition-all" style={{ width: `${entry.cash}%` }} />
+                    </div>
+                    <span className="w-8 text-right font-mono text-[10px] text-slate-600">{entry.cash}%</span>
                   </div>
-                  <span className="w-8 text-right font-mono text-[10px] text-slate-600">{entry.cash}%</span>
-                </div>
+                )}
 
                 {/* Arrow */}
-                <span className="shrink-0 text-xs text-slate-700 transition-colors group-hover:text-[#10B981]">→</span>
+                <span className="shrink-0 text-xs text-slate-700 transition-colors group-hover:text-[#10B981]">
+                  {isTeaser ? "🔒" : "→"}
+                </span>
               </button>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
 
