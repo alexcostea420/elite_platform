@@ -244,7 +244,7 @@ export default async function HomePage() {
                   </ul>
                 </div>
                 <div className="mx-auto w-[240px] shrink-0 md:w-[280px]">
-                  <div className="overflow-hidden rounded-xl border border-white/[0.08] md:rotate-2" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)", maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
+                  <div className="overflow-hidden rounded-xl border border-white/[0.08]" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)", maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
                     <Image alt="Discord Elite Privat - structura canalelor" className="w-full object-contain" height={500} src="https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/discord-sidebar.jpg" width={280} unoptimized />
                   </div>
                 </div>
