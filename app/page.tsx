@@ -272,9 +272,13 @@ export default async function HomePage() {
               <div className="text-center mb-10">
                 <p className="section-label mb-3">EXCLUSIV ELITE</p>
                 <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tau personal de trading. Disponibil 24/7.</h2>
-                <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
-                  Alex&apos;s Brain - un asistent AI antrenat pe toata metodologia, video-urile si analizele lui Alex. Ii pui o intrebare, iti da raspunsul. Ii arati un chart, iti spune ce vede. Ii dai un trade, iti zice daca e bun sau nu.
-                </p>
+                <div className="mx-auto mt-6 max-w-xl space-y-2 text-sm leading-relaxed text-slate-400 md:text-base">
+                  <p>Alex&apos;s Brain - un asistent AI antrenat pe toata metodologia, video-urile si analizele lui Alex.</p>
+                  <p>Ii pui o intrebare, iti da raspunsul.</p>
+                  <p>Ii arati un chart, iti spune ce vede.</p>
+                  <p>Ii dai un trade, iti zice daca e bun sau nu.</p>
+                  <p className="text-white font-medium">Ca si cum l-ai avea pe Alex langa tine non-stop.</p>
+                </div>
               </div>
               <div className="grid gap-4 md:grid-cols-3 mb-10">
                 {[
@@ -290,14 +294,21 @@ export default async function HomePage() {
                 ))}
               </div>
               <div className="grid gap-4 md:grid-cols-2 mb-8">
-                <div className="overflow-hidden rounded-xl border border-white/[0.08] shadow-lg transition-all hover:-translate-y-1 hover:border-white/[0.15]">
-                  <Image alt="CVX trade analysis - PRO/CONTRA complet" className="w-full" height={500} src="/alexs-brain/ab5-cvx-trade-analysis.jpg" width={600} />
-                  <p className="bg-white/[0.02] px-4 py-2 text-xs text-slate-500">Un membru intreaba despre un trade. Raspuns instant cu analiza completa.</p>
-                </div>
-                <div className="overflow-hidden rounded-xl border border-white/[0.08] shadow-lg transition-all hover:-translate-y-1 hover:border-white/[0.15]">
-                  <Image alt="ETH PDH strategy - Entry, TP, SL complet" className="w-full" height={500} src="/alexs-brain/ab8-eth-pdh-strategy.jpg" width={600} />
-                  <p className="bg-white/[0.02] px-4 py-2 text-xs text-slate-500">Setup complet: entry, target, stop loss, invalidare. In secunde.</p>
-                </div>
+                {[
+                  { src: "/alexs-brain/ab5-cvx-trade-analysis.jpg", alt: "CVX trade analysis", caption: "Validare trade cu PRO/CONTRA si strategie" },
+                  { src: "/alexs-brain/ab8-eth-pdh-strategy.jpg", alt: "ETH PDH strategy", caption: "Setup complet: entry, TP, SL, invalidare" },
+                  { src: "/alexs-brain/ab3-hype-long-or-short.jpg", alt: "HYPE long or short", caption: "Analiza completa: long sau short pe HYPE?" },
+                  { src: "/alexs-brain/ab4-eth-trade-management.jpg", alt: "ETH trade management", caption: "Trade management cu 3 optiuni de exit" },
+                  { src: "/alexs-brain/ab6-eth-breakout-structura.jpg", alt: "ETH breakout structura", caption: "Analiza structura si niveluri pe ETH" },
+                  { src: "/alexs-brain/ab2-quiz-suporti-rezistente.jpg", alt: "Quiz suporti si rezistente", caption: "Quiz interactiv dupa un video educativ" },
+                  { src: "/alexs-brain/ab7-video-links-rsi-fibonacci.jpg", alt: "Video links RSI Fibonacci", caption: "Gaseste instant video-ul relevant" },
+                  { src: "/alexs-brain/ab1-intro-salut.jpg", alt: "Alex Brain intro", caption: "Ce poate face Alex's Brain" },
+                ].map((img) => (
+                  <div key={img.src} className="overflow-hidden rounded-xl border border-white/[0.06] transition-all hover:border-white/[0.15]">
+                    <Image alt={img.alt} className="w-full" height={400} loading="lazy" src={img.src} width={500} />
+                    <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-600">{img.caption}</p>
+                  </div>
+                ))}
               </div>
               <div className="flex items-center justify-center gap-6 text-xs text-slate-500 mb-8">
                 <span><span className="font-mono font-semibold text-white">55+</span> video-uri invatate</span>
