@@ -31,17 +31,17 @@ type Entry = {
 
 const entries: Entry[] = [
   { date: "5 Aug 2025", title: "Saptamana 1 - deja 55% cash", context: "Structura bearish pe weekly. Astept confirmari.", cash: 55, dot: "gray", image: "/track-record/01-aug05-saptamana1-55pct-usdt.jpg" },
-  { date: "23 Aug 2025", title: "Cresc la 72% cash", context: "'Risc sa pierd trenul, dar disciplina > FOMO.'", cash: 72, dot: "amber", image: "/track-record/03-aug21-saptamana3-72pct-usdt.jpg" },
-  { date: "25 Aug 2025", title: "92% cash - 'Aveti mare grija'", context: "Mesaj catre comunitate: topul local e aproape.", cash: 92, dot: "amber", image: "/track-record/04-aug25-92pct-usdt-avertizare.jpg" },
-  { date: "6 Sep 2025", title: "'AM VANDUT TOT' - 93% stablecoins", context: "'FAKE PUMP.' Iesire completa din alts.", cash: 93, dot: "red", image: "/track-record/06-sep06-vandut-tot-ena-93pct.jpg" },
+  { date: "23 Aug 2025", title: "Cresc la 70% cash", context: "'Risc sa pierd trenul, dar disciplina > FOMO.'", cash: 70, dot: "amber", image: "/track-record/03-aug21-saptamana3-72pct-usdt.jpg" },
+  { date: "25 Aug 2025", title: "90% cash - 'Aveti mare grija'", context: "Mesaj catre comunitate: topul local e aproape.", cash: 90, dot: "amber", image: "/track-record/04-aug25-92pct-usdt-avertizare.jpg" },
+  { date: "6 Sep 2025", title: "'AM VANDUT TOT' - 95% stablecoins", context: "'FAKE PUMP.' Iesire completa din alts.", cash: 95, dot: "red", image: "/track-record/06-sep06-vandut-tot-ena-93pct.jpg" },
   { date: "12 Sep 2025", title: "Re-entry in alts", context: "CRV, ALGO, DOGE, IOTA. Pivot important 21 septembrie.", cash: 0, dot: "gray", image: "/track-record/07-sep12-saptamana6-crv-algo-doge.jpg" },
   { date: "30 Sep 2025", title: "De la +18% la zero", context: "'Profitul s-a evaporat.' $10,024 in portofoliu.", cash: 0, dot: "gray", image: "/track-record/08-sep30-oct06-portofoliu-10k.jpg" },
   { date: "10 Oct 2025", title: "'E BEARMARKET. Am vandut tot.'", context: "-60% in 5 minute. Alts -30% pana la -73%. Alex era pregatit.", cash: 70, dot: "red", image: "/track-record/09-oct10-crash-vandut-tot.jpg", highlight: true },
-  { date: "11 Oct 2025", title: "'Cine a dormit nu poate sa inteleaga'", context: "BTC -13%, alts pana la -73%. Portofoliu: 68% USDC.", cash: 68, dot: "red", image: "/track-record/10-oct11-aftermath-minus60.jpg" },
-  { date: "12 Oct 2025", title: "99.99% USDC - 'Dead cat bounce'", context: "'Astept sa vad ce se intampla. Ma urc in tren daca pleaca.'", cash: 99, dot: "green", image: "/track-record/12-oct12-dead-cat-bounce-99pct.jpg" },
+  { date: "11 Oct 2025", title: "'Cine a dormit nu poate sa inteleaga'", context: "BTC -13%, alts pana la -73%. Portofoliu: 70% USDC.", cash: 70, dot: "red", image: "/track-record/10-oct11-aftermath-minus60.jpg" },
+  { date: "12 Oct 2025", title: "100% USDC - 'Dead cat bounce'", context: "'Astept sa vad ce se intampla. Ma urc in tren daca pleaca.'", cash: 100, dot: "green", image: "/track-record/12-oct12-dead-cat-bounce-99pct.jpg" },
   { date: "30 Oct 2025", title: "100% cash - 'Nu dam comeback'", context: "'Nu imi place ce vad pe structura 4hr si daily.' Bear flag confirmat.", cash: 100, dot: "red", image: "/track-record/14-oct30-100pct-usdc-bearflag.jpg" },
-  { date: "14 Dec 2025", title: "99.95% USDC", context: "'BOJ meeting bearish.' A iesit complet din nou.", cash: 99, dot: "gray", image: "/track-record/17-dec11-14-btc56-usdc99.jpg" },
-  { date: "25 Jan 2026", title: "Prima pozitie dupa 3 luni", context: "79.9% USDC + 20% XMR. Target $600, SL sub $410.", cash: 80, dot: "green", image: "/track-record/18-jan25-79pct-usdc-xmr.jpg" },
+  { date: "14 Dec 2025", title: "100% USDC", context: "'BOJ meeting bearish.' A iesit complet din nou.", cash: 100, dot: "gray", image: "/track-record/17-dec11-14-btc56-usdc99.jpg" },
+  { date: "25 Jan 2026", title: "Prima pozitie dupa 3 luni", context: "80% USDC + 20% XMR. Target $600, SL sub $410.", cash: 80, dot: "green", image: "/track-record/18-jan25-79pct-usdc-xmr.jpg" },
   { date: "31 Jan 2026", title: "ETH call: 2250-2350, target 2700-2900", context: "12 thumbs up de la comunitate.", cash: 80, dot: "green", image: "/track-record/19-jan31-eth-call-2250.jpg" },
   { date: "2 Feb 2026", title: "40% ETH - executie conform planului", context: "13 thumbs up. A intrat exact unde a zis.", cash: 60, dot: "green", image: "/track-record/20-feb02-59pct-usdc-40pct-eth.jpg" },
 ];
@@ -83,19 +83,29 @@ export default function TrackRecordPage() {
         </motion.div>
 
         {/* Impact Stats */}
-        <motion.div className="glass-card mb-10 grid grid-cols-3 gap-4 px-6 py-6 text-center" initial="hidden" animate="visible" variants={fadeIn}>
+        <motion.div className="glass-card mb-8 grid grid-cols-3 gap-4 px-6 py-6 text-center" initial="hidden" animate="visible" variants={fadeIn}>
           <div>
-            <p className="font-mono text-3xl font-bold text-white sm:text-4xl">92%</p>
+            <p className="font-mono text-3xl font-bold text-white sm:text-4xl">90%</p>
             <p className="mt-1 text-xs text-slate-500">cash inainte de crash</p>
           </div>
           <div>
-            <p className="font-mono text-3xl font-bold text-[#10B981] sm:text-4xl">99.99%</p>
+            <p className="font-mono text-3xl font-bold text-[#10B981] sm:text-4xl">100%</p>
             <p className="mt-1 text-xs text-slate-500">USDC in ziua crash-ului</p>
           </div>
           <div>
             <p className="font-mono text-3xl font-bold text-white sm:text-4xl">3 luni</p>
             <p className="mt-1 text-xs text-slate-500">in cash inainte de re-entry</p>
           </div>
+        </motion.div>
+
+        {/* Narrative callout */}
+        <motion.div
+          className="mb-10 rounded-xl border-l-[3px] border-[#10B981] bg-white/[0.02] px-5 py-4 sm:px-6"
+          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
+        >
+          <p className="text-sm leading-relaxed text-slate-400">
+            Pe 10 octombrie 2025, crypto a suferit cel mai mare crash din ultimii ani. Majoritatea traderilor au ramas in monede - ghidati de influenceri si FOMO, nu de propria analiza. Grupul nostru a iesit complet in urmatoarele 2 zile, la cel mai bun pret posibil - marcand inceputul unui bear market care a dus la scaderi de -70%. Rezultatul? Membrii au suferit doar -10% drawdown, pentru ca am avut curajul sa fim contra intregului internet.
+          </p>
         </motion.div>
 
         {/* Timeline */}
@@ -108,7 +118,7 @@ export default function TrackRecordPage() {
               <button
                 key={entry.date}
                 className={`group relative flex w-full items-start gap-3 rounded-lg px-1 py-2.5 text-left transition-colors hover:bg-white/[0.03] sm:items-center sm:gap-4 sm:px-2 sm:py-2 ${
-                  entry.highlight ? "bg-red-500/[0.04] border-l-[3px] border-red-500 pl-2" : ""
+                  entry.highlight ? "bg-red-500/[0.05] border-l-[3px] border-red-500 pl-2 shadow-[inset_0_0_30px_rgba(239,68,68,0.04)]" : ""
                 }`}
                 onClick={() => setLightbox(entry.image)}
                 type="button"
