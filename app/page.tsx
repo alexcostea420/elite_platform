@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
@@ -284,7 +285,37 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        {/* 6. About */}
+        {/* 6. Track Record Teaser */}
+        <section className="py-12 md:py-20" style={{ background: "linear-gradient(180deg, transparent, rgba(239,68,68,0.02) 50%, transparent)" }}>
+          <Container>
+            <div className="mx-auto max-w-4xl text-center">
+              <p className="section-label mb-3">TRACK RECORD PUBLIC</p>
+              <h2 className="text-2xl font-bold text-white md:text-4xl">
+                Am iesit din piata inainte de crash-ul din Octombrie 2025.
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
+                Fiecare decizie documentata pe Discord, cu timestamp imuabil. De la 55% cash in August la 100% USDC pe 30 Octombrie - inainte ca piata sa piarda -60%.
+              </p>
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                {[
+                  { img: "/track-record/04-aug25-92pct-usdt-avertizare.jpg", caption: "25 Aug - 92% USDT - 'Aveti mare grija'" },
+                  { img: "/track-record/09-oct10-crash-vandut-tot.jpg", caption: "10 Oct - 'Am vandut tot' - 'E bearmarket'" },
+                  { img: "/track-record/12-oct12-dead-cat-bounce-99pct.jpg", caption: "12 Oct - 99.99% USDC - 'Dead cat bounce'" },
+                ].map((s) => (
+                  <div key={s.caption} className="overflow-hidden rounded-xl border border-white/5">
+                    <Image alt={s.caption} className="w-full" height={300} src={s.img} width={500} />
+                    <p className="bg-white/[0.02] px-3 py-2 text-xs text-slate-500">{s.caption}</p>
+                  </div>
+                ))}
+              </div>
+              <Link className="ghost-button mt-8 inline-block" href="/track-record">
+                Vezi tot Track Record-ul →
+              </Link>
+            </div>
+          </Container>
+        </section>
+
+        {/* 7. About */}
         <AboutSection />
 
         {/* 7. Benefits */}
