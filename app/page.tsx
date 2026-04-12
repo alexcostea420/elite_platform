@@ -224,7 +224,7 @@ export default async function HomePage() {
               </div>
 
               {/* Feature 5: Comunitate - text left, screenshot right */}
-              <div className="flex flex-col items-center gap-10 md:flex-row">
+              <div className="flex flex-col items-center gap-10 md:flex-row md:gap-16">
                 <div className="flex-1 space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[4].label}</p>
                   <h3 className="text-2xl font-bold text-white md:text-3xl">{features[4].title}</h3>
@@ -243,13 +243,12 @@ export default async function HomePage() {
                     ))}
                   </ul>
                 </div>
-                <div className="relative flex flex-1 items-center justify-center">
-                  <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] shadow-lg md:rotate-2" style={{ maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
-                    <Image alt="Discord Elite Privat - structura canalelor" className="w-full" height={500} src="/images/discord-sidebar.jpg" width={300} />
+                <div className="relative mx-auto flex w-[280px] items-center justify-center md:w-[380px] md:flex-1">
+                  <div className="relative w-full overflow-hidden rounded-xl border border-white/[0.08] md:rotate-2" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)", maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
+                    <Image alt="Discord Elite Privat - structura canalelor" className="w-full" height={600} src="/images/discord-sidebar.jpg" width={400} unoptimized />
                   </div>
-                  {/* Notification badges */}
-                  <span className="absolute right-4 top-6 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white animate-pulse md:right-8">12</span>
-                  <span className="absolute right-6 top-1/3 flex h-5 w-5 items-center justify-center rounded-full bg-accent-emerald text-[10px] font-bold text-crypto-dark animate-pulse md:right-10">5</span>
+                  <span className="absolute -right-1 top-4 flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-white md:-right-2 md:top-6" style={{ backgroundColor: "#ED4245", animation: "badgePulse 2s ease-in-out infinite" }}>12</span>
+                  <span className="absolute -right-1 top-[60%] flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-white md:-right-2" style={{ backgroundColor: "#ED4245", animation: "badgePulse 2s ease-in-out infinite 0.5s" }}>5</span>
                 </div>
               </div>
             </div>
