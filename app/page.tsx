@@ -265,6 +265,56 @@ export default async function HomePage() {
           </Container>
         </section>
 
+        {/* Alex's Brain AI Mentor */}
+        <section className="py-12 md:py-20">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <div className="text-center mb-10">
+                <p className="section-label mb-3">EXCLUSIV ELITE</p>
+                <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tau personal de trading. Disponibil 24/7.</h2>
+                <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
+                  Alex&apos;s Brain - un asistent AI antrenat pe toata metodologia, video-urile si analizele lui Alex. Ii pui o intrebare, iti da raspunsul. Ii arati un chart, iti spune ce vede. Ii dai un trade, iti zice daca e bun sau nu.
+                </p>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3 mb-10">
+                {[
+                  { icon: "📊", title: "Analiza chart-uri", text: "Pune o poza cu chart-ul. Primesti structura, niveluri, pattern-uri, bias." },
+                  { icon: "🎯", title: "Validare trade-uri", text: "Spune entry si SL. Primesti PRO/CONTRA, risk/reward, si plan complet." },
+                  { icon: "🧪", title: "Quiz-uri dupa video", text: "Testeaza ce ai invatat. Intrebari practice din metodologie." },
+                ].map((c) => (
+                  <div key={c.title} className="glass-card p-5 text-center">
+                    <div className="text-2xl mb-2">{c.icon}</div>
+                    <h3 className="text-sm font-semibold text-white mb-1">{c.title}</h3>
+                    <p className="text-xs text-slate-400">{c.text}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="grid gap-4 md:grid-cols-2 mb-8">
+                <div className="overflow-hidden rounded-xl border border-white/[0.08] shadow-lg transition-all hover:-translate-y-1 hover:border-white/[0.15]">
+                  <Image alt="CVX trade analysis - PRO/CONTRA complet" className="w-full" height={500} src="/alexs-brain/ab5-cvx-trade-analysis.jpg" width={600} />
+                  <p className="bg-white/[0.02] px-4 py-2 text-xs text-slate-500">Un membru intreaba despre un trade. Raspuns instant cu analiza completa.</p>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-white/[0.08] shadow-lg transition-all hover:-translate-y-1 hover:border-white/[0.15]">
+                  <Image alt="ETH PDH strategy - Entry, TP, SL complet" className="w-full" height={500} src="/alexs-brain/ab8-eth-pdh-strategy.jpg" width={600} />
+                  <p className="bg-white/[0.02] px-4 py-2 text-xs text-slate-500">Setup complet: entry, target, stop loss, invalidare. In secunde.</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-6 text-xs text-slate-500 mb-8">
+                <span><span className="font-mono font-semibold text-white">55+</span> video-uri invatate</span>
+                <span className="h-3 w-px bg-white/10" />
+                <span>Raspuns in <span className="font-semibold text-white">secunde</span></span>
+                <span className="h-3 w-px bg-white/10" />
+                <span>Disponibil <span className="font-semibold text-white">24/7</span></span>
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-slate-400 mb-4">Alex&apos;s Brain este disponibil exclusiv pentru membrii Elite pe Discord.</p>
+                <Link className="accent-button" href="/signup">Incepe Gratuit - 7 Zile →</Link>
+                <p className="mt-3 text-xs text-slate-600">Acces complet la Alex&apos;s Brain inclus in orice plan Elite</p>
+              </div>
+            </div>
+          </Container>
+        </section>
+
         {/* 5. Social Proof Stats */}
         <section className="py-12 md:py-20">
           <Container>

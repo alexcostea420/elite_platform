@@ -57,6 +57,7 @@ export const dashboardNavGroups = [
       { href: "/dashboard/videos", label: "Video-uri", icon: "🎥" },
       { href: "/dashboard/resurse", label: "Resurse", icon: "📚" },
       { href: "/dashboard/indicators", label: "Indicatori", icon: "📈" },
+      { href: "/dashboard/ask-alex", label: "Alex's Brain", icon: "🧠" },
     ],
   },
   {
