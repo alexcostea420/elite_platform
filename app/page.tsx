@@ -154,20 +154,21 @@ export default async function HomePage() {
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card w-full max-w-sm space-y-2 rounded-2xl p-5">
                     <div className="flex items-center justify-between border-b border-slate-700/50 pb-2 text-xs text-slate-500">
-                      <span>Acțiune</span><span>Status</span>
+                      <span>Acțiune</span><span>Preț</span><span>Semnal</span>
                     </div>
-                    <div className="flex items-center justify-between py-1.5">
-                      <span className="font-mono text-sm font-bold text-white">TSLA</span>
-                      <span className="rounded bg-yellow-500/10 px-2 py-0.5 text-xs font-semibold text-yellow-400">HOLD</span>
-                    </div>
-                    <div className="flex items-center justify-between py-1.5">
-                      <span className="font-mono text-sm font-bold text-white">MSFT</span>
-                      <span className="rounded bg-accent-emerald/10 px-2 py-0.5 text-xs font-semibold text-accent-emerald">BUY</span>
-                    </div>
-                    <div className="flex items-center justify-between py-1.5">
-                      <span className="font-mono text-sm font-bold text-white">GOOG</span>
-                      <span className="rounded bg-red-500/10 px-2 py-0.5 text-xs font-semibold text-red-400">SELL</span>
-                    </div>
+                    {[
+                      { ticker: "TSLA", price: "$360.59", signal: "HOLD", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+                      { ticker: "MSFT", price: "$373.46", signal: "BUY", color: "text-accent-emerald", bg: "bg-accent-emerald/10" },
+                      { ticker: "GOOG", price: "$294.46", signal: "SELL", color: "text-red-400", bg: "bg-red-500/10" },
+                      { ticker: "NVDA", price: "$177.39", signal: "HOLD", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+                      { ticker: "ORCL", price: "$146.38", signal: "BUY", color: "text-accent-emerald", bg: "bg-accent-emerald/10" },
+                    ].map((s) => (
+                      <div key={s.ticker} className="flex items-center justify-between py-1">
+                        <span className="font-mono text-sm font-bold text-white w-14">{s.ticker}</span>
+                        <span className="font-mono text-xs text-slate-400">{s.price}</span>
+                        <span className={`rounded ${s.bg} px-2 py-0.5 text-xs font-semibold ${s.color}`}>{s.signal}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="flex-1 space-y-4">
