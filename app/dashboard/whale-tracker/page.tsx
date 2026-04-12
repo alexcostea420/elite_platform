@@ -99,7 +99,7 @@ export default async function WhaleTrackerPage() {
       <main className="pb-16 pt-24 md:pt-28">
         <Container>
           <div className="mb-6 rounded-xl border border-warning/20 bg-warning/5 px-5 py-3">
-            <p className="text-sm text-yellow-400 font-medium">Beta — Date în curs de activare. Unele valori pot fi incomplete.</p>
+            <p className="text-sm text-yellow-400 font-medium">Beta - Date în curs de activare. Unele valori pot fi incomplete.</p>
           </div>
           <WhaleTrackerClient data={whaleData} />
         </Container>

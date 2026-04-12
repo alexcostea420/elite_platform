@@ -64,7 +64,7 @@ export default async function HomePage() {
     {
       label: "ANALIZA SAPTAMANALA",
       title: "Stii exact cand sa cumperi",
-      desc: "Un scor de la 0 la 100 bazat pe Fear & Greed, distanta de ATH, sentiment si cicluri. Actualizat saptamanal.",
+      desc: "Un scor de la 0 la 100 bazat pe Fear & Greed, distanta de ATH, sentiment si cicluri. Actualizat săptămânal.",
     },
     {
       label: "16 ACTIUNI MONITORIZATE",
@@ -84,7 +84,7 @@ export default async function HomePage() {
     {
       label: "350+ TRADERI",
       title: "Nu mai tranzactionezi singur",
-      desc: "Intreaba orice, primesti raspuns. Discutii zilnice, analize, si sesiuni live saptamanale cu Alex.",
+      desc: "Întreabă orice, primești răspuns. Discuții zilnice, analize și sesiuni live săptămânale cu Alex.",
     },
   ];
 

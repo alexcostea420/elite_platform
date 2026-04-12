@@ -213,15 +213,15 @@ export const testimonials = [
 export const faqs = [
   {
     question: "Ce primesc imediat după activare?",
-    answer: "Acces la Discord Elite, indicatorul TradingView, biblioteca video completa si anunturile pentru sesiunile live. Totul in mai putin de 2 minute."
+    answer: "Acces la Discord Elite, indicatorul TradingView, biblioteca video completă și anunțurile pentru sesiunile live. Totul în mai puțin de 2 minute."
   },
   {
     question: "Cum funcționează accesul?",
-    answer: "Alegi durata (30 zile, 3 luni sau 12 luni), platesti si primesti acces instant. Fara reinnoire automata, fara surprize. Dupa expirare, alegi daca continui."
+    answer: "Alegi durata (30 zile, 3 luni sau 12 luni), plătești și primești acces instant. Fără reînnoire automată, fără surprize. După expirare, alegi dacă continui."
   },
   {
     question: "Este potrivit pentru începători?",
-    answer: "Da. Biblioteca incepe de la zero, iar comunitatea te ajuta activ. Multi membri au inceput fara experienta si acum tranzactioneaza consistent."
+    answer: "Da. Biblioteca începe de la zero, iar comunitatea te ajută activ. Mulți membri au început fără experiență și acum tranzacționează consistent."
   },
   {
     question: "Ce este indicatorul ELITE?",
@@ -233,7 +233,7 @@ export const faqs = [
   },
   {
     question: "Pot plăti cu crypto?",
-    answer: "Da. Acceptam USDT si USDC pe Arbitrum, plus plata prin Binance Pay. Pentru planul lunar, poti plati si cu cardul prin Patreon."
+    answer: "Da. Acceptăm USDT și USDC pe Arbitrum, plus plata prin Binance Pay. Pentru planul lunar, poți plăti și cu cardul prin Patreon."
   },
   {
     question: "Există trial gratuit?",
@@ -245,11 +245,11 @@ export const faqs = [
   },
   {
     question: "Ce este botul de copytrade?",
-    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul executa tranzactii automat pe contul tau. Disponibil in curand — $45/luna pentru membrii Elite."
+    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul executa tranzactii automat pe contul tau. Disponibil in curand - $45/luna pentru membrii Elite."
   },
   {
     question: "Pot pierde bani?",
-    answer: "Da. Tradingul implica risc real. Nu garantam profituri si nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces — diferenta o face cum le gestionezi."
+    answer: "Da. Tradingul implica risc real. Nu garantam profituri si nici nu promitem rezultate specifice. Ceea ce oferim: un sistem disciplinat, bazat pe date, cu risk management strict. Pierderile fac parte din proces - diferenta o face cum le gestionezi."
   }
 ];
 

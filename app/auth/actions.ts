@@ -145,7 +145,7 @@ export async function signupAction(formData: FormData) {
       );
     }
 
-    // Trial is opt-in — user activates from dashboard
+    // Trial is opt-in - user activates from dashboard
   }
 
   if (data.user && data.session) {

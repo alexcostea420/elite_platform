@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-04-11T08:15:07.292709+00:00",
+  "timestamp": "2026-04-12T12:15:08.241747+00:00",
   "positioning": [
     {
       "asset": "BTC",
-      "price": 72747.0,
-      "funding": 1.25e-05,
-      "open_interest": 28029.71096,
+      "price": 71367.0,
+      "funding": -1.17676e-05,
+      "open_interest": 27298.96196,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -23,9 +23,9 @@
     },
     {
       "asset": "ETH",
-      "price": 2233.2,
-      "funding": 1.25e-05,
-      "open_interest": 592915.4026,
+      "price": 2201.7,
+      "funding": -1.7388e-06,
+      "open_interest": 575748.2162,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -43,9 +43,9 @@
     },
     {
       "asset": "SOL",
-      "price": 84.31,
-      "funding": -1.98254e-05,
-      "open_interest": 3465237.4,
+      "price": 82.24,
+      "funding": -1.78395e-05,
+      "open_interest": 3415798.58,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -63,9 +63,9 @@
     },
     {
       "asset": "AVAX",
-      "price": 9.308,
-      "funding": 1.25e-05,
-      "open_interest": 4396784.28,
+      "price": 9.0218,
+      "funding": -8.996e-07,
+      "open_interest": 4349153.08,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -83,9 +83,9 @@
     },
     {
       "asset": "BNB",
-      "price": 605.76,
-      "funding": 1.25e-05,
-      "open_interest": 35695.046,
+      "price": 594.62,
+      "funding": 9.9787e-06,
+      "open_interest": 34884.952,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -103,9 +103,9 @@
     },
     {
       "asset": "DOGE",
-      "price": 0.092886,
-      "funding": 1.06602e-05,
-      "open_interest": 279928588.0,
+      "price": 0.091197,
+      "funding": 1.1978e-06,
+      "open_interest": 270245464.0,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -123,9 +123,9 @@
     },
     {
       "asset": "LINK",
-      "price": 9.0193,
-      "funding": 5.0755e-06,
-      "open_interest": 3127779.2,
+      "price": 8.78,
+      "funding": 6.6858e-06,
+      "open_interest": 3094105.6,
       "smart_long_count": 0,
       "smart_short_count": 0,
       "smart_long_usd": 0,
@@ -154,5 +154,5 @@
     "note": "Whale wallets not active. Showing market data only."
   },
   "wallet_count": 0,
-  "scan_duration_s": 6.6
+  "scan_duration_s": 7.5
 }

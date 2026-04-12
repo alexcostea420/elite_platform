@@ -32,9 +32,9 @@ export function AlexsBrainSection() {
         <h2 className="text-2xl font-bold text-white md:text-4xl">Mentorul tau personal de trading. Disponibil 24/7.</h2>
         <div className="mx-auto mt-6 max-w-xl space-y-2 text-sm leading-relaxed text-slate-400 md:text-base">
           <p>Alex&apos;s Brain - un asistent AI antrenat pe toata metodologia, video-urile si analizele lui Alex.</p>
-          <p>Ii pui o intrebare, iti da raspunsul.</p>
-          <p>Ii arati un chart, iti spune ce vede.</p>
-          <p>Ii dai un trade, iti zice daca e bun sau nu.</p>
+          <p>Îi pui o întrebare, îți dă răspunsul.</p>
+          <p>Îi arăți un chart, îți spune ce vede.</p>
+          <p>Îi dai un trade, îți zice dacă e bun sau nu.</p>
           <p className="text-white font-medium">Ca si cum l-ai avea pe Alex langa tine non-stop.</p>
         </div>
       </div>

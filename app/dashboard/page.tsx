@@ -293,7 +293,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                       <h2 className="text-2xl font-bold text-white">Testează TOTUL gratuit. 7 zile. Zero obligații.</h2>
                       <p className="mt-3 max-w-xl text-sm text-slate-300">
                         Vei debloca: Risk Score, Should I Trade, {videoCount ?? 55}+ video-uri, Discord Elite, Indicatori TradingView.
-                        Fără card — se dezactivează automat.
+                        Fără card - se dezactivează automat.
                       </p>
                     </div>
                     <TrialButton />

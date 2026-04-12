@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceRoleSupabaseClient();
 
-  // Find user by email — paginate through all users
+  // Find user by email - paginate through all users
   let user: { id: string; email?: string } | undefined;
   let page = 1;
   while (!user) {

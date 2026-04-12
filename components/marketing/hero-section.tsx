@@ -54,12 +54,12 @@ export function HeroSection() {
                   <br className="hidden sm:block" />
                   Risk Score săptămânal, analize live, indicatori exclusivi și portofoliu transparent.
                   <br className="hidden sm:block" />
-                  Începe gratuit — 7 zile acces complet.
+                  Începe gratuit - 7 zile acces complet.
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link className="accent-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="/signup">
-                  Începe Gratuit — 7 Zile →
+                  Începe Gratuit - 7 Zile →
                 </Link>
                 <button
                   className="ghost-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
