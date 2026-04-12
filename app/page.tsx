@@ -101,41 +101,7 @@ export default async function HomePage() {
         {/* 1. Hero */}
         <HeroSection />
 
-        {/* 2. Live Data Strip */}
-        <section className="py-4">
-          <Container>
-            <div className="glass-card mx-auto flex flex-wrap items-center justify-center gap-4 rounded-2xl px-6 py-3 text-xs md:gap-8">
-              <span className="flex items-center gap-2">
-                <span className="text-slate-400">Risk Score:</span>
-                <span className={`font-mono font-bold ${riskScore >= 55 ? "text-accent-emerald" : riskScore >= 40 ? "text-yellow-400" : "text-red-400"}`}>{riskScore}</span>
-                <span className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold ${riskScore >= 55 ? "bg-accent-emerald/10 text-accent-emerald" : riskScore >= 40 ? "bg-yellow-400/10 text-yellow-400" : "bg-red-400/10 text-red-400"}`}>{riskDecision}</span>
-              </span>
-              {btcPrice > 0 && (<>
-                <span className="hidden h-4 w-px bg-slate-700 sm:block" />
-                <span className="flex items-center gap-2">
-                  <span className="text-slate-400">BTC:</span>
-                  <span className="font-mono font-bold text-white">${btcPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
-                </span>
-              </>)}
-              {fearGreed > 0 && (<>
-                <span className="hidden h-4 w-px bg-slate-700 sm:block" />
-                <span className="flex items-center gap-2">
-                  <span className="text-slate-400">Fear &amp; Greed:</span>
-                  <span className={`font-mono font-bold ${fearGreed <= 25 ? "text-red-400" : fearGreed <= 50 ? "text-yellow-400" : "text-accent-emerald"}`}>{fearGreed}</span>
-                </span>
-              </>)}
-              {pctAth < 0 && (<>
-                <span className="hidden h-4 w-px bg-slate-700 sm:block" />
-                <span className="flex items-center gap-2">
-                  <span className="text-slate-400">Distanta ATH:</span>
-                  <span className="font-mono font-bold text-red-400">{pctAth.toFixed(0)}%</span>
-                </span>
-              </>)}
-            </div>
-          </Container>
-        </section>
-
-        {/* 3. About */}
+        {/* 2. About */}
         <AboutSection />
 
         {/* 4. Track Record Teaser */}
