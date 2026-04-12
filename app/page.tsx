@@ -306,14 +306,14 @@ export default async function HomePage() {
               <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-400 md:text-base">
                 Fiecare decizie documentata pe Discord, cu timestamp imuabil. De la 55% cash in August la 100% USDC pe 30 Octombrie - inainte ca piata sa piarda -60%.
               </p>
-              <div className="mt-8 grid gap-4 md:grid-cols-3">
+              <div className="mx-auto mt-8 grid max-w-3xl gap-3 grid-cols-3">
                 {[
-                  { img: "/track-record/04-aug25-92pct-usdt-avertizare.jpg", caption: "25 Aug - 92% USDT - 'Aveti mare grija'" },
-                  { img: "/track-record/09-oct10-crash-vandut-tot.jpg", caption: "10 Oct - 'Am vandut tot' - 'E bearmarket'" },
-                  { img: "/track-record/12-oct12-dead-cat-bounce-99pct.jpg", caption: "12 Oct - 99.99% USDC - 'Dead cat bounce'" },
+                  { img: "/track-record/04-aug25-92pct-usdt-avertizare.jpg", caption: "25 Aug - 92% USDT" },
+                  { img: "/track-record/09-oct10-crash-vandut-tot.jpg", caption: "10 Oct - Am vandut tot" },
+                  { img: "/track-record/12-oct12-dead-cat-bounce-99pct.jpg", caption: "12 Oct - 100% USDC" },
                 ].map((s) => (
-                  <div key={s.caption} className="overflow-hidden rounded-xl border border-white/5">
-                    <Image alt={s.caption} className="w-full" height={300} src={s.img} width={500} />
+                  <div key={s.caption} className="overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02]">
+                    <Image alt={s.caption} className="w-full" height={250} src={s.img} width={300} />
                   </div>
                 ))}
               </div>

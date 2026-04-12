@@ -43,15 +43,15 @@ export function AlexsBrainSection() {
         <span className="flex items-center gap-2">🎯 <span>Validare trade-uri</span></span>
         <span className="flex items-center gap-2">🧪 <span>Quiz-uri practice</span></span>
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 mb-6">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 mb-6">
         {images.map((img) => (
           <button
             key={img.src}
-            className="overflow-hidden rounded-lg border border-white/[0.06] transition-all hover:border-white/[0.15] hover:-translate-y-0.5"
+            className="overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] transition-all hover:border-white/[0.15] hover:-translate-y-0.5"
             onClick={() => setLightbox(img.src)}
             type="button"
           >
-            <Image alt={img.alt} className="w-full" height={200} loading="lazy" src={img.src} width={250} />
+            <Image alt={img.alt} className="w-full object-cover" height={300} loading="lazy" src={img.src} width={300} style={{ aspectRatio: "1/1.2" }} />
           </button>
         ))}
       </div>
