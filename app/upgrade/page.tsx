@@ -222,7 +222,7 @@ export default async function UpgradePage() {
             {/* Paid Plans */}
             <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
               {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => (
-                <article key={plan.name} className={`relative rounded-[1.5rem] p-6 sm:p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow-strong" : "panel card-hover"}`}>
+                <article key={plan.name} className={`relative flex flex-col rounded-[1.5rem] p-6 sm:p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow-strong" : "panel card-hover"}`}>
                   {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
                   <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
                   <div className="mb-6 mt-3">
@@ -239,7 +239,7 @@ export default async function UpgradePage() {
                     <div className="mt-1 text-sm text-slate-500">{plan.details}</div>
                     {plan.savings ? <div className="mt-2 text-sm font-semibold text-crypto-green">{plan.savings}</div> : null}
                   </div>
-                  <ul className="space-y-3">
+                  <ul className="flex-1 space-y-3">
                     {plan.perks.map((perk) => (
                       <li key={perk} className="flex items-start gap-2 text-slate-300">
                         <span className="text-crypto-green">✓</span>
