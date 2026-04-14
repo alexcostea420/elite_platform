@@ -204,13 +204,14 @@ export default async function HomePage() {
                 <div className="flex flex-1 items-center justify-center">
                   <div className="flex w-full max-w-sm gap-2">
                     {[
-                      { tag: "ANALIZA", title: "BTC ETH bullish, blackswan cu razboiul?", date: "8 apr. 2026" },
-                      { tag: "UPDATE", title: "Platforma noua + Trade pe BITCOIN", date: "8 apr. 2026" },
-                      { tag: "EDUCATIE", title: "Cum să folosești indicatorii Elite", date: "1 apr. 2026" },
+                      { tag: "ANALIZĂ", icon: "📊", title: "BTC ETH bullish, blackswan cu razboiul?", date: "8 apr. 2026" },
+                      { tag: "UPDATE", icon: "🔄", title: "Platforma noua + Trade pe BITCOIN", date: "8 apr. 2026" },
+                      { tag: "EDUCAȚIE", icon: "📚", title: "Cum să folosești indicatorii Elite", date: "1 apr. 2026" },
                     ].map((v) => (
                       <div key={v.title} className="glass-card flex-1 overflow-hidden rounded-xl">
                         <div className="relative flex h-20 items-center justify-center bg-gradient-to-br from-accent-emerald/10 to-surface-graphite">
-                          <span className="absolute left-2 top-2 rounded bg-crypto-ink/80 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white">{v.tag}</span>
+                          <span className="text-2xl">{v.icon}</span>
+                          <span className="absolute left-2 top-2 rounded bg-accent-emerald/20 border border-accent-emerald/30 px-1.5 py-0.5 text-[9px] font-bold uppercase text-accent-emerald">{v.tag}</span>
                         </div>
                         <div className="p-2">
                           <p className="text-[10px] text-accent-emerald">{v.date}</p>
