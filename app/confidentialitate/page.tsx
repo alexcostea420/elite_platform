@@ -6,9 +6,9 @@ import { Container } from "@/components/ui/container";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Politica de Confidentialitate | Armata de Traderi",
+  title: "Politica de Confidențialitate | Armata de Traderi",
   description:
-    "Politica de confidentialitate a platformei Armata de Traderi. Afla cum colectam si protejam datele tale.",
+    "Politica de confidențialitate a platformei Armata de Traderi. Află cum colectăm și protejăm datele tale.",
   keywords: [
     "politica de confidentialitate",
     "armata de traderi",
@@ -25,178 +25,229 @@ export default function ConfidentialitatePage() {
       <main className="min-h-screen bg-surface-night pt-24 pb-16">
         <Container className="max-w-3xl">
           <h1 className="gradient-text mb-2 font-display text-3xl font-bold md:text-4xl">
-            Politica de Confidentialitate
+            Politica de Confidențialitate
           </h1>
           <p className="mb-10 text-sm text-slate-500">
-            Ultima actualizare: 5 aprilie 2026
+            Ultima actualizare: 15 aprilie 2026
           </p>
 
           <div className="space-y-8 text-slate-300 leading-relaxed">
             <Section title="1. Cine suntem">
               <p>
-                Armata de Traderi este o comunitate educationala de trading crypto,
-                administrata de Alex Costea. Site-ul nostru este{" "}
-                <strong className="text-white">armatadetraderi.com</strong> si
+                Armata de Traderi este o comunitate educațională de trading crypto,
+                operată de:
+              </p>
+              <ul className="mt-2 list-none space-y-1 pl-0">
+                <li>
+                  <strong className="text-white">PFA Costea Alexandru-Marian</strong>
+                </li>
+                <li>CUI: [Se va completa după înregistrare]</li>
+                <li>
+                  Email:{" "}
+                  <a
+                    className="text-accent-emerald hover:underline"
+                    href="mailto:contact@armatadetraderi.com"
+                  >
+                    contact@armatadetraderi.com
+                  </a>
+                </li>
+              </ul>
+              <p className="mt-2">
+                Site-ul nostru este{" "}
+                <strong className="text-white">armatadetraderi.com</strong> și
                 platforma de membri este la{" "}
                 <strong className="text-white">app.armatadetraderi.com</strong>.
               </p>
             </Section>
 
-            <Section title="2. Ce date colectam">
-              <p>Colectam urmatoarele date atunci cand iti creezi un cont sau utilizezi platforma:</p>
+            <Section title="2. Ce date colectăm">
+              <p>Colectăm următoarele date atunci când îți creezi un cont sau utilizezi platforma:</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 <li>
                   <strong>Date de cont:</strong> adresa de email, numele complet,
                   username
                 </li>
                 <li>
-                  <strong>Date Discord:</strong> username-ul si ID-ul Discord (daca
-                  iti conectezi contul)
+                  <strong>Date Discord:</strong> username-ul și ID-ul Discord (dacă
+                  îți conectezi contul)
                 </li>
                 <li>
-                  <strong>Date de plata:</strong> suma platita, hash-ul
-                  tranzactiei pe blockchain, adresa wallet-ului expeditor
+                  <strong>Date de plată prin card:</strong> procesate exclusiv prin
+                  Stripe. Nu stocăm datele cardului pe serverele noastre.
                 </li>
                 <li>
-                  <strong>Date de utilizare:</strong> pagini vizitate, actiuni
-                  pe platforma, data ultimei conectari
+                  <strong>Date de plată crypto:</strong> suma plătită, hash-ul
+                  tranzacției pe blockchain, adresa wallet-ului expeditor
+                </li>
+                <li>
+                  <strong>Date de utilizare:</strong> pagini vizitate, acțiuni
+                  pe platformă, data ultimei conectări
                 </li>
               </ul>
-              <p className="mt-2">
-                Nu colectam date bancare sau de card de credit, deoarece platile
-                se fac exclusiv prin crypto.
-              </p>
             </Section>
 
             <Section title="3. Cum folosim datele">
               <ul className="list-disc space-y-1 pl-5">
-                <li>Gestionarea contului tau si a abonamentului</li>
-                <li>Acordarea accesului la continutul Elite si Discord</li>
-                <li>Trimiterea de notificari legate de contul tau</li>
-                <li>Imbunatatirea platformei si a continutului</li>
-                <li>Prevenirea fraudei si a abuzului</li>
+                <li>Gestionarea contului tău și a abonamentului</li>
+                <li>Acordarea accesului la conținutul Elite și Discord</li>
+                <li>Trimiterea de notificări legate de contul tău</li>
+                <li>Îmbunătățirea platformei și a conținutului</li>
+                <li>Prevenirea fraudei și a abuzului</li>
               </ul>
             </Section>
 
-            <Section title="4. Unde stocam datele">
+            <Section title="4. Unde stocăm datele">
               <p>
-                Datele sunt stocate in{" "}
+                Datele sunt stocate în{" "}
                 <strong className="text-white">Supabase</strong>, un serviciu de
-                baze de date cu servere in Uniunea Europeana. Toate datele sunt
-                criptate in tranzit (HTTPS/TLS) si la stocare.
+                baze de date cu servere în Uniunea Europeană. Toate datele sunt
+                criptate în tranzit (HTTPS/TLS) și la stocare.
               </p>
             </Section>
 
-            <Section title="5. Servicii terte">
+            <Section title="5. Servicii terțe">
               <p>
-                Folosim urmatoarele servicii terte care pot colecta date
-                anonimizate:
+                Folosim următoarele servicii terțe care pot colecta date:
               </p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 <li>
-                  <strong>Google Analytics</strong> - pentru intelegerea
-                  traficului si comportamentului pe site (date anonimizate)
+                  <strong>Stripe</strong> (Stripe Payments Europe, Ltd.) -
+                  procesarea plăților cu card
                 </li>
                 <li>
-                  <strong>Meta Pixel (Facebook)</strong> - pentru masurarea
-                  eficientei campaniilor de marketing
+                  <strong>Google Analytics</strong> - pentru înțelegerea
+                  traficului și comportamentului pe site (date anonimizate)
                 </li>
                 <li>
-                  <strong>Vercel</strong> - hosting si livrarea paginilor web
+                  <strong>Meta Pixel (Facebook)</strong> - pentru măsurarea
+                  eficienței campaniilor de marketing
+                </li>
+                <li>
+                  <strong>Plausible Analytics</strong> - analiză de trafic
+                  (privacy-first, fără cookies)
+                </li>
+                <li>
+                  <strong>Resend</strong> - trimiterea emailurilor tranzacționale
+                </li>
+                <li>
+                  <strong>Cloudflare</strong> - hosting video și CDN
+                </li>
+                <li>
+                  <strong>Vercel</strong> - hosting și livrarea paginilor web
                 </li>
                 <li>
                   <strong>Discord</strong> - pentru integrarea cu serverul
-                  comunitatii
+                  comunității
                 </li>
               </ul>
             </Section>
 
             <Section title="6. Cookies">
               <p>
-                Folosim cookie-uri esentiale pentru autentificare si functionarea
-                platformei. Serviciile terte (Google Analytics, Meta Pixel) pot
-                seta cookie-uri de urmarire. Poti dezactiva cookie-urile din
-                setarile browser-ului tau.
+                Folosim cookie-uri esențiale pentru autentificare și funcționarea
+                platformei. Stripe poate seta cookie-uri necesare pentru prevenirea
+                fraudei și procesarea plăților. Serviciile terțe (Google Analytics,
+                Meta Pixel) pot seta cookie-uri de urmărire. Poți dezactiva
+                cookie-urile din setările browser-ului tău.
               </p>
             </Section>
 
-            <Section title="7. Nu vindem datele tale">
+            <Section title="7. Transfer internațional de date">
               <p>
-                Nu vindem, nu inchiriem si nu distribuim datele tale personale
-                catre terti in scopuri de marketing. Datele tale sunt folosite
-                exclusiv pentru functionarea platformei.
+                Datele tale pot fi transferate și procesate în afara țării tale de
+                reședință:
               </p>
-            </Section>
-
-            <Section title="8. Drepturile tale">
-              <p>Conform legislatiei europene (GDPR), ai urmatoarele drepturi:</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 <li>
-                  <strong>Acces:</strong> poti solicita o copie a datelor tale
+                  <strong>Stripe</strong> - procesează date în UE/SEE
                 </li>
                 <li>
-                  <strong>Rectificare:</strong> poti cere corectarea datelor
+                  <strong>Supabase</strong> - servere în UE
+                </li>
+                <li>
+                  <strong>Discord</strong> (SUA) - clauze contractuale standard
+                  pentru protecția datelor
+                </li>
+              </ul>
+            </Section>
+
+            <Section title="8. Nu vindem datele tale">
+              <p>
+                Nu vindem, nu închiriem și nu distribuim datele tale personale
+                către terți în scopuri de marketing. Datele tale sunt folosite
+                exclusiv pentru funcționarea platformei.
+              </p>
+            </Section>
+
+            <Section title="9. Drepturile tale">
+              <p>Conform legislației europene (GDPR), ai următoarele drepturi:</p>
+              <ul className="mt-2 list-disc space-y-1 pl-5">
+                <li>
+                  <strong>Acces:</strong> poți solicita o copie a datelor tale
+                </li>
+                <li>
+                  <strong>Rectificare:</strong> poți cere corectarea datelor
                   incorecte
                 </li>
                 <li>
-                  <strong>Stergere:</strong> poti solicita stergerea completa a
-                  contului si datelor tale
+                  <strong>Ștergere:</strong> poți solicita ștergerea completă a
+                  contului și datelor tale
                 </li>
                 <li>
-                  <strong>Portabilitate:</strong> poti primi datele tale
-                  intr-un format structurat
+                  <strong>Portabilitate:</strong> poți primi datele tale
+                  într-un format structurat
                 </li>
                 <li>
-                  <strong>Opozitie:</strong> te poti opune prelucrarii datelor
+                  <strong>Opoziție:</strong> te poți opune prelucrării datelor
                   pentru marketing
                 </li>
               </ul>
               <p className="mt-2">
-                Pentru a exercita oricare dintre aceste drepturi, contacteaza-ne
+                Pentru a exercita oricare dintre aceste drepturi, contactează-ne
                 la adresa de mai jos.
               </p>
             </Section>
 
-            <Section title="9. Retentia datelor">
+            <Section title="10. Retenția datelor">
               <p>
-                Pastram datele contului tau cat timp acesta este activ. Daca
-                soliciti stergerea contului, datele vor fi eliminate in maximum
-                30 de zile. Datele de plata (hash tranzactie, suma) pot fi
-                pastrate pentru evidenta contabila conform legii romane.
+                Păstrăm datele contului tău cât timp acesta este activ. Dacă
+                soliciți ștergerea contului, datele vor fi eliminate în maximum
+                30 de zile. Datele de plată (hash tranzacție, sumă) pot fi
+                păstrate pentru evidența contabilă conform legii române.
               </p>
             </Section>
 
-            <Section title="10. Securitate">
+            <Section title="11. Securitate">
               <p>
-                Protejam datele tale prin criptare, autentificare securizata si
+                Protejăm datele tale prin criptare, autentificare securizată și
                 politici de acces restrictive (Row Level Security). Cu toate
-                acestea, niciun sistem nu este 100% sigur, si nu putem garanta
-                securitatea absoluta.
+                acestea, niciun sistem nu este 100% sigur, și nu putem garanta
+                securitatea absolută.
               </p>
             </Section>
 
-            <Section title="11. Modificari">
+            <Section title="12. Modificări">
               <p>
-                Aceasta politica poate fi actualizata periodic. Modificarile
-                semnificative vor fi comunicate prin email sau pe platforma.
+                Această politică poate fi actualizată periodic. Modificările
+                semnificative vor fi comunicate prin email sau pe platformă.
               </p>
             </Section>
 
-            <Section title="12. Contact">
+            <Section title="13. Contact">
               <p>
-                Pentru orice intrebari legate de datele tale personale sau aceasta
-                politica, ne poti contacta la:
+                Pentru orice întrebări legate de datele tale personale sau această
+                politică, ne poți contacta la:
               </p>
               <p className="mt-2">
                 <a
                   className="text-accent-emerald hover:underline"
-                  href="mailto:armatadetraderi@gmail.com"
+                  href="mailto:contact@armatadetraderi.com"
                 >
-                  armatadetraderi@gmail.com
+                  contact@armatadetraderi.com
                 </a>
               </p>
               <p className="mt-1 text-sm text-slate-500">
-                Alex Costea - Armata de Traderi
+                PFA Costea Alexandru-Marian - Armata de Traderi
               </p>
             </Section>
           </div>

@@ -5,7 +5,9 @@ import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { LeadMagnetForm } from "@/components/ui/lead-magnet-form";
+import { StripePayButton } from "@/components/upgrade/stripe-pay-button";
 import { pricingPlans } from "@/lib/constants/site";
+import { isStripeEnabled } from "@/lib/payments/stripe";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { TrialActivateButton } from "@/components/upgrade/trial-activate-button";
@@ -73,6 +75,7 @@ export default async function UpgradePage() {
   const offerSchema = getUpgradeOfferSchema();
 
   // Check if user is logged in, veteran, and has used trial
+  const stripeEnabled = isStripeEnabled();
   let isVeteran = false;
   let isLoggedIn = false;
   let hasUsedTrial = false;
@@ -245,18 +248,14 @@ export default async function UpgradePage() {
                     ))}
                   </ul>
                   <div className="mt-8 space-y-3">
-                    {plan.name === "30 Zile" && !isVeteran && (
-                      <a
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-700 py-3 font-bold text-white hover:bg-slate-600"
-                        href="https://www.patreon.com/cw/armatadetraderi"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        💳 Plătește cu cardul (lunar)
-                      </a>
+                    {stripeEnabled && (
+                      <StripePayButton
+                        plan={planSlugMap[plan.name] ?? "elite_monthly"}
+                        highlighted={!!plan.highlighted}
+                      />
                     )}
                     <Link
-                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}
+                      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 font-bold ${plan.highlighted && !stripeEnabled ? "bg-accent-emerald text-crypto-dark hover:bg-accent-soft" : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}
                       href={`/upgrade/pay?plan=${planSlugMap[plan.name] ?? "elite_monthly"}`}
                     >
                       Plătește cu crypto (USDT/USDC)
@@ -269,8 +268,8 @@ export default async function UpgradePage() {
                     >
                       Plătește cu Binance
                     </a>
-                    {plan.name === "30 Zile" && !isVeteran && (
-                      <p className="text-center text-xs text-slate-600">Plata cu cardul este procesată prin Patreon</p>
+                    {stripeEnabled && (
+                      <p className="text-center text-xs text-slate-600">Plata cu cardul este procesată securizat prin Stripe</p>
                     )}
                   </div>
                 </article>

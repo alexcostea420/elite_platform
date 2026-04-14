@@ -28,11 +28,34 @@ export default function TermeniPage() {
             Termeni și Condiții
           </h1>
           <p className="mb-10 text-sm text-slate-500">
-            Ultima actualizare: 5 aprilie 2026
+            Ultima actualizare: 15 aprilie 2026
           </p>
 
           <div className="space-y-8 text-slate-300 leading-relaxed">
-            <Section title="1. Despre platforma">
+            <Section title="1. Identificarea operatorului">
+              <p>
+                Platforma Armata de Traderi (app.armatadetraderi.com) operată de:
+              </p>
+              <ul className="list-disc space-y-1 pl-5 mt-2">
+                <li>
+                  <strong>PFA Costea Alexandru-Marian</strong>
+                </li>
+                <li>Cod CAEN: 6312 – Activități ale portalurilor web</li>
+                <li>CUI: [Se va completa după înregistrare]</li>
+                <li>Sediu: [Se va completa după înregistrare]</li>
+                <li>
+                  Email:{" "}
+                  <a
+                    className="text-accent-emerald hover:underline"
+                    href="mailto:contact@armatadetraderi.com"
+                  >
+                    contact@armatadetraderi.com
+                  </a>
+                </li>
+              </ul>
+            </Section>
+
+            <Section title="2. Obiectul contractului">
               <p>
                 Armata de Traderi este o comunitate educațională de trading crypto,
                 administrată de Alex Costea. Platforma oferă acces la conținut
@@ -45,14 +68,14 @@ export default function TermeniPage() {
               </p>
             </Section>
 
-            <Section title="2. Eligibilitate">
+            <Section title="3. Eligibilitate">
               <p>
                 Pentru a utiliza platforma, trebuie să ai minim 18 ani. Prin
                 crearea unui cont, confirmi că îndeplinești această cerință.
               </p>
             </Section>
 
-            <Section title="3. Conturi si acces">
+            <Section title="4. Conturi și acces">
               <ul className="list-disc space-y-1 pl-5">
                 <li>Fiecare utilizator are dreptul la un singur cont.</li>
                 <li>Ești responsabil pentru securitatea contului tău.</li>
@@ -64,36 +87,56 @@ export default function TermeniPage() {
               </ul>
             </Section>
 
-            <Section title="4. Trial gratuit">
+            <Section title="5. Trial gratuit">
               <p>
-                La înregistrare, primești automat 3 zile de acces gratuit la
+                La înregistrare, primești automat 7 zile de acces gratuit la
                 conținutul Elite. Nu este necesară nicio plată sau card. După
-                cele 3 zile, contul revine automat la planul Free.
+                cele 7 zile, contul revine automat la planul Free.
+              </p>
+              <p className="mt-2">
+                Perioada de probă se acordă o singură dată per utilizator.
               </p>
             </Section>
 
-            <Section title="5. Planuri și prețuri">
+            <Section title="6. Planuri și prețuri">
               <ul className="list-disc space-y-1 pl-5">
                 <li>
-                  <strong>30 Zile:</strong> $49 USDT
+                  <strong>30 Zile:</strong> 49 EUR
                 </li>
                 <li>
-                  <strong>90 Zile:</strong> $137 USDT
+                  <strong>90 Zile:</strong> 137 EUR
                 </li>
                 <li>
-                  <strong>365 Zile:</strong> $497 USDT
+                  <strong>365 Zile:</strong> 497 EUR
                 </li>
               </ul>
               <p className="mt-2">
-                Prețurile sunt în dolari americani (USD) și se plătesc în USDT
-                (stablecoin crypto). Planurile oferă acces pe durată fixă și nu
-                se reînnoiesc automat.
+                Prețurile sunt exprimate în EUR. Operatorul este neplătitor de
+                TVA conform legislației în vigoare.
+              </p>
+              <p className="mt-2">
+                Membrii veterani beneficiază de prețuri reduse: 33 EUR / 100 EUR
+                / 300 EUR.
+              </p>
+              <p className="mt-2">
+                Planurile oferă acces pe durată fixă și nu se reînnoiesc automat.
               </p>
             </Section>
 
-            <Section title="6. Plăți crypto">
+            <Section title="7. Metode de plată">
               <ul className="list-disc space-y-1 pl-5">
-                <li>Plățile se fac exclusiv în USDT pe rețeaua Arbitrum.</li>
+                <li>
+                  <strong>Card bancar</strong> – procesat prin Stripe (Stripe
+                  Payments Europe, Ltd., Irlanda).
+                </li>
+                <li>
+                  <strong>Criptomonede</strong> – USDT/USDC pe rețeaua Arbitrum.
+                </li>
+              </ul>
+              <p className="mt-3 font-medium text-white">
+                Detalii plată crypto:
+              </p>
+              <ul className="list-disc space-y-1 pl-5 mt-1">
                 <li>
                   Trebuie să trimiți suma exactă indicată la momentul plății
                   (include o referință unică în centime).
@@ -108,21 +151,34 @@ export default function TermeniPage() {
               </ul>
             </Section>
 
-            <Section title="7. Rambursări">
+            <Section title="8. Rambursări">
               <p>
-                Poți solicita o rambursare completă în primele 7 zile de la
-                activare, contactându-ne la{" "}
+                Deoarece produsul oferit este conținut digital livrat instant,
+                rambursările nu sunt posibile odată ce accesul la platformă a
+                fost activat.
+              </p>
+              <p className="mt-2">
+                Pentru detalii complete, consultă{" "}
                 <a
                   className="text-accent-emerald hover:underline"
-                  href="mailto:armatadetraderi@gmail.com"
+                  href="/rambursare"
                 >
-                  armatadetraderi@gmail.com
+                  Politica de Rambursare
                 </a>
-                . După 7 zile, plățile nu sunt rambursabile.
+                .
               </p>
             </Section>
 
-            <Section title="8. Ce primești">
+            <Section title="9. Livrarea conținutului digital">
+              <p>
+                Serviciile oferite constituie conținut digital livrat instantaneu.
+                Prin finalizarea plății, utilizatorul confirmă că este de acord
+                cu livrarea imediată și își pierde dreptul de retragere conform
+                OUG 34/2014 și Directiva 2011/83/UE.
+              </p>
+            </Section>
+
+            <Section title="10. Ce primești">
               <ul className="list-disc space-y-1 pl-5">
                 <li>Acces la canalele Elite pe serverul Discord</li>
                 <li>Biblioteca video educațională</li>
@@ -136,7 +192,7 @@ export default function TermeniPage() {
               </p>
             </Section>
 
-            <Section title="9. Limitarea răspunderii">
+            <Section title="11. Limitarea răspunderii">
               <ul className="list-disc space-y-1 pl-5">
                 <li>
                   Trading-ul crypto implică riscuri semnificative, inclusiv
@@ -149,22 +205,43 @@ export default function TermeniPage() {
                   Deciziile de tranzacționare îți aparțin în totalitate.
                 </li>
                 <li>
-                  Alex Costea si Armata de Traderi nu sunt responsabili pentru
+                  Alex Costea și Armata de Traderi nu sunt responsabili pentru
                   pierderile financiare suferite.
                 </li>
               </ul>
             </Section>
 
-            <Section title="10. Proprietate intelectuală">
+            <Section title="12. Proprietate intelectuală">
               <p>
                 Tot conținutul de pe platformă (video-uri, analize, indicatori,
                 materiale educaționale) este proprietatea Armata de Traderi.
                 Redistribuirea, copierea sau partajarea conținutului fără acord
                 scris este interzisă.
               </p>
+              <p className="mt-2 font-semibold text-amber-400">
+                Copierea sau partajarea conținutului duce la suspendarea imediată
+                a contului, fără drept de rambursare.
+              </p>
             </Section>
 
-            <Section title="11. Modificări ale termenilor">
+            <Section title="13. Suspendarea contului">
+              <p>
+                Contul poate fi suspendat fără preaviz și fără rambursare în
+                următoarele situații:
+              </p>
+              <ul className="list-disc space-y-1 pl-5 mt-2">
+                <li>Încălcarea acestor Termeni și Condiții</li>
+                <li>
+                  Copierea sau partajarea conținutului platformei cu terți
+                </li>
+                <li>Chargeback fraudulos (disputarea nejustificată a plății)</li>
+                <li>
+                  Crearea mai multor conturi pentru a abuza de perioada de trial
+                </li>
+              </ul>
+            </Section>
+
+            <Section title="14. Modificări ale termenilor">
               <p>
                 Ne rezervăm dreptul de a modifica acești termeni. Modificările
                 importante vor fi comunicate prin email sau pe Discord. Continuarea
@@ -173,22 +250,58 @@ export default function TermeniPage() {
               </p>
             </Section>
 
-            <Section title="12. Legislație aplicabilă">
+            <Section title="15. Legislație aplicabilă">
               <p>
                 Acești termeni sunt guvernați de legislația din România. Orice
-                dispută va fi soluționată conform legilor române, în instanța
-                competentă din România.
+                dispută va fi soluționată conform legilor române.
               </p>
+              <p className="mt-2">Organisme de soluționare a disputelor:</p>
+              <ul className="list-disc space-y-1 pl-5 mt-1">
+                <li>
+                  <strong>ANPC</strong> – Autoritatea Națională pentru Protecția
+                  Consumatorilor:{" "}
+                  <a
+                    className="text-accent-emerald hover:underline"
+                    href="https://anpc.ro"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    anpc.ro
+                  </a>
+                </li>
+                <li>
+                  <strong>SAL</strong> – Soluționarea Alternativă a Litigiilor:{" "}
+                  <a
+                    className="text-accent-emerald hover:underline"
+                    href="https://anpc.ro/ce-este-sal/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    anpc.ro/ce-este-sal/
+                  </a>
+                </li>
+                <li>
+                  <strong>SOL</strong> – Soluționarea Online a Litigiilor:{" "}
+                  <a
+                    className="text-accent-emerald hover:underline"
+                    href="https://ec.europa.eu/consumers/odr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ec.europa.eu/consumers/odr
+                  </a>
+                </li>
+              </ul>
             </Section>
 
-            <Section title="13. Contact">
+            <Section title="16. Contact">
               <p>
                 Pentru întrebări legate de acești termeni, ne poți contacta la:{" "}
                 <a
                   className="text-accent-emerald hover:underline"
-                  href="mailto:armatadetraderi@gmail.com"
+                  href="mailto:contact@armatadetraderi.com"
                 >
-                  armatadetraderi@gmail.com
+                  contact@armatadetraderi.com
                 </a>
               </p>
             </Section>

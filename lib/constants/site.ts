@@ -263,6 +263,7 @@ export const footerLinks = {
   legal: [
     { href: "/termeni", label: "Termeni și Condiții" },
     { href: "/confidentialitate", label: "Politică de Confidențialitate" },
+    { href: "/rambursare", label: "Politică de Rambursare" },
     { href: "https://anpc.ro/ce-este-sal/", label: "ANPC" }
   ],
   dashboard: [

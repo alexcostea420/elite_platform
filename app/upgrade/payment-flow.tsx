@@ -55,6 +55,7 @@ export function PaymentFlow() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState<"address" | "amount" | null>(null);
   const [enabledChains, setEnabledChains] = useState<ChainOption[]>([]);
+  const [consentChecked, setConsentChecked] = useState(false);
 
   // Fetch enabled chains on mount
   useEffect(() => {
@@ -335,16 +336,43 @@ export function PaymentFlow() {
         </div>
       ) : null}
 
+      <div className="mb-6 rounded-xl border border-white/10 bg-white/5 p-4">
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={consentChecked}
+            onChange={(e) => setConsentChecked(e.target.checked)}
+            className="mt-1 h-4 w-4 shrink-0 rounded border-white/20 bg-white/10 text-accent-emerald accent-emerald-500"
+          />
+          <span className="text-sm text-slate-300">
+            Sunt de acord cu{" "}
+            <a href="/termeni" target="_blank" className="text-accent-emerald hover:underline">
+              Termenii și Condițiile
+            </a>
+            {" "}și cu livrarea imediată a conținutului digital. Înțeleg că, odată ce accesul a fost activat,
+            îmi pierd dreptul de retragere conform{" "}
+            <a href="/rambursare" target="_blank" className="text-accent-emerald hover:underline">
+              Politicii de Rambursare
+            </a>
+            {" "}(OUG 34/2014).
+          </span>
+        </label>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-3">
         {(["30_days", "90_days", "365_days"] as PlanDuration[]).map((plan) => (
           <button
             key={plan}
-            className={`rounded-2xl border p-6 text-left transition hover:border-accent-emerald/50 ${
+            className={`rounded-2xl border p-6 text-left transition ${
+              !consentChecked
+                ? "cursor-not-allowed opacity-50"
+                : "hover:border-accent-emerald/50"
+            } ${
               plan === "90_days"
                 ? "border-accent-emerald/30 bg-accent-emerald/5"
                 : "border-white/10 bg-white/5"
             }`}
-            disabled={loading}
+            disabled={loading || !consentChecked}
             onClick={() => createPayment(plan)}
             type="button"
           >

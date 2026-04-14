@@ -102,7 +102,10 @@ export function Footer({ compact = false }: FooterProps) {
         </div>
         <div className="border-t border-white/10 pt-8 text-center text-sm text-slate-500">
           <p className="mb-2">© 2026 {siteConfig.name} by {siteConfig.creator}. Toate drepturile rezervate.</p>
-          <p className="text-red-400">⚠️ <strong>Disclaimer:</strong> Acest website nu oferă sfaturi financiare. Trading-ul crypto implică riscuri. Investește responsabil.</p>
+          <p className="mb-2">PFA Costea Alexandru-Marian | CUI: [în curs de înregistrare] | contact@armatadetraderi.com</p>
+          <p className="max-w-2xl mx-auto text-xs text-slate-600">
+            <strong className="text-red-400/80">Disclaimer financiar:</strong> Armata de Traderi nu oferă sfaturi financiare personalizate și nu este autorizată de ASF. Tot conținutul are caracter exclusiv educațional. Tranzacționarea criptomonedelor implică riscuri semnificative, inclusiv pierderea totală a capitalului. Performanțele trecute nu garantează rezultate viitoare. Utilizatorul este singurul responsabil pentru deciziile sale de investiție.
+          </p>
         </div>
       </Container>
     </footer>
