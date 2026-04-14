@@ -120,7 +120,7 @@ export const benefits = [
 export const pricingPlans: PricingPlan[] = [
   {
     name: "Încearcă Gratis!",
-    price: "$0",
+    price: "€0",
     period: "",
     details: "7 zile acces complet",
     cta: "Începe Acum - Gratis",
@@ -137,7 +137,7 @@ export const pricingPlans: PricingPlan[] = [
   },
   {
     name: "30 Zile",
-    price: "$49",
+    price: "€49",
     period: "/acces",
     details: "(plan lunar)",
     cta: "Vreau să intru în grup",
@@ -152,7 +152,7 @@ export const pricingPlans: PricingPlan[] = [
   },
   {
     name: "3 Luni",
-    price: "$137",
+    price: "€137",
     details: "",
     cta: "Vreau să intru în grup",
     highlighted: true,
@@ -165,12 +165,13 @@ export const pricingPlans: PricingPlan[] = [
       "Video educaționale",
       "Analize săptămânale",
       "⚡ Indicatori deblocați INSTANT (fără așteptare)",
+      "⚡ Risk Score BTC live",
       "Suport prioritar"
     ]
   },
   {
     name: "12 Luni",
-    price: "$497",
+    price: "€497",
     details: "",
     cta: "Vreau să intru în grup",
     highlighted: false,
@@ -182,6 +183,7 @@ export const pricingPlans: PricingPlan[] = [
       "Video educaționale",
       "Analize săptămânale",
       "⚡ Indicatori + Dashboard deblocate INSTANT",
+      "⚡ Risk Score BTC live",
       "Suport prioritar VIP"
     ]
   }

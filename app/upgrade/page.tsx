@@ -53,9 +53,9 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 const veteranPrices: Record<string, string> = {
-  "30 Zile": "$33",
-  "3 Luni": "$100",
-  "12 Luni": "$300",
+  "30 Zile": "€33",
+  "3 Luni": "€100",
+  "12 Luni": "€300",
 };
 
 
@@ -179,7 +179,7 @@ export default async function UpgradePage() {
                   <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white md:text-3xl">Activează Trial Gratuit</h3>
-                      <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - $0</p>
+                      <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - €0</p>
                       <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
                         {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
@@ -200,7 +200,7 @@ export default async function UpgradePage() {
                   <div className="mt-4 flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white md:text-3xl">Încearcă Gratis!</h3>
-                      <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - $0</p>
+                      <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - €0</p>
                       <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
                         {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
