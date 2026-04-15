@@ -19,9 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     const Stripe = (await import("stripe")).default;
-    const stripe = new Stripe(stripeConfig.secretKey, {
-      apiVersion: "2026-03-25.dahlia",
-    });
+    const stripe = new Stripe(stripeConfig.secretKey);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let event: any;

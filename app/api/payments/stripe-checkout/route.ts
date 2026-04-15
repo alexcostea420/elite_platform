@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createServerSupabaseClient();
+    const supabase = createServerSupabaseClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -42,9 +42,7 @@ export async function POST(request: NextRequest) {
 
     // Dynamic import Stripe (only when needed)
     const Stripe = (await import("stripe")).default;
-    const stripe = new Stripe(stripeConfig.secretKey, {
-      apiVersion: "2026-03-25.dahlia",
-    });
+    const stripe = new Stripe(stripeConfig.secretKey);
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -75,9 +73,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    console.error("Stripe checkout error:", error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Stripe checkout error:", errMsg, error);
     return NextResponse.json(
-      { error: "Eroare la crearea sesiunii de plată." },
+      { error: "Eroare la crearea sesiunii de plată.", details: errMsg },
       { status: 500 }
     );
   }
