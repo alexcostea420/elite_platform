@@ -40,7 +40,7 @@ export function PricingSection() {
         <div className="mt-16" />
         <SectionHeading title={<>Alege <span className="gradient-text">Planul Tău</span></>} description="Alege durata de acces potrivită pentru nivelul tău." />
         <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:gap-8 md:grid-cols-3">
-          {pricingPlans.filter((plan) => plan.price !== "$0").map((plan) => (
+          {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => (
             <article key={plan.name} className={`relative rounded-[1.5rem] p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow" : "panel card-hover"}`}>
               {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
               <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
@@ -75,7 +75,7 @@ export function PricingSection() {
           </div>
         </div>
         <div className="mt-8 space-y-4 text-center">
-          <p className="text-slate-400">Plăți securizate prin Crypto (USDT)</p>
+          <p className="text-slate-400">Plăți securizate prin Card (Stripe) sau Crypto (USDT)</p>
           <div className="flex items-center justify-center gap-4 text-3xl">
             <span>💳</span>
             <span>🔐</span>
