@@ -252,7 +252,7 @@ export async function syncDiscordRole({
  * Queue Discord DM drip messages for a newly connected user.
  * Messages are sent by a cron/script that processes the queue.
  */
-const ANTI_SCAM_FOOTER = "\n\n—\n\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP).\n\nBotul NU cere bani si NU proceseaza plati. Toate platile se fac DOAR pe website:\nhttps://app.armatadetraderi.com/upgrade\n\nNu trimite niciodata parole, crypto sau date personale nimanui pe Discord.\nDaca primesti DM-uri suspecte de la conturi similare, raporteaza-le lui Alex.";
+const ANTI_SCAM_FOOTER = "\n\n—\n\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP).\n\nBotul NU cere bani și NU procesează plăți. Toate plățile se fac DOAR pe website:\n<https://app.armatadetraderi.com/upgrade>\n\nNu trimite niciodată parole, crypto sau date personale nimănui pe Discord.\nDacă primești DM-uri suspecte de la conturi similare, raportează-le lui Alex.";
 
 export async function queueDiscordDripMessages(userId: string, discordUserId: string, isElite: boolean) {
   const supabase = createServiceRoleSupabaseClient();
@@ -261,17 +261,17 @@ export async function queueDiscordDripMessages(userId: string, discordUserId: st
   const messages = [
     {
       type: "welcome",
-      text: "👋 **Bine ai venit in Armata de Traderi!**\n\nAi conectat Discord cu succes.\n\nAici cateva resurse pentru a incepe:\n\n📊 **Indicatori Elite:**\nhttps://app.armatadetraderi.com/dashboard/indicators\n\n🎥 **Video-uri:**\nhttps://app.armatadetraderi.com/dashboard/videos\n\n💬 Pune intrebari oricand pe server!\n\nToate resursele le gasesti pe platforma:\nhttps://app.armatadetraderi.com/dashboard" + ANTI_SCAM_FOOTER,
+      text: "👋 **Bine ai venit în Armata de Traderi!**\n\nAi conectat Discord cu succes.\n\nAici câteva resurse pentru a începe:\n\n📊 **Indicatori Elite:** <https://app.armatadetraderi.com/dashboard/indicators>\n\n🎥 **Video-uri:** <https://app.armatadetraderi.com/dashboard/videos>\n\n💬 Pune întrebări oricând pe server!\n\nToate resursele le găsești pe platformă:\nhttps://app.armatadetraderi.com/dashboard" + ANTI_SCAM_FOOTER,
       delay: 0,
     },
     {
       type: "day1_indicator",
-      text: "📊 **Ai instalat indicatorii Elite pe TradingView?**\n\nSunt 4 indicatori exclusivi care te ajuta sa identifici intrari si iesiri:\n\n• Elite Bands\n\n• Elite Momentum\n\n• Elite Levels\n\n• Elite Fib Zones\n\nInstaleaza-i de aici:\nhttps://app.armatadetraderi.com/dashboard/indicators\n\nDaca ai nevoie de ajutor, scrie in #general." + ANTI_SCAM_FOOTER,
+      text: "📊 **Ai instalat indicatorii Elite pe TradingView?**\n\nSunt 4 indicatori exclusivi care te ajută să identifici intrări și ieșiri:\n\n• Elite Bands\n• Elite Momentum\n• Elite Levels\n• Elite Fib Zones\n\nInstalează-i de aici:\nhttps://app.armatadetraderi.com/dashboard/indicators\n\nDacă ai nevoie de ajutor, scrie în #general." + ANTI_SCAM_FOOTER,
       delay: 24 * 60 * 60 * 1000,
     },
     {
       type: "day2_video",
-      text: "🎥 **Ai vazut video-ul despre Lot Size?**\n\nEste CEL MAI IMPORTANT concept in trading.\n\nFara lot size corect, poti avea 70% win rate si tot sa pierzi bani.\n\nUita-te aici:\nhttps://youtu.be/4tNSs6egoM0\n\nDupa ce il vezi, aplica metoda pe urmatorul trade.\n\nToate video-urile le gasesti in biblioteca:\nhttps://app.armatadetraderi.com/dashboard/videos" + ANTI_SCAM_FOOTER,
+      text: "🎥 **Ai văzut video-ul despre Lot Size?**\n\nEste CEL MAI IMPORTANT concept în trading.\n\nFără lot size corect, poți avea 70% win rate și tot să pierzi bani.\n\nUită-te aici:\nhttps://youtu.be/4tNSs6egoM0\n\nDupă ce îl vezi, aplică metoda pe următorul trade.\n\nToate video-urile le găsești în bibliotecă:\n<https://app.armatadetraderi.com/dashboard/videos>" + ANTI_SCAM_FOOTER,
       delay: 2 * 24 * 60 * 60 * 1000,
     },
   ];
@@ -280,7 +280,7 @@ export async function queueDiscordDripMessages(userId: string, discordUserId: st
   if (isElite) {
     messages.push({
       type: "day6_trial",
-      text: "⏰ **Trial-ul tau de 7 zile se termina curand!**\n\nDaca ti-a placut experienta, alege un plan si pastreaza accesul.\n\nPlanul de 3 luni e cel mai popular - deblochezi instant indicatorii.\n\n👉 https://app.armatadetraderi.com/upgrade" + ANTI_SCAM_FOOTER,
+      text: "⏰ **Trial-ul tău de 7 zile se termină curând!**\n\nDacă ți-a plăcut experiența, alege un plan și păstrează accesul.\n\nPlanul de 3 luni e cel mai popular - deblochezi instant indicatorii.\n\n👉 https://app.armatadetraderi.com/upgrade" + ANTI_SCAM_FOOTER,
       delay: 6 * 24 * 60 * 60 * 1000,
     });
   }
