@@ -67,6 +67,11 @@ export function LoginForm({
             required
             type="password"
           />
+          <div className="mt-2 text-right">
+            <Link className="text-xs text-slate-400 hover:text-accent-emerald" href="/forgot-password">
+              Am uitat parola
+            </Link>
+          </div>
         </div>
         <button className="accent-button w-full disabled:opacity-60" disabled={submitting} type="submit">
           {submitting ? "Se autentifică..." : "Intră în cont"}
