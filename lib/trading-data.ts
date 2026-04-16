@@ -99,6 +99,20 @@ export type RiskScoreData = {
   };
   analysis: string;
   version?: string;
+  // V2 fields
+  layer_scores?: {
+    onchain: number;
+    technical: number;
+    macro: number;
+    derivatives: number;
+    cycle: number;
+  };
+  regime_info?: {
+    regime: string;
+    modifier: number;
+  };
+  flags?: string[];
+  dca_mult?: number;
 };
 
 export function getRiskScore() {

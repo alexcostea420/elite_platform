@@ -425,8 +425,68 @@ export default async function RiskScorePage() {
                   </span>
                 )}
               </p>
+
+              {/* Regime + DCA + Last Updated */}
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                {riskScore.regime_info && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+                    🌍 {riskScore.regime_info.regime}
+                    <span className={riskScore.regime_info.modifier >= 0 ? "text-emerald-400" : "text-red-400"}>
+                      ({riskScore.regime_info.modifier >= 0 ? "+" : ""}{riskScore.regime_info.modifier})
+                    </span>
+                  </span>
+                )}
+                {riskScore.dca_mult != null && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
+                    💰 DCA: {riskScore.dca_mult}x
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-500">
+                  🕐 {updatedAt.toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" })} {updatedAt.toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
+                </span>
+              </div>
             </div>
           </section>
+
+          {/* ─── V2: LAYER SCORES ─── */}
+          {riskScore.layer_scores && (
+            <section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-5">
+              {[
+                { key: "onchain", label: "On-Chain", weight: "30%", icon: "⛓️" },
+                { key: "technical", label: "Tehnic", weight: "20%", icon: "📈" },
+                { key: "macro", label: "Macro", weight: "25%", icon: "🏦" },
+                { key: "derivatives", label: "Derivate", weight: "15%", icon: "📊" },
+                { key: "cycle", label: "Ciclu", weight: "10%", icon: "🔄" },
+              ].map(({ key, label, weight, icon }) => {
+                const val = safeNum((riskScore.layer_scores as Record<string, number>)?.[key], 50);
+                const { hex: layerHex } = scoreColor(val);
+                return (
+                  <article key={key} className="glass-card px-4 py-5 text-center">
+                    <span className="text-2xl">{icon}</span>
+                    <h4 className="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</h4>
+                    <p className="mt-1 font-data text-3xl font-bold" style={{ color: layerHex }}>{val}</p>
+                    <p className="text-[10px] text-slate-600">/ 100 ({weight})</p>
+                    {/* Mini progress bar */}
+                    <div className="mx-auto mt-2 h-1.5 w-full max-w-[80px] overflow-hidden rounded-full bg-white/5">
+                      <div className="h-full rounded-full transition-all" style={{ width: `${val}%`, backgroundColor: layerHex }} />
+                    </div>
+                  </article>
+                );
+              })}
+            </section>
+          )}
+
+          {/* ─── V2: FLAGS ─── */}
+          {riskScore.flags && riskScore.flags.length > 0 && (
+            <section className="mb-8 glass-card px-5 py-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">⚠️ Semnale active</p>
+              <div className="space-y-2">
+                {riskScore.flags.map((flag, i) => (
+                  <p key={i} className="text-sm text-slate-300">- {flag}</p>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Overrides / Alerte */}
           {overrides.length > 0 && (
