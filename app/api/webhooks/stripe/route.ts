@@ -108,9 +108,7 @@ export async function POST(request: NextRequest) {
         })
         .eq("id", userId);
 
-      console.log(
-        `Stripe: activated Elite for user ${userId}, plan ${planDuration}, expires ${expiresAt.toISOString()}`
-      );
+      console.log(`Stripe: activated Elite, plan ${planDuration}`);
     }
 
     return NextResponse.json({ received: true });

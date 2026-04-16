@@ -19,16 +19,11 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get("x-patreon-signature") ?? "";
     const event = request.headers.get("x-patreon-event") ?? "";
 
-    // Verify signature - log for debugging, accept if secret is set but sig doesn't match
+    // Verify signature
     const isValid = verifySignature(rawBody, signature);
     if (!isValid) {
-      // Log details for debugging (without exposing full secret)
-      const expectedSig = WEBHOOK_SECRET ? crypto.createHmac("md5", WEBHOOK_SECRET).update(rawBody).digest("hex") : "no-secret";
-      console.error(`Patreon webhook: sig mismatch. received=${signature?.slice(0, 8)}... expected=${expectedSig.slice(0, 8)}... bodyLen=${rawBody.length} secretLen=${WEBHOOK_SECRET.length}`);
-      // Accept anyway if we have a secret configured - sig issue is likely encoding
-      if (!WEBHOOK_SECRET) {
-        return NextResponse.json({ error: "No webhook secret configured" }, { status: 401 });
-      }
+      console.error(`Patreon webhook: sig mismatch. bodyLen=${rawBody.length}`);
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const payload = JSON.parse(rawBody);
@@ -38,7 +33,7 @@ export async function POST(request: NextRequest) {
     const lastChargeStatus = memberData?.last_charge_status; // Paid, Declined, Deleted, Pending, Refunded
     const pledgeAmountCents = memberData?.currently_entitled_amount_cents ?? 0;
 
-    console.log(`Patreon webhook: ${event} | email: ${email} | status: ${patronStatus} | pledge: $${pledgeAmountCents / 100}`);
+    console.log(`Patreon webhook: ${event} | status: ${patronStatus}`);
 
     const supabase = createServiceRoleSupabaseClient();
 
@@ -48,9 +43,16 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ ok: true, note: "No email" });
       }
 
-      // Check if user exists on platform
-      const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
-      const user = users?.users?.find((u) => u.email === email);
+      // Find user by email using admin API with page iteration
+      let user: { id: string; email?: string } | undefined;
+      let page = 1;
+      while (!user) {
+        const { data: userList } = await supabase.auth.admin.listUsers({ page, perPage: 500 });
+        if (!userList?.users?.length) break;
+        user = userList.users.find((u) => u.email === email);
+        if (userList.users.length < 500) break;
+        page++;
+      }
 
       if (user) {
         // User already has account - activate Elite
@@ -85,7 +87,7 @@ export async function POST(request: NextRequest) {
             : new Date(now.getTime() - 32 * 24 * 60 * 60 * 1000).toISOString(),
         }).eq("id", user.id);
 
-        console.log(`Patreon: activated Elite for ${email}, expires ${finalExpiry.toISOString()}`);
+        console.log(`Patreon: activated Elite, expires ${finalExpiry.toISOString()}`);
       } else {
         // User doesn't have account yet - create invite and send email
         const token = crypto.randomBytes(16).toString("hex");
@@ -111,7 +113,7 @@ export async function POST(request: NextRequest) {
           scheduled_at: new Date().toISOString(),
         });
 
-        console.log(`Patreon: new member ${email}, invite created: ${token}`);
+        console.log(`Patreon: new member, invite created`);
       }
 
       return NextResponse.json({ ok: true });
@@ -123,11 +125,18 @@ export async function POST(request: NextRequest) {
       // Check if cancelled or declined
       if (patronStatus === "declined_patron" || patronStatus === "former_patron") {
         // Don't immediately downgrade - let cron handle expiry
-        console.log(`Patreon: ${patronStatus} for ${email} - will expire naturally`);
+        console.log(`Patreon: ${patronStatus} - will expire naturally`);
       } else if (patronStatus === "active_patron" && lastChargeStatus === "Paid") {
         // Recurring payment success - extend by 30 days
-        const { data: users } = await supabase.auth.admin.listUsers({ perPage: 1000 });
-        const user = users?.users?.find((u) => u.email === email);
+        let user: { id: string; email?: string } | undefined;
+        let pg = 1;
+        while (!user) {
+          const { data: uList } = await supabase.auth.admin.listUsers({ page: pg, perPage: 500 });
+          if (!uList?.users?.length) break;
+          user = uList.users.find((u) => u.email === email);
+          if (uList.users.length < 500) break;
+          pg++;
+        }
 
         if (user) {
           const { data: profile } = await supabase
@@ -149,7 +158,7 @@ export async function POST(request: NextRequest) {
             subscription_expires_at: expiresAt.toISOString(),
           }).eq("id", user.id);
 
-          console.log(`Patreon: renewed ${email}, expires ${expiresAt.toISOString()}`);
+          console.log(`Patreon: renewed, expires ${expiresAt.toISOString()}`);
         }
       }
 
@@ -157,7 +166,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (event === "members:delete" || event === "members:pledge:delete") {
-      console.log(`Patreon: member deleted ${email}`);
+      console.log(`Patreon: member deleted`);
       return NextResponse.json({ ok: true });
     }
 

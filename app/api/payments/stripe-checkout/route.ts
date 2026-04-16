@@ -73,10 +73,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    const errMsg = error instanceof Error ? error.message : String(error);
-    console.error("Stripe checkout error:", errMsg, error);
+    console.error("Stripe checkout error:", error);
     return NextResponse.json(
-      { error: "Eroare la crearea sesiunii de plată.", details: errMsg },
+      { error: "Eroare la crearea sesiunii de plată." },
       { status: 500 }
     );
   }

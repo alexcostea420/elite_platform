@@ -228,7 +228,7 @@ export function WhaleTrackerClient({ data }: { data: WhaleData }) {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px]">
+          <table className="w-full min-w-[480px]">
             <thead>
               <tr className="border-t border-white/5">
                 <SortHeader

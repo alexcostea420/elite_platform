@@ -373,7 +373,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 <h3 className="text-lg font-semibold text-white">Ce deblochezi cu accesul premium</h3>
                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
                   {[
-                    "Biblioteca video completă ({videoCount}+ analize)",
+                    `Biblioteca video completă (${videoCount ?? 55}+ analize)`,
                     "Risk Score, Should I Trade, Indicatori TradingView",
                     "Discord Elite, sesiuni live, suport prioritar",
                   ].map((item) => (

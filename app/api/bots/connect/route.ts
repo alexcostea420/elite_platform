@@ -98,28 +98,20 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (!existingSub) {
-      const now = new Date();
-      const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      // Create pending subscription - requires payment before activation
       const { error: subError } = await serviceSupabase
         .from("bot_subscriptions")
         .insert({
           user_id: user.id,
           plan,
           price_usd: priceUsd,
-          status: "active",
-          started_at: now.toISOString(),
-          expires_at: expiresAt.toISOString(),
+          status: "pending",
+          started_at: new Date().toISOString(),
         });
 
       if (subError) {
         console.error("bot_subscriptions insert error:", subError);
       }
-
-      // Mark bot as active on profile
-      await serviceSupabase
-        .from("profiles")
-        .update({ bot_active: true })
-        .eq("id", user.id);
     }
 
     return NextResponse.json({

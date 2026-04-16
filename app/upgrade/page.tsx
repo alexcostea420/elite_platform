@@ -135,7 +135,7 @@ export default async function UpgradePage() {
             <article className="panel p-4 sm:p-6 md:p-8">
               <h2 className="text-2xl font-bold text-white">Free vs Elite</h2>
               <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
-                <div className="min-w-[420px]">
+                <div className="min-w-[360px]">
                   <div className="grid grid-cols-[1.2fr_0.9fr_0.9fr] bg-white/5 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">
                     <div className="px-3 py-3 sm:px-4 sm:py-4">Acces</div>
                     <div className="px-3 py-3 sm:px-4 sm:py-4 text-center">Free</div>

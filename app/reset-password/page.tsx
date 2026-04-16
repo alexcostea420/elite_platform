@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Container } from "@/components/ui/container";
 import { createBrowserClient } from "@supabase/ssr";
@@ -14,13 +14,13 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
 
+  const supabase = useMemo(() => createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
   useEffect(() => {
     // Supabase handles the token exchange from the URL hash automatically
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
     supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
         setReady(true);
@@ -32,8 +32,8 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     setError("");
 
-    if (password.length < 6) {
-      setError("Parola trebuie să aibă minim 6 caractere.");
+    if (password.length < 8) {
+      setError("Parola trebuie să aibă minim 8 caractere.");
       return;
     }
 
@@ -45,11 +45,6 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
-
       const { error: updateError } = await supabase.auth.updateUser({
         password,
       });
@@ -123,9 +118,9 @@ export default function ResetPasswordPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minim 6 caractere"
+                placeholder="Minim 8 caractere"
                 required
-                minLength={6}
+                minLength={8}
               />
             </div>
             <div>
