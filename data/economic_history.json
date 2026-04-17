@@ -1,0 +1,194 @@
+{
+  "fetched_at": "2026-04-17T16:31:28.415782",
+  "events": [
+    {
+      "date": "2025-04-24T12:30:00",
+      "event": "Durable Goods Orders MoM",
+      "actual": "9.2%",
+      "previous": "0.9%",
+      "forecast": "2%",
+      "category": "Durable Goods Orders",
+      "importance": 3
+    },
+    {
+      "date": "2025-04-24T14:00:00",
+      "event": "Existing Home Sales",
+      "actual": "4.02M",
+      "previous": "4.27M",
+      "forecast": "4.13M",
+      "category": "Existing Home Sales",
+      "importance": 3
+    },
+    {
+      "date": "2025-04-29T14:00:00",
+      "event": "JOLTs Job Openings",
+      "actual": "7.192M",
+      "previous": "7.48M",
+      "forecast": "7.48M",
+      "category": "Job Offers",
+      "importance": 3
+    },
+    {
+      "date": "2025-05-22T14:00:00",
+      "event": "Existing Home Sales",
+      "actual": "4M",
+      "previous": "4.02M",
+      "forecast": "4.1M",
+      "category": "Existing Home Sales",
+      "importance": 3
+    },
+    {
+      "date": "2025-05-27T12:30:00",
+      "event": "Durable Goods Orders MoM",
+      "actual": "-6.3%",
+      "previous": "7.6%",
+      "forecast": "-7.8%",
+      "category": "Durable Goods Orders",
+      "importance": 3
+    },
+    {
+      "date": "2025-05-28T18:00:00",
+      "event": "FOMC Minutes",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-06-23T14:00:00",
+      "event": "Existing Home Sales",
+      "actual": "4.03M",
+      "previous": "4M",
+      "forecast": "3.96M",
+      "category": "Existing Home Sales",
+      "importance": 3
+    },
+    {
+      "date": "2025-06-24T14:00:00",
+      "event": "Fed Chair Powell Testimony",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-06-25T14:00:00",
+      "event": "Fed Chair Powell Testimony",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-07-22T12:30:00",
+      "event": "Fed Chair Powell Speech",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-07-23T14:00:00",
+      "event": "Existing Home Sales",
+      "actual": "3.93M",
+      "previous": "4.04M",
+      "forecast": "4.01M",
+      "category": "Existing Home Sales",
+      "importance": 3
+    },
+    {
+      "date": "2025-07-25T12:30:00",
+      "event": "Durable Goods Orders MoM",
+      "actual": "-9.3%",
+      "previous": "16.5%",
+      "forecast": "-10.8%",
+      "category": "Durable Goods Orders",
+      "importance": 3
+    },
+    {
+      "date": "2025-08-20T18:00:00",
+      "event": "FOMC Minutes",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-08-21T14:00:00",
+      "event": "Existing Home Sales",
+      "actual": "4.01M",
+      "previous": "3.93M",
+      "forecast": "3.92M",
+      "category": "Existing Home Sales",
+      "importance": 3
+    },
+    {
+      "date": "2025-08-22T14:00:00",
+      "event": "Fed Chair Powell Speech",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-09-23T16:35:00",
+      "event": "Fed Chair Powell Speech",
+      "actual": "",
+      "previous": "",
+      "forecast": "",
+      "category": "Interest Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-09-25T12:30:00",
+      "event": "GDP Growth Rate QoQ Final",
+      "actual": "3.8%",
+      "previous": "-0.6%",
+      "forecast": "3.3%",
+      "category": "GDP Growth Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-09-25T12:30:00",
+      "event": "Durable Goods Orders MoM",
+      "actual": "2.9%",
+      "previous": "-2.7%",
+      "forecast": "-0.5%",
+      "category": "Durable Goods Orders",
+      "importance": 3
+    },
+    {
+      "date": "2025-10-23T14:00:00",
+      "event": "Existing Home Sales",
+      "actual": "4.06M",
+      "previous": "4M",
+      "forecast": "4.1M",
+      "category": "Existing Home Sales",
+      "importance": 3
+    },
+    {
+      "date": "2025-10-24T12:30:00",
+      "event": "Core Inflation Rate YoY",
+      "actual": "3%",
+      "previous": "3.1%",
+      "forecast": "3.1%",
+      "category": "Core Inflation Rate",
+      "importance": 3
+    },
+    {
+      "date": "2025-10-24T12:30:00",
+      "event": "Inflation Rate YoY",
+      "actual": "3%",
+      "previous": "2.9%",
+      "forecast": "3.1%",
+      "category": "Inflation Rate",
+      "importance": 3
+    }
+  ]
+}

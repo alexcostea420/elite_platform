@@ -12,6 +12,14 @@ type CalendarEvent = {
   btcImpact: string | null;
 };
 
+type HistoricalEvent = {
+  date: string;
+  event: string;
+  actual: string | number | null;
+  previous: string | number | null;
+  forecast: string | number | null;
+};
+
 function getTimeUntil(dateStr: string): string {
   const now = Date.now();
   const eventTime = new Date(dateStr).getTime();
@@ -44,8 +52,11 @@ function groupByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
 }
 
 export function CalendarClient() {
+  const [tab, setTab] = useState<"week" | "history">("week");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [history, setHistory] = useState<HistoricalEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
   const [, setTick] = useState(0);
 
@@ -56,6 +67,17 @@ export function CalendarClient() {
       .catch(() => setEvents([]))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (tab === "history" && history.length === 0) {
+      setHistoryLoading(true);
+      fetch("/api/calendar/history")
+        .then((r) => r.json())
+        .then((d) => setHistory(d.events ?? []))
+        .catch(() => setHistory([]))
+        .finally(() => setHistoryLoading(false));
+    }
+  }, [tab, history.length]);
 
   // Update countdown every minute
   useEffect(() => {
@@ -71,6 +93,152 @@ export function CalendarClient() {
     );
   }
 
+  return (
+    <div className="space-y-6">
+      {/* Tabs */}
+      <div className="flex gap-2">
+        <button
+          className={`rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
+            tab === "week"
+              ? "bg-accent-emerald text-crypto-dark"
+              : "bg-white/5 text-slate-400 hover:bg-white/10"
+          }`}
+          onClick={() => setTab("week")}
+          type="button"
+        >
+          Săptămâna asta
+        </button>
+        <button
+          className={`rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
+            tab === "history"
+              ? "bg-accent-emerald text-crypto-dark"
+              : "bg-white/5 text-slate-400 hover:bg-white/10"
+          }`}
+          onClick={() => setTab("history")}
+          type="button"
+        >
+          Istoric rezultate
+        </button>
+      </div>
+
+      {tab === "history" ? (
+        <HistoryView events={history} loading={historyLoading} />
+      ) : (
+        <WeekView events={events} expandedEvent={expandedEvent} setExpandedEvent={setExpandedEvent} />
+      )}
+    </div>
+  );
+}
+
+/* ── History View ── */
+
+function HistoryView({ events, loading }: { events: HistoricalEvent[]; loading: boolean }) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-emerald border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (events.length === 0) {
+    return (
+      <div className="glass-card p-8 text-center">
+        <div className="text-4xl">📊</div>
+        <h2 className="mt-4 text-xl font-bold text-white">Date istorice indisponibile</h2>
+        <p className="mt-2 text-slate-400">Încearcă din nou mai târziu.</p>
+      </div>
+    );
+  }
+
+  // Group by month, most recent first
+  const byMonth: Record<string, HistoricalEvent[]> = {};
+  for (const e of [...events].reverse()) {
+    const month = new Date(e.date).toLocaleDateString("ro-RO", { month: "long", year: "numeric" });
+    if (!byMonth[month]) byMonth[month] = [];
+    byMonth[month].push(e);
+  }
+
+  function getSurpriseColor(actual: string | number | null, forecast: string | number | null): string {
+    if (actual == null || forecast == null || actual === "" || forecast === "") return "text-slate-400";
+    const a = parseFloat(String(actual).replace(/[^0-9.-]/g, ""));
+    const f = parseFloat(String(forecast).replace(/[^0-9.-]/g, ""));
+    if (isNaN(a) || isNaN(f)) return "text-slate-400";
+    if (a > f) return "text-emerald-400";
+    if (a < f) return "text-red-400";
+    return "text-amber-400";
+  }
+
+  return (
+    <div className="space-y-6">
+      <p className="text-sm text-slate-500">
+        Rezultatele evenimentelor economice din ultimele luni. Verde = peste așteptări. Roșu = sub așteptări.
+      </p>
+
+      {Object.entries(byMonth).map(([month, monthEvents]) => (
+        <div key={month}>
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+            {month}
+          </h3>
+          <div className="space-y-2">
+            {monthEvents.map((e, i) => {
+              const actual = e.actual != null && e.actual !== "" ? String(e.actual) : "-";
+              const forecast = e.forecast != null && e.forecast !== "" ? String(e.forecast) : "-";
+              const previous = e.previous != null && e.previous !== "" ? String(e.previous) : "-";
+              const surpriseColor = getSurpriseColor(e.actual, e.forecast);
+
+              return (
+                <div key={`${e.date}-${e.event}-${i}`} className="glass-card px-4 py-3 md:px-5">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-white">{e.event}</p>
+                      <p className="text-xs text-slate-500">
+                        {new Date(e.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" })}
+                      </p>
+                    </div>
+                    <div className="flex gap-4 text-xs sm:gap-6">
+                      <div className="text-center">
+                        <span className="text-slate-600">Actual</span>
+                        <p className={`font-data text-sm font-bold ${surpriseColor}`}>{actual}</p>
+                      </div>
+                      <div className="text-center">
+                        <span className="text-slate-600">Așteptări</span>
+                        <p className="font-data text-sm font-semibold text-white">{forecast}</p>
+                      </div>
+                      <div className="text-center">
+                        <span className="text-slate-600">Anterior</span>
+                        <p className="font-data text-sm font-semibold text-slate-400">{previous}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <div className="rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-center">
+        <p className="text-xs text-slate-600">
+          Date din Trading Economics. Verde = peste așteptări (pozitiv piață).
+          Roșu = sub așteptări (negativ piață). Impactul real depinde de context.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Week View ── */
+
+function WeekView({
+  events,
+  expandedEvent,
+  setExpandedEvent,
+}: {
+  events: CalendarEvent[];
+  expandedEvent: string | null;
+  setExpandedEvent: (v: string | null) => void;
+}) {
   if (events.length === 0) {
     return (
       <div className="glass-card p-8 text-center">
