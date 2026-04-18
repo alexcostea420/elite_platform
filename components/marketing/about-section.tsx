@@ -14,7 +14,7 @@ const bulletPoints = [
 ];
 
 const credibilityStats = [
-  { value: "4+", label: "Ani de experiență", icon: "📈" },
+  { value: "5+", label: "Ani de experiență", icon: "📈" },
   { value: "350+", label: "Membri în comunitate", icon: "👥" },
   { value: "16", label: "Acțiuni monitorizate", icon: "📊" },
 ];
@@ -101,7 +101,7 @@ export function AboutSection() {
             <div>
               <SectionHeading align="left" title={<>Despre <span className="gradient-text">{siteConfig.creator}</span></>} />
               <div className="mt-6 space-y-4 text-lg leading-relaxed text-slate-300">
-                <p><strong className="text-white">4 ani de experiență în trading și investiții crypto.</strong></p>
+                <p><strong className="text-white">5 ani de experiență în trading și investiții crypto.</strong></p>
                 <p>O comunitate de peste <span className="font-semibold text-white">350</span> de investitori și traderi activi.</p>
                 <p>Strategii practice, nu teorie.</p>
                 <p>Indicatori exclusivi pentru TradingView.</p>
