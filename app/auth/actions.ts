@@ -215,35 +215,6 @@ export async function signupWithInviteAction(formData: FormData) {
   );
 }
 
-export async function activateTrialAction() {
-  const supabase = createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const serviceClient = createServiceRoleSupabaseClient();
-
-  // Check if trial already used
-  const { data: profile } = await serviceClient
-    .from("profiles")
-    .select("trial_used_at, subscription_tier")
-    .eq("id", user.id)
-    .single();
-
-  if (profile?.trial_used_at) {
-    redirect("/dashboard?error=" + encodeURIComponent("Ai folosit deja perioada de probă."));
-  }
-
-  if (profile?.subscription_tier === "elite") {
-    redirect("/dashboard?error=" + encodeURIComponent("Ai deja acces Elite."));
-  }
-
-  await grantTrial(user.id);
-  redirect("/dashboard?trial=activated");
-}
-
 export async function logoutAction() {
   const supabase = createServerSupabaseClient();
   await supabase.auth.signOut();

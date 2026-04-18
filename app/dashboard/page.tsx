@@ -90,6 +90,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isAdmin = profile?.role === "admin";
   const isEliteUser = profile?.subscription_tier === "elite";
+  const isTrial = isEliteUser && profile?.subscription_status === "trial";
   const canActivateTrial = !isEliteUser && !profile?.trial_used_at;
   const desiredDiscordRole = getDiscordRoleLabel(profile?.subscription_tier ?? null);
   const daysLeft = getRemainingDays(profile?.subscription_expires_at ?? null);
@@ -125,10 +126,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <p className="text-sm text-slate-400">
               Bine ai venit, <span className="font-medium text-white">{identity.firstName}</span>
             </p>
-            {isEliteUser && daysLeft !== null && daysLeft > 0 && (
+            {isEliteUser && daysLeft !== null && daysLeft > 0 && !isTrial && (
               <p className="text-xs text-slate-500">
                 Elite · <span className="font-mono text-slate-400">{daysLeft}</span> zile rămase
                 {profile?.discord_user_id && <span className="ml-2 text-green-400">· Discord sincronizat</span>}
+              </p>
+            )}
+            {isTrial && daysLeft !== null && daysLeft > 0 && (
+              <p className="text-xs text-amber-400">
+                🎁 Trial gratuit · <span className="font-mono">{daysLeft}</span> {daysLeft === 1 ? "zi" : "zile"} rămase
+                <a href="/upgrade" className="ml-2 text-accent-emerald hover:underline">Upgrade</a>
               </p>
             )}
           </div>
@@ -138,21 +145,33 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <section className="mb-6 rounded-xl border border-red-500/20 bg-red-500/5 px-5 py-4 animate-fade-in-up">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="font-semibold text-red-400">Abonamentul tău a expirat</p>
-                  <p className="mt-1 text-sm text-slate-400">Reînnoiește pentru a păstra accesul la conținutul Elite.</p>
+                  <p className="font-semibold text-red-400">
+                    {isTrial ? "Trial-ul tău a expirat" : "Abonamentul tău a expirat"}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-400">
+                    {isTrial ? "Spune-ne cum a fost experiența și alege un plan." : "Reînnoiește pentru a păstra accesul la conținutul Elite."}
+                  </p>
                 </div>
-                <Link className="accent-button whitespace-nowrap" href="/upgrade">Reînnoiește</Link>
+                <Link className="accent-button whitespace-nowrap" href={isTrial ? "/dashboard/trial-feedback" : "/upgrade"}>
+                  {isTrial ? "Spune-ne părerea" : "Reînnoiește"}
+                </Link>
               </div>
             </section>
           )}
-          {daysLeft !== null && daysLeft > 0 && daysLeft <= 7 && (
+          {daysLeft !== null && daysLeft > 0 && daysLeft <= (isTrial ? 3 : 7) && (
             <section className="mb-6 rounded-xl border border-warning/20 bg-warning/5 px-5 py-4 animate-fade-in-up">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="font-semibold text-yellow-400">Abonamentul tău expiră în {daysLeft} {daysLeft === 1 ? "zi" : "zile"}</p>
-                  <p className="mt-1 text-sm text-slate-400">Reînnoiește acum ca să nu pierzi accesul.</p>
+                  <p className="font-semibold text-yellow-400">
+                    {isTrial ? "Trial-ul tău" : "Abonamentul tău"} expiră în {daysLeft} {daysLeft === 1 ? "zi" : "zile"}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-400">
+                    {isTrial ? "Alege un plan ca să păstrezi accesul Elite." : "Reînnoiește acum ca să nu pierzi accesul."}
+                  </p>
                 </div>
-                <Link className="accent-button whitespace-nowrap" href="/upgrade">Reînnoiește</Link>
+                <Link className="accent-button whitespace-nowrap" href="/upgrade">
+                  {isTrial ? "Alege un plan" : "Reînnoiește"}
+                </Link>
               </div>
             </section>
           )}

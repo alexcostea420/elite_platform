@@ -180,7 +180,7 @@ export default async function UpgradePage() {
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white md:text-3xl">Activează Trial Gratuit</h3>
                       <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - €0</p>
-                      <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
+                      <p className="mt-1 text-sm text-amber-400">O singură perioadă de probă per cont</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
                         {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
                           <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>
@@ -201,7 +201,7 @@ export default async function UpgradePage() {
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-white md:text-3xl">Încearcă Gratis!</h3>
                       <p className="mt-2 text-lg text-accent-emerald">7 zile acces complet - €0</p>
-                      <p className="mt-1 text-sm text-amber-400">Limitat: 1 trial gratuit pe zi</p>
+                      <p className="mt-1 text-sm text-amber-400">O singură perioadă de probă per cont</p>
                       <div className="mt-3 flex flex-wrap justify-center gap-2 md:justify-start">
                         {["Portofoliu Elite live", "Chat cu Alex", "Canale Discord Elite", "Fără card"].map((perk) => (
                           <span key={perk} className="rounded-full border border-accent-emerald/30 bg-accent-emerald/5 px-3 py-1 text-xs text-accent-emerald">{perk}</span>

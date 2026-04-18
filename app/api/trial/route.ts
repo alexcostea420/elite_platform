@@ -76,12 +76,13 @@ export async function POST() {
       return NextResponse.json({ error: "Activarea trial-ului a esuat. Incearca din nou." }, { status: 500 });
     }
 
-    // Queue email drip sequence
+    // Queue email drip sequence (timed for 7-day trial)
+    const h = 60 * 60 * 1000;
     await serviceSupabase.from("email_drip_queue").insert([
-      { user_id: user.id, email: user.email, template: "welcome", subject: "Contul tau Elite e activ - uite ce sa faci prima data", scheduled_at: now.toISOString() },
-      { user_id: user.id, email: user.email, template: "value_day1", subject: "Greseala #1 care costa bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() },
-      { user_id: user.id, email: user.email, template: "social_proof", subject: "\"De cand am intrat in Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString() },
-      { user_id: user.id, email: user.email, template: "trial_expiry", subject: "Accesul tau Elite se inchide in cateva ore", scheduled_at: new Date(now.getTime() + 65 * 60 * 60 * 1000).toISOString() },
+      { user_id: user.id, email: user.email, template: "welcome", subject: "Contul tău Elite e activ - uite ce să faci prima dată", scheduled_at: now.toISOString() },
+      { user_id: user.id, email: user.email, template: "value_day1", subject: "Greșeala #1 care costă bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 48 * h).toISOString() },
+      { user_id: user.id, email: user.email, template: "social_proof", subject: "\"De când am intrat în Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 120 * h).toISOString() },
+      { user_id: user.id, email: user.email, template: "trial_expiry", subject: "Accesul tău Elite se închide mâine", scheduled_at: new Date(now.getTime() + 156 * h).toISOString() },
     ]);
 
     return NextResponse.json({ ok: true, expires_at: trialExpires.toISOString() });
