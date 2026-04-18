@@ -13,6 +13,8 @@ type CryptoData = {
   volume24h: number;
   ath: number;
   pctFromATH: number;
+  cyclePeak: number;
+  pctFromCyclePeak: number;
   sparkline: number[];
   image: string;
 };
@@ -38,14 +40,19 @@ const ZONES: Record<string, CryptoZones> = {
   TAO: { buy1: 250, buy2: 180, sell1: 600, sell2: 900 },
   BNB: { buy1: 550, buy2: 400, sell1: 800, sell2: 1000 },
   DOT: { buy1: 3.50, buy2: 2.50, sell1: 8.00, sell2: 15.00 },
-  MATIC: { buy1: 0.15, buy2: 0.10, sell1: 0.50, sell2: 1.00 },
   NEAR: { buy1: 2.50, buy2: 1.50, sell1: 7.00, sell2: 12.00 },
   LTC: { buy1: 70, buy2: 50, sell1: 120, sell2: 180 },
   UNI: { buy1: 5, buy2: 3.50, sell1: 15, sell2: 25 },
-  ICP: { buy1: 7, buy2: 4, sell1: 18, sell2: 30 },
   RENDER: { buy1: 4, buy2: 2.50, sell1: 12, sell2: 20 },
   INJ: { buy1: 8, buy2: 5, sell1: 30, sell2: 50 },
   HYPE: { buy1: 15, buy2: 10, sell1: 35, sell2: 55 },
+  CRV: { buy1: 0.40, buy2: 0.25, sell1: 1.50, sell2: 2.50 },
+  CVX: { buy1: 2, buy2: 1, sell1: 5, sell2: 8 },
+  SEI: { buy1: 0.15, buy2: 0.10, sell1: 0.80, sell2: 1.20 },
+  ALGO: { buy1: 0.15, buy2: 0.10, sell1: 0.45, sell2: 0.65 },
+  ENA: { buy1: 0.25, buy2: 0.15, sell1: 1.00, sell2: 1.50 },
+  FIL: { buy1: 2.50, buy2: 1.50, sell1: 8, sell2: 13 },
+  IOTA: { buy1: 0.15, buy2: 0.10, sell1: 0.45, sell2: 0.70 },
 };
 
 function getSignal(zones: CryptoZones | undefined, price: number): string {
@@ -106,7 +113,7 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
   );
 }
 
-type SortKey = "rank" | "price" | "change24h" | "change7d" | "pctFromATH" | "signal";
+type SortKey = "rank" | "price" | "change24h" | "change7d" | "pctFromCyclePeak" | "signal";
 type Filter = "all" | "buy" | "sell" | "hold";
 
 export function CryptoClient() {
@@ -201,7 +208,7 @@ export function CryptoClient() {
       case "price": cmp = a.price - b.price; break;
       case "change24h": cmp = a.change24h - b.change24h; break;
       case "change7d": cmp = a.change7d - b.change7d; break;
-      case "pctFromATH": cmp = a.pctFromATH - b.pctFromATH; break;
+      case "pctFromCyclePeak": cmp = a.pctFromCyclePeak - b.pctFromCyclePeak; break;
       case "signal": {
         const order = (s: string) => s.includes("BUY") ? 0 : s.includes("SELL") ? 2 : 1;
         cmp = order(a.signal) - order(b.signal);
@@ -249,7 +256,7 @@ export function CryptoClient() {
           { key: "rank" as SortKey, label: "#" },
           { key: "change24h" as SortKey, label: "24h" },
           { key: "change7d" as SortKey, label: "7d" },
-          { key: "pctFromATH" as SortKey, label: "ATH" },
+          { key: "pctFromCyclePeak" as SortKey, label: "Ciclu" },
           { key: "signal" as SortKey, label: "Semnal" },
         ]).map(({ key, label }) => (
           <button key={key} className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${sortBy === key ? "bg-accent-emerald/20 text-accent-emerald" : "bg-white/5 text-slate-500"}`} onClick={() => handleSort(key)} type="button">
@@ -271,7 +278,7 @@ export function CryptoClient() {
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change7d")}>7d {sortBy === "change7d" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3">7d Chart</th>
                 <th className="px-4 py-3">Market Cap</th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromATH")}>% ATH {sortBy === "pctFromATH" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
+                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromCyclePeak")}>% Vârf {sortBy === "pctFromCyclePeak" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3">Poziție range</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("signal")}>Semnal {sortBy === "signal" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
               </tr>
@@ -312,8 +319,8 @@ export function CryptoClient() {
                     </td>
                     <td className="px-4 py-3 text-slate-400">{formatMarketCap(coin.marketCap)}</td>
                     <td className="px-4 py-3">
-                      <span className={coin.pctFromATH > -20 ? "text-amber-400" : "text-red-400"}>
-                        {coin.pctFromATH.toFixed(1)}%
+                      <span className={coin.pctFromCyclePeak > -20 ? "text-amber-400" : "text-red-400"}>
+                        {coin.pctFromCyclePeak.toFixed(1)}%
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -378,7 +385,7 @@ export function CryptoClient() {
 
               <div className="mt-2 flex gap-4 text-xs text-slate-500">
                 <span>7d: <span className={coin.change7d >= 0 ? "text-emerald-400" : "text-red-400"}>{coin.change7d >= 0 ? "+" : ""}{coin.change7d.toFixed(1)}%</span></span>
-                <span>ATH: <span className={coin.pctFromATH > -20 ? "text-amber-400" : "text-red-400"}>{coin.pctFromATH.toFixed(1)}%</span></span>
+                <span>Vârf: <span className={coin.pctFromCyclePeak > -20 ? "text-amber-400" : "text-red-400"}>{coin.pctFromCyclePeak.toFixed(1)}%</span></span>
                 <span>Cap: {formatMarketCap(coin.marketCap)}</span>
               </div>
 
