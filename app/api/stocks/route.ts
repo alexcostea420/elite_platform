@@ -64,7 +64,7 @@ async function fetchFinviz(ticker: string): Promise<StockData | null> {
       price,
       change: changeStr,
       changePct,
-      marketCap: getField("Market Cap"),
+      marketCap: getField("Market Cap").replace(/\.$/, ""),
       pe: getField("P/E"),
       volume: getField("Volume"),
       w52High,
