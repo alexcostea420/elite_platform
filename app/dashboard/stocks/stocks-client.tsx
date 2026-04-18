@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type StockZones = {
   ticker: string;
@@ -22,6 +22,20 @@ type LiveData = {
   w52High: number;
   w52Low: number;
   pctFromATH: number;
+};
+
+type ZoneHit = {
+  zone: string;
+  price: number;
+  date: string;
+  hit: boolean;
+};
+
+type TickerHistory = {
+  ticker: string;
+  zones: ZoneHit[];
+  low3m: number;
+  high3m: number;
 };
 
 type MergedStock = StockZones & Partial<LiveData> & { price: number };
@@ -80,11 +94,13 @@ type Filter = "all" | "buy" | "sell" | "hold";
 
 export function StocksClient() {
   const [liveData, setLiveData] = useState<Record<string, LiveData>>({});
+  const [zoneHistory, setZoneHistory] = useState<Record<string, TickerHistory>>({});
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<SortKey>("ticker");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Filter>("all");
   const [updatedAt, setUpdatedAt] = useState<string>("");
+  const [expandedTicker, setExpandedTicker] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/stocks")
@@ -97,6 +113,15 @@ export function StocksClient() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
+
+    fetch("/api/stocks/history")
+      .then((r) => r.json())
+      .then((d) => {
+        const map: Record<string, TickerHistory> = {};
+        for (const h of d.history ?? []) map[h.ticker] = h;
+        setZoneHistory(map);
+      })
+      .catch(() => {});
   }, []);
 
   // Merge zones + live data
@@ -239,7 +264,11 @@ export function StocksClient() {
                     const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
 
                     return (
-                      <tr key={stock.ticker} className="border-b border-white/5 transition hover:bg-white/[0.02]">
+                      <React.Fragment key={stock.ticker}>
+                      <tr
+                        className="border-b border-white/5 cursor-pointer transition hover:bg-white/[0.02]"
+                        onClick={() => setExpandedTicker(expandedTicker === stock.ticker ? null : stock.ticker)}
+                      >
                         <td className="px-4 py-3">
                           <a
                             href={`https://finviz.com/quote.ashx?t=${stock.ticker}`}
@@ -290,6 +319,34 @@ export function StocksClient() {
                           </span>
                         </td>
                       </tr>
+                      {expandedTicker === stock.ticker && zoneHistory[stock.ticker]?.zones && (
+                        <tr className="border-b border-white/5 bg-white/[0.01]">
+                          <td colSpan={10} className="px-4 py-3">
+                            <div className="flex flex-wrap gap-4 text-xs">
+                              <span className="font-semibold text-slate-500">Zone atinse (3 luni):</span>
+                              {zoneHistory[stock.ticker].zones.map((z) => (
+                                <span key={z.zone} className="flex items-center gap-1.5">
+                                  <span className={z.hit ? "text-emerald-400" : "text-slate-600"}>
+                                    {z.hit ? "✅" : "⬜"}
+                                  </span>
+                                  <span className={z.hit ? "text-slate-300" : "text-slate-600"}>
+                                    {z.zone} ({formatPrice(z.price)})
+                                  </span>
+                                  {z.hit && z.date && (
+                                    <span className="text-slate-600">
+                                      - {new Date(z.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
+                                    </span>
+                                  )}
+                                </span>
+                              ))}
+                              <span className="text-slate-600">
+                                3M Low: {formatPrice(zoneHistory[stock.ticker].low3m)} | 3M High: {formatPrice(zoneHistory[stock.ticker].high3m)}
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                      </React.Fragment>
                     );
                   })}
                 </tbody>
@@ -351,6 +408,27 @@ export function StocksClient() {
                     <span>S1: {formatPrice(stock.sell1)}</span>
                     <span>S2: {formatPrice(stock.sell2)}</span>
                   </div>
+
+                  {/* Zone hits - 3 months */}
+                  {zoneHistory[stock.ticker]?.zones && (
+                    <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/5 pt-3">
+                      {zoneHistory[stock.ticker].zones.map((z) => (
+                        <div key={z.zone} className="flex items-center gap-1.5 text-[11px]">
+                          <span className={z.hit ? "text-emerald-400" : "text-slate-600"}>
+                            {z.hit ? "✅" : "⬜"}
+                          </span>
+                          <span className={z.hit ? "text-slate-300" : "text-slate-600"}>
+                            {z.zone} ({formatPrice(z.price)})
+                          </span>
+                          {z.hit && z.date && (
+                            <span className="text-[10px] text-slate-600">
+                              {new Date(z.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </a>
               );
             })}
