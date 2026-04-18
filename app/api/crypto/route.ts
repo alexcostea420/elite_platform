@@ -29,34 +29,33 @@ type CryptoData = {
   image: string;
 };
 
-// Cycle peaks: highest price in March 2024 or December 2024
-// These are the two major cycle tops for altcoins
+// Cycle peaks: highest price from March 2024 to present (this bull cycle)
 const CYCLE_PEAKS: Record<string, number> = {
-  bitcoin: 73750,
-  ethereum: 4090,
-  solana: 210,
-  ripple: 2.90,
+  bitcoin: 126210,
+  ethereum: 4954,
+  solana: 295,
+  ripple: 3.66,
   dogecoin: 0.48,
-  cardano: 1.33,
-  "avalanche-2": 65,
-  chainlink: 30,
-  sui: 5.35,
-  tao: 730,
-  binancecoin: 793,
-  polkadot: 11.60,
-  near: 9.00,
-  litecoin: 130,
-  uniswap: 17.50,
-  "render-token": 13.60,
-  "injective-protocol": 52,
-  hyperliquid: 35,
-  "curve-dao-token": 2.30,
-  "convex-finance": 7.50,
-  "sei-network": 1.15,
-  algorand: 0.62,
+  cardano: 1.32,
+  "avalanche-2": 65.55,
+  chainlink: 30.92,
+  sui: 5.37,
+  tao: 760,
+  binancecoin: 1376,
+  polkadot: 10.40,
+  near: 8.88,
+  litecoin: 143,
+  uniswap: 18.60,
+  "render-token": 13.53,
+  "injective-protocol": 52.94,
+  hyperliquid: 59.37,
+  "curve-dao-token": 1.33,
+  "convex-finance": 7.99,
+  "sei-network": 1.14,
+  algorand: 0.51,
   ethena: 1.52,
-  filecoin: 12.50,
-  iota: 0.65,
+  filecoin: 11.48,
+  iota: 0.62,
 };
 
 export async function GET() {
