@@ -65,7 +65,7 @@ function getSignalFromPrice(zones: StockZones, price: number): string {
   if (price <= zones.buy1) return "BUY 1";
   if (price >= zones.sell2) return "SELL 2";
   if (price >= zones.sell1) return "SELL 1";
-  return "HOLD";
+  return "WAIT";
 }
 
 function getSignalStyle(signal: string) {
@@ -219,7 +219,7 @@ export function StocksClient() {
   const filtered = merged.filter((s) => {
     if (filter === "buy") return s.signal.includes("BUY");
     if (filter === "sell") return s.signal.includes("SELL");
-    if (filter === "hold") return s.signal === "HOLD";
+    if (filter === "hold") return s.signal === "WAIT";
     return true;
   });
 
@@ -251,7 +251,7 @@ export function StocksClient() {
 
   const buyCount = merged.filter((s) => s.signal.includes("BUY")).length;
   const sellCount = merged.filter((s) => s.signal.includes("SELL")).length;
-  const holdCount = merged.filter((s) => s.signal === "HOLD").length;
+  const holdCount = merged.filter((s) => s.signal === "WAIT").length;
 
   // Market summary
   const avgChange = merged.length > 0
@@ -300,7 +300,7 @@ export function StocksClient() {
           type="button"
         >
           <p className="font-data text-3xl font-bold text-slate-400">{holdCount}</p>
-          <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Așteaptă</p>
+          <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Neutru</p>
         </button>
         <button
           className={`glass-card px-4 py-5 text-center transition ${filter === "sell" ? "border-orange-400/50 bg-orange-400/5" : ""}`}

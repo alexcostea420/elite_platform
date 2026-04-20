@@ -96,35 +96,6 @@ const ZONES: Record<string, CryptoZones> = {
   IOTA: altZone("IOTA"),
 };
 
-// Calculate RSI from price array (standard 14-period)
-function calcRSI(prices: number[], period = 14): number | null {
-  if (prices.length < period + 1) return null;
-  let avgGain = 0;
-  let avgLoss = 0;
-
-  // Initial average
-  for (let i = 1; i <= period; i++) {
-    const change = prices[i] - prices[i - 1];
-    if (change > 0) avgGain += change;
-    else avgLoss += Math.abs(change);
-  }
-  avgGain /= period;
-  avgLoss /= period;
-
-  // Smooth through remaining data
-  for (let i = period + 1; i < prices.length; i++) {
-    const change = prices[i] - prices[i - 1];
-    const gain = change > 0 ? change : 0;
-    const loss = change < 0 ? Math.abs(change) : 0;
-    avgGain = (avgGain * (period - 1) + gain) / period;
-    avgLoss = (avgLoss * (period - 1) + loss) / period;
-  }
-
-  if (avgLoss === 0) return 100;
-  const rs = avgGain / avgLoss;
-  return 100 - 100 / (1 + rs);
-}
-
 function getRSIColor(rsi: number): string {
   if (rsi >= 70) return "text-red-400 bg-red-400/10";         // Supracumpărat
   if (rsi >= 60) return "text-orange-400 bg-orange-400/10";   // Cald
@@ -147,7 +118,7 @@ function getSignal(zones: CryptoZones | undefined, price: number): string {
   if (price <= zones.buy1) return "BUY 1";
   if (price >= zones.sell2) return "SELL 2";
   if (price >= zones.sell1) return "SELL 1";
-  return "HOLD";
+  return "WAIT";
 }
 
 function getSignalStyle(signal: string) {
@@ -248,6 +219,7 @@ export function CryptoClient() {
   const [tab, setTab] = useState<Tab>("all");
   const [updatedAt, setUpdatedAt] = useState("");
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
+  const [rsiData, setRsiData] = useState<Record<string, number | null>>({});
   const prevPrices = useRef<Record<string, number>>({});
 
   useEffect(() => {
@@ -286,6 +258,15 @@ export function CryptoClient() {
     const interval = setInterval(fetchData, 60_000);
     return () => clearInterval(interval);
   }, [fetchData, accepted]);
+
+  // Fetch weekly RSI separately (cached 1h server-side)
+  useEffect(() => {
+    if (!accepted) return;
+    fetch("/api/crypto/rsi")
+      .then((r) => r.json())
+      .then((d) => setRsiData(d.rsi ?? {}))
+      .catch(() => {});
+  }, [accepted]);
 
   const handleAccept = () => {
     setAccepted(true);
@@ -330,8 +311,8 @@ export function CryptoClient() {
   const withSignals = coins.map((c, i) => {
     const zones = ZONES[c.symbol];
     const signal = getSignal(zones, c.price);
-    // Calculate RSI from sparkline (7d hourly data ≈ 168 points)
-    const rsi = calcRSI(c.sparkline, 14);
+    // Weekly RSI from API (Yahoo Finance, 14-period on weekly closes)
+    const rsi = rsiData[c.symbol] ?? null;
     // Use last 48 points for visual sparkline
     const sparkVisual = c.sparkline.slice(-48);
     return { ...c, signal, zones, rank: i + 1, rsi, sparkVisual };
@@ -347,7 +328,7 @@ export function CryptoClient() {
 
   const buyCount = withSignals.filter((s) => s.signal.includes("BUY")).length;
   const sellCount = withSignals.filter((s) => s.signal.includes("SELL")).length;
-  const holdCount = withSignals.filter((s) => s.signal === "HOLD").length;
+  const holdCount = withSignals.filter((s) => s.signal === "WAIT").length;
 
   // Apply tab filter first
   let tabFiltered = withSignals;
@@ -361,7 +342,7 @@ export function CryptoClient() {
   const filtered = tabFiltered.filter((s) => {
     if (filter === "buy") return s.signal.includes("BUY");
     if (filter === "sell") return s.signal.includes("SELL");
-    if (filter === "hold") return s.signal === "HOLD";
+    if (filter === "hold") return s.signal === "WAIT";
     return true;
   });
 
@@ -444,7 +425,7 @@ export function CryptoClient() {
 
       {/* RSI Legend */}
       <div className="flex flex-wrap items-center gap-2 text-[11px]">
-        <span className="text-slate-500 font-semibold">RSI 7d:</span>
+        <span className="text-slate-500 font-semibold">RSI Weekly:</span>
         <span className="rounded-md px-2 py-0.5 font-bold text-emerald-400 bg-emerald-400/10">≤30 Supravândut</span>
         <span className="rounded-md px-2 py-0.5 font-bold text-blue-400 bg-blue-400/10">30-40 Rece</span>
         <span className="rounded-md px-2 py-0.5 font-bold text-slate-300 bg-white/5">40-60 Neutru</span>
@@ -460,7 +441,7 @@ export function CryptoClient() {
         </button>
         <button className={`glass-card px-4 py-5 text-center transition ${filter === "hold" ? "border-slate-400/50 bg-slate-400/5" : ""}`} onClick={() => setFilter(filter === "hold" ? "all" : "hold")} type="button">
           <p className="font-data text-3xl font-bold text-slate-400">{holdCount}</p>
-          <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Așteaptă</p>
+          <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Neutru</p>
         </button>
         <button className={`glass-card px-4 py-5 text-center transition ${filter === "sell" ? "border-orange-400/50 bg-orange-400/5" : ""}`} onClick={() => setFilter(filter === "sell" ? "all" : "sell")} type="button">
           <p className="font-data text-3xl font-bold text-orange-400">{sellCount}</p>
