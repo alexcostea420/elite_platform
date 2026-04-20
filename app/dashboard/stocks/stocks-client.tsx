@@ -90,33 +90,6 @@ function getZonePosition(value: number, low: number, high: number) {
   return Math.max(0, Math.min(100, ((value - low) / range) * 100));
 }
 
-// Mini sparkline SVG component
-function Sparkline({ data, color }: { data: number[]; color: string }) {
-  if (!data || data.length < 2) return <div className="h-6 w-16" />;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const w = 64;
-  const h = 24;
-  const points = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-
-  return (
-    <svg width={w} height={h} className="inline-block opacity-80">
-      <defs>
-        <linearGradient id={`sg-${color.replace("#", "")}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
-      <polygon
-        points={`0,${h} ${points} ${w},${h}`}
-        fill={`url(#sg-${color.replace("#", "")})`}
-      />
-    </svg>
-  );
-}
-
 // Skeleton loading row
 function SkeletonRow() {
   return (
@@ -146,6 +119,36 @@ function SkeletonCard() {
       <div className="skeleton h-3 w-full rounded-full" />
     </div>
   );
+}
+
+function getNearestZone(price: number, zones: StockZones): { label: string; pct: number; direction: "buy" | "sell" | "in" } {
+  const distances = [
+    { label: "B1", price: zones.buy1, pct: ((price - zones.buy1) / zones.buy1) * 100, type: "buy" as const },
+    { label: "B2", price: zones.buy2, pct: ((price - zones.buy2) / zones.buy2) * 100, type: "buy" as const },
+    { label: "S1", price: zones.sell1, pct: ((zones.sell1 - price) / price) * 100, type: "sell" as const },
+    { label: "S2", price: zones.sell2, pct: ((zones.sell2 - price) / price) * 100, type: "sell" as const },
+  ];
+
+  // Find nearest zone the price hasn't crossed yet
+  if (price <= zones.buy1) {
+    // In buy zone, show distance to B2
+    const pct = ((price - zones.buy2) / zones.buy2) * 100;
+    return { label: `${pct.toFixed(0)}% > B2`, pct, direction: "buy" };
+  }
+  if (price >= zones.sell1) {
+    // In sell zone, show distance to S2
+    const pct = ((zones.sell2 - price) / price) * 100;
+    return { label: `${pct.toFixed(0)}% → S2`, pct, direction: "sell" };
+  }
+
+  // In neutral zone: find nearest buy or sell
+  const toB1 = ((price - zones.buy1) / price) * 100;
+  const toS1 = ((zones.sell1 - price) / price) * 100;
+
+  if (toB1 < toS1) {
+    return { label: `${toB1.toFixed(0)}% > B1`, pct: toB1, direction: "buy" };
+  }
+  return { label: `${toS1.toFixed(0)}% → S1`, pct: toS1, direction: "sell" };
 }
 
 type SortKey = "ticker" | "price" | "changePct" | "pctFromATH" | "signal";
@@ -344,7 +347,7 @@ export function StocksClient() {
                     <th className="px-4 py-3">Ticker</th>
                     <th className="px-4 py-3">Preț</th>
                     <th className="px-4 py-3">% Azi</th>
-                    <th className="px-4 py-3">5d</th>
+                    <th className="px-4 py-3">Zonă</th>
                     <th className="px-4 py-3">Buy 1</th>
                     <th className="px-4 py-3">Buy 2</th>
                     <th className="px-4 py-3">Sell 1</th>
@@ -381,7 +384,7 @@ export function StocksClient() {
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("changePct")}>
                       % Azi {sortBy === "changePct" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
-                    <th className="px-4 py-3">5d</th>
+                    <th className="px-4 py-3">Cea mai apropiată</th>
                     <th className="px-4 py-3">Buy 1</th>
                     <th className="px-4 py-3">Buy 2</th>
                     <th className="px-4 py-3">Sell 1</th>
@@ -402,7 +405,7 @@ export function StocksClient() {
                     const buy1Pos = getZonePosition(stock.buy1, stock.buy2, stock.sell2);
                     const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
                     const flash = flashMap[stock.ticker];
-                    const sparkColor = (stock.changePct ?? 0) >= 0 ? "#22c55e" : "#ef4444";
+                    const nearest = getNearestZone(stock.price, stock);
 
                     return (
                       <React.Fragment key={stock.ticker}>
@@ -436,7 +439,9 @@ export function StocksClient() {
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <Sparkline data={stock.sparkline ?? []} color={sparkColor} />
+                          <span className={`font-data text-xs font-semibold ${nearest.direction === "buy" ? "text-emerald-400" : "text-orange-400"}`}>
+                            {nearest.label}
+                          </span>
                         </td>
                         <td className="px-4 py-3 font-data text-emerald-400 tabular-nums">{formatPrice(stock.buy1)}</td>
                         <td className="px-4 py-3 font-data text-emerald-400/60 tabular-nums">{formatPrice(stock.buy2)}</td>
@@ -465,27 +470,32 @@ export function StocksClient() {
                         </td>
                       </tr>
                       {(expandedTicker === "all" || expandedTicker === stock.ticker) && zoneHistory[stock.ticker]?.zones && (
-                        <tr className="border-b border-white/5 bg-white/[0.01]">
-                          <td colSpan={11} className="px-4 py-3">
-                            <div className="flex flex-wrap gap-4 text-xs">
-                              <span className="font-semibold text-slate-500">Zone atinse (3 luni):</span>
+                        <tr className="border-b border-white/5 bg-white/[0.015]">
+                          <td colSpan={11} className="px-4 py-2.5">
+                            <div className="flex items-center gap-3 text-[11px]">
+                              <span className="text-slate-600 font-medium">3L:</span>
                               {zoneHistory[stock.ticker].zones.map((z) => (
-                                <span key={z.zone} className="flex items-center gap-1.5">
-                                  <span className={z.hit ? "text-emerald-400" : "text-slate-600"}>
-                                    {z.hit ? "✅" : "⬜"}
-                                  </span>
-                                  <span className={z.hit ? "text-slate-300" : "text-slate-600"}>
-                                    {z.zone} ({formatPrice(z.price)})
-                                  </span>
+                                <span
+                                  key={z.zone}
+                                  className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-semibold ${
+                                    z.hit
+                                      ? z.zone.startsWith("Buy")
+                                        ? "bg-emerald-400/15 text-emerald-400 border border-emerald-400/20"
+                                        : "bg-orange-400/15 text-orange-400 border border-orange-400/20"
+                                      : "bg-white/[0.03] text-slate-600 border border-white/5"
+                                  }`}
+                                >
+                                  {z.hit && <span className="text-[9px]">✓</span>}
+                                  {z.zone.replace("Buy ", "B").replace("Sell ", "S")}
                                   {z.hit && z.date && (
-                                    <span className="text-slate-600">
-                                      - {new Date(z.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
+                                    <span className="text-[9px] opacity-60">
+                                      {new Date(z.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
                                     </span>
                                   )}
                                 </span>
                               ))}
-                              <span className="text-slate-600">
-                                3M Low: {formatPrice(zoneHistory[stock.ticker].low3m)} | 3M High: {formatPrice(zoneHistory[stock.ticker].high3m)}
+                              <span className="ml-auto text-slate-600 font-data tabular-nums">
+                                {formatPrice(zoneHistory[stock.ticker].low3m)} — {formatPrice(zoneHistory[stock.ticker].high3m)}
                               </span>
                             </div>
                           </td>
@@ -507,7 +517,7 @@ export function StocksClient() {
               const buy1Pos = getZonePosition(stock.buy1, stock.buy2, stock.sell2);
               const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
               const flash = flashMap[stock.ticker];
-              const sparkColor = (stock.changePct ?? 0) >= 0 ? "#22c55e" : "#ef4444";
+              const nearest = getNearestZone(stock.price, stock);
 
               return (
                 <div
@@ -534,14 +544,14 @@ export function StocksClient() {
                     </span>
                   </div>
 
-                  <div className="mt-3 flex items-center justify-between">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-data text-2xl font-bold text-white tabular-nums">{formatPrice(stock.price ?? 0)}</span>
-                      <span className={`font-data text-sm font-semibold tabular-nums ${(stock.changePct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                        {(stock.changePct ?? 0) >= 0 ? "+" : ""}{(stock.changePct ?? 0).toFixed(2)}%
-                      </span>
-                    </div>
-                    <Sparkline data={stock.sparkline ?? []} color={sparkColor} />
+                  <div className="mt-3 flex items-baseline gap-3">
+                    <span className="font-data text-2xl font-bold text-white tabular-nums">{formatPrice(stock.price ?? 0)}</span>
+                    <span className={`font-data text-sm font-semibold tabular-nums ${(stock.changePct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                      {(stock.changePct ?? 0) >= 0 ? "+" : ""}{(stock.changePct ?? 0).toFixed(2)}%
+                    </span>
+                    <span className={`font-data text-xs font-semibold ${nearest.direction === "buy" ? "text-emerald-400" : "text-orange-400"}`}>
+                      {nearest.label}
+                    </span>
                   </div>
 
                   <div className="mt-1 text-xs text-slate-600">
