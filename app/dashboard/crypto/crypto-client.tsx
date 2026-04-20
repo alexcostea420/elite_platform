@@ -26,33 +26,54 @@ type CryptoZones = {
   sell2: number;
 };
 
-// Alex va completa zonele - placeholder pentru acum
+// BTC & ETH: zone manuale de la Alex
+// Altcoins: Buy 1 = -80% de la cycle peak (peak * 0.20)
+// Buy 2, Sell 1, Sell 2 rămân placeholder până Alex le setează manual
+const CYCLE_PEAKS: Record<string, number> = {
+  SOL: 295, XRP: 3.66, DOGE: 0.48, ADA: 1.32, AVAX: 65.55,
+  LINK: 30.92, SUI: 5.37, TAO: 760, BNB: 1376, DOT: 10.40,
+  NEAR: 8.88, LTC: 143, UNI: 18.60, RENDER: 13.53, INJ: 52.94,
+  HYPE: 59.37, CRV: 1.33, CVX: 7.99, SEI: 1.14, ALGO: 0.51,
+  ENA: 1.52, FIL: 11.48, IOTA: 0.62,
+};
+
+function altZone(symbol: string): CryptoZones {
+  const peak = CYCLE_PEAKS[symbol] ?? 0;
+  const buy1 = peak * 0.20; // -80% from cycle peak
+  const buy2 = peak * 0.10; // -90% from cycle peak
+  const sell1 = peak * 0.85; // -15% from peak
+  const sell2 = peak * 1.00; // at peak
+  return { buy1, buy2, sell1, sell2 };
+}
+
 const ZONES: Record<string, CryptoZones> = {
+  // Manual: BTC & ETH
   BTC: { buy1: 68000, buy2: 58000, sell1: 95000, sell2: 110000 },
   ETH: { buy1: 2200, buy2: 1800, sell1: 4500, sell2: 5500 },
-  SOL: { buy1: 120, buy2: 85, sell1: 250, sell2: 350 },
-  XRP: { buy1: 1.80, buy2: 1.20, sell1: 3.50, sell2: 5.00 },
-  DOGE: { buy1: 0.12, buy2: 0.08, sell1: 0.35, sell2: 0.50 },
-  ADA: { buy1: 0.55, buy2: 0.35, sell1: 1.20, sell2: 2.00 },
-  AVAX: { buy1: 18, buy2: 12, sell1: 55, sell2: 80 },
-  LINK: { buy1: 10, buy2: 7, sell1: 25, sell2: 40 },
-  SUI: { buy1: 2.50, buy2: 1.50, sell1: 6.00, sell2: 10.00 },
-  TAO: { buy1: 250, buy2: 180, sell1: 600, sell2: 900 },
-  BNB: { buy1: 550, buy2: 400, sell1: 800, sell2: 1000 },
-  DOT: { buy1: 3.50, buy2: 2.50, sell1: 8.00, sell2: 15.00 },
-  NEAR: { buy1: 2.50, buy2: 1.50, sell1: 7.00, sell2: 12.00 },
-  LTC: { buy1: 70, buy2: 50, sell1: 120, sell2: 180 },
-  UNI: { buy1: 5, buy2: 3.50, sell1: 15, sell2: 25 },
-  RENDER: { buy1: 4, buy2: 2.50, sell1: 12, sell2: 20 },
-  INJ: { buy1: 8, buy2: 5, sell1: 30, sell2: 50 },
-  HYPE: { buy1: 15, buy2: 10, sell1: 35, sell2: 55 },
-  CRV: { buy1: 0.40, buy2: 0.25, sell1: 1.50, sell2: 2.50 },
-  CVX: { buy1: 2, buy2: 1, sell1: 5, sell2: 8 },
-  SEI: { buy1: 0.15, buy2: 0.10, sell1: 0.80, sell2: 1.20 },
-  ALGO: { buy1: 0.15, buy2: 0.10, sell1: 0.45, sell2: 0.65 },
-  ENA: { buy1: 0.25, buy2: 0.15, sell1: 1.00, sell2: 1.50 },
-  FIL: { buy1: 2.50, buy2: 1.50, sell1: 8, sell2: 13 },
-  IOTA: { buy1: 0.15, buy2: 0.10, sell1: 0.45, sell2: 0.70 },
+  // Auto: -80% from cycle peak
+  SOL: altZone("SOL"),
+  XRP: altZone("XRP"),
+  DOGE: altZone("DOGE"),
+  ADA: altZone("ADA"),
+  AVAX: altZone("AVAX"),
+  LINK: altZone("LINK"),
+  SUI: altZone("SUI"),
+  TAO: altZone("TAO"),
+  BNB: altZone("BNB"),
+  DOT: altZone("DOT"),
+  NEAR: altZone("NEAR"),
+  LTC: altZone("LTC"),
+  UNI: altZone("UNI"),
+  RENDER: altZone("RENDER"),
+  INJ: altZone("INJ"),
+  HYPE: altZone("HYPE"),
+  CRV: altZone("CRV"),
+  CVX: altZone("CVX"),
+  SEI: altZone("SEI"),
+  ALGO: altZone("ALGO"),
+  ENA: altZone("ENA"),
+  FIL: altZone("FIL"),
+  IOTA: altZone("IOTA"),
 };
 
 function getSignal(zones: CryptoZones | undefined, price: number): string {
