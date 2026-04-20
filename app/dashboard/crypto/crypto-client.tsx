@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 type CryptoData = {
   id: string;
@@ -96,25 +96,61 @@ function getZonePosition(value: number, low: number, high: number) {
   return Math.max(0, Math.min(100, ((value - low) / range) * 100));
 }
 
-// Mini sparkline SVG
+// Mini sparkline SVG with gradient fill
 function Sparkline({ data, color }: { data: number[]; color: string }) {
-  if (data.length < 2) return null;
+  if (data.length < 2) return <div className="h-6 w-16" />;
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min || 1;
-  const w = 60;
+  const w = 64;
   const h = 24;
   const points = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+  const gradId = `cg-${color.replace("#", "")}`;
 
   return (
-    <svg width={w} height={h} className="inline-block">
+    <svg width={w} height={h} className="inline-block opacity-80">
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
       <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+      <polygon points={`0,${h} ${points} ${w},${h}`} fill={`url(#${gradId})`} />
     </svg>
+  );
+}
+
+// Skeleton components
+function SkeletonRow() {
+  return (
+    <tr className="border-b border-white/5">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <td key={i} className="px-4 py-3"><div className="skeleton h-4 w-14" /></td>
+      ))}
+    </tr>
+  );
+}
+
+function SkeletonCard() {
+  return (
+    <div className="glass-card px-4 py-4 space-y-3">
+      <div className="flex justify-between">
+        <div className="flex gap-2 items-center">
+          <div className="skeleton h-6 w-6 rounded-full" />
+          <div className="skeleton h-5 w-14" />
+        </div>
+        <div className="skeleton h-5 w-16 rounded-full" />
+      </div>
+      <div className="skeleton h-7 w-24" />
+      <div className="skeleton h-3 w-full rounded-full" />
+    </div>
   );
 }
 
 type SortKey = "rank" | "price" | "change24h" | "change7d" | "pctFromCyclePeak" | "signal";
 type Filter = "all" | "buy" | "sell" | "hold";
+type Tab = "all" | "gainers" | "losers";
 
 export function CryptoClient() {
   const [coins, setCoins] = useState<CryptoData[]>([]);
@@ -123,24 +159,47 @@ export function CryptoClient() {
   const [sortBy, setSortBy] = useState<SortKey>("rank");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Filter>("all");
+  const [tab, setTab] = useState<Tab>("all");
   const [updatedAt, setUpdatedAt] = useState("");
+  const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
+  const prevPrices = useRef<Record<string, number>>({});
 
   useEffect(() => {
     const stored = sessionStorage.getItem("crypto_disclaimer_accepted");
     if (stored === "true") setAccepted(true);
   }, []);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     if (!accepted) return;
     fetch("/api/crypto")
       .then((r) => r.json())
       .then((d) => {
-        setCoins(d.coins ?? []);
+        const newCoins = d.coins ?? [];
+        const flashes: Record<string, "up" | "down"> = {};
+        for (const c of newCoins) {
+          const prev = prevPrices.current[c.symbol];
+          if (prev !== undefined && prev !== c.price) {
+            flashes[c.symbol] = c.price > prev ? "up" : "down";
+          }
+          prevPrices.current[c.symbol] = c.price;
+        }
+        setCoins(newCoins);
         setUpdatedAt(d.updated_at ?? "");
+        if (Object.keys(flashes).length > 0) {
+          setFlashMap(flashes);
+          setTimeout(() => setFlashMap({}), 900);
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [accepted]);
+
+  useEffect(() => {
+    fetchData();
+    if (!accepted) return;
+    const interval = setInterval(fetchData, 60_000);
+    return () => clearInterval(interval);
+  }, [fetchData, accepted]);
 
   const handleAccept = () => {
     setAccepted(true);
@@ -188,12 +247,28 @@ export function CryptoClient() {
     return { ...c, signal, zones, rank: i + 1 };
   });
 
+  // Global stats
+  const totalMarketCap = withSignals.reduce((s, c) => s + c.marketCap, 0);
+  const btcDominance = withSignals.find((c) => c.symbol === "BTC");
+  const btcDom = btcDominance ? ((btcDominance.marketCap / totalMarketCap) * 100) : 0;
+  const avg24h = withSignals.length > 0
+    ? withSignals.reduce((s, c) => s + c.change24h, 0) / withSignals.length
+    : 0;
+
   const buyCount = withSignals.filter((s) => s.signal.includes("BUY")).length;
   const sellCount = withSignals.filter((s) => s.signal.includes("SELL")).length;
   const holdCount = withSignals.filter((s) => s.signal === "HOLD").length;
 
-  // Filter
-  const filtered = withSignals.filter((s) => {
+  // Apply tab filter first
+  let tabFiltered = withSignals;
+  if (tab === "gainers") {
+    tabFiltered = [...withSignals].sort((a, b) => b.change24h - a.change24h).slice(0, 10);
+  } else if (tab === "losers") {
+    tabFiltered = [...withSignals].sort((a, b) => a.change24h - b.change24h).slice(0, 10);
+  }
+
+  // Then apply signal filter
+  const filtered = tabFiltered.filter((s) => {
     if (filter === "buy") return s.signal.includes("BUY");
     if (filter === "sell") return s.signal.includes("SELL");
     if (filter === "hold") return s.signal === "HOLD";
@@ -202,6 +277,7 @@ export function CryptoClient() {
 
   // Sort
   const sorted = [...filtered].sort((a, b) => {
+    if (tab !== "all") return 0; // Tab already sorted
     let cmp = 0;
     switch (sortBy) {
       case "rank": cmp = a.rank - b.rank; break;
@@ -225,15 +301,57 @@ export function CryptoClient() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-emerald border-t-transparent" />
-        <span className="ml-3 text-sm text-slate-500">Se încarcă prețurile live...</span>
+      <div className="space-y-6">
+        <div className="glass-card flex items-center gap-3 px-5 py-3">
+          <div className="skeleton h-4 w-48" />
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton h-20 rounded-xl" />)}
+        </div>
+        <div className="hidden md:block">
+          <div className="panel p-0">
+            <table className="w-full text-sm">
+              <thead><tr className="border-b border-white/5"><th className="px-4 py-3" colSpan={10}><div className="skeleton h-3 w-full" /></th></tr></thead>
+              <tbody>{Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)}</tbody>
+            </table>
+          </div>
+        </div>
+        <div className="space-y-3 md:hidden">
+          {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
+      {/* Market stats bar */}
+      <div className="glass-card flex flex-wrap items-center justify-between gap-3 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="live-dot" />
+          <span className="text-xs font-semibold text-slate-400">Prețuri Live</span>
+        </div>
+        <div className="flex flex-wrap gap-4 text-xs">
+          <span className="text-slate-500">
+            Total Cap: <span className="font-semibold text-white">{formatMarketCap(totalMarketCap)}</span>
+          </span>
+          <span className="text-slate-500">
+            BTC Dom: <span className="font-data font-semibold text-amber-400">{btcDom.toFixed(1)}%</span>
+          </span>
+          <span className="text-slate-500">
+            Medie 24h:{" "}
+            <span className={`font-data font-semibold ${avg24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+              {avg24h >= 0 ? "+" : ""}{avg24h.toFixed(2)}%
+            </span>
+          </span>
+          {updatedAt && (
+            <span className="text-slate-600">
+              {new Date(updatedAt).toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
+            </span>
+          )}
+        </div>
+      </div>
+
       {/* Signal summary */}
       <div className="grid grid-cols-3 gap-3">
         <button className={`glass-card px-4 py-5 text-center transition ${filter === "buy" ? "border-emerald-400/50 bg-emerald-400/5" : ""}`} onClick={() => setFilter(filter === "buy" ? "all" : "buy")} type="button">
@@ -248,6 +366,28 @@ export function CryptoClient() {
           <p className="font-data text-3xl font-bold text-orange-400">{sellCount}</p>
           <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-orange-400/70">Vinde</p>
         </button>
+      </div>
+
+      {/* Tabs: All / Gainers / Losers */}
+      <div className="flex gap-1 rounded-xl bg-white/[0.03] p-1">
+        {([
+          { key: "all" as Tab, label: "Toate", icon: "📊" },
+          { key: "gainers" as Tab, label: "Top Câștigători", icon: "🟢" },
+          { key: "losers" as Tab, label: "Top Perdanți", icon: "🔴" },
+        ]).map(({ key, label, icon }) => (
+          <button
+            key={key}
+            className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+              tab === key
+                ? "bg-white/[0.08] text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-300"
+            }`}
+            onClick={() => setTab(key)}
+            type="button"
+          >
+            <span className="mr-1">{icon}</span> {label}
+          </button>
+        ))}
       </div>
 
       {/* Mobile sort */}
@@ -291,9 +431,10 @@ export function CryptoClient() {
                 const buy1Pos = zones ? getZonePosition(zones.buy1, zones.buy2, zones.sell2) : 0;
                 const sell1Pos = zones ? getZonePosition(zones.sell1, zones.buy2, zones.sell2) : 100;
                 const sparkColor = coin.change7d >= 0 ? "#22c55e" : "#ef4444";
+                const flash = flashMap[coin.symbol];
 
                 return (
-                  <tr key={coin.id} className="border-b border-white/5 transition hover:bg-white/[0.02]">
+                  <tr key={coin.id} className={`border-b border-white/5 transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
                     <td className="px-4 py-3 text-slate-600">{coin.rank}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
@@ -303,21 +444,21 @@ export function CryptoClient() {
                         <span className="text-xs text-slate-600">{coin.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 font-data font-semibold text-white">{formatPrice(coin.price)}</td>
+                    <td className="px-4 py-3 font-data font-semibold text-white tabular-nums">{formatPrice(coin.price)}</td>
                     <td className="px-4 py-3">
-                      <span className={`font-data font-semibold ${coin.change24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                      <span className={`font-data font-semibold tabular-nums ${coin.change24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                         {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(2)}%
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`font-data font-semibold ${coin.change7d >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                      <span className={`font-data font-semibold tabular-nums ${coin.change7d >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                         {coin.change7d >= 0 ? "+" : ""}{coin.change7d.toFixed(2)}%
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <Sparkline data={coin.sparkline} color={sparkColor} />
                     </td>
-                    <td className="px-4 py-3 text-slate-400">{formatMarketCap(coin.marketCap)}</td>
+                    <td className="px-4 py-3 text-slate-400 tabular-nums">{formatMarketCap(coin.marketCap)}</td>
                     <td className="px-4 py-3">
                       <span className={coin.pctFromCyclePeak > -20 ? "text-amber-400" : "text-red-400"}>
                         {coin.pctFromCyclePeak.toFixed(1)}%
@@ -357,9 +498,10 @@ export function CryptoClient() {
           const buy1Pos = zones ? getZonePosition(zones.buy1, zones.buy2, zones.sell2) : 0;
           const sell1Pos = zones ? getZonePosition(zones.sell1, zones.buy2, zones.sell2) : 100;
           const sparkColor = coin.change7d >= 0 ? "#22c55e" : "#ef4444";
+          const flash = flashMap[coin.symbol];
 
           return (
-            <div key={coin.id} className="glass-card px-4 py-4">
+            <div key={coin.id} className={`glass-card px-4 py-4 ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -373,10 +515,10 @@ export function CryptoClient() {
                 </span>
               </div>
 
-              <div className="mt-3 flex items-baseline justify-between">
+              <div className="mt-3 flex items-center justify-between">
                 <div>
-                  <span className="font-data text-xl font-bold text-white">{formatPrice(coin.price)}</span>
-                  <span className={`ml-2 font-data text-sm font-semibold ${coin.change24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  <span className="font-data text-xl font-bold text-white tabular-nums">{formatPrice(coin.price)}</span>
+                  <span className={`ml-2 font-data text-sm font-semibold tabular-nums ${coin.change24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                     {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(2)}%
                   </span>
                 </div>
@@ -411,11 +553,6 @@ export function CryptoClient() {
 
       {/* Footer */}
       <div className="flex flex-col items-center gap-2 text-center">
-        {updatedAt && (
-          <p className="text-xs text-slate-600">
-            Prețuri actualizate: {new Date(updatedAt).toLocaleString("ro-RO")}
-          </p>
-        )}
         <p className="text-xs text-slate-600">
           Datele sunt orientative și nu constituie sfaturi de investiții. Zonele Buy/Sell sunt setate de Alex Costea. Prețuri de la CoinGecko.
         </p>

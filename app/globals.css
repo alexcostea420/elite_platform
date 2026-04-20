@@ -122,6 +122,58 @@ button {
     animation: fadeInUp 0.5s ease-out forwards;
   }
 
+  /* Price flash animations */
+  @keyframes priceFlashUp {
+    0% { background-color: rgba(34, 197, 94, 0.15); }
+    100% { background-color: transparent; }
+  }
+  @keyframes priceFlashDown {
+    0% { background-color: rgba(239, 68, 68, 0.15); }
+    100% { background-color: transparent; }
+  }
+  .price-flash-up {
+    animation: priceFlashUp 0.8s ease-out;
+  }
+  .price-flash-down {
+    animation: priceFlashDown 0.8s ease-out;
+  }
+
+  /* Live dot pulse */
+  .live-dot {
+    @apply inline-block h-2 w-2 rounded-full bg-emerald-400;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    animation: livePulse 2s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  /* Glass card color variants */
+  .glass-card-blue {
+    background: rgba(71, 159, 250, 0.04);
+    border: 1px solid rgba(71, 159, 250, 0.15);
+    border-radius: 12px;
+  }
+  .glass-card-green {
+    background: rgba(16, 185, 129, 0.04);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 12px;
+  }
+  .glass-card-amber {
+    background: rgba(245, 158, 11, 0.04);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    border-radius: 12px;
+  }
+
   @keyframes fadeInUp {
     to {
       opacity: 1;

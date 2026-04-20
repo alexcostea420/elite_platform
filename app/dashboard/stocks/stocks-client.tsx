@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 type StockZones = {
   ticker: string;
@@ -22,6 +22,7 @@ type LiveData = {
   w52High: number;
   w52Low: number;
   pctFromATH: number;
+  sparkline?: number[];
 };
 
 type ZoneHit = {
@@ -89,6 +90,64 @@ function getZonePosition(value: number, low: number, high: number) {
   return Math.max(0, Math.min(100, ((value - low) / range) * 100));
 }
 
+// Mini sparkline SVG component
+function Sparkline({ data, color }: { data: number[]; color: string }) {
+  if (!data || data.length < 2) return <div className="h-6 w-16" />;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const w = 64;
+  const h = 24;
+  const points = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
+
+  return (
+    <svg width={w} height={h} className="inline-block opacity-80">
+      <defs>
+        <linearGradient id={`sg-${color.replace("#", "")}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+      <polygon
+        points={`0,${h} ${points} ${w},${h}`}
+        fill={`url(#sg-${color.replace("#", "")})`}
+      />
+    </svg>
+  );
+}
+
+// Skeleton loading row
+function SkeletonRow() {
+  return (
+    <tr className="border-b border-white/5">
+      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-16" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-14" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-16" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-10" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-2.5 w-24" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-5 w-16 rounded-full" /></td>
+    </tr>
+  );
+}
+
+function SkeletonCard() {
+  return (
+    <div className="glass-card px-4 py-4 space-y-3">
+      <div className="flex justify-between">
+        <div className="skeleton h-5 w-16" />
+        <div className="skeleton h-5 w-16 rounded-full" />
+      </div>
+      <div className="skeleton h-7 w-24" />
+      <div className="skeleton h-3 w-full rounded-full" />
+    </div>
+  );
+}
+
 type SortKey = "ticker" | "price" | "changePct" | "pctFromATH" | "signal";
 type Filter = "all" | "buy" | "sell" | "hold";
 
@@ -101,19 +160,43 @@ export function StocksClient() {
   const [filter, setFilter] = useState<Filter>("all");
   const [updatedAt, setUpdatedAt] = useState<string>("");
   const [expandedTicker, setExpandedTicker] = useState<string | null>(null);
+  const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
+  const prevPrices = useRef<Record<string, number>>({});
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     fetch("/api/stocks")
       .then((r) => r.json())
       .then((d) => {
         const map: Record<string, LiveData> = {};
-        for (const s of d.stocks ?? []) map[s.ticker] = s;
+        const flashes: Record<string, "up" | "down"> = {};
+        for (const s of d.stocks ?? []) {
+          map[s.ticker] = s;
+          // Detect price change for flash animation
+          const prev = prevPrices.current[s.ticker];
+          if (prev !== undefined && prev !== s.price) {
+            flashes[s.ticker] = s.price > prev ? "up" : "down";
+          }
+          prevPrices.current[s.ticker] = s.price;
+        }
         setLiveData(map);
         setUpdatedAt(d.updated_at ?? "");
+        if (Object.keys(flashes).length > 0) {
+          setFlashMap(flashes);
+          setTimeout(() => setFlashMap({}), 900);
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
+  }, []);
 
+  useEffect(() => {
+    fetchData();
+    // Refresh every 60 seconds
+    const interval = setInterval(fetchData, 60_000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
+
+  useEffect(() => {
     fetch("/api/stocks/history")
       .then((r) => r.json())
       .then((d) => {
@@ -170,8 +253,37 @@ export function StocksClient() {
   const sellCount = merged.filter((s) => s.signal.includes("SELL")).length;
   const holdCount = merged.filter((s) => s.signal === "HOLD").length;
 
+  // Market summary
+  const avgChange = merged.length > 0
+    ? merged.reduce((sum, s) => sum + (s.changePct ?? 0), 0) / merged.length
+    : 0;
+
   return (
     <div className="space-y-6">
+      {/* Market stats bar */}
+      <div className="glass-card flex flex-wrap items-center justify-between gap-3 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="live-dot" />
+          <span className="text-xs font-semibold text-slate-400">Prețuri Live</span>
+        </div>
+        <div className="flex flex-wrap gap-4 text-xs">
+          <span className="text-slate-500">
+            Portofoliu: <span className="font-semibold text-white">{merged.length} acțiuni</span>
+          </span>
+          <span className="text-slate-500">
+            Medie azi:{" "}
+            <span className={`font-data font-semibold ${avgChange >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+              {avgChange >= 0 ? "+" : ""}{avgChange.toFixed(2)}%
+            </span>
+          </span>
+          {updatedAt && (
+            <span className="text-slate-600">
+              {new Date(updatedAt).toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
+            </span>
+          )}
+        </div>
+      </div>
+
       {/* Signal summary cards */}
       <div className="grid grid-cols-3 gap-3 md:gap-4">
         <button
@@ -222,10 +334,36 @@ export function StocksClient() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-emerald border-t-transparent" />
-          <span className="ml-3 text-sm text-slate-500">Se încarcă prețurile live...</span>
-        </div>
+        <>
+          {/* Desktop skeleton */}
+          <div className="hidden md:block">
+            <div className="panel overflow-x-auto p-0">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-white/5 text-left text-xs uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3">Ticker</th>
+                    <th className="px-4 py-3">Preț</th>
+                    <th className="px-4 py-3">% Azi</th>
+                    <th className="px-4 py-3">5d</th>
+                    <th className="px-4 py-3">Buy 1</th>
+                    <th className="px-4 py-3">Buy 2</th>
+                    <th className="px-4 py-3">Sell 1</th>
+                    <th className="px-4 py-3">Sell 2</th>
+                    <th className="px-4 py-3">Poziție</th>
+                    <th className="px-4 py-3">Semnal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {/* Mobile skeleton */}
+          <div className="space-y-3 md:hidden">
+            {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+          </div>
+        </>
       ) : (
         <>
           {/* Desktop table */}
@@ -243,6 +381,7 @@ export function StocksClient() {
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("changePct")}>
                       % Azi {sortBy === "changePct" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
+                    <th className="px-4 py-3">5d</th>
                     <th className="px-4 py-3">Buy 1</th>
                     <th className="px-4 py-3">Buy 2</th>
                     <th className="px-4 py-3">Sell 1</th>
@@ -262,11 +401,13 @@ export function StocksClient() {
                     const pos = getPricePosition(stock.price ?? 0, stock.buy2, stock.sell2);
                     const buy1Pos = getZonePosition(stock.buy1, stock.buy2, stock.sell2);
                     const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
+                    const flash = flashMap[stock.ticker];
+                    const sparkColor = (stock.changePct ?? 0) >= 0 ? "#22c55e" : "#ef4444";
 
                     return (
                       <React.Fragment key={stock.ticker}>
                       <tr
-                        className="border-b border-white/5 cursor-pointer transition hover:bg-white/[0.02]"
+                        className={`border-b border-white/5 cursor-pointer transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}
                         onClick={() => setExpandedTicker(expandedTicker === stock.ticker ? null : stock.ticker)}
                       >
                         <td className="px-4 py-3">
@@ -275,6 +416,7 @@ export function StocksClient() {
                             target="_blank"
                             rel="noreferrer"
                             className="font-bold text-white hover:text-accent-emerald"
+                            onClick={(e) => e.stopPropagation()}
                           >
                             {stock.ticker}
                           </a>
@@ -282,18 +424,21 @@ export function StocksClient() {
                             <span className="ml-2 text-[10px] text-slate-600">{stock.marketCap}</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 font-data font-semibold text-white">
+                        <td className="px-4 py-3 font-data font-semibold text-white tabular-nums">
                           {formatPrice(stock.price ?? 0)}
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`font-data font-semibold ${(stock.changePct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                          <span className={`font-data font-semibold tabular-nums ${(stock.changePct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                             {(stock.changePct ?? 0) >= 0 ? "+" : ""}{(stock.changePct ?? 0).toFixed(2)}%
                           </span>
                         </td>
-                        <td className="px-4 py-3 font-data text-emerald-400">{formatPrice(stock.buy1)}</td>
-                        <td className="px-4 py-3 font-data text-emerald-400/60">{formatPrice(stock.buy2)}</td>
-                        <td className="px-4 py-3 font-data text-orange-400">{formatPrice(stock.sell1)}</td>
-                        <td className="px-4 py-3 font-data text-orange-400/60">{formatPrice(stock.sell2)}</td>
+                        <td className="px-4 py-3">
+                          <Sparkline data={stock.sparkline ?? []} color={sparkColor} />
+                        </td>
+                        <td className="px-4 py-3 font-data text-emerald-400 tabular-nums">{formatPrice(stock.buy1)}</td>
+                        <td className="px-4 py-3 font-data text-emerald-400/60 tabular-nums">{formatPrice(stock.buy2)}</td>
+                        <td className="px-4 py-3 font-data text-orange-400 tabular-nums">{formatPrice(stock.sell1)}</td>
+                        <td className="px-4 py-3 font-data text-orange-400/60 tabular-nums">{formatPrice(stock.sell2)}</td>
                         <td className="px-4 py-3">
                           <span className={(stock.pctFromATH ?? 0) > -20 ? "text-amber-400" : "text-red-400"}>
                             {(stock.pctFromATH ?? 0).toFixed(1)}%
@@ -301,11 +446,8 @@ export function StocksClient() {
                         </td>
                         <td className="px-4 py-3">
                           <div className="relative h-2.5 w-24 overflow-hidden rounded-full bg-white/5">
-                            {/* Buy zone */}
                             <div className="absolute top-0 h-full bg-emerald-500/20 rounded-l-full" style={{ left: 0, width: `${buy1Pos}%` }} />
-                            {/* Sell zone */}
                             <div className="absolute top-0 h-full bg-orange-500/20 rounded-r-full" style={{ left: `${sell1Pos}%`, width: `${100 - sell1Pos}%` }} />
-                            {/* Price marker */}
                             <div
                               className="absolute top-0 h-full w-1 rounded-full bg-white shadow-[0_0_4px_rgba(255,255,255,0.8)]"
                               style={{ left: `${pos}%` }}
@@ -321,7 +463,7 @@ export function StocksClient() {
                       </tr>
                       {expandedTicker === stock.ticker && zoneHistory[stock.ticker]?.zones && (
                         <tr className="border-b border-white/5 bg-white/[0.01]">
-                          <td colSpan={10} className="px-4 py-3">
+                          <td colSpan={11} className="px-4 py-3">
                             <div className="flex flex-wrap gap-4 text-xs">
                               <span className="font-semibold text-slate-500">Zone atinse (3 luni):</span>
                               {zoneHistory[stock.ticker].zones.map((z) => (
@@ -361,20 +503,26 @@ export function StocksClient() {
               const pos = getPricePosition(stock.price, stock.buy2, stock.sell2);
               const buy1Pos = getZonePosition(stock.buy1, stock.buy2, stock.sell2);
               const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
+              const flash = flashMap[stock.ticker];
+              const sparkColor = (stock.changePct ?? 0) >= 0 ? "#22c55e" : "#ef4444";
 
               return (
-                <a
+                <div
                   key={stock.ticker}
-                  href={`https://finviz.com/quote.ashx?t=${stock.ticker}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="glass-card block px-4 py-4 transition hover:border-white/20"
+                  className={`glass-card block px-4 py-4 transition ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}
                 >
                   <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-lg font-bold text-white">{stock.ticker}</span>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={`https://finviz.com/quote.ashx?t=${stock.ticker}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-lg font-bold text-white hover:text-accent-emerald"
+                      >
+                        {stock.ticker}
+                      </a>
                       {stock.marketCap && (
-                        <span className="ml-2 text-xs text-slate-600">{stock.marketCap}</span>
+                        <span className="text-xs text-slate-600">{stock.marketCap}</span>
                       )}
                     </div>
                     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
@@ -383,14 +531,18 @@ export function StocksClient() {
                     </span>
                   </div>
 
-                  <div className="mt-3 flex items-baseline gap-3">
-                    <span className="font-data text-2xl font-bold text-white">{formatPrice(stock.price ?? 0)}</span>
-                    <span className={`font-data text-sm font-semibold ${(stock.changePct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                      {(stock.changePct ?? 0) >= 0 ? "+" : ""}{(stock.changePct ?? 0).toFixed(2)}%
-                    </span>
-                    <span className="text-xs text-slate-600">
-                      ATH: {(stock.pctFromATH ?? 0).toFixed(1)}%
-                    </span>
+                  <div className="mt-3 flex items-center justify-between">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-data text-2xl font-bold text-white tabular-nums">{formatPrice(stock.price ?? 0)}</span>
+                      <span className={`font-data text-sm font-semibold tabular-nums ${(stock.changePct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                        {(stock.changePct ?? 0) >= 0 ? "+" : ""}{(stock.changePct ?? 0).toFixed(2)}%
+                      </span>
+                    </div>
+                    <Sparkline data={stock.sparkline ?? []} color={sparkColor} />
+                  </div>
+
+                  <div className="mt-1 text-xs text-slate-600">
+                    ATH: {(stock.pctFromATH ?? 0).toFixed(1)}%
                   </div>
 
                   {/* Range bar */}
@@ -429,7 +581,7 @@ export function StocksClient() {
                       ))}
                     </div>
                   )}
-                </a>
+                </div>
               );
             })}
           </div>
@@ -438,11 +590,6 @@ export function StocksClient() {
 
       {/* Footer */}
       <div className="flex flex-col items-center gap-2 text-center">
-        {updatedAt && (
-          <p className="text-xs text-slate-600">
-            Prețuri actualizate: {new Date(updatedAt).toLocaleString("ro-RO")}
-          </p>
-        )}
         <p className="text-xs text-slate-600">
           Datele sunt orientative și nu constituie sfaturi de investiții. Zonele Buy/Sell sunt setate de Alex Costea. Prețuri de la Finviz.
         </p>

@@ -19,6 +19,7 @@ type StockData = {
   w52High: number;
   w52Low: number;
   pctFromATH: number;
+  sparkline: number[];
 };
 
 async function fetchFinviz(ticker: string): Promise<StockData | null> {
@@ -70,10 +71,40 @@ async function fetchFinviz(ticker: string): Promise<StockData | null> {
       w52High,
       w52Low,
       pctFromATH: w52High > 0 ? ((price - w52High) / w52High) * 100 : 0,
+      sparkline: [],
     };
   } catch {
     return null;
   }
+}
+
+/** Fetch 5-day sparkline from Yahoo Finance chart API */
+async function fetchSparklines(tickers: string[]): Promise<Record<string, number[]>> {
+  const result: Record<string, number[]> = {};
+  try {
+    const symbols = tickers.join(",");
+    const res = await fetch(
+      `https://query1.finance.yahoo.com/v8/finance/spark?symbols=${symbols}&range=5d&interval=1h`,
+      {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return result;
+    const data = await res.json();
+    for (const ticker of tickers) {
+      const spark = data[ticker];
+      const closes = spark?.close ?? [];
+      // Filter out nulls and take every other point to reduce density
+      const filtered = closes.filter((v: number | null) => v !== null) as number[];
+      result[ticker] = filtered;
+    }
+  } catch {
+    // Sparklines are optional - don't fail the whole request
+  }
+  return result;
 }
 
 export async function GET() {
@@ -93,6 +124,13 @@ export async function GET() {
     }
 
     const stocks = results.filter(Boolean) as StockData[];
+
+    // Fetch sparklines in parallel
+    const sparklines = await fetchSparklines(TICKERS);
+    for (const stock of stocks) {
+      stock.sparkline = sparklines[stock.ticker] ?? [];
+    }
+
     return NextResponse.json({ stocks, updated_at: new Date().toISOString() });
   } catch (error) {
     console.error("Stocks fetch error:", error);
