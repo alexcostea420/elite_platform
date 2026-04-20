@@ -162,7 +162,7 @@ export function StocksClient() {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Filter>("all");
   const [updatedAt, setUpdatedAt] = useState<string>("");
-  const [expandedTicker, setExpandedTicker] = useState<string | "all" | null>("all");
+  // expandedTicker no longer needed - zone hits shown inline
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
   const prevPrices = useRef<Record<string, number>>({});
 
@@ -392,7 +392,6 @@ export function StocksClient() {
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromATH")}>
                       % ATH {sortBy === "pctFromATH" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
-                    <th className="px-4 py-3">Poziție în range</th>
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("signal")}>
                       Semnal {sortBy === "signal" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
@@ -401,20 +400,35 @@ export function StocksClient() {
                 <tbody>
                   {sorted.map((stock) => {
                     const style = getSignalStyle(stock.signal);
-                    const pos = getPricePosition(stock.price ?? 0, stock.buy2, stock.sell2);
-                    const buy1Pos = getZonePosition(stock.buy1, stock.buy2, stock.sell2);
-                    const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
                     const flash = flashMap[stock.ticker];
                     const nearest = getNearestZone(stock.price, stock);
+                    const zh = zoneHistory[stock.ticker];
+                    const zoneHitMap: Record<string, ZoneHit> = {};
+                    if (zh?.zones) for (const z of zh.zones) zoneHitMap[z.zone] = z;
+
+                    function zoneCell(zone: string, price: number, baseColor: string, dimColor: string) {
+                      const hit = zoneHitMap[zone];
+                      const hitDate = hit?.hit && hit.date
+                        ? new Date(hit.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })
+                        : null;
+                      return (
+                        <td className={`px-3 py-3 ${hit?.hit ? (zone.startsWith("Buy") ? "bg-emerald-400/[0.06]" : "bg-orange-400/[0.06]") : ""}`}>
+                          <div className={`font-data tabular-nums font-semibold ${hit?.hit ? baseColor : dimColor}`}>
+                            {formatPrice(price)}
+                          </div>
+                          {hit?.hit && hitDate && (
+                            <div className={`text-[9px] mt-0.5 ${zone.startsWith("Buy") ? "text-emerald-400/60" : "text-orange-400/60"}`}>
+                              ✓ {hitDate}
+                            </div>
+                          )}
+                        </td>
+                      );
+                    }
 
                     return (
-                      <React.Fragment key={stock.ticker}>
                       <tr
-                        className={`border-b border-white/5 cursor-pointer transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}
-                        onClick={() => setExpandedTicker(
-                          expandedTicker === "all" ? stock.ticker :
-                          expandedTicker === stock.ticker ? "all" : stock.ticker
-                        )}
+                        key={stock.ticker}
+                        className={`border-b border-white/5 transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}
                       >
                         <td className="px-4 py-3">
                           <a
@@ -422,7 +436,6 @@ export function StocksClient() {
                             target="_blank"
                             rel="noreferrer"
                             className="font-bold text-white hover:text-accent-emerald"
-                            onClick={(e) => e.stopPropagation()}
                           >
                             {stock.ticker}
                           </a>
@@ -443,24 +456,14 @@ export function StocksClient() {
                             {nearest.label}
                           </span>
                         </td>
-                        <td className="px-4 py-3 font-data text-emerald-400 tabular-nums">{formatPrice(stock.buy1)}</td>
-                        <td className="px-4 py-3 font-data text-emerald-400/60 tabular-nums">{formatPrice(stock.buy2)}</td>
-                        <td className="px-4 py-3 font-data text-orange-400 tabular-nums">{formatPrice(stock.sell1)}</td>
-                        <td className="px-4 py-3 font-data text-orange-400/60 tabular-nums">{formatPrice(stock.sell2)}</td>
+                        {zoneCell("Buy 1", stock.buy1, "text-emerald-400", "text-emerald-400/40")}
+                        {zoneCell("Buy 2", stock.buy2, "text-emerald-400", "text-emerald-400/30")}
+                        {zoneCell("Sell 1", stock.sell1, "text-orange-400", "text-orange-400/40")}
+                        {zoneCell("Sell 2", stock.sell2, "text-orange-400", "text-orange-400/30")}
                         <td className="px-4 py-3">
                           <span className={(stock.pctFromATH ?? 0) > -20 ? "text-amber-400" : "text-red-400"}>
                             {(stock.pctFromATH ?? 0).toFixed(1)}%
                           </span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="relative h-2.5 w-24 overflow-hidden rounded-full bg-white/5">
-                            <div className="absolute top-0 h-full bg-emerald-500/20 rounded-l-full" style={{ left: 0, width: `${buy1Pos}%` }} />
-                            <div className="absolute top-0 h-full bg-orange-500/20 rounded-r-full" style={{ left: `${sell1Pos}%`, width: `${100 - sell1Pos}%` }} />
-                            <div
-                              className="absolute top-0 h-full w-1 rounded-full bg-white shadow-[0_0_4px_rgba(255,255,255,0.8)]"
-                              style={{ left: `${pos}%` }}
-                            />
-                          </div>
                         </td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
@@ -469,39 +472,6 @@ export function StocksClient() {
                           </span>
                         </td>
                       </tr>
-                      {(expandedTicker === "all" || expandedTicker === stock.ticker) && zoneHistory[stock.ticker]?.zones && (
-                        <tr className="border-b border-white/5 bg-white/[0.015]">
-                          <td colSpan={11} className="px-4 py-2.5">
-                            <div className="flex items-center gap-3 text-[11px]">
-                              <span className="text-slate-600 font-medium">3L:</span>
-                              {zoneHistory[stock.ticker].zones.map((z) => (
-                                <span
-                                  key={z.zone}
-                                  className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-semibold ${
-                                    z.hit
-                                      ? z.zone.startsWith("Buy")
-                                        ? "bg-emerald-400/15 text-emerald-400 border border-emerald-400/20"
-                                        : "bg-orange-400/15 text-orange-400 border border-orange-400/20"
-                                      : "bg-white/[0.03] text-slate-600 border border-white/5"
-                                  }`}
-                                >
-                                  {z.hit && <span className="text-[9px]">✓</span>}
-                                  {z.zone.replace("Buy ", "B").replace("Sell ", "S")}
-                                  {z.hit && z.date && (
-                                    <span className="text-[9px] opacity-60">
-                                      {new Date(z.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
-                                    </span>
-                                  )}
-                                </span>
-                              ))}
-                              <span className="ml-auto text-slate-600 font-data tabular-nums">
-                                {formatPrice(zoneHistory[stock.ticker].low3m)} — {formatPrice(zoneHistory[stock.ticker].high3m)}
-                              </span>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                      </React.Fragment>
                     );
                   })}
                 </tbody>
