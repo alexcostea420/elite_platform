@@ -27,22 +27,42 @@ type CryptoZones = {
 };
 
 // BTC & ETH: zone manuale de la Alex
-// Altcoins: Buy 1 = -80% de la cycle peak (peak * 0.20)
-// Buy 2, Sell 1, Sell 2 rămân placeholder până Alex le setează manual
-const CYCLE_PEAKS: Record<string, number> = {
-  SOL: 295, XRP: 3.66, DOGE: 0.48, ADA: 1.32, AVAX: 65.55,
-  LINK: 30.92, SUI: 5.37, TAO: 760, BNB: 1376, DOT: 10.40,
-  NEAR: 8.88, LTC: 143, UNI: 18.60, RENDER: 13.53, INJ: 52.94,
-  HYPE: 59.37, CRV: 1.33, CVX: 7.99, SEI: 1.14, ALGO: 0.51,
-  ENA: 1.52, FIL: 11.48, IOTA: 0.62,
+// Altcoins: Buy 1 = -80% din peak, Buy 2 = -90% din peak
+//           Sell 1 = 0.618 Fib (low → peak), Sell 2 = -15% din peak
+const CYCLE_DATA: Record<string, { peak: number; low: number }> = {
+  // peak = highest price Mar 2024 – present, low = cycle bottom (Q4 2023 / listing)
+  SOL:    { peak: 295,    low: 18.50 },
+  XRP:    { peak: 3.66,   low: 0.43 },
+  DOGE:   { peak: 0.48,   low: 0.057 },
+  ADA:    { peak: 1.32,   low: 0.24 },
+  AVAX:   { peak: 65.55,  low: 8.90 },
+  LINK:   { peak: 30.92,  low: 5.50 },
+  SUI:    { peak: 5.37,   low: 0.36 },
+  TAO:    { peak: 760,    low: 195 },
+  BNB:    { peak: 1376,   low: 202 },
+  DOT:    { peak: 10.40,  low: 3.56 },
+  NEAR:   { peak: 8.88,   low: 1.05 },
+  LTC:    { peak: 143,    low: 57 },
+  UNI:    { peak: 18.60,  low: 3.40 },
+  RENDER: { peak: 13.53,  low: 1.50 },
+  INJ:    { peak: 52.94,  low: 6.20 },
+  HYPE:   { peak: 59.37,  low: 3.20 },
+  CRV:    { peak: 1.33,   low: 0.22 },
+  CVX:    { peak: 7.99,   low: 2.10 },
+  SEI:    { peak: 1.14,   low: 0.10 },
+  ALGO:   { peak: 0.51,   low: 0.09 },
+  ENA:    { peak: 1.52,   low: 0.26 },
+  FIL:    { peak: 11.48,  low: 3.10 },
+  IOTA:   { peak: 0.62,   low: 0.14 },
 };
 
 function altZone(symbol: string): CryptoZones {
-  const peak = CYCLE_PEAKS[symbol] ?? 0;
-  const buy1 = peak * 0.20; // -80% from cycle peak
-  const buy2 = peak * 0.10; // -90% from cycle peak
-  const sell1 = peak * 0.85; // -15% from peak
-  const sell2 = peak * 1.00; // at peak
+  const d = CYCLE_DATA[symbol];
+  if (!d) return { buy1: 0, buy2: 0, sell1: 0, sell2: 0 };
+  const buy1 = d.peak * 0.20;                          // -80% din peak
+  const buy2 = d.peak * 0.10;                          // -90% din peak
+  const sell1 = d.low + (d.peak - d.low) * 0.618;      // 0.618 Fib (low → peak)
+  const sell2 = d.peak * 0.85;                          // -15% din peak
   return { buy1, buy2, sell1, sell2 };
 }
 
@@ -50,7 +70,7 @@ const ZONES: Record<string, CryptoZones> = {
   // Manual: BTC & ETH
   BTC: { buy1: 68000, buy2: 58000, sell1: 95000, sell2: 110000 },
   ETH: { buy1: 2200, buy2: 1800, sell1: 4500, sell2: 5500 },
-  // Auto: -80% from cycle peak
+  // Auto: formule din cycle data
   SOL: altZone("SOL"),
   XRP: altZone("XRP"),
   DOGE: altZone("DOGE"),
@@ -75,6 +95,51 @@ const ZONES: Record<string, CryptoZones> = {
   FIL: altZone("FIL"),
   IOTA: altZone("IOTA"),
 };
+
+// Calculate RSI from price array (standard 14-period)
+function calcRSI(prices: number[], period = 14): number | null {
+  if (prices.length < period + 1) return null;
+  let avgGain = 0;
+  let avgLoss = 0;
+
+  // Initial average
+  for (let i = 1; i <= period; i++) {
+    const change = prices[i] - prices[i - 1];
+    if (change > 0) avgGain += change;
+    else avgLoss += Math.abs(change);
+  }
+  avgGain /= period;
+  avgLoss /= period;
+
+  // Smooth through remaining data
+  for (let i = period + 1; i < prices.length; i++) {
+    const change = prices[i] - prices[i - 1];
+    const gain = change > 0 ? change : 0;
+    const loss = change < 0 ? Math.abs(change) : 0;
+    avgGain = (avgGain * (period - 1) + gain) / period;
+    avgLoss = (avgLoss * (period - 1) + loss) / period;
+  }
+
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - 100 / (1 + rs);
+}
+
+function getRSIColor(rsi: number): string {
+  if (rsi >= 70) return "text-red-400 bg-red-400/10";         // Supracumpărat
+  if (rsi >= 60) return "text-orange-400 bg-orange-400/10";   // Cald
+  if (rsi >= 40) return "text-slate-300 bg-white/5";          // Neutru
+  if (rsi >= 30) return "text-blue-400 bg-blue-400/10";       // Rece
+  return "text-emerald-400 bg-emerald-400/10";                 // Supravândut
+}
+
+function getRSILabel(rsi: number): string {
+  if (rsi >= 70) return "Supracumpărat";
+  if (rsi >= 60) return "Cald";
+  if (rsi >= 40) return "Neutru";
+  if (rsi >= 30) return "Rece";
+  return "Supravândut";
+}
 
 function getSignal(zones: CryptoZones | undefined, price: number): string {
   if (!zones) return "HOLD";
@@ -265,7 +330,11 @@ export function CryptoClient() {
   const withSignals = coins.map((c, i) => {
     const zones = ZONES[c.symbol];
     const signal = getSignal(zones, c.price);
-    return { ...c, signal, zones, rank: i + 1 };
+    // Calculate RSI from sparkline (7d hourly data ≈ 168 points)
+    const rsi = calcRSI(c.sparkline, 14);
+    // Use last 48 points for visual sparkline
+    const sparkVisual = c.sparkline.slice(-48);
+    return { ...c, signal, zones, rank: i + 1, rsi, sparkVisual };
   });
 
   // Global stats
@@ -373,6 +442,16 @@ export function CryptoClient() {
         </div>
       </div>
 
+      {/* RSI Legend */}
+      <div className="flex flex-wrap items-center gap-2 text-[11px]">
+        <span className="text-slate-500 font-semibold">RSI 7d:</span>
+        <span className="rounded-md px-2 py-0.5 font-bold text-emerald-400 bg-emerald-400/10">≤30 Supravândut</span>
+        <span className="rounded-md px-2 py-0.5 font-bold text-blue-400 bg-blue-400/10">30-40 Rece</span>
+        <span className="rounded-md px-2 py-0.5 font-bold text-slate-300 bg-white/5">40-60 Neutru</span>
+        <span className="rounded-md px-2 py-0.5 font-bold text-orange-400 bg-orange-400/10">60-70 Cald</span>
+        <span className="rounded-md px-2 py-0.5 font-bold text-red-400 bg-red-400/10">≥70 Supracumpărat</span>
+      </div>
+
       {/* Signal summary */}
       <div className="grid grid-cols-3 gap-3">
         <button className={`glass-card px-4 py-5 text-center transition ${filter === "buy" ? "border-emerald-400/50 bg-emerald-400/5" : ""}`} onClick={() => setFilter(filter === "buy" ? "all" : "buy")} type="button">
@@ -438,6 +517,7 @@ export function CryptoClient() {
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change24h")}>24h {sortBy === "change24h" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change7d")}>7d {sortBy === "change7d" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3">7d Chart</th>
+                <th className="px-4 py-3">RSI</th>
                 <th className="px-4 py-3">Market Cap</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromCyclePeak")}>% Vârf {sortBy === "pctFromCyclePeak" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3">Poziție range</th>
@@ -453,6 +533,8 @@ export function CryptoClient() {
                 const sell1Pos = zones ? getZonePosition(zones.sell1, zones.buy2, zones.sell2) : 100;
                 const sparkColor = coin.change7d >= 0 ? "#22c55e" : "#ef4444";
                 const flash = flashMap[coin.symbol];
+                const rsiColor = coin.rsi !== null ? getRSIColor(coin.rsi) : "";
+                const rsiLabel = coin.rsi !== null ? getRSILabel(coin.rsi) : "";
 
                 return (
                   <tr key={coin.id} className={`border-b border-white/5 transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
@@ -477,7 +559,16 @@ export function CryptoClient() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <Sparkline data={coin.sparkline} color={sparkColor} />
+                      <Sparkline data={coin.sparkVisual} color={sparkColor} />
+                    </td>
+                    <td className="px-4 py-3">
+                      {coin.rsi !== null ? (
+                        <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-bold tabular-nums ${rsiColor}`} title={rsiLabel}>
+                          {coin.rsi.toFixed(0)}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-600">-</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-slate-400 tabular-nums">{formatMarketCap(coin.marketCap)}</td>
                     <td className="px-4 py-3">
@@ -520,6 +611,7 @@ export function CryptoClient() {
           const sell1Pos = zones ? getZonePosition(zones.sell1, zones.buy2, zones.sell2) : 100;
           const sparkColor = coin.change7d >= 0 ? "#22c55e" : "#ef4444";
           const flash = flashMap[coin.symbol];
+          const rsiColor = coin.rsi !== null ? getRSIColor(coin.rsi) : "";
 
           return (
             <div key={coin.id} className={`glass-card px-4 py-4 ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
@@ -530,10 +622,17 @@ export function CryptoClient() {
                   <span className="text-lg font-bold text-white">{coin.symbol}</span>
                   <span className="text-xs text-slate-600">{coin.name}</span>
                 </div>
-                <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
-                  <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                  {coin.signal}
-                </span>
+                <div className="flex items-center gap-2">
+                  {coin.rsi !== null && (
+                    <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-bold tabular-nums ${rsiColor}`}>
+                      RSI {coin.rsi.toFixed(0)}
+                    </span>
+                  )}
+                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                    {coin.signal}
+                  </span>
+                </div>
               </div>
 
               <div className="mt-3 flex items-center justify-between">
@@ -543,7 +642,7 @@ export function CryptoClient() {
                     {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(2)}%
                   </span>
                 </div>
-                <Sparkline data={coin.sparkline} color={sparkColor} />
+                <Sparkline data={coin.sparkVisual} color={sparkColor} />
               </div>
 
               <div className="mt-2 flex gap-4 text-xs text-slate-500">

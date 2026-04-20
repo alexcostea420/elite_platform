@@ -94,7 +94,7 @@ export async function GET() {
         pctFromATH: (c.ath_change_percentage as number) ?? 0,
         cyclePeak,
         pctFromCyclePeak,
-        sparkline: (c.sparkline_in_7d as { price: number[] })?.price?.slice(-24) ?? [],
+        sparkline: (c.sparkline_in_7d as { price: number[] })?.price ?? [],
         image: (c.image as string) ?? "",
       };
     });
