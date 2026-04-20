@@ -159,7 +159,7 @@ export function StocksClient() {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Filter>("all");
   const [updatedAt, setUpdatedAt] = useState<string>("");
-  const [expandedTicker, setExpandedTicker] = useState<string | null>(null);
+  const [expandedTicker, setExpandedTicker] = useState<string | "all" | null>("all");
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
   const prevPrices = useRef<Record<string, number>>({});
 
@@ -408,7 +408,10 @@ export function StocksClient() {
                       <React.Fragment key={stock.ticker}>
                       <tr
                         className={`border-b border-white/5 cursor-pointer transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}
-                        onClick={() => setExpandedTicker(expandedTicker === stock.ticker ? null : stock.ticker)}
+                        onClick={() => setExpandedTicker(
+                          expandedTicker === "all" ? stock.ticker :
+                          expandedTicker === stock.ticker ? "all" : stock.ticker
+                        )}
                       >
                         <td className="px-4 py-3">
                           <a
@@ -461,7 +464,7 @@ export function StocksClient() {
                           </span>
                         </td>
                       </tr>
-                      {expandedTicker === stock.ticker && zoneHistory[stock.ticker]?.zones && (
+                      {(expandedTicker === "all" || expandedTicker === stock.ticker) && zoneHistory[stock.ticker]?.zones && (
                         <tr className="border-b border-white/5 bg-white/[0.01]">
                           <td colSpan={11} className="px-4 py-3">
                             <div className="flex flex-wrap gap-4 text-xs">
