@@ -41,23 +41,30 @@ function calcRSI(closes: (number | null)[], period = 14): number | null {
 }
 
 async function fetchWeeklyCloses(yahooSymbol: string): Promise<(number | null)[]> {
-  try {
-    const res = await fetch(
-      `https://query1.finance.yahoo.com/v8/finance/chart/${yahooSymbol}?range=6mo&interval=1wk`,
-      {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-        },
-        next: { revalidate: 3600 },
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(
+        `https://query1.finance.yahoo.com/v8/finance/chart/${yahooSymbol}?range=6mo&interval=1wk`,
+        {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+          },
+          next: { revalidate: 3600 },
+        }
+      );
+      if (res.status === 429) {
+        await new Promise((r) => setTimeout(r, 2000));
+        continue;
       }
-    );
-    if (!res.ok) return [];
-    const data = await res.json();
-    const result = data?.chart?.result?.[0];
-    return result?.indicators?.quote?.[0]?.close ?? [];
-  } catch {
-    return [];
+      if (!res.ok) return [];
+      const data = await res.json();
+      const result = data?.chart?.result?.[0];
+      return result?.indicators?.quote?.[0]?.close ?? [];
+    } catch {
+      if (attempt === 0) await new Promise((r) => setTimeout(r, 1000));
+    }
   }
+  return [];
 }
 
 export async function GET() {
@@ -65,9 +72,9 @@ export async function GET() {
     const entries = Object.entries(YAHOO_SYMBOLS);
     const rsiMap: Record<string, number | null> = {};
 
-    // Fetch in batches of 5 with delays
-    for (let i = 0; i < entries.length; i += 5) {
-      const batch = entries.slice(i, i + 5);
+    // Fetch in batches of 3 with delays to avoid Yahoo 429
+    for (let i = 0; i < entries.length; i += 3) {
+      const batch = entries.slice(i, i + 3);
       const results = await Promise.all(
         batch.map(async ([symbol, yahooSym]) => {
           const closes = await fetchWeeklyCloses(yahooSym);
@@ -79,8 +86,8 @@ export async function GET() {
         rsiMap[symbol] = rsi;
       }
       // Delay between batches
-      if (i + 5 < entries.length) {
-        await new Promise((r) => setTimeout(r, 500));
+      if (i + 3 < entries.length) {
+        await new Promise((r) => setTimeout(r, 800));
       }
     }
 

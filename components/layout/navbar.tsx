@@ -7,6 +7,7 @@ import { MarketingDiscordButton } from "@/components/layout/marketing-discord-bu
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavDropdown } from "@/components/layout/nav-dropdown";
 import { ProfileMenu } from "@/components/layout/profile-menu";
+import { CommandSearchTrigger } from "@/components/ui/command-search";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getAbsoluteHostUrl, getHostRole } from "@/lib/utils/host-routing";
 
@@ -127,8 +128,9 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
               )}
             </div>
 
-            {/* Mobile hamburger + profile */}
+            {/* Search + Mobile hamburger + profile */}
             <div className="flex items-center gap-2">
+              <CommandSearchTrigger />
               <MobileNav
                 groups={dashboardNavGroups}
                 standalone={dashboardNavStandalone}

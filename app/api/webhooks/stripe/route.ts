@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { syncDiscordRole } from "@/lib/discord/server";
 import { getStripeConfig, STRIPE_PLANS } from "@/lib/payments/stripe";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
@@ -107,6 +108,25 @@ export async function POST(request: NextRequest) {
           elite_since: profile?.elite_since ?? now.toISOString(),
         })
         .eq("id", userId);
+
+      // Auto-sync Discord role if user has connected Discord
+      try {
+        const { data: discordProfile } = await supabase
+          .from("profiles")
+          .select("discord_id")
+          .eq("id", userId)
+          .maybeSingle();
+        if (discordProfile?.discord_id) {
+          await syncDiscordRole({
+            profileId: userId,
+            discordUserId: discordProfile.discord_id,
+            subscriptionTier: "elite",
+          });
+          console.log(`Stripe: Discord role synced for ${discordProfile.discord_id}`);
+        }
+      } catch (discordErr) {
+        console.error("Stripe: Discord role sync failed:", discordErr);
+      }
 
       console.log(`Stripe: activated Elite, plan ${planDuration}`);
     }
