@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 // ─── Types ─────────────────────────────────────────────────────
 type Wallet = {
@@ -273,7 +274,7 @@ function WhaleTable({
                         <span className="font-data text-slate-400">{wPositions.length}</span>
                       </td>
                       <td className="px-4 py-3 text-xs text-slate-500">
-                        {w.last_activity ? timeAgo(w.last_activity) : "-"}
+                        {w.last_activity ? timeAgo(w.last_activity) : <span className="text-slate-700">Inactiv</span>}
                       </td>
                     </tr>
                     {isSelected && (
@@ -449,61 +450,57 @@ function WalletDetail({ wallet, positions, fills }: { wallet: Wallet; positions:
   );
 }
 
-// ─── PnL Chart (SVG) ───────────────────────────────────────────
+// ─── PnL Chart (Recharts) ──────────────────────────────────────
 function PnlChart({ data }: { data: PnlDay[] }) {
-  const w = 600;
-  const h = 140;
-  const pad = { top: 10, right: 10, bottom: 20, left: 50 };
-  const cw = w - pad.left - pad.right;
-  const ch = h - pad.top - pad.bottom;
-
-  const values = data.map((d) => d.cumulative_pnl);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-
-  const points = data.map((d, i) => {
-    const x = pad.left + (i / (data.length - 1)) * cw;
-    const y = pad.top + ch - ((d.cumulative_pnl - min) / range) * ch;
-    return `${x},${y}`;
-  }).join(" ");
-
-  const polygonPoints = `${pad.left},${pad.top + ch} ${points} ${pad.left + cw},${pad.top + ch}`;
+  const chartData = data.map((d) => ({
+    date: new Date(d.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" }),
+    pnl: d.cumulative_pnl,
+    daily: d.daily_pnl,
+  }));
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ maxHeight: 180 }}>
-      <defs>
-        <linearGradient id="pnlGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#10B981" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* Grid lines */}
-      {[0, 0.25, 0.5, 0.75, 1].map((pct) => {
-        const y = pad.top + ch * (1 - pct);
-        const val = min + range * pct;
-        return (
-          <g key={pct}>
-            <line x1={pad.left} y1={y} x2={w - pad.right} y2={y} stroke="rgba(255,255,255,0.05)" />
-            <text x={pad.left - 4} y={y + 3} textAnchor="end" fill="#5A7168" fontSize="9" fontFamily="monospace">
-              {formatUsd(val)}
-            </text>
-          </g>
-        );
-      })}
-      <polygon points={polygonPoints} fill="url(#pnlGrad)" />
-      <polyline points={points} fill="none" stroke="#10B981" strokeWidth="2" strokeLinejoin="round" />
-      {/* Date labels */}
-      {data.filter((_, i) => i % Math.ceil(data.length / 5) === 0).map((d, idx) => {
-        const i = data.indexOf(d);
-        const x = pad.left + (i / (data.length - 1)) * cw;
-        return (
-          <text key={idx} x={x} y={h - 4} textAnchor="middle" fill="#5A7168" fontSize="8">
-            {new Date(d.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
-          </text>
-        );
-      })}
-    </svg>
+    <ResponsiveContainer width="100%" height={180}>
+      <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+        <defs>
+          <linearGradient id="pnlGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#10B981" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <XAxis
+          dataKey="date"
+          tick={{ fill: "#5A7168", fontSize: 10 }}
+          axisLine={false}
+          tickLine={false}
+          interval="preserveStartEnd"
+        />
+        <YAxis
+          tick={{ fill: "#5A7168", fontSize: 10 }}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(v: number) => formatUsd(v)}
+          width={60}
+        />
+        <Tooltip
+          contentStyle={{
+            background: "#0D1F18",
+            border: "1px solid rgba(16,185,129,0.2)",
+            borderRadius: 8,
+            fontSize: 12,
+          }}
+          labelStyle={{ color: "#fff", fontWeight: 600 }}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          formatter={(value: any) => formatUsd(Number(value))}
+        />
+        <Area
+          type="monotone"
+          dataKey="pnl"
+          stroke="#10B981"
+          strokeWidth={2}
+          fill="url(#pnlGradient)"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
   );
 }
 
@@ -511,7 +508,8 @@ function PnlChart({ data }: { data: PnlDay[] }) {
 export function WhaleTrackerClient() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
-  const [fills, setFills] = useState<Fill[]>([]);
+  const [activityFills, setActivityFills] = useState<Fill[]>([]);
+  const [allFills, setAllFills] = useState<Fill[]>([]);
   const [consensus, setConsensus] = useState<Consensus[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
@@ -523,7 +521,8 @@ export function WhaleTrackerClient() {
       .then((d) => {
         setWallets(d.wallets ?? []);
         setPositions(d.positions ?? []);
-        setFills(d.fills ?? []);
+        setActivityFills(d.activity_fills ?? []);
+        setAllFills(d.all_fills ?? []);
         setConsensus(d.consensus ?? []);
         setUpdatedAt(d.updated_at ?? "");
       })
@@ -571,7 +570,7 @@ export function WhaleTrackerClient() {
       </div>
 
       {/* Activity feed */}
-      <ActivityFeed fills={fills} wallets={wallets} />
+      <ActivityFeed fills={activityFills} wallets={wallets} />
 
       {/* Whale table */}
       <div>
@@ -579,7 +578,7 @@ export function WhaleTrackerClient() {
         <WhaleTable
           wallets={wallets}
           positions={positions}
-          fills={fills}
+          fills={allFills}
           onSelectWallet={setSelectedWallet}
           selectedWallet={selectedWallet}
         />

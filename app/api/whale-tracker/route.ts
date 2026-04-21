@@ -9,7 +9,7 @@ export async function GET() {
     const supabase = createServiceRoleSupabaseClient();
 
     // Fetch all data in parallel
-    const [walletsRes, positionsRes, fillsRes, consensusRes] = await Promise.all([
+    const [walletsRes, positionsRes, activityFillsRes, allFillsRes, consensusRes] = await Promise.all([
       supabase
         .from("whale_wallets")
         .select("*")
@@ -19,12 +19,19 @@ export async function GET() {
         .select("*")
         .eq("is_current", true)
         .order("notional_usd", { ascending: false }),
+      // Activity feed: big trades only
       supabase
         .from("whale_fills")
         .select("*")
         .gte("notional_usd", 25000)
         .order("filled_at", { ascending: false })
         .limit(50),
+      // All recent fills for wallet detail (last 500)
+      supabase
+        .from("whale_fills")
+        .select("*")
+        .order("filled_at", { ascending: false })
+        .limit(500),
       supabase
         .from("whale_consensus")
         .select("*")
@@ -34,7 +41,8 @@ export async function GET() {
     return NextResponse.json({
       wallets: walletsRes.data ?? [],
       positions: positionsRes.data ?? [],
-      fills: fillsRes.data ?? [],
+      activity_fills: activityFillsRes.data ?? [],
+      all_fills: allFillsRes.data ?? [],
       consensus: consensusRes.data ?? [],
       updated_at: new Date().toISOString(),
     });
