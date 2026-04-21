@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 type NavDropdownProps = {
   label: string;
-  items: { href: string; label: string; icon?: string }[];
+  items: { href: string; label: string; icon?: string; badge?: string }[];
 };
 
 export function NavDropdown({ label, items }: NavDropdownProps) {
@@ -65,6 +65,11 @@ export function NavDropdown({ label, items }: NavDropdownProps) {
             >
               {item.icon && <span className="text-base">{item.icon}</span>}
               {item.label}
+              {item.badge && (
+                <span className="ml-auto rounded-full bg-accent-emerald/20 px-1.5 py-0.5 text-[10px] font-bold text-accent-emerald">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
         </div>

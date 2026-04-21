@@ -68,6 +68,7 @@ export const dashboardNavGroups = [
       { href: "/dashboard/pivots", label: "Pivoți BTC", icon: "🔮" },
       { href: "/dashboard/countertrade", label: "Countertrade", icon: "📺" },
       { href: "/dashboard/calendar", label: "Calendar Economic", icon: "📅" },
+      { href: "/tools/whale-tracker", label: "Whale Tracker", icon: "🐋", badge: "NEW" },
     ],
   },
   {

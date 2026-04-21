@@ -1,0 +1,222 @@
+[
+  {
+    "universe": [
+      {
+        "szDecimals": 5,
+        "name": "BTC",
+        "maxLeverage": 40,
+        "marginTableId": 56
+      },
+      {
+        "szDecimals": 4,
+        "name": "ETH",
+        "maxLeverage": 25,
+        "marginTableId": 55
+      },
+      {
+        "szDecimals": 2,
+        "name": "ATOM",
+        "maxLeverage": 5,
+        "marginTableId": 5
+      },
+      {
+        "szDecimals": 1,
+        "name": "MATIC",
+        "maxLeverage": 20,
+        "marginTableId": 20,
+        "isDelisted": true
+      },
+      {
+        "szDecimals": 1,
+        "name": "DYDX",
+        "maxLeverage": 5,
+        "marginTableId": 5
+      }
+    ],
+    "marginTables": [
+      [
+        50,
+        {
+          "description": "",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 50
+            }
+          ]
+        }
+      ],
+      [
+        51,
+        {
+          "description": "tiered 10x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 10
+            },
+            {
+              "lowerBound": "3000000.0",
+              "maxLeverage": 5
+            }
+          ]
+        }
+      ],
+      [
+        52,
+        {
+          "description": "tiered 10x (2)",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 10
+            },
+            {
+              "lowerBound": "20000000.0",
+              "maxLeverage": 5
+            }
+          ]
+        }
+      ],
+      [
+        53,
+        {
+          "description": "tiered 20x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 20
+            },
+            {
+              "lowerBound": "40000000.0",
+              "maxLeverage": 10
+            }
+          ]
+        }
+      ],
+      [
+        54,
+        {
+          "description": "tiered 20x (2)",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 20
+            },
+            {
+              "lowerBound": "70000000.0",
+              "maxLeverage": 10
+            }
+          ]
+        }
+      ],
+      [
+        55,
+        {
+          "description": "tiered 25x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 25
+            },
+            {
+              "lowerBound": "100000000.0",
+              "maxLeverage": 15
+            }
+          ]
+        }
+      ],
+      [
+        56,
+        {
+          "description": "tiered 40x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 40
+            },
+            {
+              "lowerBound": "150000000.0",
+              "maxLeverage": 20
+            }
+          ]
+        }
+      ]
+    ],
+    "collateralToken": 0
+  },
+  [
+    {
+      "funding": "0.0000028503",
+      "openInterest": "27512.5952",
+      "prevDayPx": "76067.0",
+      "dayNtlVlm": "1517469876.5228304863",
+      "premium": "-0.0006182096",
+      "oraclePx": "76026.0",
+      "markPx": "75982.0",
+      "midPx": "75978.5",
+      "impactPxs": [
+        "75972.1",
+        "75979.0"
+      ],
+      "dayBaseVlm": "20076.5093199999"
+    },
+    {
+      "funding": "-0.0000249027",
+      "openInterest": "398539.0388000004",
+      "prevDayPx": "2352.3",
+      "dayNtlVlm": "561270897.9012007713",
+      "premium": "-0.0010678285",
+      "oraclePx": "2341.2",
+      "markPx": "2339.5",
+      "midPx": "2338.65",
+      "impactPxs": [
+        "2338.6",
+        "2338.7"
+      ],
+      "dayBaseVlm": "240281.0526000004"
+    },
+    {
+      "funding": "-0.0000190104",
+      "openInterest": "1946798.5599999998",
+      "prevDayPx": "1.7892",
+      "dayNtlVlm": "342211.5980080001",
+      "premium": "-0.0008370536",
+      "oraclePx": "1.792",
+      "markPx": "1.79",
+      "midPx": "1.7889",
+      "impactPxs": [
+        "1.7876",
+        "1.7905"
+      ],
+      "dayBaseVlm": "192916.8499999999"
+    },
+    {
+      "funding": "0.0",
+      "openInterest": "0.0",
+      "prevDayPx": "0.37621",
+      "dayNtlVlm": "0.0",
+      "premium": null,
+      "oraclePx": "0.3754",
+      "markPx": "0.37621",
+      "midPx": null,
+      "impactPxs": null,
+      "dayBaseVlm": "0.0"
+    },
+    {
+      "funding": "0.0000125",
+      "openInterest": "20039150.3999999948",
+      "prevDayPx": "0.13979",
+      "dayNtlVlm": "1437984.0031619996",
+      "premium": "0.0",
+      "oraclePx": "0.14863",
+      "markPx": "0.14864",
+      "midPx": "0.14863",
+      "impactPxs": [
+        "0.14849",
+        "0.149"
+      ],
+      "dayBaseVlm": "9917049.9999999963"
+    }
+  ]
+]
