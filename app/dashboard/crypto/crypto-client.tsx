@@ -219,6 +219,7 @@ export function CryptoClient() {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Filter>("all");
   const [tab, setTab] = useState<Tab>("all");
+  const [search, setSearch] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
   const [rsiData, setRsiData] = useState<Record<string, number | null>>({});
@@ -340,8 +341,9 @@ export function CryptoClient() {
     tabFiltered = [...withSignals].sort((a, b) => a.change24h - b.change24h).slice(0, 10);
   }
 
-  // Then apply signal filter
+  // Then apply signal + search filter
   const filtered = tabFiltered.filter((s) => {
+    if (search && !s.symbol.toLowerCase().includes(search.toLowerCase()) && !s.name.toLowerCase().includes(search.toLowerCase())) return false;
     if (filter === "buy") return s.signal.includes("BUY");
     if (filter === "sell") return s.signal.includes("SELL");
     if (filter === "hold") return s.signal === "WAIT";
@@ -471,6 +473,22 @@ export function CryptoClient() {
             <span className="mr-1">{icon}</span> {label}
           </button>
         ))}
+      </div>
+
+      {/* Search */}
+      <div className="relative">
+        <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" strokeLinecap="round" />
+        </svg>
+        <input
+          className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-600 outline-none transition focus:border-accent-emerald/30"
+          placeholder="Caută monedă... (ex: BTC, Solana)"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        {search && (
+          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-600 hover:text-white" onClick={() => setSearch("")} type="button">✕</button>
+        )}
       </div>
 
       {/* Mobile sort */}

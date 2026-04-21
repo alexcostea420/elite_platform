@@ -163,8 +163,8 @@ export function StocksClient() {
   const [sortBy, setSortBy] = useState<SortKey>("ticker");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<Filter>("all");
+  const [search, setSearch] = useState("");
   const [updatedAt, setUpdatedAt] = useState<string>("");
-  // expandedTicker no longer needed - zone hits shown inline
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
   const prevPrices = useRef<Record<string, number>>({});
 
@@ -222,6 +222,7 @@ export function StocksClient() {
 
   // Filter
   const filtered = merged.filter((s) => {
+    if (search && !s.ticker.toLowerCase().includes(search.toLowerCase())) return false;
     if (filter === "buy") return s.signal.includes("BUY");
     if (filter === "sell") return s.signal.includes("SELL");
     if (filter === "hold") return s.signal === "WAIT";
@@ -315,6 +316,22 @@ export function StocksClient() {
           <p className="font-data text-3xl font-bold text-orange-400">{sellCount}</p>
           <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-orange-400/70">Vinde</p>
         </button>
+      </div>
+
+      {/* Search */}
+      <div className="relative">
+        <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" strokeLinecap="round" />
+        </svg>
+        <input
+          className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-600 outline-none transition focus:border-accent-emerald/30"
+          placeholder="Caută ticker... (ex: TSLA, NVDA)"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        {search && (
+          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-600 hover:text-white" onClick={() => setSearch("")} type="button">✕</button>
+        )}
       </div>
 
       {/* Sort buttons - mobile */}
