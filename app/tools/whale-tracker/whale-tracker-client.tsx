@@ -2,6 +2,12 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { useBlurMode } from "@/components/ui/blur-guard";
+
+// TODO v2: Discord daily digest (webhook post with top whale moves)
+// TODO v2: Member favorites table (user_id, address) + star UI
+// TODO v2: Asset heatmap (7-day position change by asset)
+// TODO v2: Whale-vs-thesis match (cross-reference Risk Score V2 with consensus)
 
 // ─── Types ─────────────────────────────────────────────────────
 type Wallet = {
@@ -64,6 +70,20 @@ function formatUsd(n: number): string {
 
 function shortAddr(addr: string): string {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      className="text-[10px] text-slate-600 hover:text-accent-emerald transition"
+      onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
+      title="Copiază adresa"
+      type="button"
+    >
+      {copied ? "✓" : "⧉"}
+    </button>
+  );
 }
 
 function timeAgo(iso: string): string {
@@ -134,7 +154,7 @@ function ConsensusPanel({ data }: { data: Consensus[] }) {
 }
 
 // ─── Activity Feed ─────────────────────────────────────────────
-function ActivityFeed({ fills, wallets }: { fills: Fill[]; wallets: Wallet[] }) {
+function ActivityFeed({ fills, wallets, onSelectWallet }: { fills: Fill[]; wallets: Wallet[]; onSelectWallet?: (addr: string) => void }) {
   const [showAll, setShowAll] = useState(false);
   const rankMap = Object.fromEntries(wallets.map((w) => [w.address, w.rank]));
   const visible = showAll ? fills : fills.slice(0, 10);
@@ -162,7 +182,7 @@ function ActivityFeed({ fills, wallets }: { fills: Fill[]; wallets: Wallet[] }) 
           const isOpen = f.action_type === "OPEN";
           const isLong = f.direction === "LONG";
           return (
-            <div key={f.tid} className="flex items-center gap-3 px-4 py-2.5 text-xs">
+            <div key={f.tid} className="flex items-center gap-3 px-4 py-2.5 text-xs cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectWallet?.(f.address)}>
               <span className="font-data text-slate-600 w-8">#{rank}</span>
               <span className="text-slate-500">{shortAddr(f.address)}</span>
               <span className={`rounded-md px-1.5 py-0.5 font-bold ${
@@ -251,6 +271,7 @@ function WhaleTable({
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <span className="font-data text-white">{shortAddr(w.address)}</span>
+                          <CopyButton text={w.address} />
                           <a
                             href={`https://app.hyperliquid.xyz/explorer/address/${w.address}`}
                             target="_blank"
@@ -514,6 +535,9 @@ export function WhaleTrackerClient() {
   const [loading, setLoading] = useState(true);
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState("");
+  const [sortBy, setSortBy] = useState<"rank" | "pnl" | "value" | "activity">("rank");
+  const [filterAsset, setFilterAsset] = useState<string>("all");
+  const [filterDir, setFilterDir] = useState<"all" | "long" | "short">("all");
 
   const fetchData = useCallback(() => {
     fetch("/api/whale-tracker")
@@ -570,14 +594,59 @@ export function WhaleTrackerClient() {
       </div>
 
       {/* Activity feed */}
-      <ActivityFeed fills={activityFills} wallets={wallets} />
+      <ActivityFeed fills={activityFills} wallets={wallets} onSelectWallet={setSelectedWallet} />
+
+      {/* Filter/Sort bar */}
+      <div className="flex flex-wrap items-center gap-3">
+        <h2 className="section-label">Top 20 Portofele</h2>
+        <div className="ml-auto flex flex-wrap gap-2">
+          {/* Sort */}
+          {([
+            { key: "rank" as const, label: "Rank" },
+            { key: "pnl" as const, label: "PnL" },
+            { key: "value" as const, label: "Valoare" },
+            { key: "activity" as const, label: "Activitate" },
+          ]).map(({ key, label }) => (
+            <button
+              key={key}
+              className={`rounded-lg px-3 py-1 text-xs font-semibold transition ${sortBy === key ? "bg-accent-emerald/20 text-accent-emerald" : "bg-white/5 text-slate-500"}`}
+              onClick={() => setSortBy(key)}
+              type="button"
+            >
+              {label}
+            </button>
+          ))}
+          {/* Direction filter */}
+          <select
+            className="rounded-lg bg-white/5 px-2 py-1 text-xs text-slate-400 border border-white/10 outline-none"
+            value={filterDir}
+            onChange={(e) => setFilterDir(e.target.value as "all" | "long" | "short")}
+          >
+            <option value="all">Toate direcțiile</option>
+            <option value="long">Doar Long</option>
+            <option value="short">Doar Short</option>
+          </select>
+        </div>
+      </div>
 
       {/* Whale table */}
       <div>
-        <h2 className="section-label mb-3">Top 20 Portofele</h2>
         <WhaleTable
-          wallets={wallets}
-          positions={positions}
+          wallets={(() => {
+            let sorted = [...wallets];
+            switch (sortBy) {
+              case "pnl": sorted.sort((a, b) => b.pnl_90d - a.pnl_90d); break;
+              case "value": sorted.sort((a, b) => b.account_value - a.account_value); break;
+              case "activity": sorted.sort((a, b) => {
+                const ta = a.last_activity ? new Date(a.last_activity).getTime() : 0;
+                const tb = b.last_activity ? new Date(b.last_activity).getTime() : 0;
+                return tb - ta;
+              }); break;
+              default: sorted.sort((a, b) => a.rank - b.rank);
+            }
+            return sorted;
+          })()}
+          positions={filterDir === "all" ? positions : positions.filter((p) => p.direction === filterDir.toUpperCase())}
           fills={allFills}
           onSelectWallet={setSelectedWallet}
           selectedWallet={selectedWallet}
