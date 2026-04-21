@@ -24,35 +24,25 @@
   --green: #10B981;
   --red: #ef4444;
   --orange: #f97316;
-  --font-head: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-head: 'General Sans', var(--font-sans), system-ui, sans-serif;
+  --font-body: 'General Sans', var(--font-sans), system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 400;
   line-height: 1.65;
-  min-height: 100vh;
   position: relative;
 }
 
-.root::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
+/* dot-grid removed — using site's global background */
 
 /* ── Layout ── */
 .container {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 32px 64px;
+  padding: 16px 16px 64px;
   position: relative;
   z-index: 1;
 }
