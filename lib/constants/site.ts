@@ -70,6 +70,7 @@ export const dashboardNavGroups = [
       { href: "/dashboard/calendar", label: "Calendar Economic", icon: "📅" },
       { href: "/tools/whale-tracker", label: "Whale Tracker", icon: "🐋", badge: "NEW" },
       { href: "/dashboard/news", label: "Știri Crypto", icon: "📰" },
+      { href: "/dashboard/macro", label: "Macro Dashboard", icon: "🏛️", badge: "NEW" },
     ],
   },
   {

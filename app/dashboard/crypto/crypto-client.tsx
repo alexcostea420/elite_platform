@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { BlurGuard, useBlurMode } from "@/components/ui/blur-guard";
 
 type CryptoData = {
   id: string;
@@ -210,6 +211,7 @@ type Filter = "all" | "buy" | "sell" | "hold";
 type Tab = "all" | "gainers" | "losers";
 
 export function CryptoClient() {
+  const blur = useBlurMode();
   const [coins, setCoins] = useState<CryptoData[]>([]);
   const [loading, setLoading] = useState(true);
   const [accepted, setAccepted] = useState(false);
@@ -543,7 +545,9 @@ export function CryptoClient() {
                       <Sparkline data={coin.sparkVisual} color={sparkColor} />
                     </td>
                     <td className="px-4 py-3">
-                      {coin.rsi !== null ? (
+                      {blur ? (
+                        <BlurGuard label="RSI Elite"><span className="text-slate-600">--</span></BlurGuard>
+                      ) : coin.rsi !== null ? (
                         <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-bold tabular-nums ${rsiColor}`} title={rsiLabel}>
                           {coin.rsi.toFixed(0)}
                         </span>
@@ -558,7 +562,9 @@ export function CryptoClient() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      {zones ? (
+                      {blur ? (
+                        <BlurGuard label="Zone Elite"><span className="text-slate-600">---</span></BlurGuard>
+                      ) : zones ? (
                         <div className="relative h-2.5 w-20 overflow-hidden rounded-full bg-white/5">
                           <div className="absolute top-0 h-full bg-emerald-500/20 rounded-l-full" style={{ left: 0, width: `${buy1Pos}%` }} />
                           <div className="absolute top-0 h-full bg-orange-500/20 rounded-r-full" style={{ left: `${sell1Pos}%`, width: `${100 - sell1Pos}%` }} />
@@ -569,10 +575,14 @@ export function CryptoClient() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
-                        <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                        {coin.signal}
-                      </span>
+                      {blur ? (
+                        <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
+                          <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                          {coin.signal}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 );

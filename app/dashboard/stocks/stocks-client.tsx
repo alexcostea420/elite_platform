@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { BlurGuard, useBlurMode } from "@/components/ui/blur-guard";
 
 type StockZones = {
   ticker: string;
@@ -155,6 +156,7 @@ type SortKey = "ticker" | "price" | "changePct" | "pctFromATH" | "signal";
 type Filter = "all" | "buy" | "sell" | "hold";
 
 export function StocksClient() {
+  const blur = useBlurMode();
   const [liveData, setLiveData] = useState<Record<string, LiveData>>({});
   const [zoneHistory, setZoneHistory] = useState<Record<string, TickerHistory>>({});
   const [loading, setLoading] = useState(true);
@@ -456,20 +458,28 @@ export function StocksClient() {
                             {nearest.label}
                           </span>
                         </td>
-                        {zoneCell("Buy 1", stock.buy1, "text-emerald-400", "text-emerald-400/40")}
-                        {zoneCell("Buy 2", stock.buy2, "text-emerald-400", "text-emerald-400/30")}
-                        {zoneCell("Sell 1", stock.sell1, "text-orange-400", "text-orange-400/40")}
-                        {zoneCell("Sell 2", stock.sell2, "text-orange-400", "text-orange-400/30")}
+                        {blur ? (
+                          <td colSpan={4} className="px-4 py-3"><BlurGuard label="Zone Elite Only"><span className="text-slate-600">$--- / $--- / $--- / $---</span></BlurGuard></td>
+                        ) : (
+                          <>{zoneCell("Buy 1", stock.buy1, "text-emerald-400", "text-emerald-400/40")}
+                          {zoneCell("Buy 2", stock.buy2, "text-emerald-400", "text-emerald-400/30")}
+                          {zoneCell("Sell 1", stock.sell1, "text-orange-400", "text-orange-400/40")}
+                          {zoneCell("Sell 2", stock.sell2, "text-orange-400", "text-orange-400/30")}</>
+                        )}
                         <td className="px-4 py-3">
                           <span className={(stock.pctFromATH ?? 0) > -20 ? "text-amber-400" : "text-red-400"}>
                             {(stock.pctFromATH ?? 0).toFixed(1)}%
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
-                            <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                            {stock.signal}
-                          </span>
+                          {blur ? (
+                            <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
+                          ) : (
+                            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
+                              <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                              {stock.signal}
+                            </span>
+                          )}
                         </td>
                       </tr>
                     );
