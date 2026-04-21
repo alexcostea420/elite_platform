@@ -109,8 +109,24 @@ export async function POST(request: NextRequest) {
         })
         .eq("id", userId);
 
-      // Discord auto-sync temporarily disabled
-      // TODO: re-enable when Discord app is stable
+      // Auto-sync Discord role if user has connected Discord
+      try {
+        const { data: discordProfile } = await supabase
+          .from("profiles")
+          .select("discord_user_id")
+          .eq("id", userId)
+          .maybeSingle();
+        if (discordProfile?.discord_user_id) {
+          await syncDiscordRole({
+            profileId: userId,
+            discordUserId: discordProfile.discord_user_id,
+            subscriptionTier: "elite",
+          });
+          console.log(`Stripe: Discord role synced`);
+        }
+      } catch (discordErr) {
+        console.error("Stripe: Discord role sync failed:", discordErr);
+      }
 
       console.log(`Stripe: activated Elite, plan ${planDuration}`);
     }

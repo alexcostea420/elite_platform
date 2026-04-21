@@ -25,12 +25,6 @@ function redirectWithDiscordState(request: NextRequest, params: Record<string, s
 }
 
 export async function GET(request: NextRequest) {
-  // Discord OAuth temporarily disabled
-  return redirectWithDiscordState(request, { discord_error: "Discord este temporar dezactivat pentru mentenanță." });
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function _originalGET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const state = request.nextUrl.searchParams.get("state");
   const oauthError = request.nextUrl.searchParams.get("error");
