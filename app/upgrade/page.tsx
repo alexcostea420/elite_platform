@@ -381,12 +381,12 @@ export default async function UpgradePage() {
                   </p>
                 </div>
 
-                {/* Stats preview */}
+                {/* Stats preview - real data from trades.db */}
                 <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {[
-                    { value: "10+", label: "Active tranzacționate" },
-                    { value: "4.8", label: "Profit Factor mediu" },
-                    { value: "76%", label: "Win Rate" },
+                    { value: "12", label: "Active tranzacționate" },
+                    { value: "62", label: "Tranzacții executate" },
+                    { value: "51.6%", label: "Win Rate" },
                     { value: "24/7", label: "Tranzacționare automată" },
                   ].map((stat) => (
                     <div key={stat.label} className="rounded-xl bg-white/[0.03] px-4 py-3 text-center">
