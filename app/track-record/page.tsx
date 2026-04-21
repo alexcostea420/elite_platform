@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { LivePerformanceSection } from "./track-record-client";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 12 },
@@ -162,6 +163,9 @@ export default function TrackRecordPage() {
             })}
           </div>
         </motion.div>
+
+        {/* Live Bot Performance */}
+        <LivePerformanceSection />
 
         {/* Close */}
         <motion.div className="py-10 text-center" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
