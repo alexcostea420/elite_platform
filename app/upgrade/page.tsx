@@ -280,22 +280,22 @@ export default async function UpgradePage() {
           {/* Bot Copytrade Section - Coming Soon */}
           <section className="mb-10" id="copytrade">
             <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-surface-graphite via-crypto-dark to-surface-graphite">
-              {/* Coming Soon badge */}
-              <div className="absolute right-4 top-4 z-10 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
-                Coming Soon
-              </div>
-
               <div className="p-6 sm:p-8 md:p-10">
-                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                  Bot Trading Automat
-                </p>
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                    Bot Trading Automat
+                  </p>
+                  <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400">
+                    Coming Soon
+                  </span>
+                </div>
                 <h2 className="text-2xl font-bold text-white sm:text-3xl">
                   Copytrade V5 <span className="gradient-text">Bot</span>
                 </h2>
-                <p className="mt-3 max-w-2xl text-slate-400">
-                  Botul nostru tranzacționează automat pe 10+ active crypto cu strategii testate pe date reale.
-                  Tu conectezi contul MEXC, botul face restul.
-                </p>
+                <div className="mt-3 max-w-2xl space-y-2 text-slate-400">
+                  <p>Botul nostru tranzacționează automat pe 10+ active crypto cu strategii testate pe date reale.</p>
+                  <p>Tu conectezi contul MEXC, botul face restul.</p>
+                </div>
 
                 {/* Two column pricing */}
                 <div className="mt-8 grid gap-6 md:grid-cols-2">
