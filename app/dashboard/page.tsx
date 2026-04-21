@@ -180,7 +180,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             /* ═══ ELITE DASHBOARD ═══ */
             <>
               {/* Discord connect prompt for users without Discord */}
-              {!profile?.discord_user_id && <DiscordConnectPrompt />}
+              {/* Discord connect temporarily disabled */}
+              {/* {!profile?.discord_user_id && <DiscordConnectPrompt />} */}
 
               {/* Onboarding checklist for new users */}
               <OnboardingChecklist />

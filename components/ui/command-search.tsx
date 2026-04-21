@@ -29,7 +29,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   // Account
   { label: "Upgrade / Plăți", href: "/upgrade", icon: "💳", group: "Cont" },
   { label: "Track Record - Performanță", href: "/track-record", icon: "📊", group: "Cont" },
-  { label: "Conectează Discord", href: "/auth/discord", icon: "💬", group: "Cont" },
+  // { label: "Conectează Discord", href: "/auth/discord", icon: "💬", group: "Cont" }, // Temporarily disabled
   // External
   { label: "Alex's Brain - Bot Discord", href: "/dashboard/ask-alex", icon: "🧠", group: "Pagini" },
   { label: "Bot Trading", href: "/bots", icon: "🤖", group: "Cont" },
