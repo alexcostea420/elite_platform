@@ -16,6 +16,8 @@ type StockData = {
   marketCap: string;
   pe: string;
   volume: string;
+  avgVolume: string;
+  sector: string;
   w52High: number;
   w52Low: number;
   pctFromATH: number;
@@ -68,6 +70,8 @@ async function fetchFinviz(ticker: string): Promise<StockData | null> {
       marketCap: getField("Market Cap").replace(/\.$/, ""),
       pe: getField("P/E"),
       volume: getField("Volume"),
+      avgVolume: getField("Avg Volume"),
+      sector: getField("Sector"),
       w52High,
       w52Low,
       pctFromATH: w52High > 0 ? ((price - w52High) / w52High) * 100 : 0,

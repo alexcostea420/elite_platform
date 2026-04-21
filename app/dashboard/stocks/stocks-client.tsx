@@ -20,11 +20,43 @@ type LiveData = {
   marketCap: string;
   pe: string;
   volume: string;
+  avgVolume: string;
+  sector: string;
   w52High: number;
   w52Low: number;
   pctFromATH: number;
   sparkline?: number[];
 };
+
+const SECTORS: Record<string, string> = {
+  TSLA: "Auto/EV", COIN: "Crypto", HOOD: "Fintech", MSTR: "Crypto",
+  MARA: "Crypto", CRCL: "Crypto", GOOG: "Tech", META: "Tech",
+  NVDA: "Tech", AAPL: "Tech", MSFT: "Tech", AMZN: "Tech",
+  PYPL: "Fintech", SHOP: "Tech", PLTR: "Tech/AI", ORCL: "Tech",
+};
+
+const SECTOR_COLORS: Record<string, string> = {
+  Tech: "text-blue-400", "Tech/AI": "text-blue-400", Crypto: "text-amber-400",
+  Fintech: "text-purple-400", "Auto/EV": "text-cyan-400",
+};
+
+function parseVolume(vol: string): number {
+  if (!vol || vol === "-") return 0;
+  const clean = vol.replace(/,/g, "");
+  const num = parseFloat(clean);
+  return isNaN(num) ? 0 : num;
+}
+
+function volumeRatio(vol: string, avgVol: string): { ratio: number; label: string; color: string } {
+  const v = parseVolume(vol);
+  const a = parseVolume(avgVol);
+  if (a === 0) return { ratio: 0, label: "-", color: "text-slate-600" };
+  const r = v / a;
+  if (r >= 2) return { ratio: r, label: `${r.toFixed(1)}x`, color: "text-emerald-400" };
+  if (r >= 1.2) return { ratio: r, label: `${r.toFixed(1)}x`, color: "text-white" };
+  if (r >= 0.5) return { ratio: r, label: `${r.toFixed(1)}x`, color: "text-slate-400" };
+  return { ratio: r, label: `${r.toFixed(1)}x`, color: "text-red-400" };
+}
 
 type ZoneHit = {
   zone: string;
@@ -150,6 +182,17 @@ function getNearestZone(price: number, zones: StockZones): { label: string; pct:
     return { label: `${toB1.toFixed(0)}% > B1`, pct: toB1, direction: "buy" };
   }
   return { label: `${toS1.toFixed(0)}% → S1`, pct: toS1, direction: "sell" };
+}
+
+function LiveCountdown({ updatedAt }: { updatedAt: string }) {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const i = setInterval(() => setTick((t) => t + 1), 10000);
+    return () => clearInterval(i);
+  }, []);
+  const secs = Math.floor((Date.now() - new Date(updatedAt).getTime()) / 1000);
+  const label = secs < 60 ? "acum" : secs < 3600 ? `${Math.floor(secs / 60)}m ago` : `${Math.floor(secs / 3600)}h ago`;
+  return <span className="text-slate-600 tabular-nums">{label}</span>;
 }
 
 type SortKey = "ticker" | "price" | "changePct" | "pctFromATH" | "signal";
@@ -282,11 +325,7 @@ export function StocksClient() {
               {avgChange >= 0 ? "+" : ""}{avgChange.toFixed(2)}%
             </span>
           </span>
-          {updatedAt && (
-            <span className="text-slate-600">
-              {new Date(updatedAt).toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
-            </span>
-          )}
+          {updatedAt && <LiveCountdown updatedAt={updatedAt} />}
         </div>
       </div>
 
@@ -403,7 +442,10 @@ export function StocksClient() {
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("changePct")}>
                       % Azi {sortBy === "changePct" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
-                    <th className="px-4 py-3">Cea mai apropiată</th>
+                    <th className="px-4 py-3">52W Range</th>
+                    <th className="px-4 py-3">Vol</th>
+                    <th className="px-4 py-3">P/E</th>
+                    <th className="px-4 py-3">Zonă</th>
                     <th className="px-4 py-3">Buy 1</th>
                     <th className="px-4 py-3">Buy 2</th>
                     <th className="px-4 py-3">Sell 1</th>
@@ -461,6 +503,9 @@ export function StocksClient() {
                           {stock.marketCap && (
                             <span className="ml-2 text-[10px] text-slate-600">{stock.marketCap}</span>
                           )}
+                          <span className={`ml-1 text-[9px] ${SECTOR_COLORS[SECTORS[stock.ticker] ?? ""] ?? "text-slate-700"}`}>
+                            {SECTORS[stock.ticker] ?? ""}
+                          </span>
                         </td>
                         <td className="px-4 py-3 font-data font-semibold text-white tabular-nums">
                           {formatPrice(stock.price ?? 0)}
@@ -470,6 +515,35 @@ export function StocksClient() {
                             {(stock.changePct ?? 0) >= 0 ? "+" : ""}{(stock.changePct ?? 0).toFixed(2)}%
                           </span>
                         </td>
+                        {/* 52W Range */}
+                        <td className="px-4 py-3">
+                          {stock.w52Low && stock.w52High ? (
+                            <div className="w-20">
+                              <div className="relative h-1.5 rounded-full bg-white/5">
+                                <div
+                                  className="absolute top-0 h-full w-1.5 rounded-full bg-accent-emerald shadow-[0_0_4px_rgba(16,185,129,0.6)]"
+                                  style={{ left: `${Math.max(0, Math.min(100, ((stock.price - stock.w52Low) / (stock.w52High - stock.w52Low)) * 100))}%` }}
+                                />
+                              </div>
+                              <div className="mt-0.5 flex justify-between text-[8px] text-slate-700 tabular-nums">
+                                <span>{formatPrice(stock.w52Low)}</span>
+                                <span>{formatPrice(stock.w52High)}</span>
+                              </div>
+                            </div>
+                          ) : <span className="text-xs text-slate-600">-</span>}
+                        </td>
+                        {/* Volume relative */}
+                        <td className="px-4 py-3">
+                          {(() => {
+                            const vr = volumeRatio(stock.volume ?? "", stock.avgVolume ?? "");
+                            return <span className={`font-data text-xs font-semibold ${vr.color}`}>{vr.label}</span>;
+                          })()}
+                        </td>
+                        {/* P/E */}
+                        <td className="px-4 py-3 font-data text-xs tabular-nums text-slate-400">
+                          {stock.pe && stock.pe !== "-" ? stock.pe : <span className="text-slate-700">-</span>}
+                        </td>
+                        {/* Nearest zone */}
                         <td className="px-4 py-3">
                           <span className={`font-data text-xs font-semibold ${nearest.direction === "buy" ? "text-emerald-400" : "text-orange-400"}`}>
                             {nearest.label}

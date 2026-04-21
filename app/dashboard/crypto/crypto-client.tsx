@@ -113,6 +113,33 @@ function getRSILabel(rsi: number): string {
   return "Supravândut";
 }
 
+function getNearestZone(price: number, zones: CryptoZones | undefined): { label: string; direction: "buy" | "sell" | "in" } {
+  if (!zones) return { label: "-", direction: "in" };
+  if (price <= zones.buy1) {
+    const pct = zones.buy2 > 0 ? ((price - zones.buy2) / zones.buy2 * 100) : 0;
+    return { label: `${pct.toFixed(0)}% > B2`, direction: "buy" };
+  }
+  if (price >= zones.sell1) {
+    const pct = zones.sell2 > 0 ? ((zones.sell2 - price) / price * 100) : 0;
+    return { label: `${pct.toFixed(0)}% → S2`, direction: "sell" };
+  }
+  const toB1 = ((price - zones.buy1) / price) * 100;
+  const toS1 = ((zones.sell1 - price) / price) * 100;
+  if (toB1 < toS1) return { label: `${toB1.toFixed(0)}% > B1`, direction: "buy" };
+  return { label: `${toS1.toFixed(0)}% → S1`, direction: "sell" };
+}
+
+function LiveCountdown({ updatedAt }: { updatedAt: string }) {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const i = setInterval(() => setTick((t) => t + 1), 10000);
+    return () => clearInterval(i);
+  }, []);
+  const secs = Math.floor((Date.now() - new Date(updatedAt).getTime()) / 1000);
+  const label = secs < 60 ? "acum" : secs < 3600 ? `${Math.floor(secs / 60)}m ago` : `${Math.floor(secs / 3600)}h ago`;
+  return <span className="text-slate-600 tabular-nums">{label}</span>;
+}
+
 function getSignal(zones: CryptoZones | undefined, price: number): string {
   if (!zones) return "HOLD";
   if (price <= zones.buy2) return "BUY 2";
@@ -419,11 +446,7 @@ export function CryptoClient() {
               {avg24h >= 0 ? "+" : ""}{avg24h.toFixed(2)}%
             </span>
           </span>
-          {updatedAt && (
-            <span className="text-slate-600">
-              {new Date(updatedAt).toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
-            </span>
-          )}
+          {updatedAt && <LiveCountdown updatedAt={updatedAt} />}
         </div>
       </div>
 
@@ -520,8 +543,9 @@ export function CryptoClient() {
                 <th className="px-4 py-3">7d Chart</th>
                 <th className="px-4 py-3">RSI</th>
                 <th className="px-4 py-3">Market Cap</th>
+                <th className="px-4 py-3">Zonă</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromCyclePeak")}>% Vârf {sortBy === "pctFromCyclePeak" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
-                <th className="px-4 py-3">Poziție range</th>
+                <th className="px-4 py-3">Range</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("signal")}>Semnal {sortBy === "signal" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
               </tr>
             </thead>
@@ -574,6 +598,18 @@ export function CryptoClient() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-slate-400 tabular-nums">{formatMarketCap(coin.marketCap)}</td>
+                    <td className="px-4 py-3">
+                      {(() => {
+                        const nz = getNearestZone(coin.price, zones);
+                        return blur ? (
+                          <BlurGuard label="Elite"><span className="text-slate-600">--</span></BlurGuard>
+                        ) : (
+                          <span className={`font-data text-xs font-semibold ${nz.direction === "buy" ? "text-emerald-400" : "text-orange-400"}`}>
+                            {nz.label}
+                          </span>
+                        );
+                      })()}
+                    </td>
                     <td className="px-4 py-3">
                       <span className={coin.pctFromCyclePeak > -20 ? "text-amber-400" : "text-red-400"}>
                         {coin.pctFromCyclePeak.toFixed(1)}%
