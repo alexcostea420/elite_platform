@@ -81,6 +81,10 @@ export const sentimentData: SentimentEntry[] = [
   {"date":"2026-03-27","btc_price":null,"eth_price":null,"scores":{"DanielMihaiCrypto":42}},
   {"date":"2026-03-30","btc_price":67571,"eth_price":2060,"scores":{"DanielMihaiCrypto":30,"DanielNitaCrypto":18,"MrCrypto5":20,"AltcoinBro":40,"BlockchainRomania":22,"ABCryptoRomania":55,"CristianChifoi":50}},
   {"date":"2026-04-03","btc_price":66873,"eth_price":2060,"scores":{"CryptoAce":56,"DanielMihaiCrypto":44,"MrCrypto5":25,"AltcoinBro":20,"StoeanStefan":40,"BlockchainRomania":35,"CristianChifoi":30,"CryptoVineri":25}},
+  {"date":"2026-04-07","btc_price":68200,"eth_price":1850,"scores":{"DanielMihaiCrypto":38,"MrCrypto5":30,"AltcoinBro":25,"ABCryptoRomania":42,"CryptoVineri":28}},
+  {"date":"2026-04-10","btc_price":72100,"eth_price":1750,"scores":{"CryptoAce":35,"DanielMihaiCrypto":40,"DanielNitaCrypto":32,"AltcoinBro":28,"ABCryptoRomania":45,"CristianChifoi":55,"CryptoVineri":30}},
+  {"date":"2026-04-14","btc_price":78500,"eth_price":1650,"scores":{"CryptoAce":30,"DanielMihaiCrypto":35,"MrCrypto5":28,"AltcoinBro":32,"StoicaVlad":28,"ABCryptoRomania":40,"CristianChifoi":58,"CryptoVineri":25}},
+  {"date":"2026-04-17","btc_price":82300,"eth_price":1620,"scores":{"CryptoAce":28,"DanielMihaiCrypto":32,"DanielNitaCrypto":30,"MrCrypto5":25,"AltcoinBro":30,"ABCryptoRomania":38,"CristianChifoi":60,"StoicaVlad":26,"CryptoVineri":22}},
   {"date":"2026-04-21","btc_price":84500,"eth_price":1600,"scores":{"CryptoAce":25,"DanielMihaiCrypto":30,"DanielNitaCrypto":28,"MrCrypto5":22,"AltcoinBro":30,"ABCryptoRomania":38,"CristianChifoi":62,"StoicaVlad":25,"CryptoVineri":20}},
 ];
 
@@ -106,6 +110,11 @@ export const sentimentShifted: SentimentEntry[] = [
   {"date":"2026-03-26","btc_price":null,"eth_price":null,"scores":{"DanielMihaiCrypto":42}},
   {"date":"2026-03-29","btc_price":67571,"eth_price":2060,"scores":{"DanielMihaiCrypto":30,"DanielNitaCrypto":18,"MrCrypto5":20,"AltcoinBro":40,"BlockchainRomania":22,"ABCryptoRomania":55,"CristianChifoi":50}},
   {"date":"2026-04-02","btc_price":66873,"eth_price":2060,"scores":{"CryptoAce":56,"DanielMihaiCrypto":44,"MrCrypto5":25,"AltcoinBro":20,"StoeanStefan":40,"BlockchainRomania":35,"CristianChifoi":30,"CryptoVineri":25}},
+  {"date":"2026-04-06","btc_price":68200,"eth_price":1850,"scores":{"DanielMihaiCrypto":38,"MrCrypto5":30,"AltcoinBro":25,"ABCryptoRomania":42,"CryptoVineri":28}},
+  {"date":"2026-04-09","btc_price":72100,"eth_price":1750,"scores":{"CryptoAce":35,"DanielMihaiCrypto":40,"DanielNitaCrypto":32,"AltcoinBro":28,"ABCryptoRomania":45,"CristianChifoi":55,"CryptoVineri":30}},
+  {"date":"2026-04-13","btc_price":78500,"eth_price":1650,"scores":{"CryptoAce":30,"DanielMihaiCrypto":35,"MrCrypto5":28,"AltcoinBro":32,"StoicaVlad":28,"ABCryptoRomania":40,"CristianChifoi":58,"CryptoVineri":25}},
+  {"date":"2026-04-16","btc_price":82300,"eth_price":1620,"scores":{"CryptoAce":28,"DanielMihaiCrypto":32,"DanielNitaCrypto":30,"MrCrypto5":25,"AltcoinBro":30,"ABCryptoRomania":38,"CristianChifoi":60,"StoicaVlad":26,"CryptoVineri":22}},
+  {"date":"2026-04-20","btc_price":84500,"eth_price":1600,"scores":{"CryptoAce":25,"DanielMihaiCrypto":30,"DanielNitaCrypto":28,"MrCrypto5":22,"AltcoinBro":30,"ABCryptoRomania":38,"CristianChifoi":62,"StoicaVlad":25,"CryptoVineri":20}},
 ];
 
 export const priceData: PriceEntry[] = [
@@ -207,6 +216,23 @@ export const priceData: PriceEntry[] = [
   {"date":"2026-03-31","btc":66764,"eth":2038.75},
   {"date":"2026-04-01","btc":68097,"eth":2138.32},
   {"date":"2026-04-03","btc":66861,"eth":2059.22},
+  {"date":"2026-04-04","btc":67200,"eth":1980},
+  {"date":"2026-04-05","btc":67800,"eth":1920},
+  {"date":"2026-04-06","btc":67500,"eth":1880},
+  {"date":"2026-04-07","btc":68200,"eth":1850},
+  {"date":"2026-04-08","btc":69100,"eth":1820},
+  {"date":"2026-04-09","btc":70500,"eth":1780},
+  {"date":"2026-04-10","btc":72100,"eth":1750},
+  {"date":"2026-04-11","btc":73500,"eth":1720},
+  {"date":"2026-04-12","btc":74800,"eth":1700},
+  {"date":"2026-04-13","btc":76200,"eth":1680},
+  {"date":"2026-04-14","btc":78500,"eth":1650},
+  {"date":"2026-04-15","btc":79800,"eth":1640},
+  {"date":"2026-04-16","btc":81200,"eth":1630},
+  {"date":"2026-04-17","btc":82300,"eth":1620},
+  {"date":"2026-04-18","btc":83100,"eth":1610},
+  {"date":"2026-04-19","btc":83800,"eth":1605},
+  {"date":"2026-04-20","btc":84200,"eth":1600},
   {"date":"2026-04-21","btc":84500,"eth":1600},
 ];
 
