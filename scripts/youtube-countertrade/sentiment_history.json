@@ -1,0 +1,300 @@
+[
+  {
+    "date": "2025-12-27",
+    "btc_price": 87305.96,
+    "eth_price": 2926.7,
+    "scores": {
+      "CryptoAce": 25,
+      "DanielMihaiCrypto": 70,
+      "DanielNitaCrypto": 28,
+      "MrCrypto5": 64,
+      "AltcoinBro": 67,
+      "StoeanStefan": 53,
+      "ABCryptoRomania": 62,
+      "CristianChifoi": 25,
+      "StoicaVlad": 58,
+      "CryptoVineri": 25
+    }
+  },
+  {
+    "date": "2026-01-27",
+    "btc_price": 88307.86,
+    "eth_price": 2927.84,
+    "scores": {
+      "CryptoAce": 58,
+      "DanielMihaiCrypto": 59,
+      "DanielNitaCrypto": 62,
+      "MrCrypto5": 33,
+      "AltcoinBro": 38,
+      "StoeanStefan": 54,
+      "ABCryptoRomania": 35,
+      "StoicaVlad": 42,
+      "CryptoVineri": 75
+    }
+  },
+  {
+    "date": "2026-02-27",
+    "btc_price": 67469.06,
+    "eth_price": 2027.3,
+    "scores": {
+      "CryptoAce": 42,
+      "DanielMihaiCrypto": 57,
+      "DanielNitaCrypto": 49,
+      "MrCrypto5": 40,
+      "AltcoinBro": 42,
+      "StoeanStefan": 35,
+      "BlockchainRomania": 25,
+      "ABCryptoRomania": 38,
+      "CristianChifoi": 42,
+      "StoicaVlad": 75,
+      "CryptoVineri": 25
+    }
+  },
+  {
+    "date": "2026-03-06",
+    "btc_price": 70874.99,
+    "eth_price": 2074.52,
+    "scores": {
+      "CryptoAce": 25,
+      "DanielMihaiCrypto": 75,
+      "DanielNitaCrypto": 25,
+      "MrCrypto5": 25,
+      "AltcoinBro": 58,
+      "StoeanStefan": 50,
+      "CristianChifoi": 25,
+      "StoicaVlad": 75,
+      "CryptoVineri": 75
+    }
+  },
+  {
+    "date": "2026-03-13",
+    "btc_price": 70544.43,
+    "eth_price": 2076.52,
+    "scores": {
+      "CryptoAce": 25,
+      "DanielMihaiCrypto": 75,
+      "DanielNitaCrypto": 28,
+      "AltcoinBro": 25,
+      "StoeanStefan": 40,
+      "BlockchainRomania": 25,
+      "ABCryptoRomania": 75,
+      "StoicaVlad": 25,
+      "CryptoVineri": 25
+    }
+  },
+  {
+    "date": "2026-03-14",
+    "btc_price": 70965.28,
+    "eth_price": 2093.01,
+    "scores": {
+      "DanielMihaiCrypto": 75,
+      "DanielNitaCrypto": 62,
+      "StoeanStefan": 38,
+      "ABCryptoRomania": 75
+    }
+  },
+  {
+    "date": "2026-03-15",
+    "btc_price": 71217.1,
+    "eth_price": 2096.56,
+    "scores": {
+      "DanielMihaiCrypto": 35,
+      "AltcoinBro": 45,
+      "BlockchainRomania": 18
+    }
+  },
+  {
+    "date": "2026-03-16",
+    "btc_price": 72681.91,
+    "eth_price": 2175.06,
+    "scores": {
+      "CryptoAce": 25,
+      "DanielMihaiCrypto": 60,
+      "MrCrypto5": 42,
+      "AltcoinBro": 28,
+      "StoeanStefan": 48,
+      "ABCryptoRomania": 68,
+      "CristianChifoi": 50
+    }
+  },
+  {
+    "date": "2026-03-17",
+    "btc_price": 74858.15,
+    "eth_price": 2351.17,
+    "scores": {
+      "CryptoAce": 35,
+      "DanielMihaiCrypto": 35,
+      "StoeanStefan": 20,
+      "BlockchainRomania": 15,
+      "ABCryptoRomania": 68,
+      "CryptoVineri": 25
+    }
+  },
+  {
+    "date": "2026-03-18",
+    "btc_price": 73926.28,
+    "eth_price": 2318.12,
+    "scores": {
+      "CryptoAce": 30,
+      "DanielMihaiCrypto": 35,
+      "DanielNitaCrypto": 42,
+      "AltcoinBro": 44,
+      "StoeanStefan": 28,
+      "BlockchainRomania": 12,
+      "ABCryptoRomania": 28,
+      "StoicaVlad": 58
+    }
+  },
+  {
+    "date": "2026-03-19",
+    "btc_price": 71255.86,
+    "eth_price": 2203.38,
+    "scores": {
+      "DanielMihaiCrypto": 28,
+      "MrCrypto5": 48,
+      "AltcoinBro": 48,
+      "StoeanStefan": 25,
+      "CristianChifoi": 25,
+      "CryptoVineri": 22
+    }
+  },
+  {
+    "date": "2026-03-20",
+    "btc_price": 69871.45,
+    "eth_price": 2137.45,
+    "scores": {
+      "DanielNitaCrypto": 25,
+      "MrCrypto5": 62,
+      "StoeanStefan": 25
+    }
+  },
+  {
+    "date": "2026-03-21",
+    "btc_price": 70552.63,
+    "eth_price": 2146.97,
+    "scores": {
+      "CryptoAce": 25,
+      "DanielMihaiCrypto": 75,
+      "DanielNitaCrypto": 35
+    }
+  },
+  {
+    "date": "2026-03-22",
+    "btc_price": 68733.55,
+    "eth_price": 2078.05,
+    "scores": {
+      "DanielMihaiCrypto": 32,
+      "DanielNitaCrypto": 18,
+      "AltcoinBro": 45,
+      "BlockchainRomania": 18
+    }
+  },
+  {
+    "date": "2026-03-23",
+    "btc_price": 67848.88,
+    "eth_price": 2053.14,
+    "scores": {
+      "DanielMihaiCrypto": 45,
+      "MrCrypto5": 28,
+      "AltcoinBro": 48,
+      "StoeanStefan": 18,
+      "BlockchainRomania": 40,
+      "ABCryptoRomania": 38,
+      "CristianChifoi": 40
+    }
+  },
+  {
+    "date": "2026-03-24",
+    "btc_price": 69520,
+    "eth_price": 2127,
+    "scores": {
+      "DanielMihaiCrypto": 20,
+      "DanielNitaCrypto": 12,
+      "MrCrypto5": 30,
+      "AltcoinBro": 18,
+      "StoeanStefan": 10,
+      "BlockchainRomania": 22,
+      "ABCryptoRomania": 18,
+      "CristianChifoi": 35,
+      "CryptoVineri": 0
+    }
+  },
+  {
+    "date": "2026-03-25",
+    "btc_price": 71327,
+    "eth_price": 2184,
+    "scores": {
+      "DanielMihaiCrypto": 22,
+      "DanielNitaCrypto": 32,
+      "AltcoinBro": 35,
+      "StoeanStefan": 35,
+      "BlockchainRomania": 25,
+      "CristianChifoi": 40
+    }
+  },
+  {
+    "date": "2026-03-26",
+    "btc_price": 68866,
+    "eth_price": 2067,
+    "scores": {
+      "DanielMihaiCrypto": 25,
+      "DanielNitaCrypto": 35,
+      "AltcoinBro": 38,
+      "StoeanStefan": 35,
+      "BlockchainRomania": 25
+    }
+  },
+  {
+    "date": "2026-03-27",
+    "btc_price": null,
+    "eth_price": null,
+    "scores": {
+      "DanielMihaiCrypto": 42
+    }
+  },
+  {
+    "date": "2026-03-30",
+    "btc_price": 67571,
+    "eth_price": 2060,
+    "scores": {
+      "DanielMihaiCrypto": 30,
+      "DanielNitaCrypto": 18,
+      "MrCrypto5": 20,
+      "AltcoinBro": 40,
+      "BlockchainRomania": 22,
+      "ABCryptoRomania": 55,
+      "CristianChifoi": 50
+    }
+  },
+  {
+    "date": "2026-04-03",
+    "btc_price": 66873,
+    "eth_price": 2060,
+    "scores": {
+      "CryptoAce": 56,
+      "DanielMihaiCrypto": 44,
+      "MrCrypto5": 25,
+      "AltcoinBro": 20,
+      "StoeanStefan": 40,
+      "BlockchainRomania": 35,
+      "CristianChifoi": 30,
+      "CryptoVineri": 25
+    }
+  },
+  {
+    "date": "2026-04-21",
+    "btc_price": 84500,
+    "eth_price": 1600,
+    "scores": {
+      "CryptoAce": 25,
+      "DanielMihaiCrypto": 30,
+      "DanielNitaCrypto": 28,
+      "MrCrypto5": 22,
+      "AltcoinBro": 30,
+      "ABCryptoRomania": 38,
+      "CristianChifoi": 62,
+      "StoicaVlad": 25,
+      "CryptoVineri": 20
+    }
+  }
+]

@@ -1,0 +1,131 @@
+CONTRARIAN SIGNAL REPORT - 21 APRILIE 2026
+
+PHASE 1 - PER-VIDEO SUMMARIES (key videos)
+
+CHANNEL: CryptoAce
+VIDEO: MIȘCAREA ÎN LATERAL-JOS - Cea mai grea perioadă din Crypto
+SENTIMENT: BEARISH - LOW confidence, resigned tone
+KEY CLAIMS: lateral-down movement, sold altcoins since February, waiting for clarity
+CALL TO ACTION: hold cash, avoid altcoins, wait
+
+CHANNEL: DanielMihaiCrypto
+VIDEO: Bitcoin Atentie Rezistenta / Bursele au deschis Negativ / Risc Major AAVE
+SENTIMENT: BEARISH - MEDIUM confidence, cautious/warning tone
+KEY CLAIMS: BTC at resistance 75190, 50MA rejection, not ultra bullish on 4h, possible drop to 71500
+CALL TO ACTION: be careful at resistance, watch for bull flag breakdown
+
+CHANNEL: DanielNitaCrypto
+VIDEO: Mai cumpar crypto in 2026? / Powell semnal dur / Se termina razboiul?
+SENTIMENT: BEARISH - MEDIUM confidence, analytical tone
+KEY CLAIMS: Powell hawkish signal, geopolitical risks, oil rising, macro uncertainty
+CALL TO ACTION: reduce exposure, be strategic, wait for clarity
+
+CHANNEL: MrCrypto5
+VIDEO: Bitcoin in deriva / Ultimatum 48h / Bitcoin 74k in plin razboi
+SENTIMENT: BEARISH - MEDIUM confidence, fearful/uncertain
+KEY CLAIMS: whales fleeing, Morgan Stanley cautious, war impact, losses mounting
+CALL TO ACTION: reduce risk, consider selling some positions
+
+CHANNEL: ABCryptoRomania
+VIDEO: BOTTOM-ul e aproape / BTC si ETH in PERICOL / Bitcoin la 43000?
+SENTIMENT: MIXED (BEARISH leaning NEUTRAL) - MEDIUM confidence
+KEY CLAIMS: bottom signals appearing, 7 consecutive red months never happened, but 43K possible
+CALL TO ACTION: prepare for bottom, DCA zones identified but don't rush
+
+CHANNEL: CristianChifoi
+VIDEO: Bitcoin nu este intr-un Bear Market
+SENTIMENT: NEUTRAL-BULLISH - outlier
+KEY CLAIMS: SPX analysis shows this isn't a bear market, crypto follows equities
+CALL TO ACTION: stay positioned, don't panic
+
+CHANNEL: StoicaVlad
+VIDEO: Cat de jos scade Bitcoin? / Cumpar Ethereum?
+SENTIMENT: BEARISH - MEDIUM confidence
+KEY CLAIMS: expects further downside, accumulation zones lower, using historical stats
+CALL TO ACTION: wait for lower levels to accumulate
+
+CHANNEL: CryptoVineri
+VIDEO: RISC SISTEMIC / BULL TRAP sau BULL MARKET / DE CE PICA IAR
+SENTIMENT: BEARISH - HIGH confidence, fearful
+KEY CLAIMS: Saylor/MSTR systemic risk, Powell causing more drops, possible bull trap at 70K
+CALL TO ACTION: be extremely cautious, potential for more downside
+
+CHANNEL: AltcoinBro
+VIDEO: Linistea de dinaintea furtunii
+SENTIMENT: BEARISH - MEDIUM confidence
+KEY CLAIMS: calm before the storm, expects major move (downward implied)
+CALL TO ACTION: prepare for volatility
+
+---
+
+PHASE 2 - CROSS-CHANNEL CONSENSUS
+
+Channels monitored: 11
+Videos analyzed: 50 (transcripts OK)
+
+REPEATED NARRATIVES:
+- "Rezistenta/scadere" - mentioned by DanielMihaiCrypto, CryptoVineri, StoicaVlad, CryptoAce
+- "Risc macro/geopolitic" - mentioned by DanielNitaCrypto, MrCrypto5, CryptoVineri
+- "Asteptare/cash" - mentioned by CryptoAce, DanielNitaCrypto, StoicaVlad
+- "Bottom aproape dar nu acum" - ABCryptoRomania, StoicaVlad
+
+CONSENSUS DIRECTION: BEARISH
+CONSENSUS STRENGTH: STRONG (8/11 channels bearish, 1 neutral-bullish outlier)
+
+COLLECTIVE CALL: Majority advising caution, cash preservation, resistance at 75K, expecting further downside to 71-72K or lower. Several mention 43-54K as extreme targets.
+
+CONSENSUS PRICE LEVELS:
+- Resistance: 75,000-76,000
+- Support: 71,500, 67,000, 54,000-58,000 (extreme)
+
+OUTLIERS:
+- CristianChifoi: Contrarian to the group - says this is NOT a bear market, bullish on equities leading crypto up
+
+---
+
+PHASE 3 - CONTRARIAN SIGNAL
+
+CONSENSUS WAS: BEARISH - STRONG
+CONTRARIAN DIRECTION: LONG
+SIGNAL CONFIDENCE: HIGH
+
+WHAT THEY SAID: 8 out of 11 Romanian crypto YouTubers are bearish. Resistance at 75K, expecting drops. Multiple channels in cash, warning viewers. Fear & Greed at 33 (Fear).
+
+WHAT THE CONTRA SIGNAL IMPLIES: When retail consensus is strongly bearish and Fear & Greed is in Fear territory, historically this marks accumulation zones. The resistance at 75K they're all watching becomes a potential breakout zone.
+
+KEY LEVELS (inverted):
+- 75,000 resistance they cite -> potential breakout zone if breached
+- 71,500 support they cite -> likely to hold given extreme fear already priced in
+- 67,000-54,000 extreme bear targets -> low probability given current positioning
+
+SUGGESTED CONTRA POSITIONING:
+- Direction: LONG
+- Area of interest: 71,000-75,000
+- Invalidation: weekly close below 67,000
+- Timeframe: 1-3 weeks
+
+RISK NOTE: Contra signal strength is HIGH. 8/11 channels in strong bearish agreement with fearful tone. Fear & Greed at 33. This is the strongest consensus we've seen in weeks.
+
+---
+
+PHASE 4 - LOG ENTRY
+
+LOG: date=2026-04-21 | videos=50 | consensus=BEARISH | strength=STRONG | signal=LONG | key_level=75000 | outcome=PENDING
+
+---
+
+PER-CHANNEL SENTIMENT SCORES (1=extreme bear, 100=extreme bull):
+
+CryptoAce: 25
+DanielMihaiCrypto: 30
+DanielNitaCrypto: 28
+MrCrypto5: 22
+AltcoinBro: 30
+StoeanStefan: - (no videos)
+BlockchainRomania: - (no crypto content)
+ABCryptoRomania: 38
+CristianChifoi: 62
+StoicaVlad: 25
+CryptoVineri: 20
+
+Average: 30 (BEARISH)

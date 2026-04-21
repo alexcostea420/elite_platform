@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrarian Signal Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { overflow-x:hidden; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0d0d12; color: #c8c8d0; padding: 28px 24px;
+}
+.header {
+  max-width:1440px; margin:0 auto 22px;
+  display:flex; align-items:baseline; justify-content:space-between;
+  border-bottom:1px solid #1c1c28; padding-bottom:14px;
+}
+.header h1 { font-size:.85em; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:#e0e0ec; }
+.header .updated { font-size:.75em; color:#33334a; }
+.stats-bar {
+  max-width:1440px; margin:0 auto 18px;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
+}
+.stat {
+  background:#11111a; border:1px solid #1c1c28; border-radius:10px; padding:16px 20px;
+}
+.stat .lbl { font-size:.68em; text-transform:uppercase; letter-spacing:.09em; color:#33334a; margin-bottom:6px; }
+.stat .val { font-size:1.7em; font-weight:700; color:#e0e0ec; line-height:1; }
+.stat .sub { font-size:.7em; color:#33334a; margin-top:5px; }
+.stat.bearish .val { color:#d95555; }
+.stat.bullish .val { color:#27b86e; }
+.stat.neutral  .val { color:#c88c0a; }
+.grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:14px;
+  max-width:1440px; margin:0 auto;
+}
+.card { background:#11111a; border:1px solid #1c1c28; border-radius:10px; padding:20px 22px; min-width:0; overflow:hidden; }
+.card.full { grid-column:1/-1; }
+.card h2 { font-size:.68em; font-weight:600; text-transform:uppercase; letter-spacing:.11em; color:#33334a; margin-bottom:14px; }
+.chart-container { position:relative; }
+.ch-main { height:400px; }
+.ch-half { height:290px; }
+table { width:100%; border-collapse:collapse; font-size:.82em; }
+th, td { padding:9px 12px; text-align:left; border-bottom:1px solid #171720; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#13131e; }
+th { color:#33334a; font-size:.68em; text-transform:uppercase; letter-spacing:.07em; font-weight:600; }
+.bar-wrap { background:#171720; border-radius:3px; height:5px; width:110px; overflow:hidden; display:inline-block; }
+.bar-fill { height:100%; border-radius:3px; }
+.pill { display:inline-block; padding:2px 9px; border-radius:5px; font-size:.78em; font-weight:600; }
+.pill-long    { background:rgba(39,184,110,.13); color:#27b86e; }
+.pill-short   { background:rgba(217,85,85,.13);  color:#d95555; }
+.pill-correct { background:rgba(39,184,110,.12); color:#27b86e; }
+.pill-pending { background:rgba(60,60,85,.2);    color:#55556a; }
+.pill-wrong   { background:rgba(217,85,85,.12);  color:#d95555; }
+
+/* Heatmap table */
+.heatmap { border-collapse:collapse; width:100%; font-size:.72em; }
+.heatmap th { color:#33334a; font-weight:500; padding:4px 6px; white-space:nowrap; border:none; font-size:.7em; text-transform:none; letter-spacing:0; }
+.heatmap td { padding:3px 4px; border:1px solid #0d0d12; text-align:center; font-weight:600; border-radius:3px; }
+.heatmap .ch-name { text-align:left; color:#55556a; font-weight:500; white-space:nowrap; padding-right:10px; background:none; border:none; }
+@media (max-width:860px) {
+  .grid { grid-template-columns:1fr; }
+  .stats-bar { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Contrarian Signal Dashboard</h1>
+  <span class="updated">Updated 2026-04-03 14:09 &nbsp;·&nbsp; Sentiment plotted at video date (scan date − 1)</span>
+</div>
+
+<div class="stats-bar" id="statsBar"></div>
+
+<div class="grid">
+
+  <div class="card full">
+    <h2>YouTube Sentiment vs BTC Price</h2>
+    <div class="chart-container ch-main"><canvas id="mainChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h2 style="margin-bottom:0">Per-Channel Sentiment — Heatmap</h2>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button id="hmPrev" onclick="hmNav(-1)" style="background:#1c1c28;border:1px solid #252535;color:#c8c8d0;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85em">&#8592;</button>
+        <span id="hmRange" style="font-size:.68em;color:#55556a;white-space:nowrap"></span>
+        <button id="hmNext" onclick="hmNav(1)" style="background:#1c1c28;border:1px solid #252535;color:#c8c8d0;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85em">&#8594;</button>
+      </div>
+    </div>
+    <div id="heatmapWrap" style="overflow-x:auto"></div>
+  </div>
+
+  <div class="card">
+    <h2>Fear &amp; Greed vs YouTube Sentiment</h2>
+    <div class="chart-container ch-half"><canvas id="fngChart"></canvas></div>
+  </div>
+
+  <div class="card full">
+    <h2>Latest Channel Scores</h2>
+    <table id="scoresTable">
+      <thead><tr><th>Channel</th><th>Score</th><th style="width:130px">Bar</th><th>vs Prev Run</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="card full">
+    <h2>Signal History</h2>
+    <table id="signalTable">
+      <thead><tr><th>Date</th><th>Consensus</th><th>Signal</th><th>BTC Entry</th><th>Outcome</th><th>P&amp;L</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const sentimentData    = [{"date": "2025-12-27", "btc_price": 87305.96, "eth_price": 2926.7, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 70, "DanielNitaCrypto": 28, "MrCrypto5": 64, "AltcoinBro": 67, "StoeanStefan": 53, "ABCryptoRomania": 62, "CristianChifoi": 25, "StoicaVlad": 58, "CryptoVineri": 25}}, {"date": "2026-01-27", "btc_price": 88307.86, "eth_price": 2927.84, "scores": {"CryptoAce": 58, "DanielMihaiCrypto": 59, "DanielNitaCrypto": 62, "MrCrypto5": 33, "AltcoinBro": 38, "StoeanStefan": 54, "ABCryptoRomania": 35, "StoicaVlad": 42, "CryptoVineri": 75}}, {"date": "2026-02-27", "btc_price": 67469.06, "eth_price": 2027.3, "scores": {"CryptoAce": 42, "DanielMihaiCrypto": 57, "DanielNitaCrypto": 49, "MrCrypto5": 40, "AltcoinBro": 42, "StoeanStefan": 35, "BlockchainRomania": 25, "ABCryptoRomania": 38, "CristianChifoi": 42, "StoicaVlad": 75, "CryptoVineri": 25}}, {"date": "2026-03-06", "btc_price": 70874.99, "eth_price": 2074.52, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 75, "DanielNitaCrypto": 25, "MrCrypto5": 25, "AltcoinBro": 58, "StoeanStefan": 50, "CristianChifoi": 25, "StoicaVlad": 75, "CryptoVineri": 75}}, {"date": "2026-03-13", "btc_price": 70544.43, "eth_price": 2076.52, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 75, "DanielNitaCrypto": 28, "AltcoinBro": 25, "StoeanStefan": 40, "BlockchainRomania": 25, "ABCryptoRomania": 75, "StoicaVlad": 25, "CryptoVineri": 25}}, {"date": "2026-03-14", "btc_price": 70965.28, "eth_price": 2093.01, "scores": {"DanielMihaiCrypto": 75, "DanielNitaCrypto": 62, "StoeanStefan": 38, "ABCryptoRomania": 75}}, {"date": "2026-03-15", "btc_price": 71217.1, "eth_price": 2096.56, "scores": {"DanielMihaiCrypto": 35, "AltcoinBro": 45, "BlockchainRomania": 18}}, {"date": "2026-03-16", "btc_price": 72681.91, "eth_price": 2175.06, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 60, "MrCrypto5": 42, "AltcoinBro": 28, "StoeanStefan": 48, "ABCryptoRomania": 68, "CristianChifoi": 50}}, {"date": "2026-03-17", "btc_price": 74858.15, "eth_price": 2351.17, "scores": {"CryptoAce": 35, "DanielMihaiCrypto": 35, "StoeanStefan": 20, "BlockchainRomania": 15, "ABCryptoRomania": 68, "CryptoVineri": 25}}, {"date": "2026-03-18", "btc_price": 73926.28, "eth_price": 2318.12, "scores": {"CryptoAce": 30, "DanielMihaiCrypto": 35, "DanielNitaCrypto": 42, "AltcoinBro": 44, "StoeanStefan": 28, "BlockchainRomania": 12, "ABCryptoRomania": 28, "StoicaVlad": 58}}, {"date": "2026-03-19", "btc_price": 71255.86, "eth_price": 2203.38, "scores": {"DanielMihaiCrypto": 28, "MrCrypto5": 48, "AltcoinBro": 48, "StoeanStefan": 25, "CristianChifoi": 25, "CryptoVineri": 22}}, {"date": "2026-03-20", "btc_price": 69871.45, "eth_price": 2137.45, "scores": {"DanielNitaCrypto": 25, "MrCrypto5": 62, "StoeanStefan": 25}}, {"date": "2026-03-21", "btc_price": 70552.63, "eth_price": 2146.97, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 75, "DanielNitaCrypto": 35}}, {"date": "2026-03-22", "btc_price": 68733.55, "eth_price": 2078.05, "scores": {"DanielMihaiCrypto": 32, "DanielNitaCrypto": 18, "AltcoinBro": 45, "BlockchainRomania": 18}}, {"date": "2026-03-23", "btc_price": 67848.88, "eth_price": 2053.14, "scores": {"DanielMihaiCrypto": 45, "MrCrypto5": 28, "AltcoinBro": 48, "StoeanStefan": 18, "BlockchainRomania": 40, "ABCryptoRomania": 38, "CristianChifoi": 40}}, {"date": "2026-03-24", "btc_price": 69520, "eth_price": 2127, "scores": {"DanielMihaiCrypto": 20, "DanielNitaCrypto": 12, "MrCrypto5": 30, "AltcoinBro": 18, "StoeanStefan": 10, "BlockchainRomania": 22, "ABCryptoRomania": 18, "CristianChifoi": 35, "CryptoVineri": 0}}, {"date": "2026-03-25", "btc_price": 71327, "eth_price": 2184, "scores": {"DanielMihaiCrypto": 22, "DanielNitaCrypto": 32, "AltcoinBro": 35, "StoeanStefan": 35, "BlockchainRomania": 25, "CristianChifoi": 40}}, {"date": "2026-03-26", "btc_price": 68866, "eth_price": 2067, "scores": {"DanielMihaiCrypto": 25, "DanielNitaCrypto": 35, "AltcoinBro": 38, "StoeanStefan": 35, "BlockchainRomania": 25}}, {"date": "2026-03-27", "btc_price": null, "eth_price": null, "scores": {"DanielMihaiCrypto": 42}}, {"date": "2026-03-30", "btc_price": 67571, "eth_price": 2060, "scores": {"DanielMihaiCrypto": 30, "DanielNitaCrypto": 18, "MrCrypto5": 20, "AltcoinBro": 40, "BlockchainRomania": 22, "ABCryptoRomania": 55, "CristianChifoi": 50}}, {"date": "2026-04-03", "btc_price": 66873, "eth_price": 2060, "scores": {"CryptoAce": 56, "DanielMihaiCrypto": 44, "MrCrypto5": 25, "AltcoinBro": 20, "StoeanStefan": 40, "BlockchainRomania": 35, "CristianChifoi": 30, "CryptoVineri": 25}}];
+const sentimentShifted = [{"date": "2025-12-26", "btc_price": 87305.96, "eth_price": 2926.7, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 70, "DanielNitaCrypto": 28, "MrCrypto5": 64, "AltcoinBro": 67, "StoeanStefan": 53, "ABCryptoRomania": 62, "CristianChifoi": 25, "StoicaVlad": 58, "CryptoVineri": 25}}, {"date": "2026-01-26", "btc_price": 88307.86, "eth_price": 2927.84, "scores": {"CryptoAce": 58, "DanielMihaiCrypto": 59, "DanielNitaCrypto": 62, "MrCrypto5": 33, "AltcoinBro": 38, "StoeanStefan": 54, "ABCryptoRomania": 35, "StoicaVlad": 42, "CryptoVineri": 75}}, {"date": "2026-02-26", "btc_price": 67469.06, "eth_price": 2027.3, "scores": {"CryptoAce": 42, "DanielMihaiCrypto": 57, "DanielNitaCrypto": 49, "MrCrypto5": 40, "AltcoinBro": 42, "StoeanStefan": 35, "BlockchainRomania": 25, "ABCryptoRomania": 38, "CristianChifoi": 42, "StoicaVlad": 75, "CryptoVineri": 25}}, {"date": "2026-03-05", "btc_price": 70874.99, "eth_price": 2074.52, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 75, "DanielNitaCrypto": 25, "MrCrypto5": 25, "AltcoinBro": 58, "StoeanStefan": 50, "CristianChifoi": 25, "StoicaVlad": 75, "CryptoVineri": 75}}, {"date": "2026-03-12", "btc_price": 70544.43, "eth_price": 2076.52, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 75, "DanielNitaCrypto": 28, "AltcoinBro": 25, "StoeanStefan": 40, "BlockchainRomania": 25, "ABCryptoRomania": 75, "StoicaVlad": 25, "CryptoVineri": 25}}, {"date": "2026-03-13", "btc_price": 70965.28, "eth_price": 2093.01, "scores": {"DanielMihaiCrypto": 75, "DanielNitaCrypto": 62, "StoeanStefan": 38, "ABCryptoRomania": 75}}, {"date": "2026-03-14", "btc_price": 71217.1, "eth_price": 2096.56, "scores": {"DanielMihaiCrypto": 35, "AltcoinBro": 45, "BlockchainRomania": 18}}, {"date": "2026-03-15", "btc_price": 72681.91, "eth_price": 2175.06, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 60, "MrCrypto5": 42, "AltcoinBro": 28, "StoeanStefan": 48, "ABCryptoRomania": 68, "CristianChifoi": 50}}, {"date": "2026-03-16", "btc_price": 74858.15, "eth_price": 2351.17, "scores": {"CryptoAce": 35, "DanielMihaiCrypto": 35, "StoeanStefan": 20, "BlockchainRomania": 15, "ABCryptoRomania": 68, "CryptoVineri": 25}}, {"date": "2026-03-17", "btc_price": 73926.28, "eth_price": 2318.12, "scores": {"CryptoAce": 30, "DanielMihaiCrypto": 35, "DanielNitaCrypto": 42, "AltcoinBro": 44, "StoeanStefan": 28, "BlockchainRomania": 12, "ABCryptoRomania": 28, "StoicaVlad": 58}}, {"date": "2026-03-18", "btc_price": 71255.86, "eth_price": 2203.38, "scores": {"DanielMihaiCrypto": 28, "MrCrypto5": 48, "AltcoinBro": 48, "StoeanStefan": 25, "CristianChifoi": 25, "CryptoVineri": 22}}, {"date": "2026-03-19", "btc_price": 69871.45, "eth_price": 2137.45, "scores": {"DanielNitaCrypto": 25, "MrCrypto5": 62, "StoeanStefan": 25}}, {"date": "2026-03-20", "btc_price": 70552.63, "eth_price": 2146.97, "scores": {"CryptoAce": 25, "DanielMihaiCrypto": 75, "DanielNitaCrypto": 35}}, {"date": "2026-03-21", "btc_price": 68733.55, "eth_price": 2078.05, "scores": {"DanielMihaiCrypto": 32, "DanielNitaCrypto": 18, "AltcoinBro": 45, "BlockchainRomania": 18}}, {"date": "2026-03-22", "btc_price": 67848.88, "eth_price": 2053.14, "scores": {"DanielMihaiCrypto": 45, "MrCrypto5": 28, "AltcoinBro": 48, "StoeanStefan": 18, "BlockchainRomania": 40, "ABCryptoRomania": 38, "CristianChifoi": 40}}, {"date": "2026-03-23", "btc_price": 69520, "eth_price": 2127, "scores": {"DanielMihaiCrypto": 20, "DanielNitaCrypto": 12, "MrCrypto5": 30, "AltcoinBro": 18, "StoeanStefan": 10, "BlockchainRomania": 22, "ABCryptoRomania": 18, "CristianChifoi": 35, "CryptoVineri": 0}}, {"date": "2026-03-24", "btc_price": 71327, "eth_price": 2184, "scores": {"DanielMihaiCrypto": 22, "DanielNitaCrypto": 32, "AltcoinBro": 35, "StoeanStefan": 35, "BlockchainRomania": 25, "CristianChifoi": 40}}, {"date": "2026-03-25", "btc_price": 68866, "eth_price": 2067, "scores": {"DanielMihaiCrypto": 25, "DanielNitaCrypto": 35, "AltcoinBro": 38, "StoeanStefan": 35, "BlockchainRomania": 25}}, {"date": "2026-03-26", "btc_price": null, "eth_price": null, "scores": {"DanielMihaiCrypto": 42}}, {"date": "2026-03-29", "btc_price": 67571, "eth_price": 2060, "scores": {"DanielMihaiCrypto": 30, "DanielNitaCrypto": 18, "MrCrypto5": 20, "AltcoinBro": 40, "BlockchainRomania": 22, "ABCryptoRomania": 55, "CristianChifoi": 50}}, {"date": "2026-04-02", "btc_price": 66873, "eth_price": 2060, "scores": {"CryptoAce": 56, "DanielMihaiCrypto": 44, "MrCrypto5": 25, "AltcoinBro": 20, "StoeanStefan": 40, "BlockchainRomania": 35, "CristianChifoi": 30, "CryptoVineri": 25}}];
+const priceData        = [{"date": "2025-12-25", "btc": 87642.61, "eth": 2945.99}, {"date": "2025-12-26", "btc": 87229.78, "eth": 2904.25}, {"date": "2025-12-27", "btc": 87305.96, "eth": 2926.7}, {"date": "2025-12-28", "btc": 87807.0, "eth": 2948.86}, {"date": "2025-12-29", "btc": 87822.91, "eth": 2947.86}, {"date": "2025-12-30", "btc": 87156.56, "eth": 2934.22}, {"date": "2025-12-31", "btc": 88414.63, "eth": 2970.06}, {"date": "2026-01-01", "btc": 87520.18, "eth": 2966.77}, {"date": "2026-01-02", "btc": 88727.67, "eth": 3000.42}, {"date": "2026-01-03", "btc": 89926.28, "eth": 3121.9}, {"date": "2026-01-04", "btc": 90593.85, "eth": 3126.04}, {"date": "2026-01-05", "btc": 91373.22, "eth": 3139.06}, {"date": "2026-01-06", "btc": 93926.8, "eth": 3228.3}, {"date": "2026-01-07", "btc": 93666.86, "eth": 3295.1}, {"date": "2026-01-08", "btc": 91257.16, "eth": 3164.79}, {"date": "2026-01-09", "btc": 90983.52, "eth": 3104.22}, {"date": "2026-01-10", "btc": 90504.9, "eth": 3083.14}, {"date": "2026-01-11", "btc": 90442.02, "eth": 3082.97}, {"date": "2026-01-12", "btc": 90819.37, "eth": 3119.36}, {"date": "2026-01-13", "btc": 91134.97, "eth": 3090.28}, {"date": "2026-01-14", "btc": 95260.44, "eth": 3319.94}, {"date": "2026-01-15", "btc": 97007.78, "eth": 3356.5}, {"date": "2026-01-16", "btc": 95584.83, "eth": 3318.2}, {"date": "2026-01-17", "btc": 95516.08, "eth": 3296.06}, {"date": "2026-01-18", "btc": 95099.53, "eth": 3306.87}, {"date": "2026-01-19", "btc": 93752.71, "eth": 3284.32}, {"date": "2026-01-20", "btc": 92558.46, "eth": 3185.66}, {"date": "2026-01-21", "btc": 88312.84, "eth": 2935.62}, {"date": "2026-01-22", "btc": 89354.34, "eth": 2976.05}, {"date": "2026-01-23", "btc": 89443.4, "eth": 2948.28}, {"date": "2026-01-24", "btc": 89412.4, "eth": 2950.91}, {"date": "2026-01-25", "btc": 89170.87, "eth": 2949.2}, {"date": "2026-01-26", "btc": 86548.32, "eth": 2814.19}, {"date": "2026-01-27", "btc": 88307.86, "eth": 2927.84}, {"date": "2026-01-28", "btc": 89204.22, "eth": 3021.09}, {"date": "2026-01-29", "btc": 89162.1, "eth": 3006.81}, {"date": "2026-01-30", "btc": 84570.41, "eth": 2818.82}, {"date": "2026-01-31", "btc": 84141.78, "eth": 2702.41}, {"date": "2026-02-01", "btc": 78725.86, "eth": 2443.93}, {"date": "2026-02-02", "btc": 76937.06, "eth": 2269.33}, {"date": "2026-02-03", "btc": 78767.66, "eth": 2344.51}, {"date": "2026-02-04", "btc": 75638.96, "eth": 2226.99}, {"date": "2026-02-05", "btc": 73172.29, "eth": 2152.09}, {"date": "2026-02-06", "btc": 62853.69, "eth": 1820.57}, {"date": "2026-02-07", "btc": 70523.95, "eth": 2060.73}, {"date": "2026-02-08", "btc": 69296.81, "eth": 2091.04}, {"date": "2026-02-09", "btc": 70542.37, "eth": 2095.13}, {"date": "2026-02-10", "btc": 70096.41, "eth": 2104.46}, {"date": "2026-02-11", "btc": 68779.91, "eth": 2018.92}, {"date": "2026-02-12", "btc": 66937.58, "eth": 1939.43}, {"date": "2026-02-13", "btc": 66184.58, "eth": 1945.74}, {"date": "2026-02-14", "btc": 68838.87, "eth": 2047.36}, {"date": "2026-02-15", "btc": 69765.6, "eth": 2085.52}, {"date": "2026-02-16", "btc": 68716.58, "eth": 1963.96}, {"date": "2026-02-17", "btc": 68907.78, "eth": 2000.61}, {"date": "2026-02-18", "btc": 67489.46, "eth": 1992.0}, {"date": "2026-02-19", "btc": 66456.35, "eth": 1954.75}, {"date": "2026-02-20", "btc": 66918.68, "eth": 1946.91}, {"date": "2026-02-21", "btc": 67970.29, "eth": 1967.81}, {"date": "2026-02-22", "btc": 67977.91, "eth": 1973.66}, {"date": "2026-02-23", "btc": 67585.12, "eth": 1954.19}, {"date": "2026-02-24", "btc": 64577.55, "eth": 1853.7}, {"date": "2026-02-25", "btc": 64074.11, "eth": 1852.81}, {"date": "2026-02-26", "btc": 67947.39, "eth": 2053.19}, {"date": "2026-02-27", "btc": 67469.06, "eth": 2027.3}, {"date": "2026-02-28", "btc": 65883.99, "eth": 1931.32}, {"date": "2026-03-01", "btc": 67008.45, "eth": 1965.04}, {"date": "2026-03-02", "btc": 65713.5, "eth": 1938.41}, {"date": "2026-03-03", "btc": 68864.04, "eth": 2029.44}, {"date": "2026-03-04", "btc": 68321.62, "eth": 1982.46}, {"date": "2026-03-05", "btc": 72669.77, "eth": 2125.83}, {"date": "2026-03-06", "btc": 70874.99, "eth": 2074.52}, {"date": "2026-03-07", "btc": 68148.28, "eth": 1980.78}, {"date": "2026-03-08", "btc": 67271.19, "eth": 1969.69}, {"date": "2026-03-09", "btc": 66036.16, "eth": 1938.62}, {"date": "2026-03-10", "btc": 68459.32, "eth": 1992.36}, {"date": "2026-03-11", "btc": 69883.01, "eth": 2035.21}, {"date": "2026-03-12", "btc": 70226.82, "eth": 2051.73}, {"date": "2026-03-13", "btc": 70544.43, "eth": 2076.52}, {"date": "2026-03-14", "btc": 70965.28, "eth": 2093.01}, {"date": "2026-03-15", "btc": 71217.1, "eth": 2096.56}, {"date": "2026-03-16", "btc": 72681.91, "eth": 2175.06}, {"date": "2026-03-17", "btc": 74858.15, "eth": 2351.17}, {"date": "2026-03-18", "btc": 73926.28, "eth": 2318.12}, {"date": "2026-03-19", "btc": 71255.86, "eth": 2203.38}, {"date": "2026-03-20", "btc": 69871.45, "eth": 2137.45}, {"date": "2026-03-21", "btc": 70552.63, "eth": 2146.97}, {"date": "2026-03-22", "btc": 68733.55, "eth": 2078.05}, {"date": "2026-03-23", "btc": 67848.88, "eth": 2053.14}, {"date": "2026-03-24", "btc": 69190.66, "eth": 2115.91}, {"date": "2026-03-25", "btc": 71327, "eth": 2184.51}, {"date": "2026-03-26", "btc": 69500, "eth": 2077.63}, {"date": "2026-03-27", "btc": 67685, "eth": 2040.9}, {"date": "2026-03-29", "btc": 66703, "eth": 2003.49}, {"date": "2026-03-30", "btc": 67565, "eth": 2059.51}, {"date": "2026-03-31", "btc": 66764, "eth": 2038.75}, {"date": "2026-04-01", "btc": 68097, "eth": 2138.32}, {"date": "2026-04-03", "btc": 66861, "eth": 2059.22}];
+const signalData       = [{"date": "2026-03-18", "videos": 49, "transcripts": 0, "data_source": "titles_only", "consensus": "BULLISH", "strength": "STRONG", "adjusted_strength": "MODERATE", "signal": "SHORT", "key_level_btc": "78000-82000", "key_level_eth": "3500-4000", "outcome": "CORRECT", "note": "Transcripts unavailable due to YouTube IP block; analysis from titles only; signal confidence downgraded", "btc_at_signal": 73937, "eth_at_signal": 2327.86, "outcome_btc": 69199, "outcome_date": "2026-03-24", "outcome_pct": -6.41}, {"date": "2026-03-18", "videos": 48, "transcripts": 48, "data_source": "full_transcripts", "consensus": "BULLISH", "strength": "STRONG", "signal": "BEARISH_SHORT", "key_level": "74000-76000", "tp1": 66000, "tp2": "54000-58000", "stop": "80000_weekly_close", "outcome": "CORRECT", "note": "9/9 channels bullish. Unanimous accumulation calls. $74K breakout with weak volume. Bear flag to $50-54K not invalidated. FOMC Mar 18-19 catalyst.", "btc_at_signal": 73937, "eth_at_signal": 2327.86, "outcome_btc": 69199, "outcome_date": "2026-03-24", "outcome_pct": -6.41}, {"date": "2026-03-19", "videos": 34, "consensus": "BEARISH", "strength": "STRONG", "signal": "LONG", "key_level": "74000", "entry_zone": "70000-72000", "tp1": 80000, "tp2": "84000-88000", "stop": 67000, "btc_at_signal": 70304, "eth_at_signal": 2143, "outcome": "PENDING", "note": "7+ channels unanimous BEARISH. Market empty / capitulation framing. Smart money contra: Satoshi Whale 7500 BTC, Saylor 22300 BTC/week. USDT dominance falling. Institutional decoupling underway."}, {"date": "2026-03-24", "videos": 32, "consensus": "BEARISH", "strength": "STRONG", "signal": "LONG_BTC_ETH", "key_level": 71000, "btc_at_signal": 71249, "eth_at_signal": 2162, "entry_zone_btc": "68000-71000", "tp1_btc": 76000, "tp2_btc": 88000, "stop_btc": 61000, "entry_zone_eth": "2100-2200", "tp1_eth": 2600, "tp2_eth": 3200, "stop_eth": 1800, "top_narratives": ["bear_market_confirmed", "iran_war_volatility", "recession_fear_30pct", "fear_greed_9to32", "new_lows_57_60k_expected"], "outliers": ["CristianChifoi_BTC_SP_decoupling", "MrCrypto5_BTC_outperforming_gold"], "outcome": "PENDING"}, {"date": "2026-03-25", "videos": 15, "consensus": "BEARISH", "strength": "MODERATE", "signal": "LONG", "key_level": 71000, "btc_at_signal": 71327, "eth_at_signal": 2184, "outcome": "PENDING", "note": "Retroactive \u2014 scanare lips\u0103 pe 25 martie; reconstituit\u0103 din weekly_2026-03-27.json (--days 3)", "channels": ["DanielMihaiCrypto", "DanielNitaCrypto", "AltcoinBro", "StoeanStefan", "BlockchainRomania", "CristianChifoi"]}, {"date": "2026-03-26", "videos": 11, "consensus": "BEARISH", "strength": "MODERATE", "signal": "LONG", "key_level": 68000, "btc_at_signal": 68866, "eth_at_signal": 2067, "fear_greed": 10, "outcome": "PENDING", "channels": ["DanielMihaiCrypto", "DanielNitaCrypto", "AltcoinBro", "StoeanStefan", "BlockchainRomania"]}, {"date": "2026-03-30", "consensus": "BEARISH", "strength": "MODERATE", "signal": "LONG", "confidence": "MEDIUM", "key_level": 66990, "btc_at_signal": 67571, "eth_at_signal": 2060, "outcome": "PENDING", "videos": 9, "channels": ["DanielMihaiCrypto", "DanielNitaCrypto", "MrCrypto5", "AltcoinBro", "BlockchainRomania", "ABCryptoRomania", "CristianChifoi"], "notes": "F&G=8 Extreme Fear. BNP Paribas ETNs for BTC/ETH. Bear flag risk to 42-46k. Whale accumulation 300 BTC/day. Monthly close key level 66990."}, {"date": "2026-04-03", "videos": 15, "consensus": "BEARISH", "strength": "MODERATE", "signal": "LONG", "confidence": "MEDIUM", "key_level": 73000, "btc_at_signal": 66873, "eth_at_signal": 2060, "entry_zone_btc": "65000-67500", "tp1_btc": 70000, "tp2_btc": 73000, "stop_btc": 62500, "entry_zone_eth": "1970-2100", "tp1_eth": 2200, "tp2_eth": 2400, "stop_eth": 1800, "fear_greed": 9, "avg_sentiment": 34, "channels": ["CryptoAce", "DanielMihaiCrypto", "MrCrypto5", "AltcoinBro", "StoeanStefan", "BlockchainRomania", "CristianChifoi", "CryptoVineri"], "top_narratives": ["geopolitical_trump_iran", "drift_hack_285m", "recession_official", "mass_layoffs_ai", "oil_prices_rising"], "outliers": ["DanielMihaiCrypto_ETF_inflows_bullish", "DanielMihaiCrypto_short_squeeze_73k"], "outcome": "PENDING"}];
+const fngData          = [{"date": "2026-01-04", "value": 25}, {"date": "2026-01-05", "value": 26}, {"date": "2026-01-06", "value": 44}, {"date": "2026-01-07", "value": 42}, {"date": "2026-01-08", "value": 28}, {"date": "2026-01-09", "value": 27}, {"date": "2026-01-10", "value": 25}, {"date": "2026-01-11", "value": 29}, {"date": "2026-01-12", "value": 27}, {"date": "2026-01-13", "value": 26}, {"date": "2026-01-14", "value": 48}, {"date": "2026-01-15", "value": 61}, {"date": "2026-01-16", "value": 49}, {"date": "2026-01-17", "value": 50}, {"date": "2026-01-18", "value": 49}, {"date": "2026-01-19", "value": 44}, {"date": "2026-01-20", "value": 32}, {"date": "2026-01-21", "value": 24}, {"date": "2026-01-22", "value": 20}, {"date": "2026-01-23", "value": 24}, {"date": "2026-01-24", "value": 25}, {"date": "2026-01-25", "value": 25}, {"date": "2026-01-26", "value": 20}, {"date": "2026-01-27", "value": 29}, {"date": "2026-01-28", "value": 29}, {"date": "2026-01-29", "value": 26}, {"date": "2026-01-30", "value": 16}, {"date": "2026-01-31", "value": 20}, {"date": "2026-02-01", "value": 14}, {"date": "2026-02-02", "value": 14}, {"date": "2026-02-03", "value": 17}, {"date": "2026-02-04", "value": 14}, {"date": "2026-02-05", "value": 12}, {"date": "2026-02-06", "value": 9}, {"date": "2026-02-07", "value": 6}, {"date": "2026-02-08", "value": 7}, {"date": "2026-02-09", "value": 14}, {"date": "2026-02-10", "value": 9}, {"date": "2026-02-11", "value": 11}, {"date": "2026-02-12", "value": 5}, {"date": "2026-02-13", "value": 9}, {"date": "2026-02-14", "value": 9}, {"date": "2026-02-15", "value": 8}, {"date": "2026-02-16", "value": 12}, {"date": "2026-02-17", "value": 10}, {"date": "2026-02-18", "value": 8}, {"date": "2026-02-19", "value": 9}, {"date": "2026-02-20", "value": 7}, {"date": "2026-02-21", "value": 8}, {"date": "2026-02-22", "value": 9}, {"date": "2026-02-23", "value": 5}, {"date": "2026-02-24", "value": 8}, {"date": "2026-02-25", "value": 11}, {"date": "2026-02-26", "value": 11}, {"date": "2026-02-27", "value": 13}, {"date": "2026-02-28", "value": 11}, {"date": "2026-03-01", "value": 14}, {"date": "2026-03-02", "value": 10}, {"date": "2026-03-03", "value": 14}, {"date": "2026-03-04", "value": 10}, {"date": "2026-03-05", "value": 22}, {"date": "2026-03-06", "value": 18}, {"date": "2026-03-07", "value": 12}, {"date": "2026-03-08", "value": 12}, {"date": "2026-03-09", "value": 8}, {"date": "2026-03-10", "value": 13}, {"date": "2026-03-11", "value": 15}, {"date": "2026-03-12", "value": 18}, {"date": "2026-03-13", "value": 15}, {"date": "2026-03-14", "value": 16}, {"date": "2026-03-15", "value": 15}, {"date": "2026-03-16", "value": 23}, {"date": "2026-03-17", "value": 28}, {"date": "2026-03-18", "value": 26}, {"date": "2026-03-19", "value": 23}, {"date": "2026-03-20", "value": 11}, {"date": "2026-03-21", "value": 12}, {"date": "2026-03-22", "value": 10}, {"date": "2026-03-23", "value": 8}, {"date": "2026-03-24", "value": 11}, {"date": "2026-03-25", "value": 14}, {"date": "2026-03-26", "value": 10}, {"date": "2026-03-27", "value": 13}, {"date": "2026-03-28", "value": 12}, {"date": "2026-03-29", "value": 9}, {"date": "2026-03-30", "value": 8}, {"date": "2026-03-31", "value": 11}, {"date": "2026-04-01", "value": 8}, {"date": "2026-04-02", "value": 12}, {"date": "2026-04-03", "value": 9}];
+const allChannels      = ["ABCryptoRomania", "AltcoinBro", "BlockchainRomania", "CristianChifoi", "CryptoAce", "CryptoVineri", "DanielMihaiCrypto", "DanielNitaCrypto", "MrCrypto5", "StoeanStefan", "StoicaVlad"];
+
+const GRID  = '#151520';
+const TICK  = '#2e2e42';
+const TTIP  = { backgroundColor:'#181820', borderColor:'#252535', borderWidth:1, titleColor:'#c8c8d0', bodyColor:'#66667a', padding:10 };
+
+function sentAvg(e) {
+  const v = Object.values(e.scores||{}).filter(s=>s>0);
+  return v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length) : null;
+}
+
+function rollingAvg(arr, w=3) {
+  return arr.map((v,i) => {
+    if (v==null) return null;
+    const sl = arr.slice(Math.max(0,i-w+1),i+1).filter(x=>x!=null);
+    return sl.length ? Math.round(sl.reduce((a,b)=>a+b,0)/sl.length) : null;
+  });
+}
+
+// ── Stats ──
+(function renderStats() {
+  const bar  = document.getElementById('statsBar');
+  const last = sentimentData[sentimentData.length-1];
+  const lp   = priceData[priceData.length-1];
+  const lfng = fngData[fngData.length-1];
+  if (!last) return;
+  const avg  = sentAvg(last)||0;
+  const cls  = avg<35?'bearish':avg>65?'bullish':'neutral';
+  const sig  = avg<35?'LONG contra signal':avg>65?'SHORT contra signal':'No clear signal';
+  const res  = signalData.filter(s=>['CORRECT','INCORRECT'].includes(s.outcome));
+  const acc  = res.length ? Math.round(res.filter(s=>s.outcome==='CORRECT').length/res.length*100)+'%' : '--';
+  const pend = signalData.filter(s=>s.outcome==='PENDING').length;
+  const fl   = lfng ? (lfng.value<25?'Extreme Fear':lfng.value<45?'Fear':lfng.value<55?'Neutral':lfng.value<75?'Greed':'Extreme Greed') : '';
+  const fc   = lfng ? (lfng.value<25?'bearish':lfng.value>60?'bullish':'') : '';
+  bar.innerHTML =
+    '<div class="stat '+cls+'"><div class="lbl">YouTube Sentiment</div><div class="val">'+avg+'<small style="font-size:.42em;color:#33334a;font-weight:400">/100</small></div><div class="sub">'+sig+'</div></div>' +
+    '<div class="stat"><div class="lbl">BTC Price</div><div class="val">'+(lp?'$'+Math.round(lp.btc).toLocaleString():'--')+'</div><div class="sub">ETH $'+(lp?Math.round(lp.eth).toLocaleString():'--')+'</div></div>' +
+    '<div class="stat '+fc+'"><div class="lbl">Fear &amp; Greed</div><div class="val">'+(lfng?lfng.value:'--')+'</div><div class="sub">'+fl+'</div></div>' +
+    '<div class="stat"><div class="lbl">Signal Accuracy</div><div class="val">'+acc+'</div><div class="sub">'+pend+' pending &middot; '+sentimentData.length+' runs</div></div>';
+})();
+
+// ── Main Chart (shifted -1d) ──
+(function renderMain() {
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  const allDates = [...new Set([...sentimentShifted.map(d=>d.date),...priceData.map(d=>d.date)])].sort();
+  const pm = Object.fromEntries(priceData.map(d=>[d.date,d.btc]));
+  const sm = {};
+  sentimentShifted.forEach(d=>{ sm[d.date]=sentAvg(d); });
+  const raw    = allDates.map(d=>sm[d]??null);
+  const smooth = rollingAvg(raw,3);
+
+  new Chart(ctx, {
+    type:'line',
+    data:{ labels:allDates, datasets:[
+      { label:'Sentiment (raw)', data:raw,
+         borderColor:'rgba(217,85,85,.2)', borderWidth:1, fill:false,
+         pointRadius:raw.map(v=>v!=null?3:0), pointBackgroundColor:'rgba(217,85,85,.45)',
+         yAxisID:'y1', tension:.2, spanGaps:true },
+      { label:'Sentiment 3d avg', data:smooth,
+         borderColor:'#d95555', borderWidth:2.5, fill:false,
+         pointRadius:0, yAxisID:'y1', tension:.45, spanGaps:true },
+      { label:'BTC Price', data:allDates.map(d=>pm[d]??null),
+         borderColor:'#27b86e', backgroundColor:'rgba(39,184,110,.04)',
+         fill:true, borderWidth:2, pointRadius:0,
+         yAxisID:'y2', tension:.3, spanGaps:true },
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ labels:{ color:'#44445a', font:{size:11}, boxWidth:22, padding:14 } },
+        tooltip:{ ...TTIP, callbacks:{ label:c=>c.datasetIndex<2?'Sentiment: '+c.raw+'/100':'BTC: $'+c.raw?.toLocaleString() } }
+      },
+      scales:{
+        x:{ type:'time', time:{ unit:'day', tooltipFormat:'MMM d' }, ticks:{ color:TICK, maxTicksLimit:14 }, grid:{ color:GRID } },
+        y1:{ position:'left', min:0, max:100, title:{ display:true, text:'Sentiment', color:'#44445a', font:{size:10} }, ticks:{ color:TICK, stepSize:25 }, grid:{ color:GRID } },
+        y2:{ position:'right', title:{ display:true, text:'BTC USD', color:'#44445a', font:{size:10} }, ticks:{ color:TICK, callback:v=>'$'+Math.round(v/1000)+'k' }, grid:{ drawOnChartArea:false } },
+      },
+    },
+  });
+})();
+
+// ── Heatmap (paginated, 15 days) ──
+const HM_PAGE = 15;
+let hmOffset = 0; // 0 = latest page
+
+(function initHeatmap() {
+  const allDates = sentimentData.map(d=>d.date);
+  // start at last page
+  hmOffset = Math.max(0, allDates.length - HM_PAGE);
+  renderHeatmap();
+})();
+
+function scoreColor(s) {
+  if (s==null || s===0) return '#161620';
+  if (s<20) return '#7a1e1e';
+  if (s<30) return '#a02828';
+  if (s<40) return '#7a3a10';
+  if (s<50) return '#4a4010';
+  if (s<60) return '#1a3a2a';
+  if (s<70) return '#1a5235';
+  return '#166b3a';
+}
+function textColor(s) { return (s==null||s===0) ? '#252535' : s<45 ? '#ffb3b3' : s>55 ? '#b3ffd9' : '#e0d080'; }
+
+function renderHeatmap() {
+  const wrap = document.getElementById('heatmapWrap');
+  const allDates = sentimentData.map(d=>d.date);
+  const page = allDates.slice(hmOffset, hmOffset + HM_PAGE);
+
+  const shortDate = d => { const p=d.split('-'); return p[1]+'/'+p[2]; };
+
+  // update range label & button states
+  document.getElementById('hmRange').textContent = page.length ? shortDate(page[0])+' – '+shortDate(page[page.length-1]) : '';
+  document.getElementById('hmPrev').disabled = hmOffset <= 0;
+  document.getElementById('hmNext').disabled = hmOffset + HM_PAGE >= allDates.length;
+  document.getElementById('hmPrev').style.opacity = hmOffset <= 0 ? '0.3' : '1';
+  document.getElementById('hmNext').style.opacity = hmOffset + HM_PAGE >= allDates.length ? '0.3' : '1';
+
+  let html = '<table class="heatmap"><thead><tr><th></th>';
+  page.forEach(d => { html += '<th>'+shortDate(d)+'</th>'; });
+  html += '</tr></thead><tbody>';
+
+  allChannels.forEach(ch => {
+    html += '<tr><td class="ch-name">'+ch+'</td>';
+    page.forEach(d => {
+      const e = sentimentData.find(x=>x.date===d);
+      const s = e?.scores?.[ch];
+      const bg = scoreColor(s);
+      const tc = textColor(s);
+      html += '<td style="background:'+bg+';color:'+tc+'">'+(s!=null&&s>0?s:'')+'</td>';
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function hmNav(dir) {
+  const allDates = sentimentData.map(d=>d.date);
+  hmOffset = Math.max(0, Math.min(allDates.length - HM_PAGE, hmOffset + dir * HM_PAGE));
+  renderHeatmap();
+}
+
+// ── F&G Chart — bar chart for sentiment + line for F&G ──
+(function renderFng() {
+  const ctx = document.getElementById('fngChart').getContext('2d');
+
+  // Use shifted dates for sentiment alignment
+  const sentMap = {};
+  sentimentShifted.forEach(d=>{ sentMap[d.date]=sentAvg(d); });
+
+  // Only show dates where we have F&G data, plus sentiment dates
+  const allDates = [...new Set([...fngData.map(d=>d.date),...Object.keys(sentMap)])].sort();
+  const fm = Object.fromEntries(fngData.map(d=>[d.date,d.value]));
+
+  // Bar colors for sentiment: green zone = fear (low score) = contra LONG, red = greed
+  const sentVals = allDates.map(d=>sentMap[d]??null);
+  const barColors = sentVals.map(v => {
+    if (v==null) return 'transparent';
+    if (v<35) return 'rgba(39,184,110,.55)';
+    if (v>65) return 'rgba(217,85,85,.55)';
+    return 'rgba(200,140,10,.45)';
+  });
+
+  new Chart(ctx, {
+    type:'bar',
+    data:{ labels:allDates, datasets:[
+      { label:'YouTube Sentiment', data:sentVals,
+         backgroundColor:barColors, borderWidth:0,
+         borderRadius:3, order:2 },
+      { label:'Fear & Greed', data:allDates.map(d=>fm[d]??null),
+         borderColor:'#c88c0a', borderWidth:2,
+         pointRadius:0, tension:.3, spanGaps:true, fill:false,
+         type:'line', order:1 },
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ labels:{ color:'#44445a', font:{size:11}, boxWidth:14, padding:12, usePointStyle:true } },
+        tooltip:{ ...TTIP }
+      },
+      scales:{
+        x:{ type:'time', time:{ unit:'day', tooltipFormat:'MMM d' },
+             ticks:{ color:TICK, maxTicksLimit:12 }, grid:{ color:GRID } },
+        y:{ min:0, max:100,
+             ticks:{ color:TICK, stepSize:25 }, grid:{ color:GRID } },
+      },
+    },
+  });
+})();
+
+// ── Scores Table ──
+(function renderScores() {
+  const tbody = document.querySelector('#scoresTable tbody');
+  const last  = sentimentData[sentimentData.length-1];
+  const prev  = sentimentData.length>=2 ? sentimentData[sentimentData.length-2] : null;
+  if (!last) return;
+  allChannels.forEach(ch => {
+    const s = last.scores?.[ch];
+    const p = prev?.scores?.[ch];
+    const tr = document.createElement('tr');
+    let trend = '<span style="color:#252535">—</span>';
+    if (s!=null && p!=null) {
+      const d=s-p, sign=d>0?'+':'';
+      trend = d>5 ? '<span style="color:#27b86e">'+sign+d+' ↑</span>'
+            : d<-5 ? '<span style="color:#d95555">'+sign+d+' ↓</span>'
+            : '<span style="color:#33334a">'+sign+d+' →</span>';
+    }
+    const bc = !s?'#252535':s<35?'#d95555':s>65?'#27b86e':'#c88c0a';
+    tr.innerHTML = s!=null
+      ? '<td style="color:#c8c8d0;font-weight:500">'+ch+'</td><td style="color:#c8c8d0">'+s+'<small style="color:#33334a">/100</small></td><td><div class="bar-wrap"><div class="bar-fill" style="width:'+s+'%;background:'+bc+'"></div></div></td><td>'+trend+'</td>'
+      : '<td style="color:#252535">'+ch+'</td><td style="color:#252535">—</td><td></td><td></td>';
+    tbody.appendChild(tr);
+  });
+})();
+
+// ── Signal Table ──
+(function renderSignals() {
+  const tbody = document.querySelector('#signalTable tbody');
+  const seen  = new Set();
+  [...signalData].reverse().forEach(s => {
+    const key = s.date+'-'+s.signal;
+    if (seen.has(key)) return;
+    seen.add(key);
+    const out    = s.outcome||'PENDING';
+    const sigLbl = (s.signal||'').replace('_BTC_ETH','').replace(/_/g,' ');
+    const sigCls = sigLbl.includes('LONG')?'pill-long':sigLbl.includes('SHORT')?'pill-short':'';
+    const outCls = out==='CORRECT'?'pill-correct':out==='PENDING'?'pill-pending':'pill-wrong';
+    const pnl    = s.outcome_pct!=null
+      ? '<span style="color:'+(s.outcome_pct>0?'#27b86e':'#d95555')+'">'+(s.outcome_pct>0?'+':'')+s.outcome_pct+'%</span>'
+      : '<span style="color:#252535">—</span>';
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td style="color:#55556a">'+s.date+'</td>'+
+      '<td>'+s.consensus+' <small style="color:#33334a">'+s.strength+'</small></td>'+
+      '<td><span class="pill '+sigCls+'">'+sigLbl+'</span></td>'+
+      '<td style="color:#55556a">'+(s.btc_at_signal?'$'+Number(s.btc_at_signal).toLocaleString():'—')+'</td>'+
+      '<td><span class="pill '+outCls+'">'+out+'</span></td>'+
+      '<td>'+pnl+'</td>';
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>
