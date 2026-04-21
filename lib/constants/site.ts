@@ -37,8 +37,8 @@ export const dashboardNav = [
   { href: "/dashboard/resurse", label: "Resurse" },
   { href: "/dashboard/indicators", label: "Indicatori" },
   { href: "/dashboard/stocks", label: "Stocks" },
-  { href: "/dashboard/pivots", label: "Pivoți" },
-  { href: "/dashboard/countertrade", label: "Countertrade" },
+  // { href: "/dashboard/pivots", label: "Pivoți" },          // Admin-only
+  // { href: "/dashboard/countertrade", label: "Countertrade" }, // Admin-only
   { href: "/dashboard/risk-score", label: "Risk Score" },
   { href: "/dashboard/should-i-trade", label: "Trade?" },
   { href: "/bots", label: "Bot" },
@@ -65,8 +65,8 @@ export const dashboardNavGroups = [
     items: [
       { href: "/dashboard/stocks", label: "Stocks", icon: "💹" },
       { href: "/dashboard/crypto", label: "Crypto Screener", icon: "₿" },
-      { href: "/dashboard/pivots", label: "Pivoți BTC", icon: "🔮" },
-      { href: "/dashboard/countertrade", label: "Countertrade", icon: "📺" },
+      // { href: "/dashboard/pivots", label: "Pivoți BTC", icon: "🔮" },        // Admin-only, hidden until verified
+      // { href: "/dashboard/countertrade", label: "Countertrade", icon: "📺" }, // Admin-only, hidden until verified
       { href: "/dashboard/calendar", label: "Calendar Economic", icon: "📅" },
       { href: "/tools/whale-tracker", label: "Whale Tracker", icon: "🐋", badge: "NEW" },
       { href: "/dashboard/news", label: "Știri Crypto", icon: "📰" },

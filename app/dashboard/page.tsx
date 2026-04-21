@@ -244,9 +244,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               {/* More tools */}
               <section className="mb-8 grid gap-3 grid-cols-2 md:grid-cols-3 animate-fade-in-up stagger-4">
                 {[
-                  { href: "/dashboard/pivots", icon: "🔮", title: "Pivoți BTC", desc: "Timing research" },
-                  { href: "/dashboard/countertrade", icon: "📺", title: "Countertrade", desc: "Sentiment YouTube" },
                   { href: "/dashboard/resurse", icon: "📚", title: "Resurse", desc: "Ghiduri și materiale" },
+                  { href: "/tools/whale-tracker", icon: "🐋", title: "Whale Tracker", desc: "Top 20 portofele" },
+                  { href: "/dashboard/news", icon: "📰", title: "Știri Crypto", desc: "Feed live agregate" },
                 ].map((link) => (
                   <Link key={link.title} className="glass-card group p-5" href={link.href}>
                     <div className="text-2xl">{link.icon}</div>
