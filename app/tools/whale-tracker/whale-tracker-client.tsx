@@ -153,11 +153,32 @@ function ConsensusPanel({ data }: { data: Consensus[] }) {
   );
 }
 
+// Aggregate partial fills from the same wallet+asset+direction within 1 hour
+function aggregateFills(fills: Fill[]): (Fill & { count: number })[] {
+  const groups: Map<string, Fill & { count: number }> = new Map();
+  for (const f of fills) {
+    const hourBucket = f.filled_at.slice(0, 13); // group by hour
+    const key = `${f.address}_${f.asset}_${f.direction}_${f.action_type}_${hourBucket}`;
+    const existing = groups.get(key);
+    if (existing) {
+      existing.notional_usd += f.notional_usd;
+      existing.closed_pnl += f.closed_pnl;
+      existing.count += 1;
+      // Keep the latest timestamp
+      if (f.filled_at > existing.filled_at) existing.filled_at = f.filled_at;
+    } else {
+      groups.set(key, { ...f, count: 1 });
+    }
+  }
+  return Array.from(groups.values()).sort((a, b) => new Date(b.filled_at).getTime() - new Date(a.filled_at).getTime());
+}
+
 // ─── Activity Feed ─────────────────────────────────────────────
 function ActivityFeed({ fills, wallets, onSelectWallet }: { fills: Fill[]; wallets: Wallet[]; onSelectWallet?: (addr: string) => void }) {
   const [showAll, setShowAll] = useState(false);
   const rankMap = Object.fromEntries(wallets.map((w) => [w.address, w.rank]));
-  const visible = showAll ? fills : fills.slice(0, 10);
+  const aggregated = aggregateFills(fills);
+  const visible = showAll ? aggregated : aggregated.slice(0, 10);
 
   if (!fills.length) {
     return (
@@ -177,12 +198,12 @@ function ActivityFeed({ fills, wallets, onSelectWallet }: { fills: Fill[]; walle
         <span className="text-[10px] text-slate-600">Tranzacții &gt; $25K</span>
       </div>
       <div className="divide-y divide-white/5">
-        {visible.map((f) => {
+        {visible.map((f, i) => {
           const rank = rankMap[f.address];
           const isOpen = f.action_type === "OPEN";
           const isLong = f.direction === "LONG";
           return (
-            <div key={f.tid} className="flex items-center gap-3 px-4 py-2.5 text-xs cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectWallet?.(f.address)}>
+            <div key={`${f.tid}-${i}`} className="flex items-center gap-3 px-4 py-2.5 text-xs cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectWallet?.(f.address)}>
               <span className="font-data text-slate-600 w-8">#{rank}</span>
               <span className="text-slate-500">{shortAddr(f.address)}</span>
               <span className={`rounded-md px-1.5 py-0.5 font-bold ${
@@ -194,6 +215,7 @@ function ActivityFeed({ fills, wallets, onSelectWallet }: { fills: Fill[]; walle
               </span>
               <span className="font-bold text-white">{f.asset}</span>
               <span className="font-data text-slate-400 tabular-nums">{formatUsd(f.notional_usd)}</span>
+              {f.count > 1 && <span className="text-[10px] text-slate-600">({f.count} fills)</span>}
               {f.closed_pnl !== 0 && (
                 <span className={`font-data tabular-nums ${f.closed_pnl > 0 ? "text-emerald-400" : "text-red-400"}`}>
                   {f.closed_pnl > 0 ? "+" : ""}{formatUsd(f.closed_pnl)}
@@ -204,13 +226,13 @@ function ActivityFeed({ fills, wallets, onSelectWallet }: { fills: Fill[]; walle
           );
         })}
       </div>
-      {fills.length > 10 && (
+      {aggregated.length > 10 && (
         <button
           className="w-full border-t border-white/5 px-4 py-2 text-xs text-slate-500 hover:text-white transition"
           onClick={() => setShowAll(!showAll)}
           type="button"
         >
-          {showAll ? "Arată mai puține" : `Arată toate (${fills.length})`}
+          {showAll ? "Arată mai puține" : `Arată toate (${aggregated.length})`}
         </button>
       )}
     </div>
