@@ -277,6 +277,132 @@ export default async function UpgradePage() {
             </div>
           </section>
 
+          {/* Bot Copytrade Section - Coming Soon */}
+          <section className="mb-10" id="copytrade">
+            <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-surface-graphite via-crypto-dark to-surface-graphite">
+              {/* Coming Soon badge */}
+              <div className="absolute right-4 top-4 z-10 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
+                Coming Soon
+              </div>
+
+              <div className="p-6 sm:p-8 md:p-10">
+                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">
+                  Bot Trading Automat
+                </p>
+                <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                  Copytrade V5 <span className="gradient-text">Bot</span>
+                </h2>
+                <p className="mt-3 max-w-2xl text-slate-400">
+                  Botul nostru tranzacționează automat pe 10+ active crypto cu strategii testate pe date reale.
+                  Tu conectezi contul MEXC, botul face restul.
+                </p>
+
+                {/* Two column pricing */}
+                <div className="mt-8 grid gap-6 md:grid-cols-2">
+                  {/* Bundle - Most Popular */}
+                  <div className="relative rounded-2xl border-2 border-accent-emerald bg-accent-emerald/[0.03] p-6">
+                    <div className="absolute -top-3 left-6 rounded-full bg-accent-emerald px-4 py-1 text-xs font-bold text-crypto-dark">
+                      CEL MAI POPULAR
+                    </div>
+                    <h3 className="mt-2 text-lg font-bold text-white">Elite + Copytrade</h3>
+                    <div className="mt-3">
+                      <span className="text-4xl font-bold text-accent-emerald">€94</span>
+                      <span className="text-slate-400">/lună</span>
+                    </div>
+                    <p className="mt-1 text-sm text-slate-500">€49 Elite + €45 Copytrade</p>
+                    <ul className="mt-5 space-y-2.5 text-sm">
+                      {[
+                        "Acces complet comunitate Discord",
+                        "67+ video-uri educaționale",
+                        "Indicatori Elite TradingView",
+                        "Copytrade V5 bot (10+ active)",
+                        "Suport prioritar la setup",
+                        "Sesiuni live săptămânale",
+                      ].map((perk) => (
+                        <li key={perk} className="flex items-start gap-2 text-slate-300">
+                          <span className="text-accent-emerald">✓</span>
+                          {perk}
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      className="mt-6 w-full rounded-xl bg-white/5 py-3 font-bold text-slate-500 cursor-not-allowed"
+                      disabled
+                      type="button"
+                    >
+                      Disponibil în curând
+                    </button>
+                  </div>
+
+                  {/* Standalone */}
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+                    <h3 className="text-lg font-bold text-white">Copytrade Only</h3>
+                    <div className="mt-3">
+                      <span className="text-4xl font-bold text-slate-300">€109</span>
+                      <span className="text-slate-400">/lună</span>
+                    </div>
+                    <p className="mt-1 text-sm text-slate-500">Doar copytrade, fără acces comunitate</p>
+                    <ul className="mt-5 space-y-2.5 text-sm">
+                      {[
+                        "Copytrade V5 bot (10+ active)",
+                        "Dashboard performanță",
+                        "Notificări Telegram",
+                      ].map((perk) => (
+                        <li key={perk} className="flex items-start gap-2 text-slate-400">
+                          <span className="text-slate-600">✓</span>
+                          {perk}
+                        </li>
+                      ))}
+                      {[
+                        "Fără acces comunitate Discord",
+                        "Fără suport prioritar la setup*",
+                        "Fără indicatori TradingView",
+                      ].map((perk) => (
+                        <li key={perk} className="flex items-start gap-2 text-slate-600">
+                          <span className="text-slate-700">✗</span>
+                          {perk}
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      className="mt-6 w-full rounded-xl bg-white/5 py-3 font-bold text-slate-500 cursor-not-allowed"
+                      disabled
+                      type="button"
+                    >
+                      Disponibil în curând
+                    </button>
+                  </div>
+                </div>
+
+                {/* Bottom note */}
+                <div className="mt-6 rounded-xl border border-accent-emerald/20 bg-accent-emerald/5 px-5 py-3 text-center">
+                  <p className="text-sm text-accent-emerald">
+                    <span className="font-bold">Economisești €15/lună</span> alegând bundle-ul Elite + Copytrade față de Copytrade Only.
+                  </p>
+                </div>
+
+                {/* Stats preview */}
+                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {[
+                    { value: "10+", label: "Active tranzacționate" },
+                    { value: "4.8", label: "Profit Factor mediu" },
+                    { value: "76%", label: "Win Rate" },
+                    { value: "24/7", label: "Tranzacționare automată" },
+                  ].map((stat) => (
+                    <div key={stat.label} className="rounded-xl bg-white/[0.03] px-4 py-3 text-center">
+                      <p className="font-data text-2xl font-bold text-white">{stat.value}</p>
+                      <p className="mt-1 text-[11px] text-slate-500">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-4 text-center text-xs text-slate-600">
+                  * Copytrade Only fără suport la setup: configurarea contului MEXC se face individual, fără asistență dedicată.
+                </p>
+              </div>
+            </div>
+          </section>
+
           <section className="panel px-6 py-8 md:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-2xl font-bold text-white sm:text-3xl">Vrei să plătești dar nu știi cum?</h2>
