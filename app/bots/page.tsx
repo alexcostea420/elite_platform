@@ -127,9 +127,9 @@ export default function BotsPage() {
               Copiază tranzacțiile automat pe contul tău MEXC. Tu setezi riscul, botul execută. Non-stop, fără intervenție manuală.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-              <Link className="accent-button px-8 py-3.5 text-lg font-bold" href="/bots/subscribe">
-                Începe acum
-              </Link>
+              <button className="inline-flex items-center gap-2 rounded-xl border border-amber-400/30 bg-amber-400/10 px-8 py-3.5 text-lg font-bold text-amber-400 cursor-not-allowed" disabled type="button">
+                Coming Soon
+              </button>
               <a className="ghost-button px-8 py-3.5" href="#preturi">
                 Vezi prețurile
               </a>
@@ -185,9 +185,9 @@ export default function BotsPage() {
                   </li>
                 ))}
               </ul>
-              <Link className="ghost-button mt-8 block w-full py-3 text-center font-bold" href="/bots/subscribe">
-                Începe acum
-              </Link>
+              <button className="mt-8 block w-full rounded-xl border border-white/10 bg-white/5 py-3 text-center font-bold text-slate-500 cursor-not-allowed" disabled type="button">
+                Coming Soon
+              </button>
             </article>
 
             {/* Elite */}
@@ -218,9 +218,9 @@ export default function BotsPage() {
                   </li>
                 ))}
               </ul>
-              <Link className="accent-button mt-8 block w-full py-3 text-center font-bold" href="/bots/subscribe">
-                Începe acum
-              </Link>
+              <button className="mt-8 block w-full rounded-xl border border-amber-400/30 bg-amber-400/10 py-3 text-center font-bold text-amber-400 cursor-not-allowed" disabled type="button">
+                Coming Soon
+              </button>
             </article>
           </div>
         </Container>
