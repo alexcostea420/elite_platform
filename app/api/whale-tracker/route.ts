@@ -1,40 +1,53 @@
 import { NextResponse } from "next/server";
 
-import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 export const revalidate = 60; // Cache 1 minute
 
 export async function GET() {
   try {
+    // Auth check - elite only
+    const authSupabase = createServerSupabaseClient();
+    const { data: { user } } = await authSupabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const { data: profile } = await authSupabase
+      .from("profiles")
+      .select("subscription_tier, subscription_status, role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const isElite = profile?.role === "admin" ||
+      (profile?.subscription_tier === "elite" && profile?.subscription_status === "active");
+    if (!isElite) return NextResponse.json({ error: "Elite required" }, { status: 403 });
+
     const supabase = createServiceRoleSupabaseClient();
 
     // Fetch all data in parallel
     const [walletsRes, positionsRes, activityFillsRes, allFillsRes, consensusRes] = await Promise.all([
       supabase
         .from("whale_wallets")
-        .select("*")
+        .select("address,rank,previous_rank,display_name,account_value,pnl_90d,last_activity,updated_at")
         .order("rank", { ascending: true }),
       supabase
         .from("whale_positions")
-        .select("*")
+        .select("address,asset,direction,size,entry_price,leverage,unrealized_pnl,margin_used,notional_usd,snapshot_at")
         .eq("is_current", true)
         .order("notional_usd", { ascending: false }),
-      // Activity feed: big trades only
       supabase
         .from("whale_fills")
-        .select("*")
+        .select("address,asset,direction,price,size,notional_usd,closed_pnl,action_type,filled_at,tid")
         .gte("notional_usd", 25000)
         .order("filled_at", { ascending: false })
         .limit(50),
-      // All recent fills for wallet detail (last 500)
       supabase
         .from("whale_fills")
-        .select("*")
+        .select("address,asset,direction,price,size,notional_usd,closed_pnl,action_type,filled_at,tid")
         .order("filled_at", { ascending: false })
-        .limit(500),
+        .limit(300),
       supabase
         .from("whale_consensus")
-        .select("*")
+        .select("asset,long_count,short_count,net_long_notional_usd,avg_long_leverage,avg_short_leverage,dominant_side")
         .order("long_count", { ascending: false }),
     ]);
 
