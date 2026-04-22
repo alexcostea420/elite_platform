@@ -19,7 +19,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   // Research
   { label: "Stocks - Portofoliu Acțiuni", href: "/dashboard/stocks", icon: "💹", group: "Research" },
   { label: "Crypto Screener", href: "/dashboard/crypto", icon: "₿", group: "Research" },
-  { label: "Pivoți BTC", href: "/dashboard/pivots", icon: "🔮", group: "Research" },
+  // { label: "Pivoți BTC", href: "/dashboard/pivots", icon: "🔮", group: "Research" }, // Admin-only
   // Countertrade hidden until verified (admin-only)
   { label: "Calendar Economic", href: "/dashboard/calendar", icon: "📅", group: "Research" },
   { label: "Whale Tracker Hyperliquid", href: "/tools/whale-tracker", icon: "🐋", group: "Research" },

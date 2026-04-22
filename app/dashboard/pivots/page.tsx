@@ -29,13 +29,33 @@ export default async function PivotsPage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const isElite =
-    profile?.role === "admin" ||
-    (profile?.subscription_tier === "elite" && profile?.subscription_status === "active");
-
-  if (!isElite) redirect("/upgrade?from=pivots");
+  if (profile?.subscription_tier !== "elite") redirect("/upgrade");
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
+  const isAdmin = profile?.role === "admin";
+
+  if (!isAdmin) {
+    return (
+      <>
+        <Navbar mode="dashboard" userIdentity={identity} />
+        <main className="pb-16 pt-24 md:pt-28">
+          <div className="mx-auto max-w-lg px-4 py-12">
+            <div className="panel p-8 text-center md:p-12">
+              <div className="mb-4 text-5xl">🔮</div>
+              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
+              <p className="mx-auto mt-4 max-w-lg text-slate-400">
+                Dashboard-ul de Pivoți BTC va fi disponibil în curând. Lucrăm la el!
+              </p>
+              <a className="accent-button mt-6 inline-block" href="/dashboard">
+                Înapoi la Dashboard
+              </a>
+            </div>
+          </div>
+        </main>
+        <Footer compact />
+      </>
+    );
+  }
 
   return (
     <>
