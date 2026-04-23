@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Orbitron, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 
 import { CommandSearch } from "@/components/ui/command-search";
 import { FeedbackButton } from "@/components/ui/feedback-button";
+import { NoiseOverlay } from "@/components/ui/noise-overlay";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { SplashScreen } from "@/components/ui/splash-screen";
 import { metadataBaseUrl } from "@/lib/seo";
 
@@ -11,21 +13,9 @@ import "./globals.css";
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  display: "swap",
-});
-
-const orbitron = Orbitron({
-  subsets: ["latin"],
-  variable: "--font-orbitron",
   display: "swap",
 });
 
@@ -64,7 +54,7 @@ export default function RootLayout({
           </Script>
         )}
       </head>
-      <body className={`${inter.variable} ${orbitron.variable} ${jetbrainsMono.variable} font-sans`}>
+      <body className={`${jetbrainsMono.variable} font-sans`}>
         {/* GTM noscript fallback */}
         {GTM_ID && (
           <noscript>
@@ -77,6 +67,8 @@ export default function RootLayout({
           </noscript>
         )}
         <SplashScreen />
+        <ScrollProgress />
+        <NoiseOverlay />
         {children}
         <CommandSearch />
         <FeedbackButton />

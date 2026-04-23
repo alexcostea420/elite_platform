@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/container";
-import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 type StatItem = {
   value: string;
@@ -28,16 +29,16 @@ export function StatsSection({ stats }: { stats?: StatItem[] }) {
           {items.map((stat, i) => {
             const { num, prefix, suffix } = parseStatValue(stat.value);
             return (
-              <div key={stat.label} className={`animate-fade-in-up stagger-${i + 1}`}>
+              <ScrollReveal key={stat.label} delay={i * 0.08}>
                 <div className={`mb-2 text-4xl font-bold ${stat.tone === "green" ? "text-crypto-green" : "text-accent-emerald"}`}>
                   {num > 0 ? (
-                    <AnimatedCounter value={num} prefix={prefix} suffix={suffix} />
+                    <NumberTicker value={num} prefix={prefix} suffix={suffix} />
                   ) : (
                     stat.value
                   )}
                 </div>
                 <div className="text-slate-400">{stat.label}</div>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>

@@ -1,5 +1,7 @@
-import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { testimonials } from "@/lib/constants/site";
 
 export function TestimonialsSection() {
@@ -8,18 +10,23 @@ export function TestimonialsSection() {
       <Container>
         <SectionHeading title={<>Ce spun <span className="gradient-text">Membrii Nostri</span></>} description="Review-uri reale de pe Discord" />
         <div className="mt-16 grid gap-6 md:grid-cols-2">
-          {testimonials.map((testimonial) => (
-            <article key={testimonial.name} className="panel p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-emerald text-lg font-bold text-crypto-dark">{testimonial.name.charAt(0)}</div>
-                <div>
-                  <h3 className="font-bold text-white">{testimonial.name}</h3>
-                  <p className="text-sm text-accent-emerald">{testimonial.meta}</p>
+          {testimonials.map((testimonial, i) => (
+            <ScrollReveal key={testimonial.name} delay={(i % 2) * 0.1}>
+              <SpotlightCard
+                as="article"
+                className="panel hover-glow-bloom h-full p-6"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-emerald text-lg font-bold text-crypto-dark">{testimonial.name.charAt(0)}</div>
+                  <div>
+                    <h3 className="font-bold text-white">{testimonial.name}</h3>
+                    <p className="text-sm text-accent-emerald">{testimonial.meta}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4 text-accent-emerald">★★★★★</div>
-              <p className="mt-3 italic leading-relaxed text-slate-300">&ldquo;{testimonial.quote}&rdquo;</p>
-            </article>
+                <div className="mt-4 text-accent-emerald">★★★★★</div>
+                <p className="mt-3 italic leading-relaxed text-slate-300">&ldquo;{testimonial.quote}&rdquo;</p>
+              </SpotlightCard>
+            </ScrollReveal>
           ))}
         </div>
         <div className="mt-8 text-center">

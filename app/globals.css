@@ -87,7 +87,7 @@ button {
   }
 
   h1, h2, h3 {
-    font-family: 'General Sans', var(--font-sans), system-ui, sans-serif;
+    font-family: 'General Sans', system-ui, sans-serif;
   }
 
   .grid-glow {
@@ -218,5 +218,103 @@ button {
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
+  }
+
+  /* Aurora blobs (hero background) */
+  @keyframes auroraSlow {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+    33% { transform: translate(30px, -20px) scale(1.08); opacity: 1; }
+    66% { transform: translate(-20px, 30px) scale(0.95); opacity: 0.85; }
+  }
+  .animate-aurora-slow {
+    animation: auroraSlow 18s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  /* Marquee (infinite horizontal scroll) */
+  @keyframes marquee-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+  @keyframes marquee-right {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Animated conic gradient border (premium CTA). Use .gradient-border-animated on a wrapper */
+  .gradient-border-animated {
+    position: relative;
+    isolation: isolate;
+  }
+  .gradient-border-animated::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--angle, 0deg), rgba(16,185,129,0.9), rgba(56,189,248,0.6), rgba(16,185,129,0.9));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    animation: rotateAngle 4s linear infinite;
+  }
+  @property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+  @keyframes rotateAngle {
+    to { --angle: 360deg; }
+  }
+  /* Fallback for browsers without @property — still rotate via background-position trick */
+  @supports not (background: conic-gradient(from 0deg, red, blue)) {
+    .gradient-border-animated::before { display: none; }
+  }
+
+  /* Hover glow bloom */
+  .hover-glow-bloom {
+    transition: box-shadow 280ms ease, transform 280ms ease, border-color 280ms ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .hover-glow-bloom:hover {
+      box-shadow: 0 0 0 1px rgba(16,185,129,0.3), 0 12px 40px -8px rgba(16,185,129,0.25);
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Live ripple (expanding ring around live-dot) */
+  .live-dot-ripple {
+    position: relative;
+  }
+  .live-dot-ripple::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    border: 1.5px solid rgba(16,185,129,0.5);
+    animation: ripple 1.8s ease-out infinite;
+  }
+  @keyframes ripple {
+    0% { transform: scale(0.6); opacity: 0.9; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  /* Respect prefers-reduced-motion globally for custom keyframes */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-aurora-slow,
+    .live-dot,
+    .live-dot-ripple::after,
+    .gradient-border-animated::before,
+    .skeleton,
+    .animate-fade-in-up,
+    .animate-scale-in {
+      animation: none !important;
+    }
+    .animate-fade-in-up,
+    .animate-scale-in {
+      opacity: 1 !important;
+      transform: none !important;
+    }
   }
 }

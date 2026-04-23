@@ -5,10 +5,13 @@ import dynamic from "next/dynamic";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
-import { Container } from "@/components/ui/container";
 import { AlexsBrainSection } from "@/components/marketing/alexs-brain-section";
-import { TrackRecordTeaser } from "@/components/marketing/track-record-teaser";
 import { HeroSection } from "@/components/marketing/hero-section";
+import { TrackRecordTeaser } from "@/components/marketing/track-record-teaser";
+import { Container } from "@/components/ui/container";
+import { Marquee } from "@/components/ui/marquee";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 const AboutSection = dynamic(() => import("@/components/marketing/about-section").then(m => m.AboutSection));
@@ -271,20 +274,49 @@ export default async function HomePage() {
         <section className="py-12 md:py-20">
           <Container>
             <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-3">
-              <div className="text-center">
-                <p className="text-5xl font-bold text-white md:text-7xl">85%</p>
+              <ScrollReveal className="text-center">
+                <p className="text-5xl font-bold text-white md:text-7xl">
+                  <NumberTicker value={85} suffix="%" />
+                </p>
                 <p className="mt-4 text-sm text-slate-400">spun că au înțeles mai bine <span className="font-semibold text-white">piața</span> după primele <span className="font-semibold text-white">2 săptămâni</span></p>
-              </div>
-              <div className="text-center">
-                <p className="text-5xl font-bold text-white md:text-7xl">70%</p>
+              </ScrollReveal>
+              <ScrollReveal className="text-center" delay={0.1}>
+                <p className="text-5xl font-bold text-white md:text-7xl">
+                  <NumberTicker value={70} suffix="%" />
+                </p>
                 <p className="mt-4 text-sm text-slate-400">spun că au evitat cel puțin o decizie proastă datorită <span className="font-semibold text-white">Risk Score</span>-ului</p>
-              </div>
-              <div className="text-center">
-                <p className="text-5xl font-bold text-accent-emerald md:text-7xl">350+</p>
+              </ScrollReveal>
+              <ScrollReveal className="text-center" delay={0.2}>
+                <p className="text-5xl font-bold text-accent-emerald md:text-7xl">
+                  <NumberTicker value={350} suffix="+" />
+                </p>
                 <p className="mt-4 text-sm text-slate-400">traderi activi care <span className="font-semibold text-white">învață</span> și <span className="font-semibold text-white">cresc împreună</span></p>
-              </div>
+              </ScrollReveal>
             </div>
           </Container>
+        </section>
+
+        {/* 7.5. Feature Marquee - trust bar */}
+        <section className="border-y border-white/5 bg-surface-graphite/40 py-6 backdrop-blur-sm">
+          <Marquee speed={45}>
+            {[
+              "⚡ Risk Score săptămânal",
+              "📊 55+ Video-uri Elite",
+              "🎯 Indicatori TradingView exclusivi",
+              "💬 Discord privat",
+              "🔴 Sesiuni live cu Alex",
+              "🆓 7 zile trial gratuit",
+              "💳 Stripe + Crypto payments",
+              "🚀 350+ Traderi activi",
+              "📈 Track record public",
+              "🧠 Alex's Brain AI mentor",
+            ].map((item) => (
+              <span key={item} className="whitespace-nowrap text-sm font-medium text-slate-300">
+                {item}
+                <span aria-hidden className="mx-6 text-white/10">•</span>
+              </span>
+            ))}
+          </Marquee>
         </section>
 
         {/* 8. Testimonials */}
@@ -306,7 +338,7 @@ export default async function HomePage() {
             <p className="mx-auto mt-4 max-w-lg text-slate-400">
               Începe cu <span className="font-semibold text-white">7 zile gratuit</span>. <span className="font-semibold text-white">Fără card</span>, fără obligații. Dacă nu merită, nu plătești nimic.
             </p>
-            <Link className="accent-button mt-8 inline-block px-10 py-4 text-lg font-bold" href="/signup">
+            <Link className="accent-button gradient-border-animated mt-8 inline-block rounded-xl px-10 py-4 text-lg font-bold" href="/signup">
               Începe Gratuit →
             </Link>
           </Container>

@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { AuroraBg } from "@/components/ui/aurora-bg";
 import { Container } from "@/components/ui/container";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import { ParticlesBg } from "@/components/ui/particles-bg";
-import { TextReveal } from "@/components/ui/text-reveal";
-import { siteConfig } from "@/lib/constants/site";
 
 export function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -35,6 +34,7 @@ export function HeroSection() {
     <>
       <section className="relative overflow-hidden px-4 pb-20 pt-32">
         <div className="absolute inset-0 bg-hero-radial opacity-90" />
+        <AuroraBg />
         <div className="absolute inset-0 grid-glow opacity-20" />
         <ParticlesBg className="z-[1]" />
         <Container className="relative z-10">
@@ -58,16 +58,18 @@ export function HeroSection() {
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link className="accent-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg" href="/signup">
+                <MagneticButton
+                  href="/signup"
+                  className="accent-button gradient-border-animated w-full rounded-xl px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
+                >
                   Începe Gratuit - 7 Zile →
-                </Link>
-                <button
-                  className="ghost-button w-full px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
+                </MagneticButton>
+                <MagneticButton
+                  className="ghost-button w-full rounded-xl px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
                   onClick={() => setIsVideoOpen(true)}
-                  type="button"
                 >
                   Vezi prezentarea
-                </button>
+                </MagneticButton>
               </div>
               <div className="mt-4 flex items-center gap-6 text-sm text-slate-500">
                 <span><span className="font-semibold text-white">350+</span> Traderi</span>

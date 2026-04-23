@@ -27,8 +27,8 @@ const config: Config = {
         "hero-radial": "radial-gradient(circle at top, rgba(16, 185, 129, 0.06), transparent 38%)",
       },
       fontFamily: {
-        display: ["General Sans", "var(--font-sans)", "system-ui", "sans-serif"],
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["General Sans", "system-ui", "sans-serif"],
+        sans: ["General Sans", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "ui-monospace", "monospace"],
       },
     },
