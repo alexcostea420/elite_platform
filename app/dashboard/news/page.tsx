@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { Navbar } from "@/components/layout/navbar";
 import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getDisplayIdentity } from "@/lib/utils/identity";
 import { NewsClient } from "./news-client";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -21,20 +23,25 @@ export default async function NewsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select(ELITE_PROFILE_COLUMNS)
+    .select(`full_name, ${ELITE_PROFILE_COLUMNS}`)
     .eq("id", user.id)
     .maybeSingle();
 
   if (!hasEliteAccess(profile)) redirect("/upgrade");
 
+  const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-      <div className="mb-6">
-        <p className="section-label mb-2">Feed Live</p>
-        <h1 className="text-2xl font-bold text-white sm:text-3xl">Știri Crypto</h1>
-        <p className="mt-2 text-sm text-slate-500">Agregate automat din cele mai importante surse. Actualizare la fiecare 5 minute.</p>
-      </div>
-      <NewsClient />
-    </div>
+    <>
+      <Navbar mode="dashboard" userIdentity={identity} />
+      <main className="mx-auto max-w-4xl px-4 pb-16 pt-24 sm:px-6 md:pt-28">
+        <div className="mb-6">
+          <p className="section-label mb-2">Feed Live</p>
+          <h1 className="text-2xl font-bold text-white sm:text-3xl">Știri Crypto</h1>
+          <p className="mt-2 text-sm text-slate-500">Agregate automat din cele mai importante surse. Actualizare la fiecare 5 minute.</p>
+        </div>
+        <NewsClient />
+      </main>
+    </>
   );
 }
