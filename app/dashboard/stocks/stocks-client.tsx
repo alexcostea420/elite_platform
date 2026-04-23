@@ -42,9 +42,14 @@ const SECTOR_COLORS: Record<string, string> = {
 
 function parseVolume(vol: string): number {
   if (!vol || vol === "-") return 0;
-  const clean = vol.replace(/,/g, "");
+  const clean = vol.replace(/,/g, "").trim();
   const num = parseFloat(clean);
-  return isNaN(num) ? 0 : num;
+  if (isNaN(num)) return 0;
+  const suffix = clean.slice(-1).toUpperCase();
+  if (suffix === "B") return num * 1_000_000_000;
+  if (suffix === "M") return num * 1_000_000;
+  if (suffix === "K") return num * 1_000;
+  return num;
 }
 
 function volumeRatio(vol: string, avgVol: string): { ratio: number; label: string; color: string } {
