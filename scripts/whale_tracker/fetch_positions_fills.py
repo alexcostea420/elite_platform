@@ -17,7 +17,7 @@ import os
 import sys
 import time
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(__file__))
 from config import SUPABASE_URL, SUPABASE_KEY, HL_API_BASE, RATE_LIMIT_DELAY
@@ -99,6 +99,15 @@ def main():
     now_iso = now.isoformat()
     total_positions = 0
     total_fills = 0
+    skipped_fills = 0
+
+    # Pre-fetch last known tid per wallet to avoid re-inserting old fills
+    last_tids = {}
+    for w in wallets:
+        result = supabase_req("GET", "whale_fills",
+            f"address=eq.{w['address']}&select=tid&order=filled_at.desc&limit=1")
+        if result and isinstance(result, list) and result:
+            last_tids[w["address"]] = str(result[0].get("tid", ""))
 
     for w in wallets:
         addr = w["address"]
@@ -163,19 +172,23 @@ def main():
 
         time.sleep(RATE_LIMIT_DELAY)
 
-        for f in fills[:200]:  # Limit to last 200 per cycle
+        known_tid = last_tids.get(addr, "")
+        new_fills = 0
+        for f in fills[:200]:
+            tid = str(f.get("tid", ""))
+            # Skip fills we already have (they come sorted newest first)
+            if tid == known_tid:
+                skipped_fills += len(fills) - new_fills  # rest are older
+                break
+
             coin = f.get("coin", "")
             px = float(f.get("px", "0"))
             sz = float(f.get("sz", "0"))
-            mark_px = mark_prices.get(coin, px)
             notional = sz * px
-            tid = str(f.get("tid", ""))
             filled_ms = f.get("time", 0)
             filled_at = datetime.fromtimestamp(filled_ms / 1000, tz=timezone.utc).isoformat()
 
-            # dir field: "Open Long", "Open Short", "Close Long", "Close Short"
             direction = f.get("dir", "")
-            # Derive action type
             if "Open" in direction:
                 action = "OPEN"
             elif "Close" in direction:
@@ -183,7 +196,6 @@ def main():
             else:
                 action = "TRADE"
 
-            # Simplify direction to LONG/SHORT
             if "Long" in direction:
                 dir_simple = "LONG"
             elif "Short" in direction:
@@ -198,6 +210,7 @@ def main():
                 "action_type": action, "filled_at": filled_at, "tid": tid,
             }
             supabase_req("POST", "whale_fills", "on_conflict=tid", row)
+            new_fills += 1
             total_fills += 1
 
         # Update last_activity
@@ -207,9 +220,17 @@ def main():
                 latest_at = datetime.fromtimestamp(latest_ms / 1000, tz=timezone.utc).isoformat()
                 supabase_req("PATCH", "whale_wallets", f"address=eq.{addr}", {"last_activity": latest_at})
 
-    log(f"SUMMARY: {total_positions} positions, {total_fills} fills processed for {len(wallets)} wallets")
+    # Cleanup: delete positions_history older than 90 days
+    cutoff = (now - timedelta(days=90)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    supabase_req("DELETE", "whale_positions_history", f"snapshot_at=lt.{cutoff}")
+    log("Cleaned up positions_history older than 90 days")
+
+    log(f"SUMMARY: {total_positions} positions, {total_fills} new fills ({skipped_fills} skipped) for {len(wallets)} wallets")
     log("fetch_positions_fills done.")
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from common.lockfile import acquire_lock_or_exit
+    acquire_lock_or_exit("whale_fetch_positions_fills")
     main()

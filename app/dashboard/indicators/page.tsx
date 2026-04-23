@@ -6,6 +6,7 @@ import { TimeGateLock } from "@/components/dashboard/time-gate-lock";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDaysUntilUnlock, getEliteDays, hasPassedTimeGate } from "@/lib/utils/time-gate";
@@ -73,11 +74,11 @@ export default async function IndicatorsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, elite_since")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, elite_since, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.subscription_tier !== "elite") {
+  if (!hasEliteAccess(profile)) {
     redirect("/upgrade");
   }
 

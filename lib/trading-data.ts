@@ -177,6 +177,40 @@ export function getDynamicLimits() {
   return readTradingData<DynamicLimits>("dynamic_limits", "data/dynamic_limits.json");
 }
 
+// ── Macro Dashboard ────────────────────────────────────────
+
+export type MacroMetric = {
+  value: number;
+  date?: string;
+  source?: string;
+  change_3m?: number;
+  change_1y?: number;
+  label?: string;
+};
+
+export type MacroLayer = {
+  signal: "supportive" | "neutral" | "restrictive";
+  score: number;
+  metrics: string[];
+};
+
+export type MacroDashboardData = {
+  timestamp: string;
+  metrics: Record<string, MacroMetric>;
+  timeseries: Record<string, Array<{ date: string; value: number }>>;
+  regime: {
+    regime: string;
+    label: string;
+    color: string;
+    modifier: number;
+  };
+  layers: Record<string, MacroLayer>;
+};
+
+export function getMacroDashboard() {
+  return readTradingData<MacroDashboardData>("macro_dashboard", "data/macro_dashboard.json");
+}
+
 // ── Whale Tracker ──────────────────────────────────────────
 
 export type WhaleData = {

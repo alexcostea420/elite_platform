@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { NewsClient } from "./news-client";
@@ -16,7 +17,15 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function NewsPage() {
   const supabase = createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?next=/dashboard/news");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select(ELITE_PROFILE_COLUMNS)
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!hasEliteAccess(profile)) redirect("/upgrade");
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
@@ -38,11 +39,11 @@ export default async function AskAlexPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.subscription_tier !== "elite") redirect("/upgrade");
+  if (!hasEliteAccess(profile)) redirect("/upgrade");
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
 
   return (
@@ -71,9 +72,9 @@ export default async function AskAlexPage() {
           {/* 3 capability cards */}
           <div className="grid gap-4 md:grid-cols-3 mb-10">
             {[
-              { title: "Analizeaza chart-uri", text: "Pune o poza cu chart-ul tau si primesti analiza completa: structura, niveluri cheie, S/R, pattern-uri.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab6-eth-breakout-structura.jpg" },
-              { title: "Valideaza trade-uri", text: "Spune-i entry, SL, si TP. Primesti PRO/CONTRA, risk/reward, si strategie recomandata.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab5-cvx-trade-analysis.jpg" },
-              { title: "Quiz-uri practice", text: "Cere un quiz dupa orice video si testeaza ce ai invatat.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab2-quiz-suporti-rezistente.jpg" },
+              { title: "Analizează chart-uri", text: "Pune o poză cu chart-ul tău și primești analiză completă: structură, niveluri cheie, S/R, pattern-uri.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab6-eth-breakout-structura.jpg" },
+              { title: "Validează trade-uri", text: "Spune-i entry, SL, și TP. Primești PRO/CONTRA, risk/reward, și strategie recomandată.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab5-cvx-trade-analysis.jpg" },
+              { title: "Quiz-uri practice", text: "Cere un quiz după orice video și testează ce ai învățat.", img: "https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/images/alexs-brain/ab2-quiz-suporti-rezistente.jpg" },
             ].map((card) => (
               <div key={card.title} className="glass-card overflow-hidden">
                 <div className="p-5">

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import PivotsDashboard from "@/components/dashboard/pivots-dashboard";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
@@ -25,11 +26,11 @@ export default async function PivotsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, subscription_status, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.subscription_tier !== "elite") redirect("/upgrade");
+  if (!hasEliteAccess(profile)) redirect("/upgrade");
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isAdmin = profile?.role === "admin";

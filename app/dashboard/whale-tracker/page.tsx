@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getWhaleData } from "@/lib/trading-data";
@@ -35,11 +36,11 @@ export default async function WhaleTrackerPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.subscription_tier !== "elite" && profile?.role !== "admin") {
+  if (!hasEliteAccess(profile)) {
     redirect("/upgrade");
   }
 
@@ -54,8 +55,8 @@ export default async function WhaleTrackerPage() {
             <section className="glass-card p-8 text-center md:p-12">
               <div className="mb-4 text-5xl">🚀</div>
               <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mx-auto mt-4 max-w-lg text-slate-400">Aceasta sectiune va fi disponibila in curand.</p>
-              <a className="accent-button mt-6 inline-block" href="/dashboard">Inapoi la Dashboard</a>
+              <p className="mx-auto mt-4 max-w-lg text-slate-400">Această secțiune va fi disponibilă în curând.</p>
+              <a className="accent-button mt-6 inline-block" href="/dashboard">Înapoi la Dashboard</a>
             </section>
           </Container>
         </main>
@@ -83,7 +84,7 @@ export default async function WhaleTrackerPage() {
               <div className="text-5xl">--</div>
               <h2 className="mt-4 text-2xl font-bold text-white">Date indisponibile</h2>
               <p className="mt-3 text-slate-400">
-                Datele whale tracker nu au putut fi incarcate. Incearca din nou mai tarziu.
+                Datele whale tracker nu au putut fi încărcate. Încearcă din nou mai târziu.
               </p>
             </section>
           </Container>

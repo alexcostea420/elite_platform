@@ -29,109 +29,11 @@ import {
   type EclipseEvent,
 } from "@/lib/data/pivots-data";
 
+import { eventLinePlugin } from "./pivots-dashboard/chart-plugin";
+import { cx, fmtP, fmtDate, diffDays } from "./pivots-dashboard/formatters";
+import { calcScore } from "./pivots-dashboard/score";
+import type { ActiveMethod, UpcomingEvent } from "./pivots-dashboard/score";
 import s from "./pivots-dashboard.module.css";
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Helpers
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-function cx(...classes: (string | false | null | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-function fmtP(v: number | null | undefined): string {
-  if (v == null) return "\u2014";
-  if (v >= 1000)
-    return "$" + (v / 1000).toFixed(v >= 10000 ? 0 : 1) + "K";
-  return "$" + Math.round(v);
-}
-
-function fmtDate(d: Date): string {
-  const dd = d.getDate();
-  const mm = d.getMonth() + 1;
-  const yy = d.getFullYear();
-  return (dd < 10 ? "0" : "") + dd + "." + (mm < 10 ? "0" : "") + mm + "." + yy;
-}
-
-function diffDays(from: Date, to: Date): number {
-  return Math.round((to.getTime() - from.getTime()) / 86400000);
-}
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Score calculation
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-interface ActiveMethod {
-  name: string;
-  pts: number;
-  type: "PRIMAR" | "secundar";
-  detail?: string;
-}
-
-interface UpcomingEvent {
-  name: string;
-  days: number;
-}
-
-function calcScore() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const active: ActiveMethod[] = [];
-  const upcoming: UpcomingEvent[] = [];
-
-  ECLIPSES_SOLAR.forEach((d) => {
-    const diff = (d.getTime() - today.getTime()) / 86400000;
-    if (diff >= 0 && diff <= 7)
-      active.push({ name: "Eclipsă Solară", pts: 3, type: "PRIMAR", detail: `în ${Math.round(diff)} zile` });
-    else if (diff > 7 && diff < 120)
-      upcoming.push({ name: "Eclipsă Solară Totală", days: Math.round(diff) });
-  });
-
-  ECLIPSES_LUNAR.forEach((d) => {
-    const diff = (d.getTime() - today.getTime()) / 86400000;
-    const adiff = Math.abs(diff);
-    if (adiff <= 3)
-      active.push({ name: "Eclipsă Lunară", pts: 2, type: "PRIMAR", detail: `±${Math.round(adiff)}z` });
-    else if (diff > 3 && diff < 120)
-      upcoming.push({ name: "Eclipsă Lunară", days: Math.round(diff) });
-  });
-
-  FIB_LEVELS_SCORE.forEach((f) => {
-    const diff = (f.d.getTime() - today.getTime()) / 86400000;
-    const adiff = Math.abs(diff);
-    if (adiff <= 7)
-      active.push({ name: `Fibonacci ${f.name}`, pts: 2, type: "PRIMAR", detail: `±${Math.round(adiff)}z` });
-    else if (diff > 7 && diff < 200)
-      upcoming.push({ name: `Fibonacci ${f.name}`, days: Math.round(diff) });
-  });
-
-  const m = today.getMonth() + 1;
-  const day = today.getDate();
-  if ((m === 1 && day >= 16) || (m === 2 && day <= 15))
-    active.push({ name: "Sezonier Ianuarie", pts: 1, type: "secundar" });
-
-  const dom = today.getDate();
-  const hv = DOM_HIGHS[dom] || 0;
-  const lv = DOM_LOWS[dom] || 0;
-  if (hv >= 1.3 || lv >= 1.3) {
-    const favors =
-      hv >= lv
-        ? `top-uri +${Math.round((hv - 1) * 100)}%`
-        : `low-uri +${Math.round((lv - 1) * 100)}%`;
-    active.push({ name: `Zi din Lună (${dom})`, pts: 1, type: "secundar", detail: favors });
-  }
-
-  const daysF = (today.getTime() - KNOWN_FULL_MOON.getTime()) / 86400000;
-  const cp = ((daysF % 29.53) + 29.53) % 29.53;
-  const df = Math.min(cp, 29.53 - cp);
-  const dn = Math.abs(cp - 14.765);
-  if (df <= 1.5) active.push({ name: "Lună Plină", pts: 1, type: "secundar", detail: `±${df.toFixed(1)}z` });
-  else if (dn <= 1.5) active.push({ name: "Lună Nouă", pts: 1, type: "secundar", detail: `±${dn.toFixed(1)}z` });
-
-  const total = active.reduce((sum, x) => sum + x.pts, 0);
-  const hasPrimary = active.some((x) => x.type === "PRIMAR");
-  return { total, active, upcoming, hasPrimary };
-}
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Bar Chart sub-component
@@ -474,33 +376,6 @@ function EclipseCompactTable({ events, color: conceptColor }: { events: EclipseE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Chart Card sub-component (Halving / Cycle / Pi)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-// Chart.js event line plugin
-const eventLinePlugin: Plugin = {
-  id: "eventLine",
-  afterDraw(chart) {
-    const idx = (chart.config as unknown as { _eventIdx?: number })._eventIdx;
-    if (idx == null) return;
-    const meta = chart.getDatasetMeta(0);
-    const pt = meta.data[idx];
-    if (!pt) return;
-    const ctx = chart.ctx;
-    const { top: y0, bottom: y1 } = chart.chartArea;
-    ctx.save();
-    ctx.beginPath();
-    ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = "rgba(255,255,255,.25)";
-    ctx.lineWidth = 1;
-    ctx.moveTo(pt.x, y0);
-    ctx.lineTo(pt.x, y1);
-    ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.45)";
-    ctx.font = "500 9px JetBrains Mono";
-    ctx.textAlign = "center";
-    ctx.fillText("EVENT", pt.x, y0 + 10);
-    ctx.restore();
-  },
-};
 
 function ChartCard({ ev, lineColor, id }: { ev: EclipseEvent; lineColor: string; id: string }) {
   const [isOpen, setIsOpen] = useState(false);

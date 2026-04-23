@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getRiskScore, getRiskScoreV2 } from "@/lib/trading-data";
@@ -52,19 +53,19 @@ const componentWhyRo: Record<string, string> = {
   vix: "Peste 44 = oportunitate de cumparare (100% istoric)",
   mvrv: "Semnaleaza fiecare top (>7) si bottom (<0) de ciclu",
   sopr: "Sub 1 = capitulare, semnal de bottom",
-  fear_greed: "Indicator contrarian - frica extrema = cumpara",
+  fear_greed: "Indicator contrarian - frică extremă = cumpără",
   ma50w_bear: "Cel mai puternic semnal de trend pe termen lung",
-  rsi_weekly: "Sub 30 = zona de acumulare",
-  macd_weekly: "Schimbare de directie = schimbare de momentum",
+  rsi_weekly: "Sub 30 = zonă de acumulare",
+  macd_weekly: "Schimbare de direcție = schimbare de momentum",
   funding_rate: "Sentiment derivate - aglomerare pe o parte",
-  pi_cycle_top: "Niciodata gresit - semnalul definitiv de top",
-  halving_cycle: "Ciclul de 4 ani - peak la ~494 zile dupa halving",
-  fomc_proximity: "Risc eveniment - 73% scadere in cicluri de crestere rate",
-  mayer_multiple: "Sub 0.8 = zona de acumulare istorica",
+  pi_cycle_top: "Niciodată greșit - semnalul definitiv de top",
+  halving_cycle: "Ciclul de 4 ani - peak la ~494 zile după halving",
+  fomc_proximity: "Risc eveniment - 73% scădere în cicluri de creștere rate",
+  mayer_multiple: "Sub 0.8 = zonă de acumulare istorică",
   puell_multiple: "Economia minerilor - sub 0.5 = bottom de ciclu",
-  stoch_rsi_weekly: "Mai precis decat RSI la extreme de ciclu",
-  nupl: "Net Unrealized Profit/Loss - >0.75 = zona de euforie",
-  realized_price: "Pretul mediu de achizitie al tuturor BTC",
+  stoch_rsi_weekly: "Mai precis decât RSI la extreme de ciclu",
+  nupl: "Net Unrealized Profit/Loss - >0.75 = zonă de euforie",
+  realized_price: "Prețul mediu de achiziție al tuturor BTC",
   dxy: "Dolar slab = favorabil pentru crypto",
   m2_supply: "Lichiditate globala - expansiune = bullish",
 };
@@ -168,9 +169,9 @@ function getConvictionRo(c: string): string {
 
 function getSimpleSummary(decision: string, conviction: string): string {
   const conv = getConvictionRo(conviction);
-  if (decision === "BUY") return `Conditiile de piata sunt favorabile pentru acumulare pe termen lung. Convingere ${conv}.`;
-  if (decision === "SELL") return `Piata arata semne de supraincalzire. Prudenta la achizitii noi. Convingere ${conv}.`;
-  return `Piata este in zona neutra. Nu exista un semnal clar. Convingere ${conv}.`;
+  if (decision === "BUY") return `Condițiile de piață sunt favorabile pentru acumulare pe termen lung. Convingere ${conv}.`;
+  if (decision === "SELL") return `Piața arată semne de supraîncălzire. Prudență la achiziții noi. Convingere ${conv}.`;
+  return `Piața este în zona neutră. Nu există un semnal clar. Convingere ${conv}.`;
 }
 
 /* ── SVG Gauge (inline client component) ── */
@@ -282,11 +283,11 @@ export default async function RiskScorePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, elite_since, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, elite_since, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.subscription_tier !== "elite") {
+  if (!hasEliteAccess(profile)) {
     redirect("/upgrade");
   }
 
@@ -302,8 +303,8 @@ export default async function RiskScorePage() {
             <section className="glass-card p-8 text-center md:p-12">
               <div className="mb-4 text-5xl">🚀</div>
               <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mx-auto mt-4 max-w-lg text-slate-400">Aceasta sectiune va fi disponibila in curand.</p>
-              <a className="accent-button mt-6 inline-block" href="/dashboard">Inapoi la Dashboard</a>
+              <p className="mx-auto mt-4 max-w-lg text-slate-400">Această secțiune va fi disponibilă în curând.</p>
+              <a className="accent-button mt-6 inline-block" href="/dashboard">Înapoi la Dashboard</a>
             </section>
           </Container>
         </main>
@@ -603,7 +604,7 @@ export default async function RiskScorePage() {
                 </div>
               )}
               <p className="mt-3 text-sm leading-relaxed text-slate-500">
-                Ciclul de 4 ani: peak la ~494 zile dupa halving
+                Ciclul de 4 ani: peak la ~494 zile după halving
               </p>
             </article>
           </section>

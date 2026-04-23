@@ -104,7 +104,7 @@ export default async function PerformancePage() {
               <div className="text-5xl mb-4">🚀</div>
               <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
               <p className="mt-4 max-w-lg mx-auto text-slate-400">
-                Aceasta sectiune va fi disponibila in curand. Lucram la ea!
+                Această secțiune va fi disponibilă în curând. Lucrăm la ea!
               </p>
               <Link className="accent-button mt-6 inline-block" href="/dashboard">
                 Inapoi la Dashboard

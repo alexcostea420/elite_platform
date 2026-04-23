@@ -6,6 +6,7 @@ import { CountertradeDashboard } from "@/components/dashboard/countertrade-dashb
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
@@ -27,11 +28,11 @@ export default async function CountertradePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.subscription_tier !== "elite") redirect("/upgrade");
+  if (!hasEliteAccess(profile)) redirect("/upgrade");
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isAdmin = profile?.role === "admin";
@@ -46,10 +47,10 @@ export default async function CountertradePage() {
               <div className="mb-4 text-5xl">🚀</div>
               <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
               <p className="mx-auto mt-4 max-w-lg text-slate-400">
-                Analiza contrarian YouTube va fi disponibila in curand.
+                Analiza contrarian YouTube va fi disponibilă în curând.
               </p>
               <Link className="accent-button mt-6 inline-block" href="/dashboard">
-                Inapoi la Dashboard
+                Înapoi la Dashboard
               </Link>
             </section>
           </Container>

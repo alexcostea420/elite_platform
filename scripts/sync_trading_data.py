@@ -88,6 +88,10 @@ def main():
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from common.lockfile import acquire_lock_or_exit
+    acquire_lock_or_exit("sync_trading_data")
+
     # One-shot mode (for cron) or loop mode
     if "--loop" in sys.argv:
         interval = int(os.environ.get("SYNC_INTERVAL", "300"))  # 5 min default

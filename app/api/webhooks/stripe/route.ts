@@ -57,6 +57,19 @@ export async function POST(request: NextRequest) {
 
       const supabase = createServiceRoleSupabaseClient();
 
+      // Idempotency: skip if this session/payment_intent was already processed
+      const txHash = (session.payment_intent as string) ?? session.id;
+      const { data: existingPayment } = await supabase
+        .from("payments")
+        .select("id")
+        .eq("tx_hash", txHash)
+        .eq("chain", "STRIPE")
+        .maybeSingle();
+      if (existingPayment) {
+        console.log(`Stripe: duplicate event for tx ${txHash}, skipping`);
+        return NextResponse.json({ received: true, duplicate: true });
+      }
+
       // Get current profile
       const { data: profile } = await supabase
         .from("profiles")

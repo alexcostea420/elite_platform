@@ -60,30 +60,18 @@ export async function POST() {
       }
     }
 
-    // Check global daily trial availability
-    const { data: configRow } = await serviceSupabase
-      .from("platform_config")
-      .select("value")
-      .eq("key", "trial_available")
-      .maybeSingle();
+    // Atomic global daily trial claim (race-safe via SELECT FOR UPDATE inside RPC)
+    const { data: claimResult, error: claimError } = await serviceSupabase
+      .rpc("try_claim_daily_trial", { p_user_id: user.id });
 
-    const trialConfig = configRow?.value as { available: boolean; reset_at: string | null } | null;
+    if (claimError) {
+      console.error("Trial claim RPC failed:", claimError);
+      return NextResponse.json({ error: "Eroare internă. Încearcă din nou." }, { status: 500 });
+    }
 
-    if (trialConfig && !trialConfig.available) {
-      // Check if it should have reset (reset daily at 08:00 UTC)
-      const now08 = new Date();
-      now08.setUTCHours(8, 0, 0, 0);
-      if (now08.getTime() < Date.now()) {
-        // Past 08:00 today - check if reset_at is before today's 08:00
-        const resetAt = trialConfig.reset_at ? new Date(trialConfig.reset_at).getTime() : 0;
-        if (resetAt < now08.getTime()) {
-          // Should have reset - allow it
-        } else {
-          return NextResponse.json({ error: "Trial-ul de azi a fost deja luat. Revino mâine la 08:00." }, { status: 429 });
-        }
-      } else {
-        return NextResponse.json({ error: "Trial-ul de azi a fost deja luat. Revino mâine la 08:00." }, { status: 429 });
-      }
+    const claimed = (claimResult as { claimed?: boolean } | null)?.claimed === true;
+    if (!claimed) {
+      return NextResponse.json({ error: "Trial-ul de azi a fost deja luat. Revino mâine la 08:00." }, { status: 429 });
     }
 
     // Activate 7-day trial with trial_used_at timestamp
@@ -99,19 +87,8 @@ export async function POST() {
 
     if (updateError) {
       console.error("Trial activation failed:", updateError);
-      return NextResponse.json({ error: "Activarea trial-ului a esuat. Incearca din nou." }, { status: 500 });
+      return NextResponse.json({ error: "Activarea trial-ului a eșuat. Încearcă din nou." }, { status: 500 });
     }
-
-    // Mark global trial as claimed for today
-    await serviceSupabase.from("platform_config").update({
-      value: {
-        available: false,
-        last_claimed_at: now.toISOString(),
-        last_claimed_by: user.id,
-        reset_at: now.toISOString(),
-      },
-      updated_at: now.toISOString(),
-    }).eq("key", "trial_available");
 
     // Queue email drip sequence (timed for 7-day trial)
     const h = 60 * 60 * 1000;

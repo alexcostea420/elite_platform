@@ -1,43 +1,43 @@
 {
   "version": "2.0",
-  "timestamp": "2026-04-12T13:00:06.998832+00:00",
-  "score": 67,
-  "decision": "BUY",
-  "decision_text": "Conditiile sunt favorabile pentru acumulare pe termen lung.",
-  "conviction": "MEDIUM",
-  "conviction_detail": "3 cumpara / 0 vinde / 6 neutru",
+  "timestamp": "2026-04-23T05:00:07.153077+00:00",
+  "score": 63,
+  "decision": "HOLD",
+  "decision_text": "Conditii mixte. Acumulare DCA cu prudenta.",
+  "conviction": "LOW",
+  "conviction_detail": "2 cumpara / 0 vinde / 7 neutru",
   "overrides": [],
-  "btc_price": 71148,
-  "btc_price_live": 71148,
+  "btc_price": 77934,
+  "btc_price_live": 77934,
   "btc_ath": 126208.5,
-  "pct_from_ath": -43.63,
-  "internal_score": 0.667,
-  "btc_market_cap": 1424447681599.2031,
-  "btc_24h_change": -2.48,
+  "pct_from_ath": -38.25,
+  "internal_score": 0.6311,
+  "btc_market_cap": 1559951119516.8691,
+  "btc_24h_change": 0.59,
   "fear_greed": {
-    "value": 16,
-    "label": "Extreme Fear"
+    "value": 46,
+    "label": "Fear"
   },
   "coingecko": {
-    "total_mcap": 2498821431802.5044,
-    "btc_dominance": 57.0141345748023,
-    "eth_dominance": 10.616936677555609,
-    "mcap_change_24h": -1.9901453438820778
+    "total_mcap": 2682727151733.587,
+    "btc_dominance": 58.13355599808268,
+    "eth_dominance": 10.558173764240612,
+    "mcap_change_24h": 0.04043076246130637
   },
   "derivatives": {
-    "funding_rate": -3.69e-05,
-    "funding_pct": -0.00369,
-    "oi_value": 6737289734.24,
+    "funding_rate": -7.87e-05,
+    "funding_pct": -0.00787,
+    "oi_value": 7986248191.02,
     "oi_delta_pct": 0,
-    "ls_ratio": 0.9369,
-    "long_pct": 48.37,
-    "short_pct": 51.63,
-    "taker_buy_vol": 1066.96,
-    "taker_sell_vol": 1156.55,
-    "taker_ratio": 0.9225,
-    "basis_pct": 0.785,
-    "spot_price": 71070.22,
-    "futures_price": 71628.1
+    "ls_ratio": 0.555,
+    "long_pct": 35.69,
+    "short_pct": 64.31,
+    "taker_buy_vol": 3420.82,
+    "taker_sell_vol": 3607.75,
+    "taker_ratio": 0.9482,
+    "basis_pct": 0.2762,
+    "spot_price": 77924.47,
+    "futures_price": 78139.7
   },
   "macro": {
     "vix": 0,
@@ -50,26 +50,26 @@
   "indicators": {},
   "components": {
     "mvrv_zscore": {
-      "raw": 0.59,
-      "norm": 0.855,
+      "raw": 0.762,
+      "norm": 0.832,
       "weight": 0.12,
       "signal": "CUMPARA",
-      "explanation": "Z-Score la 0.59. Sub 1 = zona de acumulare. Peste 5 = piata supraincalzita."
+      "explanation": "Z-Score la 0.76. Sub 1 = zona de acumulare. Peste 5 = piata supraincalzita."
     },
     "sopr": {
-      "raw": 1.006,
-      "norm": 0.293,
+      "raw": 0.998,
+      "norm": 0.347,
       "weight": 0.08,
       "signal": "NEUTRU",
-      "explanation": "SOPR la 1.0060. Sub 1 = holderii vand in pierdere (capitulare). Peste 1.05 = profit taking."
+      "explanation": "SOPR la 0.9980. Sub 1 = holderii vand in pierdere (capitulare). Peste 1.05 = profit taking."
     },
     "nupl": {
-      "raw": 0.2607,
-      "norm": 0.515,
+      "raw": 0.289,
+      "norm": 0.485,
       "weight": 0.1,
       "signal": "NEUTRU",
       "phase": "Optimism",
-      "explanation": "NUPL la 0.261 - faza: Optimism. Sub 0 = capitulare (cel mai bun moment de cumparare istoric)."
+      "explanation": "NUPL la 0.289 - faza: Optimism. Sub 0 = capitulare (cel mai bun moment de cumparare istoric)."
     },
     "puell_multiple": {
       "raw": 0.732,
@@ -79,44 +79,44 @@
       "explanation": "Puell la 0.732. Sub 0.5 = minerii sunt in pierdere (bottom de ciclu). Peste 4 = top de ciclu."
     },
     "fear_greed": {
-      "raw": 16,
-      "norm": 0.84,
+      "raw": 46,
+      "norm": 0.54,
       "weight": 0.06,
-      "signal": "CUMPARA",
-      "label": "Extreme Fear",
-      "explanation": "Indicele la 16 (Extreme Fear). Frica extrema = oportunitate contrarian de cumparare."
+      "signal": "NEUTRU",
+      "label": "Fear",
+      "explanation": "Indicele la 46 (Fear). Frica extrema = oportunitate contrarian de cumparare."
     },
     "drawdown": {
-      "raw": -43.63,
-      "norm": 0.545,
+      "raw": -38.25,
+      "norm": 0.478,
       "weight": 0.08,
       "signal": "NEUTRU",
-      "explanation": "BTC la -43.6% de la ATH ($126,208). Drawdown-uri mari = oportunitati istorice."
+      "explanation": "BTC la -38.2% de la ATH ($126,208). Drawdown-uri mari = oportunitati istorice."
     },
     "halving_cycle": {
-      "days_since_halving": 722,
-      "days_to_next_halving": 738,
+      "days_since_halving": 733,
+      "days_to_next_halving": 727,
       "norm": 0.7,
       "weight": 0.08,
       "phase": "Corectie / Acumulare",
       "signal": "CUMPARA",
-      "explanation": "722 zile de la halving. Faza: Corectie / Acumulare. Urmatorul halving in ~738 zile."
+      "explanation": "733 zile de la halving. Faza: Corectie / Acumulare. Urmatorul halving in ~727 zile."
     },
     "days_from_peak": {
-      "days_from_peak": 188,
+      "days_from_peak": 199,
       "norm": 0.6,
       "weight": 0.08,
       "signal": "NEUTRU",
-      "explanation": "188 zile de la ATH. Istoric: bottom-ul vine la ~365 zile dupa peak."
+      "explanation": "199 zile de la ATH. Istoric: bottom-ul vine la ~365 zile dupa peak."
     },
     "realized_price": {
-      "raw": 51414.0,
-      "ratio": 1.384,
-      "norm": 0.784,
+      "raw": 53697.0,
+      "ratio": 1.451,
+      "norm": 0.759,
       "weight": 0.1,
       "signal": "NEUTRU",
-      "explanation": "Pret actual / Pret realizat = 1.38x. Sub 1 = sub costul mediu al retelei (extrem de rar)."
+      "explanation": "Pret actual / Pret realizat = 1.45x. Sub 1 = sub costul mediu al retelei (extrem de rar)."
     }
   },
-  "analysis": "SCOR RISC: 67/100. Decizie: CUMPARA (Conviction: MEDIUM).\n\nMVRV Z-Score: 0.59. Z-Score la 0.59. Sub 1 = zona de acumulare. Peste 5 = piata supraincalzita.\nNUPL: 0.2607 (Optimism). NUPL la 0.261 - faza: Optimism. Sub 0 = capitulare (cel mai bun moment de cumparare istoric).\nSOPR: 1.006. SOPR la 1.0060. Sub 1 = holderii vand in pierdere (capitulare). Peste 1.05 = profit taking.\nFear & Greed: 16 (Extreme Fear). Frica extrema = oportunitate contrarian.\nDrawdown: -43.63% de la ATH. BTC la -43.6% de la ATH ($126,208). Drawdown-uri mari = oportunitati istorice.\nCiclul Halving: 722 zile de la halving. Faza: Corectie / Acumulare. Urmatorul halving in ~738 zile.\nZile de la peak: 188 zile de la ATH. Istoric: bottom-ul vine la ~365 zile dupa peak.\nPret realizat: $51,414. Pret actual / Pret realizat = 1.38x. Sub 1 = sub costul mediu al retelei (extrem de rar).\n\nAceasta analiza este generata automat si nu constituie sfaturi de investitii."
+  "analysis": "SCOR RISC: 63/100. Decizie: ASTEAPTA (Conviction: LOW).\n\nMVRV Z-Score: 0.762. Z-Score la 0.76. Sub 1 = zona de acumulare. Peste 5 = piata supraincalzita.\nNUPL: 0.289 (Optimism). NUPL la 0.289 - faza: Optimism. Sub 0 = capitulare (cel mai bun moment de cumparare istoric).\nSOPR: 0.998. SOPR la 0.9980. Sub 1 = holderii vand in pierdere (capitulare). Peste 1.05 = profit taking.\nFear & Greed: 46 (Fear). Frica extrema = oportunitate contrarian.\nDrawdown: -38.25% de la ATH. BTC la -38.2% de la ATH ($126,208). Drawdown-uri mari = oportunitati istorice.\nCiclul Halving: 733 zile de la halving. Faza: Corectie / Acumulare. Urmatorul halving in ~727 zile.\nZile de la peak: 199 zile de la ATH. Istoric: bottom-ul vine la ~365 zile dupa peak.\nPret realizat: $53,697. Pret actual / Pret realizat = 1.45x. Sub 1 = sub costul mediu al retelei (extrem de rar).\n\nAceasta analiza este generata automat si nu constituie sfaturi de investitii."
 }
