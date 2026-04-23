@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 
+import { Navbar } from "@/components/layout/navbar";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getDisplayIdentity } from "@/lib/utils/identity";
 import { WhaleTrackerClient } from "./whale-tracker-client";
 
 export const metadata = {
@@ -18,7 +20,7 @@ export default async function WhaleTrackerPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("subscription_tier, subscription_status, role")
+    .select("full_name, subscription_tier, subscription_status, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -30,9 +32,14 @@ export default async function WhaleTrackerPage() {
     redirect("/upgrade?from=whale-tracker");
   }
 
+  const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <WhaleTrackerClient />
-    </div>
+    <>
+      <Navbar mode="dashboard" userIdentity={identity} />
+      <main className="mx-auto max-w-7xl px-4 pb-16 pt-24 sm:px-6 md:pt-28">
+        <WhaleTrackerClient />
+      </main>
+    </>
   );
 }
