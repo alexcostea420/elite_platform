@@ -20,9 +20,10 @@ export function VideoTemplateThumbnail({
   youtubeId?: string;
   title?: string;
 }) {
-  // Use YouTube maxresdefault if we have a youtube ID
+  // R2-hosted videos use pseudo IDs like "r2_..." — those have no YouTube thumbnail.
+  const isYoutube = youtubeId && !youtubeId.startsWith("r2_");
   const resolvedThumb = thumbnailUrl
-    ?? (youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null);
+    ?? (isYoutube ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null);
 
   if (resolvedThumb) {
     return (
