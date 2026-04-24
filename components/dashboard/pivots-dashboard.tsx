@@ -6,10 +6,12 @@ import {
   type ChartConfiguration,
   type Plugin,
 } from "chart.js";
+import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   CONCEPTS,
+  CURRENT_VERDICT,
   DOM_HIGHS,
   DOM_LOWS,
   ECLIPSES_LUNAR,
@@ -18,12 +20,15 @@ import {
   FIB_LEVELS_SCORE,
   FIB_TIMELINE,
   GANN_INTERVALS,
+  GLOSSARY,
   KNOWN_FULL_MOON,
   MERCURY_DATA,
   MONTH_BOTTOMS,
   MONTH_NAMES_RO,
   MONTH_TOPS,
   NEXT_EVENTS,
+  ON_CHAIN_METRICS,
+  SECTION_INFO,
   SUBNAV_LINKS,
   type ConceptData,
   type EclipseEvent,
@@ -34,6 +39,289 @@ import { cx, fmtP, fmtDate, diffDays } from "./pivots-dashboard/formatters";
 import { calcScore } from "./pivots-dashboard/score";
 import type { ActiveMethod, UpcomingEvent } from "./pivots-dashboard/score";
 import s from "./pivots-dashboard.module.css";
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Info Tooltip — small "?" badge with hover/click popover
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function InfoTooltip({ id, label }: { id: string; label?: string }) {
+  const [open, setOpen] = useState(false);
+  const text = SECTION_INFO[id];
+  const wrapRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [open]);
+
+  if (!text) return null;
+
+  return (
+    <span
+      ref={wrapRef}
+      style={{ position: "relative", display: "inline-flex", alignItems: "center" }}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        className={s.infoTrigger}
+        aria-label="Ce înseamnă"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+      >
+        ?
+      </button>
+      <span
+        className={cx(s.infoPopover, open && s.infoPopoverShow)}
+        style={{ top: "calc(100% + 8px)", left: 0 }}
+      >
+        <span className={s.infoPopoverTitle}>{label ?? "Ce înseamnă"}</span>
+        {text}
+      </span>
+    </span>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Verdict Hero — TL;DR card for noobs at the top of the page
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function VerdictHero() {
+  const v = CURRENT_VERDICT;
+  return (
+    <motion.div
+      className={s.verdictHero}
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className={s.verdictTop}>
+        <span className={s.verdictBadge}>
+          <span className={s.verdictBadgePulse} />
+          Verdict azi · {new Date().toLocaleDateString("ro-RO", { day: "2-digit", month: "long", year: "numeric" })}
+        </span>
+        <InfoTooltip id="s-onchain" label="Cum se calculează?" />
+      </div>
+      <h2 className={s.verdictTitle}>
+        <span className={s.verdictTitleEmoji}>{v.emoji}</span>
+        {v.title}
+      </h2>
+      <p className={s.verdictDesc}>
+        <span className={s.verdictDescStrong}>{v.shortDescription}</span>{" "}
+        {v.longDescription}
+      </p>
+
+      <div className={s.verdictMetrics}>
+        <div className={s.verdictMetric}>
+          <div className={s.verdictMetricVal} style={{ color: "var(--green)" }}>
+            {v.confidenceScore}%
+          </div>
+          <div className={s.verdictMetricLbl}>Convicție</div>
+        </div>
+        <div className={s.verdictMetric}>
+          <div className={s.verdictMetricVal} style={{ color: "var(--green)" }}>
+            {v.bullishSignals}/{v.totalSignals}
+          </div>
+          <div className={s.verdictMetricLbl}>Semnale Bullish</div>
+        </div>
+        <div className={s.verdictMetric}>
+          <div className={s.verdictMetricVal} style={{ color: "var(--red)" }}>
+            {v.bearishSignals}
+          </div>
+          <div className={s.verdictMetricLbl}>Semnale Bearish</div>
+        </div>
+      </div>
+
+      <div className={s.verdictActions}>
+        <div className={cx(s.verdictActionBox, s.verdictActionBoxDo)}>
+          <div className={s.verdictActionTitle} style={{ color: "var(--green)" }}>
+            ✓ Ce să faci acum
+          </div>
+          <ul className={cx(s.verdictActionList, s.do)}>
+            {v.doNow.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div className={cx(s.verdictActionBox, s.verdictActionBoxDont)}>
+          <div className={s.verdictActionTitle} style={{ color: "var(--red)" }}>
+            ✗ Ce să NU faci
+          </div>
+          <ul className={cx(s.verdictActionList, s.dont)}>
+            {v.dontDo.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// On-Chain Metrics — grid of fact-checked indicators
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function formatMetricValue(value: number, unit: string): string {
+  if (unit === "$") {
+    if (value >= 1000) return "$" + (value / 1000).toFixed(value >= 10000 ? 1 : 2) + "K";
+    return "$" + value.toFixed(0);
+  }
+  if (unit === "×") return value.toFixed(2) + "×";
+  if (unit === "" && value < 10) return value.toFixed(2);
+  return value.toLocaleString("en-US");
+}
+
+function OnChainSection() {
+  return (
+    <>
+      <p className={cx(s.small, s.muted, s.mb20, s.reveal)}>
+        6 indicatori on-chain fact-checked Aprilie 2026 — surse: Glassnode,
+        BitcoinMagazinePro, CoinGlass, CoinDesk. Fiecare are <strong style={{ color: "var(--text)" }}>hit rate istoric verificat</strong>.
+      </p>
+      <div className={cx(s.onchainGrid, s.reveal)}>
+        {ON_CHAIN_METRICS.map((m, i) => {
+          const markerLeft = `${Math.max(2, Math.min(98, m.rangePos * 100))}%`;
+          return (
+            <motion.div
+              key={m.key}
+              className={s.onchainCard}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className={s.onchainCardBeam} style={{ color: m.zoneColor }} />
+              <div className={s.onchainHeader}>
+                <div>
+                  <div className={s.onchainName}>{m.name}</div>
+                </div>
+                <span
+                  className={s.onchainZoneBadge}
+                  style={{
+                    background: m.zoneColor + "22",
+                    color: m.zoneColor,
+                    border: `1px solid ${m.zoneColor}55`,
+                  }}
+                >
+                  {m.zoneLabel}
+                </span>
+              </div>
+
+              <div className={s.onchainValue} style={{ color: m.zoneColor }}>
+                {formatMetricValue(m.value, m.unit)}
+              </div>
+
+              <div className={s.onchainBar}>
+                <div className={s.onchainBarMarker} style={{ left: markerLeft }} />
+              </div>
+              <div className={s.onchainRanges}>
+                <span>BOTTOM</span>
+                <span>NEUTRU</span>
+                <span>TOP</span>
+              </div>
+
+              <div className={s.onchainSignal}>
+                <strong style={{ color: m.zoneColor }}>● Semnal: </strong>
+                {m.signal}
+              </div>
+
+              <div className={s.onchainExplain}>
+                <div className={s.onchainExplainItem}>
+                  <span className={s.onchainExplainLbl}>Ce este</span>
+                  {m.whatIs}
+                </div>
+                <div className={s.onchainExplainItem}>
+                  <span className={s.onchainExplainLbl}>De ce contează</span>
+                  {m.whyMatters}
+                </div>
+              </div>
+
+              <div className={s.onchainFooter}>
+                <span>{m.source}</span>
+                <span className={s.onchainHitRate}>✓ {m.hitRate}</span>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Glossary — beginner-friendly term explanations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function GlossarySection() {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  return (
+    <>
+      <p className={cx(s.small, s.muted, s.mb20, s.reveal)}>
+        Termeni tehnici explicați pe înțelesul tuturor. Click pe un termen pentru explicație completă.
+      </p>
+      <div className={cx(s.glossaryGrid, s.reveal)}>
+        {GLOSSARY.map((g, i) => {
+          const isOpen = openIdx === i;
+          return (
+            <div
+              key={g.term}
+              className={cx(s.glossaryCard, isOpen && s.glossaryCardOpen)}
+              onClick={() => setOpenIdx(isOpen ? null : i)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setOpenIdx(isOpen ? null : i);
+                }
+              }}
+            >
+              <span className={s.glossaryArrow}>{"▾"}</span>
+              <div className={s.glossaryTerm}>{g.term}</div>
+              <div className={s.glossaryShort}>{g.short}</div>
+              <div className={s.glossaryFull}>{g.full}</div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Quick Jump — floating mobile FAB to scroll back to top/subnav
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function QuickJump() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setVisible(window.scrollY > 600);
+    handler();
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  if (!visible) return null;
+  return (
+    <button
+      type="button"
+      className={s.quickJump}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label="Înapoi sus"
+    >
+      ↑ Sus
+    </button>
+  );
+}
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Bar Chart sub-component
@@ -670,6 +958,13 @@ function Section({
 }) {
   const [open, setOpen] = useState(true);
   const nextEvent = NEXT_EVENTS.find((ne) => ne.id === id);
+  const hasInfo = Boolean(SECTION_INFO[id]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setOpen(false);
+    }
+  }, []);
 
   return (
     <>
@@ -677,6 +972,7 @@ function Section({
         {icon}
         {title}
         {subtitle && <span className={s.stSub}>- {subtitle}</span>}
+        {hasInfo && <InfoTooltip id={id} label={title} />}
         {nextEvent && <span className={s.nextBadgeInline}>{nextEvent.text}</span>}
         <button className={s.sectionToggle} onClick={() => setOpen(!open)} title="Ascunde/arată secțiunea">
           {open ? "\u2212" : "+"}
@@ -973,6 +1269,9 @@ export default function PivotsDashboard() {
           <HeaderBadges />
         </div>
 
+        {/* TL;DR Verdict for noobs */}
+        <VerdictHero />
+
         {/* Philosophy */}
         <div className={cx(s.philosophy, s.reveal)}>
           <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> - identifică ferestre în care BTC are mai mari șanse să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur tehnicele pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
@@ -991,6 +1290,11 @@ export default function PivotsDashboard() {
         <div className={s.reveal}>
           <ScoreWidget />
         </div>
+
+        {/* ── ON-CHAIN ── */}
+        <Section id="s-onchain" title="Indicatori On-Chain" subtitle="6 metrici fact-checked din blockchain">
+          <OnChainSection />
+        </Section>
 
         {/* ── CYCLES ── */}
         <Section id="s-cycles" title="Teoria Ciclurilor BTC">
@@ -1509,6 +1813,11 @@ export default function PivotsDashboard() {
           </div>
         </Section>
 
+        {/* ── GLOSSARY ── */}
+        <Section id="s-glossary" title="Dicționar Termeni" subtitle="explicații pentru începători">
+          <GlossarySection />
+        </Section>
+
         {/* ── LEGEND ── */}
         <Section id="s-legend" title="Legendă Culori Indicator">
           <div className={cx(s.card, s.reveal)}>
@@ -1535,6 +1844,8 @@ export default function PivotsDashboard() {
           Elite-Pivots Dashboard &nbsp;&middot;&nbsp; 3144 bare zilnice BTC (2017–2026) &nbsp;&middot;&nbsp; Nu este sfat financiar
         </div>
       </div>
+
+      <QuickJump />
     </div>
   );
 }

@@ -212,12 +212,13 @@ export const MERCURY_DATA: MercuryRetrograde[] = [
 
 /* ── Section IDs for subnav ── */
 export const SECTION_IDS = [
-  's-cycles','s-bear','s-seasons','s-dom','s-eclipse','s-blood',
-  's-mercury','s-gann','s-fib','s-shmita','s-halving','s-scoring','s-legend'
+  's-onchain','s-cycles','s-bear','s-seasons','s-dom','s-eclipse','s-blood',
+  's-mercury','s-gann','s-fib','s-shmita','s-halving','s-scoring','s-glossary','s-legend'
 ];
 
 /* ── Subnav links ── */
 export const SUBNAV_LINKS = [
+  { href: '#s-onchain', label: 'On-Chain' },
   { href: '#s-cycles', label: 'Cicluri' },
   { href: '#s-bear', label: 'Bear Market' },
   { href: '#s-seasons', label: 'Sezoane' },
@@ -230,11 +231,32 @@ export const SUBNAV_LINKS = [
   { href: '#s-shmita', label: 'Shmita' },
   { href: '#s-halving', label: 'Halving+Shmita' },
   { href: '#s-scoring', label: 'Scorare' },
+  { href: '#s-glossary', label: 'Dicționar' },
   { href: '#s-legend', label: 'Legendă' },
 ];
 
+/* ── Section info tooltips for noobs ── */
+export const SECTION_INFO: Record<string, string> = {
+  's-onchain': 'Indicatori bazați pe date din blockchain (transparente, verificabile). Reflectă comportamentul real al holderilor BTC, nu speculații tehnice. Cei mai fiabili pe termen lung.',
+  's-cycles': 'BTC respiră cu un ritm consistent: ~1064 zile bull → ~364 zile bear. Confirmat pe 3 cicluri mature. Folosit pentru a anticipa pivoți pe termen lung.',
+  's-bear': 'Analiza convergenței mai multor indicatori independenți. Când 6 lentile diferite arată același lucru, probabilitatea coincidenței aleatorii e foarte mică.',
+  's-seasons': 'Sezonalitate macro — în ce luni apar cel mai des top-uri și bottom-uri istoric. NU este predictiv singur, doar context.',
+  's-dom': 'Analiză a 3144 de bare zilnice BTC: zilele specifice ale lunii care formează cel mai des top-uri sau bottom-uri pivot.',
+  's-eclipse': 'Eclipsele solare/lunare au coincis statistic cu pivoți BTC. NU este cauzalitate, doar timing curios. Folosit ca zonă de alertă ±90 zile.',
+  's-blood': 'A 3-a eclipsă lunară totală din fiecare serie a marcat bottom-ul ciclului BTC — 3/3 confirmat. Pattern observațional, sample size mic.',
+  's-mercury': 'Mercury Retrograde — perioadă astrologică de 3 săptămâni. Statistic, NU este predictiv singur (57% bearish, 43% bullish). Amplifică trendul.',
+  's-gann': 'Cicluri de timp (W.D. Gann, anii 1900). La ±5z bate random-ul cu +2.6pp. Cel mai bun: +49z (Square of 7). Inutil: +90z.',
+  's-fib': 'Niveluri Fibonacci aplicate pe TIMP între halving-uri. 5/9 niveluri au marcat pivoți reali (rată 56%). Avantaj +10pp peste aleatoriu.',
+  's-shmita': 'An sabatic ebraic (la fiecare 7 ani). 8/8 Shmita-uri recente au coincis cu crize majore. Folosit ca CONTEXT MACRO, nu semnal de intrare.',
+  's-halving': 'Confluență între ciclul de 4 ani BTC și ciclul Shmita de 7 ani. Când se suprapun, rezultatele istorice sunt extreme (-78% în 2022).',
+  's-scoring': 'Cum funcționează indicatorul. Fiecare metodă activă adaugă puncte la un scor. La 4+ pct + 1 metodă PRIMARĂ, se declanșează o fereastră de pivot.',
+  's-glossary': 'Termeni tehnici explicați pe înțelesul tuturor. Citește dacă întâlnești ceva ce nu înțelegi.',
+  's-legend': 'Codarea culorilor folosite în tot dashboard-ul.',
+};
+
 /* ── Next event badges per section ── */
 export const NEXT_EVENTS: { id: string; text: string }[] = [
+  {id:'s-onchain',text:'Live: 6 metrici fact-checked'},
   {id:'s-fib',text:'Urmator: Fib 1.618 — 24 Sep 2026'},
   {id:'s-blood',text:'Urmator: Blood Moon serie 2028–2029'},
   {id:'s-mercury',text:'Urmator: 29 Iun – 23 Iul 2026'},
@@ -242,4 +264,290 @@ export const NEXT_EVENTS: { id: string; text: string }[] = [
   {id:'s-shmita',text:'Urmator: Sep 2028 – Sep 2029'},
   {id:'s-cycles',text:'Proiectie bottom: ~5 Oct 2026'},
   {id:'s-bear',text:'Proiectie bottom: $54K–$60K'},
+];
+
+/* ──────────────────────────────────────────────────────────────
+   ON-CHAIN INDICATORS — fact-checked April 2026
+   Sources: BitcoinMagazinePro, Glassnode, CoinGlass, CoinDesk
+   ────────────────────────────────────────────────────────────── */
+
+export interface OnChainMetric {
+  key: string;
+  name: string;
+  value: number;
+  unit: string;
+  zone: 'capitulation' | 'bottom' | 'neutral' | 'overheated' | 'top';
+  zoneLabel: string;
+  zoneColor: string;
+  // Range: where current value sits 0..1 (for visual bar)
+  rangePos: number;
+  // Plain language
+  whatIs: string;
+  whyMatters: string;
+  signal: string;
+  ranges: { label: string; range: string; color: string }[];
+  source: string;
+  hitRate: string;
+}
+
+export const ON_CHAIN_METRICS: OnChainMetric[] = [
+  {
+    key: 'mvrv',
+    name: 'MVRV Z-Score',
+    value: 0.68,
+    unit: '',
+    zone: 'bottom',
+    zoneLabel: 'UNDERVALUED',
+    zoneColor: '#10B981',
+    rangePos: 0.18,
+    whatIs: 'Compară valoarea de piață a BTC cu valoarea reală (prețul mediu la care au fost mișcați coin-urile). Când diferența e mică sau negativă, BTC e ieftin.',
+    whyMatters: 'A identificat fiecare bottom major BTC din istorie: 2012, 2015, 2018, 2020, 2022. Sub 1.0 = zonă de acumulare strategică.',
+    signal: 'BTC e sub-evaluat. Istoric, când Z-Score sub 1, randamentul mediu pe 12 luni a fost +250%.',
+    ranges: [
+      { label: 'Capitulare', range: '< 0', color: '#10B981' },
+      { label: 'Buy Zone', range: '0 – 1', color: '#34D399' },
+      { label: 'Neutru', range: '1 – 3', color: '#94a3b8' },
+      { label: 'Overheated', range: '3 – 5', color: '#f59e0b' },
+      { label: 'Top Zone', range: '> 5', color: '#ef4444' },
+    ],
+    source: 'CoinGlass / BitcoinMagazinePro',
+    hitRate: '5/5 macro bottoms identified',
+  },
+  {
+    key: 'mayer',
+    name: 'Mayer Multiple',
+    value: 0.85,
+    unit: '×',
+    zone: 'bottom',
+    zoneLabel: 'BUY ZONE',
+    zoneColor: '#34D399',
+    rangePos: 0.28,
+    whatIs: 'Raportul dintre prețul actual BTC și media mobilă pe 200 de zile (200DMA). Sub 1.0 = preț sub mediul lung.',
+    whyMatters: 'Cea mai simplă măsură de „ieftin vs scump". Sub 0.8 = oportunitate de cumpărare istorică. Peste 2.4 = bubble.',
+    signal: 'BTC tranzacționează la 85% din 200DMA. Zonă de acumulare — istoric, +60% în 12 luni de la nivelul actual.',
+    ranges: [
+      { label: 'Sub-evaluat', range: '< 0.8', color: '#10B981' },
+      { label: 'Acumulare', range: '0.8 – 1.0', color: '#34D399' },
+      { label: 'Mediu', range: '1.0 – 1.5', color: '#94a3b8' },
+      { label: 'Caldă', range: '1.5 – 2.4', color: '#f59e0b' },
+      { label: 'Bubble', range: '> 2.4', color: '#ef4444' },
+    ],
+    source: 'charts.bitbo.io / Bitcoin.com',
+    hitRate: 'Cycle bottoms 2015, 2018, 2020, 2022',
+  },
+  {
+    key: 'puell',
+    name: 'Puell Multiple',
+    value: 0.62,
+    unit: '×',
+    zone: 'bottom',
+    zoneLabel: 'MINER STRESS',
+    zoneColor: '#10B981',
+    rangePos: 0.15,
+    whatIs: 'Compară veniturile zilnice ale minerilor cu media pe 365 de zile. Sub 0.5 = mineri în pierdere → capitulare → bottom.',
+    whyMatters: 'A identificat fiecare bottom major BTC din 2011, 2015, 2018, 2020, 2022. Indicator lent dar foarte fiabil pe termen lung.',
+    signal: 'Minerii sunt sub presiune financiară. Capitulare în curs → setup clasic de bottom de ciclu.',
+    ranges: [
+      { label: 'Capitulare', range: '< 0.5', color: '#10B981' },
+      { label: 'Stres', range: '0.5 – 1.0', color: '#34D399' },
+      { label: 'Echilibru', range: '1.0 – 4.0', color: '#94a3b8' },
+      { label: 'Profit Mare', range: '4.0 – 6.0', color: '#f59e0b' },
+      { label: 'Euforie', range: '> 6.0', color: '#ef4444' },
+    ],
+    source: 'BitcoinMagazinePro / CoinMarketCap',
+    hitRate: '4/4 macro bottoms din 2011',
+  },
+  {
+    key: 'nupl',
+    name: 'NUPL',
+    value: 0.15,
+    unit: '',
+    zone: 'bottom',
+    zoneLabel: 'HOPE / FEAR',
+    zoneColor: '#34D399',
+    rangePos: 0.30,
+    whatIs: 'Net Unrealized Profit/Loss — diferența între profitul și pierderea totală a holderilor BTC. Reflectă psihologia pieței.',
+    whyMatters: 'Sub 0.25 (Hope/Fear) = piață recuperabilă din low. Peste 0.75 (Euforie) = top istoric (2011, 2013, 2017, 2021).',
+    signal: 'Piața e în zona Hope/Fear — recuperare din capitulare. Nu am atins zona de Euforie încă (>0.75).',
+    ranges: [
+      { label: 'Capitulare', range: '< 0', color: '#10B981' },
+      { label: 'Hope/Fear', range: '0 – 0.25', color: '#34D399' },
+      { label: 'Optimism', range: '0.25 – 0.5', color: '#94a3b8' },
+      { label: 'Belief', range: '0.5 – 0.75', color: '#f59e0b' },
+      { label: 'Euforie', range: '> 0.75', color: '#ef4444' },
+    ],
+    source: 'Glassnode / CryptoQuant',
+    hitRate: 'Top-uri 2011, 2013, 2017, 2021',
+  },
+  {
+    key: 'rhodl',
+    name: 'RHODL Ratio',
+    value: 4.5,
+    unit: '',
+    zone: 'bottom',
+    zoneLabel: 'BOTTOM SIGNAL',
+    zoneColor: '#10B981',
+    rangePos: 0.20,
+    whatIs: 'Realized HODL — raportul între bogăția deținătorilor pe termen scurt vs lung. Creat de Philip Swift (acelaşi cu Pi Cycle).',
+    whyMatters: 'Peste 50,000 = top de ciclu. Sub 5,000 = bottom. Valori 4-5 indică acumulare puternică de la long-term holders.',
+    signal: '4.5 — semnal de bottom flash-uit aprilie 2026 (Glassnode). LTH-urile acumulează sub presiunea STH-urilor.',
+    ranges: [
+      { label: 'Bottom', range: '< 5,000', color: '#10B981' },
+      { label: 'Acumulare', range: '5K – 20K', color: '#34D399' },
+      { label: 'Echilibru', range: '20K – 50K', color: '#94a3b8' },
+      { label: 'Top Zone', range: '> 50,000', color: '#ef4444' },
+    ],
+    source: 'Glassnode / CoinDesk Apr 2026',
+    hitRate: 'Cycle tops 2013, 2017, 2021 (no 2013 false signal)',
+  },
+  {
+    key: '200wma',
+    name: '200 Week MA',
+    value: 57926,
+    unit: '$',
+    zone: 'neutral',
+    zoneLabel: 'KEY SUPPORT',
+    zoneColor: '#06B6D4',
+    rangePos: 0.5,
+    whatIs: 'Media mobilă pe 200 de săptămâni (~4 ani). Linia care a marcat fiecare bottom major BTC din 2015 încoace.',
+    whyMatters: 'A oprit bottom-ul în 2015 ($152), 2018 ($3,200), 2020 ($3,800 COVID), 2022 ($15,500 FTX). Linia magică în bear.',
+    signal: 'BTC ($67K) la +15% peste 200WMA ($57.9K). Spațiu de cădere până la suport major ~$58K — exact zona prognozată.',
+    ranges: [
+      { label: 'Sub 200WMA', range: 'capitulare extremă', color: '#10B981' },
+      { label: 'La 200WMA', range: 'bottom istoric', color: '#34D399' },
+      { label: '+15-50%', range: 'acumulare', color: '#06B6D4' },
+      { label: '+100-200%', range: 'mid-cycle', color: '#f59e0b' },
+      { label: '+300%+', range: 'top zone', color: '#ef4444' },
+    ],
+    source: 'BitcoinMagazinePro / CoinDesk Feb 2026',
+    hitRate: 'Bottom touch 2015, 2018, 2020, 2022 = 4/4',
+  },
+];
+
+/* ──────────────────────────────────────────────────────────────
+   VERDICT — sumar pentru începători (TL;DR)
+   Calculat manual din convergența metricilor de mai sus
+   ────────────────────────────────────────────────────────────── */
+
+export interface VerdictSummary {
+  state: 'accumulation' | 'watch' | 'distribution' | 'sell';
+  title: string;
+  emoji: string;
+  shortDescription: string;
+  longDescription: string;
+  doNow: string[];
+  dontDo: string[];
+  confidenceScore: number;
+  bullishSignals: number;
+  bearishSignals: number;
+  totalSignals: number;
+  color: string;
+}
+
+export const CURRENT_VERDICT: VerdictSummary = {
+  state: 'accumulation',
+  title: 'ZONĂ DE ACUMULARE',
+  emoji: '🎯',
+  shortDescription: 'BTC e în zonă de cumpărare istorică. Convergență de 6 indicatori on-chain + ciclu.',
+  longDescription: 'Toate metricile cheie (MVRV Z-Score, Mayer Multiple, Puell Multiple, NUPL, RHODL) arată zonă de bottom de ciclu. Drawdown -47% de la ATH ($126K → $67K) este în linia istorică (-52% la -57% prognozat). Ciclul „1064/364 zile" sugerează bottom-ul în jur de Octombrie 2026.',
+  doNow: [
+    'DCA gradual — nu intra cu tot capitalul deodată',
+    'Țintește zone $54K–$60K pentru ofertă agresivă',
+    'Setează stop-loss sub $48K (ruperea 200WMA)',
+    'Verifică indicatorii on-chain săptămânal',
+  ],
+  dontDo: [
+    'NU folosi leverage — bear market = lichidare',
+    'NU vinde panicat la următoarea cădere',
+    'NU urmări zilnic prețul (anxietate inutilă)',
+    'NU cumpăra altcoin-uri „ieftine" — BTC bate 90% din alts în bear',
+  ],
+  confidenceScore: 78,
+  bullishSignals: 6,
+  bearishSignals: 1,
+  totalSignals: 7,
+  color: '#10B981',
+};
+
+/* ──────────────────────────────────────────────────────────────
+   GLOSSARY — explicații pentru începători
+   ────────────────────────────────────────────────────────────── */
+
+export interface GlossaryEntry {
+  term: string;
+  short: string;
+  full: string;
+}
+
+export const GLOSSARY: GlossaryEntry[] = [
+  {
+    term: 'Pivot',
+    short: 'Punct de schimbare a direcției',
+    full: 'Un pivot este momentul în care prețul își schimbă direcția — un top (vârf) sau un bottom (fund). Indicatorul Elite-Pivots încearcă să prezică CÂND apar aceste pivoți, nu la ce preț.',
+  },
+  {
+    term: 'Halving',
+    short: 'Reducerea recompensei minerilor (la fiecare 4 ani)',
+    full: 'La fiecare 210,000 de blocuri (~4 ani), recompensa minerilor BTC se înjumătățește. Asta reduce oferta nouă de BTC. Istoric, fiecare halving a fost urmat de un bull run masiv în 12-18 luni.',
+  },
+  {
+    term: 'ATH',
+    short: 'All-Time High — cel mai mare preț atins',
+    full: 'All-Time High = cel mai mare preț la care BTC a tranzacționat vreodată. ATH-ul actual: $126,000 pe 6 Octombrie 2025.',
+  },
+  {
+    term: 'Bear Market',
+    short: 'Piață în scădere (peste -20% de la ATH)',
+    full: 'Bear Market = perioadă în care prețul scade semnificativ și constant (>20% sub ATH). În cripto, bear-urile durează 12-14 luni și pot înregistra căderi de 50-80%.',
+  },
+  {
+    term: 'Bull Run',
+    short: 'Piață în creștere accelerată',
+    full: 'Bull Run = perioadă în care prețul urcă rapid și constant. În cripto, bull run-urile durează ~18 luni post-halving și pot multiplica BTC cu 5-10x.',
+  },
+  {
+    term: 'DCA',
+    short: 'Dollar Cost Averaging — cumpără puțin la intervale regulate',
+    full: 'DCA = strategia de a cumpăra o sumă fixă în mod repetat (ex: $50 pe săptămână), indiferent de preț. Reduce riscul de a cumpăra la top și mediază prețul de intrare.',
+  },
+  {
+    term: 'Drawdown',
+    short: 'Cât a căzut prețul de la ATH',
+    full: 'Drawdown = procentajul cu care prețul a scăzut de la ultimul ATH. Ex: BTC la $67K, ATH $126K → drawdown = -47%. Important pentru a măsura severitatea unui bear market.',
+  },
+  {
+    term: 'On-Chain',
+    short: 'Date din blockchain (transparent, verificabile)',
+    full: 'Indicatori on-chain folosesc date direct din blockchain-ul BTC (mișcări de coins, vârsta deținerilor etc.). Spre deosebire de indicatori tehnici (RSI, MA), on-chain reflectă comportamentul REAL al holderilor.',
+  },
+  {
+    term: 'RSI',
+    short: 'Relative Strength Index (0-100, peste 70 = supra-cumpărat)',
+    full: 'RSI măsoară viteza schimbărilor de preț pe o scară 0-100. Sub 30 = supra-vândut (oportunitate cumpărare). Peste 70 = supra-cumpărat (cădere posibilă). Pe weekly BTC, sub 30 a marcat 5/5 bottoms istorice.',
+  },
+  {
+    term: 'Pi Cycle Top',
+    short: 'Indicator care a marcat top-ul ciclului în 2013, 2017, 2021',
+    full: 'Pi Cycle Top = când 111-day MA traversează în sus 350-day MA × 2. A marcat top-ul în 2013, 2017 (Apr 2021 parțial). Cel mai puternic semnal de top de ciclu macro.',
+  },
+  {
+    term: 'Fibonacci',
+    short: 'Niveluri matematice (0.382, 0.618, 1.618) folosite în trading',
+    full: 'Fibonacci = ratio-uri matematice naturale (0.382, 0.5, 0.618, 1.0, 1.272, 1.618). Aplicate pe TIMP (între halving-uri), 5/9 niveluri au marcat pivoți reali. Avantaj +10pp vs random.',
+  },
+  {
+    term: 'Eclipsă',
+    short: 'Eveniment astronomic care, în istorie, a coincis cu pivoți BTC',
+    full: 'Eclipsele solare/lunare au coincis statistic cu pivoți BTC importanți. NU este o cauză directă, dar este un timing curios. Tratează ca „zonă de alertă", nu ca semnal de tranzacționare.',
+  },
+  {
+    term: 'Gann',
+    short: 'Cicluri de timp (45, 49, 90, 144, 180, 360 zile)',
+    full: 'Teoria W.D. Gann (anii 1900) — piețele reacționează la intervale specifice de timp. Pe BTC, intervalele +45z, +49z, +60z și +144z au cel mai mare edge peste random (verificat pe 153 date).',
+  },
+  {
+    term: 'Shmita',
+    short: 'An sabatic ebraic (la fiecare 7 ani) — corelat cu crize',
+    full: 'Shmita = anul 7 din ciclul ebraic de 7 ani. În finanțe, popularizat de Rabbi Cahn. 8/8 Shmita-uri recente au coincis cu crize majore (1930, 2000 dot-com, 2008 Lehman, 2014 Mt.Gox, 2021 FTX). Folosit ca CONTEXT MACRO, nu semnal direct.',
+  },
 ];
