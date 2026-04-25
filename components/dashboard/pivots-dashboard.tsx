@@ -166,7 +166,7 @@ function VerdictHero() {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// On-Chain Metrics — grid of fact-checked indicators
+// On-Chain Metrics — grid of verificați indicators
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 function formatMetricValue(value: number, unit: string): string {
@@ -183,7 +183,7 @@ function OnChainSection() {
   return (
     <>
       <p className={cx(s.small, s.muted, s.mb20, s.reveal)}>
-        6 indicatori on-chain fact-checked Aprilie 2026 — surse: Glassnode,
+        6 indicatori on-chain verificați Aprilie 2026 — surse: Glassnode,
         BitcoinMagazinePro, CoinGlass, CoinDesk. Fiecare are <strong style={{ color: "var(--text)" }}>hit rate istoric verificat</strong>.
       </p>
       <div className={cx(s.onchainGrid, s.reveal)}>
@@ -1274,7 +1274,7 @@ export default function PivotsDashboard() {
 
         {/* Philosophy */}
         <div className={cx(s.philosophy, s.reveal)}>
-          <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> - identifică ferestre în care BTC are mai mari șanse să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur tehnicele pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
+          <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> - identifică ferestre în care BTC are șanse mai mari să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur indicatorii tehnici pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
           <p style={{ marginTop: 8, color: "#94a3b8" }}>O fereastră necesită <strong>scor ≥ 4 + cel puțin o metodă PRIMARĂ</strong>. Metodele secundare singure nu pot declanșa un semnal.</p>
         </div>
 
@@ -1292,7 +1292,7 @@ export default function PivotsDashboard() {
         </div>
 
         {/* ── ON-CHAIN ── */}
-        <Section id="s-onchain" title="Indicatori On-Chain" subtitle="6 metrici fact-checked din blockchain">
+        <Section id="s-onchain" title="Indicatori On-Chain" subtitle="6 metrici verificați din blockchain">
           <OnChainSection />
         </Section>
 
@@ -1358,10 +1358,10 @@ export default function PivotsDashboard() {
               <div className={cx(s.infoBox, s.infoBoxGreen)} style={{ marginTop: 12 }}><strong style={{ color: "var(--green)" }}>Pattern: 4/4 confirmat.</strong> <span className={s.muted}>ATH vine la <strong style={{ color: "var(--text)" }}>335–404 zile</strong> după alegeri (~12 luni). Distanța se <strong style={{ color: "var(--text)" }}>comprimă</strong>: 404→372→335. Următor: Alegeri Nov 2028 → ATH proiectat ~Oct 2029.</span></div>
             </div>
             <div className={s.card}>
-              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--fib)" }} />Spargere ATH Vechi → Top-ul de Ciclu</h2>
+              <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--fib)" }} />Spargere ATH Anterior → Top-ul de Ciclu</h2>
               <p className={cx(s.small, s.muted)} style={{ marginBottom: 14 }}>Câte zile de la spargerea ATH-ului anterior până la top-ul de ciclu?</p>
               <table className={s.methodTable}>
-                <thead><tr><th>Ciclu</th><th>Spargere ATH vechi</th><th>Top ciclu</th><th>Zile</th></tr></thead>
+                <thead><tr><th>Ciclu</th><th>Spargere ATH anterior</th><th>Top ciclu</th><th>Zile</th></tr></thead>
                 <tbody>
                   <tr><td>2017</td><td className={cx(s.muted, s.small)}>~Ian 2017 ($1,150)</td><td className={s.muted}>17 Dec 2017</td><td style={{ color: "var(--green)" }} className={s.mono}>~340</td></tr>
                   <tr><td>2021</td><td className={cx(s.muted, s.small)}>30 Nov 2020 ($19,666)</td><td className={s.muted}>10 Nov 2021</td><td style={{ color: "var(--green)" }} className={s.mono}>~345</td></tr>
@@ -1800,7 +1800,7 @@ export default function PivotsDashboard() {
                 {[
                   { name: "Faza Lunii", desc: "La Lună Nouă și Lună Plină (ciclu de 29.5 zile), BTC prezintă o tendință ușoară de inversare.", ex: "Efect statistic moderat - nu folosi singur." },
                   { name: "Intervale Gann", desc: "Piețele reacționează la intervale specifice de timp: 30, 45, 90, 180, 360 zile. Cel mai puternic: 180 zile.", ex: "7 Apr 2025 + 180 zile = 5 Oct 2025 = ATH $126,000 ✓" },
-                  { name: "Sezonier Ianuarie", desc: "BTC formează low-uri cu +79% mai des în perioada 16 Ianuarie – 15 Februarie.", ex: "Ian 2015 → bottom $152 ✓ · Ian 2023 → bottom $16,500 ✓" },
+                  { name: "Sezonalitate Ianuarie", desc: "BTC formează low-uri cu +79% mai des în perioada 16 Ianuarie – 15 Februarie.", ex: "Ian 2015 → bottom $152 ✓ · Ian 2023 → bottom $16,500 ✓" },
                   { name: "Zi din Lună", desc: "Ziua 14 → +147% top-uri. Ziua 25 → +135% low-uri. Ziua 12 → zero top-uri.", ex: "Bottom-uri frecvente: zilele 5, 10, 11, 24, 25." },
                 ].map((item) => (
                   <tr key={item.name} style={{ background: "rgba(6,182,212,.025)" }}><td><strong>{item.name}</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagS)}>secundar</span><span className={cx(s.score, s.s1)}>1</span></span></td><td>{item.desc}</td><td className={cx(s.small, s.muted)}>{item.ex}</td></tr>

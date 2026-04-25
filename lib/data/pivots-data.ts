@@ -242,11 +242,11 @@ export const SECTION_INFO: Record<string, string> = {
   's-bear': 'Analiza convergenței mai multor indicatori independenți. Când 6 lentile diferite arată același lucru, probabilitatea coincidenței aleatorii e foarte mică.',
   's-seasons': 'Sezonalitate macro — în ce luni apar cel mai des top-uri și bottom-uri istoric. NU este predictiv singur, doar context.',
   's-dom': 'Analiză a 3144 de bare zilnice BTC: zilele specifice ale lunii care formează cel mai des top-uri sau bottom-uri pivot.',
-  's-eclipse': 'Eclipsele solare/lunare au coincis statistic cu pivoți BTC. NU este cauzalitate, doar timing curios. Folosit ca zonă de alertă ±90 zile.',
-  's-blood': 'A 3-a eclipsă lunară totală din fiecare serie a marcat bottom-ul ciclului BTC — 3/3 confirmat. Pattern observațional, sample size mic.',
+  's-eclipse': 'Eclipsele solare/lunare au coincis statistic cu pivoți BTC. NU este cauzalitate, doar coincidență de timp. Folosit ca zonă de alertă ±90 zile.',
+  's-blood': 'A 3-a eclipsă lunară totală din fiecare serie a marcat bottom-ul ciclului BTC — 3/3 confirmat. Pattern observațional, eșantion mic.',
   's-mercury': 'Mercury Retrograde — perioadă astrologică de 3 săptămâni. Statistic, NU este predictiv singur (57% bearish, 43% bullish). Amplifică trendul.',
   's-gann': 'Cicluri de timp (W.D. Gann, anii 1900). La ±5z bate random-ul cu +2.6pp. Cel mai bun: +49z (Square of 7). Inutil: +90z.',
-  's-fib': 'Niveluri Fibonacci aplicate pe TIMP între halving-uri. 5/9 niveluri au marcat pivoți reali (rată 56%). Avantaj +10pp peste aleatoriu.',
+  's-fib': 'Niveluri Fibonacci aplicate pe TIMP între halving-uri. 5/9 niveluri au marcat pivoți reali (rată 56%). Avantaj +10pp față de aleatoriu.',
   's-shmita': 'An sabatic ebraic (la fiecare 7 ani). 8/8 Shmita-uri recente au coincis cu crize majore. Folosit ca CONTEXT MACRO, nu semnal de intrare.',
   's-halving': 'Confluență între ciclul de 4 ani BTC și ciclul Shmita de 7 ani. Când se suprapun, rezultatele istorice sunt extreme (-78% în 2022).',
   's-scoring': 'Cum funcționează indicatorul. Fiecare metodă activă adaugă puncte la un scor. La 4+ pct + 1 metodă PRIMARĂ, se declanșează o fereastră de pivot.',
@@ -256,14 +256,14 @@ export const SECTION_INFO: Record<string, string> = {
 
 /* ── Next event badges per section ── */
 export const NEXT_EVENTS: { id: string; text: string }[] = [
-  {id:'s-onchain',text:'Live: 6 metrici fact-checked'},
-  {id:'s-fib',text:'Urmator: Fib 1.618 — 24 Sep 2026'},
-  {id:'s-blood',text:'Urmator: Blood Moon serie 2028–2029'},
-  {id:'s-mercury',text:'Urmator: 29 Iun – 23 Iul 2026'},
-  {id:'s-halving',text:'Urmator: Halving 5 — ~20 Apr 2028'},
-  {id:'s-shmita',text:'Urmator: Sep 2028 – Sep 2029'},
-  {id:'s-cycles',text:'Proiectie bottom: ~5 Oct 2026'},
-  {id:'s-bear',text:'Proiectie bottom: $54K–$60K'},
+  {id:'s-onchain',text:'Live: 6 metrici verificați'},
+  {id:'s-fib',text:'Următor: Fib 1.618 — 24 Sep 2026'},
+  {id:'s-blood',text:'Următor: Blood Moon serie 2028–2029'},
+  {id:'s-mercury',text:'Următor: 29 Iun – 23 Iul 2026'},
+  {id:'s-halving',text:'Următor: Halving 5 — ~20 Apr 2028'},
+  {id:'s-shmita',text:'Următor: Sep 2028 – Sep 2029'},
+  {id:'s-cycles',text:'Proiecție bottom: ~5 Oct 2026'},
+  {id:'s-bear',text:'Proiecție bottom: $54K–$60K'},
 ];
 
 /* ──────────────────────────────────────────────────────────────
@@ -538,7 +538,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     term: 'Eclipsă',
     short: 'Eveniment astronomic care, în istorie, a coincis cu pivoți BTC',
-    full: 'Eclipsele solare/lunare au coincis statistic cu pivoți BTC importanți. NU este o cauză directă, dar este un timing curios. Tratează ca „zonă de alertă", nu ca semnal de tranzacționare.',
+    full: 'Eclipsele solare/lunare au coincis statistic cu pivoți BTC importanți. NU este o cauză directă, dar este o coincidență de timp interesantă. Tratează ca „zonă de alertă", nu ca semnal de tranzacționare.',
   },
   {
     term: 'Gann',
