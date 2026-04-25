@@ -134,21 +134,27 @@ function InfoTooltip({
     <span
       ref={wrapRef}
       className="relative inline-flex items-center"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") setOpen(true);
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === "mouse") setOpen(false);
+      }}
     >
       <button
         type="button"
         aria-label="Ce înseamnă"
+        aria-expanded={open}
         onClick={(e) => {
           e.stopPropagation();
           setOpen((v) => !v);
         }}
-        className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[11px] font-bold text-slate-400 transition-colors hover:border-emerald-400/40 hover:text-emerald-400"
+        className="ml-2 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[11px] font-bold text-slate-400 transition-colors hover:border-emerald-400/40 hover:text-emerald-400 active:bg-emerald-400/10 sm:h-5 sm:w-5"
       >
         ?
       </button>
       <span
+        role="tooltip"
         className={`absolute top-[calc(100%+8px)] left-0 z-50 max-w-[calc(100vw-2rem)] w-[260px] rounded-xl border border-white/10 bg-[#0b0b0f] p-3 text-left text-xs leading-relaxed text-slate-300 shadow-2xl transition-all ${
           open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-1"
         }`}

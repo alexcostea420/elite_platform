@@ -59,6 +59,15 @@ export const INDICATOR_INFO: IndicatorInfo[] = [
     source: "David Puell · hit rate ~90% pe extreme de ciclu",
   },
   {
+    key: "rhodl_ratio",
+    label: "RHODL Ratio",
+    short: "Raport între monedele recent active și cele HODLuite.",
+    full: "RHODL = (Realized Cap HODL Wave 1-week) / (1-2 ani). Crește când coinurile vechi sunt redistribuite în mâini noi (semnal de top). 5/5 hit rate pe topurile BTC istoric.",
+    howToRead: "Sub 1500 = zonă de bottom. Peste 50,000 = cycle top istoric. Peste 100,000 = zonă de euforie extremă.",
+    group: "On-Chain",
+    source: "Look Into Bitcoin · 5/5 hit rate pe topurile BTC",
+  },
+  {
     key: "realized_price",
     label: "Preț Realizat",
     short: "Costul mediu plătit pe toate BTC din rețea.",
