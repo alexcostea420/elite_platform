@@ -2,19 +2,20 @@
    Elite-Pivots Dashboard — CSS Module
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* ── CSS Variables ── */
+/* ── CSS Variables — aligned with site tokens (globals.css) ── */
 .root {
-  --bg: #050a0f;
-  --bg2: #0a1118;
-  --bg3: #0f1922;
-  --bg4: #15202d;
-  --border: rgba(255, 255, 255, 0.08);
+  --bg: #09090B;
+  --bg2: rgba(255, 255, 255, 0.025);
+  --bg3: rgba(255, 255, 255, 0.04);
+  --bg4: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.06);
   --border2: rgba(255, 255, 255, 0.12);
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --dim: #475569;
+  --text: #FAFAFA;
+  --muted: #A1A1AA;
+  --dim: #52525B;
   --accent: #10B981;
   --accent2: #34D399;
+  --accent-glow: rgba(16, 185, 129, 0.15);
   --solar: #f59e0b;
   --lunar: #93c5fd;
   --fib: #10B981;
@@ -22,8 +23,9 @@
   --cycle: #06b6d4;
   --pi: #a78bfa;
   --green: #10B981;
-  --red: #ef4444;
+  --red: #EF4444;
   --orange: #f97316;
+  --warning: #F59E0B;
   --font-head: 'General Sans', var(--font-sans), system-ui, sans-serif;
   --font-body: 'General Sans', var(--font-sans), system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -78,11 +80,11 @@
 
 /* ── Cards ── */
 .card {
-  background: rgba(10, 17, 24, 0.7);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 14px;
   padding: 22px;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
@@ -112,11 +114,11 @@
 
 /* ── Philosophy Box ── */
 .philosophy {
-  background: rgba(10, 17, 24, 0.6);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
   padding: 24px 28px;
   margin-bottom: 28px;
   position: relative;
@@ -131,14 +133,14 @@
   pointer-events: none;
 }
 
-.philosophy p { color: #94a3b8; line-height: 1.8; position: relative; }
+.philosophy p { color: var(--muted); line-height: 1.8; position: relative; }
 .philosophy strong { color: var(--accent); }
 
 /* ── Stats ── */
 .stat {
   padding: 18px 20px;
-  border-radius: 16px;
-  background: rgba(15, 25, 34, 0.7);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
   border: 1px solid var(--border);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -336,7 +338,7 @@
 .infoBox strong { color: var(--text); }
 
 /* ── Insight Cards ── */
-.insight { padding: 14px 16px; background: rgba(15, 25, 34, 0.6); border-radius: 14px; border-left: 3px solid var(--border); transition: transform 0.2s, box-shadow 0.2s; }
+.insight { padding: 14px 16px; background: rgba(255, 255, 255, 0.025); border-radius: 14px; border-left: 3px solid var(--accent); transition: transform 0.2s, box-shadow 0.2s; }
 .insight:hover { transform: translateX(5px); box-shadow: -3px 0 16px rgba(0, 0, 0, 0.25); }
 .insTitle { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
 .insBody { font-size: 12px; color: var(--muted); line-height: 1.6; }
@@ -346,7 +348,7 @@
   position: sticky;
   top: 72px;
   z-index: 40;
-  background: rgba(5, 10, 15, 0.9);
+  background: rgba(9, 9, 11, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -383,11 +385,11 @@
 
 /* ── Score Widget ── */
 .scoreWidget {
-  background: rgba(10, 17, 24, 0.7);
-  border: 1px solid var(--border2);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-radius: 20px;
+  border-radius: 14px;
   padding: 20px 24px;
   margin-bottom: 24px;
   display: flex;
@@ -736,7 +738,7 @@
   position: relative;
   background: linear-gradient(135deg, rgba(16,185,129,.08) 0%, rgba(16,185,129,.02) 50%, rgba(167,139,250,.04) 100%);
   border: 1px solid rgba(16,185,129,.25);
-  border-radius: 24px;
+  border-radius: 16px;
   padding: 28px;
   margin-bottom: 28px;
   overflow: hidden;
@@ -838,7 +840,7 @@
 }
 
 .verdictMetric {
-  background: rgba(10,17,24,.5);
+  background: rgba(255, 255, 255, 0.025);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 14px 16px;
@@ -870,7 +872,7 @@
 }
 
 .verdictActionBox {
-  background: rgba(10,17,24,.4);
+  background: rgba(255, 255, 255, 0.025);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px 18px;
@@ -950,9 +952,9 @@
 }
 
 .onchainCard {
-  background: rgba(10,17,24,.7);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 14px;
   padding: 20px;
   position: relative;
   overflow: hidden;
@@ -1135,7 +1137,7 @@
 .infoPopover {
   position: absolute;
   z-index: 100;
-  background: rgba(10,17,24,.98);
+  background: rgba(9, 9, 11, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border2);
@@ -1179,7 +1181,7 @@
 }
 
 .glossaryCard {
-  background: rgba(10,17,24,.5);
+  background: rgba(255, 255, 255, 0.025);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px 18px;
@@ -1190,7 +1192,7 @@
 
 .glossaryCard:hover {
   border-color: var(--border2);
-  background: rgba(10,17,24,.7);
+  background: rgba(255, 255, 255, 0.05);
   transform: translateY(-2px);
 }
 
@@ -1248,7 +1250,7 @@
   bottom: 20px;
   right: 20px;
   z-index: 60;
-  background: rgba(10,17,24,.92);
+  background: rgba(9, 9, 11, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border2);
@@ -1298,7 +1300,7 @@
   .sectionTitle { font-size: 14px; margin: 32px 0 14px; padding-left: 12px; flex-wrap: wrap; }
   .nextBadgeInline { margin-left: 0; margin-top: 6px; font-size: 9px; padding: 2px 8px; flex-basis: 100%; }
   .sectionToggle { width: 28px; height: 28px; }
-  .card { padding: 18px; border-radius: 16px; }
+  .card { padding: 18px; border-radius: 14px; }
   .cardH2 { font-size: 11px; flex-wrap: wrap; }
   .stat { padding: 14px 14px; }
   .statVal { font-size: 24px; }
