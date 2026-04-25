@@ -104,8 +104,7 @@
 
 .card:hover {
   border-color: var(--border2);
-  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.05), 0 8px 32px rgba(0, 0, 0, 0.4);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .cardH2 {
@@ -160,8 +159,9 @@
 }
 
 .stat:hover {
-  transform: translateY(-4px) scale(1.015);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+  border-color: var(--border2);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .statVal {
@@ -223,12 +223,12 @@
 
 .methodTable th {
   text-align: left;
-  padding: 10px 14px;
+  padding: 12px 14px;
   color: var(--muted);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 1.2px;
   border-bottom: 1px solid var(--border);
   font-family: var(--font-mono);
 }
@@ -254,19 +254,19 @@
 .barVal { width: 55px; font-size: 11px; flex-shrink: 0; font-family: var(--font-mono); font-weight: 500; }
 
 /* ── Calendar ── */
-.calGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; max-width: 580px; }
+.calGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; max-width: 620px; }
 
 .calCell {
-  height: 54px;
+  height: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: 11px;
   border: 1px solid transparent;
   cursor: default;
-  transition: transform 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .calCell:hover { transform: scale(1.08); z-index: 2; position: relative; }
@@ -302,8 +302,8 @@
 .tlDotHit { background: var(--green); border-color: var(--green); box-shadow: 0 0 6px rgba(16, 185, 129, 0.4); }
 .tlDotFuture { background: var(--solar); border-color: var(--solar); box-shadow: 0 0 6px rgba(245, 158, 11, 0.4); animation: floatDot 2.2s ease-in-out infinite; }
 .tlDotMiss { background: var(--bg3); border-color: var(--dim); }
-.tlDate { font-size: 12px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 1px; }
-.tlLabel { font-weight: 500; font-size: 13px; }
+.tlDate { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 3px; letter-spacing: 0.4px; }
+.tlLabel { font-weight: 600; font-size: 13px; color: var(--text); letter-spacing: 0.1px; }
 
 /* ── Today marker ── */
 .tlToday { position: relative; padding: 6px 0 6px 18px; cursor: default; }
@@ -581,12 +581,12 @@
 
 .eclTable th {
   text-align: left;
-  padding: 8px 12px;
+  padding: 10px 14px;
   color: var(--muted);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 1.2px;
   border-bottom: 1px solid var(--border);
   font-family: var(--font-mono);
 }
