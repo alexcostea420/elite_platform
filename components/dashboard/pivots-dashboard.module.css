@@ -42,9 +42,9 @@
 
 /* ── Layout ── */
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 16px 16px 64px;
+  padding: 24px 24px 80px;
   position: relative;
   z-index: 1;
 }
@@ -109,16 +109,18 @@
 }
 
 .cardH2 {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin-bottom: 16px;
+  letter-spacing: 1.4px;
+  margin-bottom: 18px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .cardAccentSolar { box-shadow: inset 3px 0 0 0 var(--solar); }
@@ -378,17 +380,18 @@
 .subnav::-webkit-scrollbar { display: none; }
 
 .subnavLink {
-  padding: 9px 13px;
+  padding: 14px 16px;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted);
   white-space: nowrap;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.18s, border-color 0.18s;
   text-decoration: none;
   font-family: var(--font-mono);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
   background: none;
   border-top: none;
   border-left: none;
@@ -396,7 +399,7 @@
 }
 
 .subnavLink:hover { color: var(--text); }
-.subnavLink:active { transform: scale(0.93); }
+.subnavLink:active { transform: scale(0.95); }
 .subnavLinkActive { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* ── Score Widget ── */
@@ -764,12 +767,15 @@
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .verdictHero {
   position: relative;
-  background: linear-gradient(135deg, rgba(16,185,129,.08) 0%, rgba(16,185,129,.02) 50%, rgba(167,139,250,.04) 100%);
-  border: 1px solid rgba(16,185,129,.25);
-  border-radius: 16px;
-  padding: 28px;
+  background:
+    linear-gradient(135deg, rgba(16,185,129,.08) 0%, rgba(16,185,129,.02) 50%, rgba(255,255,255,0.02) 100%),
+    rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(16,185,129,.22);
+  border-radius: 18px;
+  padding: 32px 36px;
   margin-bottom: 28px;
   overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 24px 48px rgba(0, 0, 0, 0.25);
 }
 
 .verdictHero::before {
@@ -830,12 +836,12 @@
 
 .verdictTitle {
   font-family: var(--font-head);
-  font-size: 32px;
+  font-size: 40px;
   font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
   line-height: 1.05;
-  margin: 8px 0 12px;
+  margin: 12px 0 14px;
   position: relative;
   z-index: 1;
 }
@@ -871,24 +877,37 @@
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 14px 16px;
-  text-align: center;
+  padding: 16px 18px;
+  text-align: left;
+  position: relative;
+}
+
+.verdictMetric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.4), transparent);
 }
 
 .verdictMetricVal {
   font-family: var(--font-mono);
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--text);
   line-height: 1;
+  letter-spacing: -0.5px;
 }
 
 .verdictMetricLbl {
   font-size: 10px;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 6px;
+  letter-spacing: 1.2px;
+  margin-top: 8px;
+  font-weight: 600;
 }
 
 .verdictActions {
