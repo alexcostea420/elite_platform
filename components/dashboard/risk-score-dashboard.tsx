@@ -149,7 +149,7 @@ function InfoTooltip({
         ?
       </button>
       <span
-        className={`absolute top-[calc(100%+8px)] left-0 z-50 w-[260px] rounded-xl border border-white/10 bg-[#0b0b0f] p-3 text-left text-xs leading-relaxed text-slate-300 shadow-2xl transition-all ${
+        className={`absolute top-[calc(100%+8px)] left-0 z-50 max-w-[calc(100vw-2rem)] w-[260px] rounded-xl border border-white/10 bg-[#0b0b0f] p-3 text-left text-xs leading-relaxed text-slate-300 shadow-2xl transition-all ${
           open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-1"
         }`}
       >
@@ -190,7 +190,7 @@ function Section({
   }, []);
 
   return (
-    <section id={id} className="mb-8 scroll-mt-24">
+    <section id={id} className="mb-6 scroll-mt-24 md:mb-8">
       <div className="mb-4 flex items-center gap-2">
         {icon && <span className="text-lg">{icon}</span>}
         <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-300">{title}</h2>
@@ -231,7 +231,7 @@ function VerdictHero({
   const v = getVerdictCopy(decision, score);
   return (
     <motion.div
-      className="glass-card relative mb-8 overflow-hidden p-6 md:p-9"
+      className="glass-card relative mb-6 overflow-hidden p-4 sm:p-6 md:mb-8 md:p-9"
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -239,9 +239,9 @@ function VerdictHero({
         background: `linear-gradient(135deg, rgba(10,10,12,0.92), rgba(10,10,12,0.7)), radial-gradient(ellipse 80% 50% at 80% 0%, ${v.color}22, transparent 60%)`,
       }}
     >
-      <div className="mb-4 flex flex-wrap items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-center gap-2 md:mb-4">
         <span
-          className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
+          className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] sm:text-[10px] sm:tracking-[0.2em]"
           style={{
             borderColor: `${v.color}55`,
             color: v.color,
@@ -252,43 +252,47 @@ function VerdictHero({
             className="h-1.5 w-1.5 animate-pulse rounded-full"
             style={{ background: v.color }}
           />
-          Verdict azi · {new Date().toLocaleDateString("ro-RO", { day: "2-digit", month: "long", year: "numeric" })}
+          <span className="hidden sm:inline">Verdict azi · </span>
+          {new Date().toLocaleDateString("ro-RO", { day: "2-digit", month: "long", year: "numeric" })}
         </span>
         <InfoTooltip id="hero" label="Cum e calculat?" />
       </div>
 
-      <h2 className="mb-3 flex flex-wrap items-center gap-3 text-2xl font-black md:text-4xl" style={{ color: v.color }}>
-        <span className="text-3xl md:text-5xl">{v.emoji}</span>
+      <h2
+        className="mb-3 flex flex-wrap items-center gap-2 text-lg font-black leading-tight sm:gap-3 sm:text-2xl md:text-4xl"
+        style={{ color: v.color }}
+      >
+        <span className="text-2xl sm:text-3xl md:text-5xl">{v.emoji}</span>
         {v.title}
       </h2>
 
-      <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">
+      <p className="mb-5 max-w-3xl text-[13px] leading-relaxed text-slate-300 sm:text-sm md:mb-6 md:text-base">
         <span className="font-semibold text-white">{v.short}</span> {v.long}
       </p>
 
-      <div className="mb-6 grid grid-cols-3 gap-3 md:gap-5">
-        <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3 text-center md:p-4">
-          <div className="font-data text-2xl font-black md:text-3xl" style={{ color: v.color }}>
+      <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3 md:mb-6 md:gap-5">
+        <div className="rounded-lg border border-white/5 bg-white/[0.02] p-2 text-center sm:p-3 sm:rounded-xl md:p-4">
+          <div className="font-data text-base font-black sm:text-2xl md:text-3xl" style={{ color: v.color }}>
             {score}
-            <span className="ml-1 text-sm font-medium text-slate-500">/100</span>
+            <span className="ml-0.5 text-[10px] font-medium text-slate-500 sm:ml-1 sm:text-sm">/100</span>
           </div>
-          <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-slate-500 sm:text-[10px]">
             Risk Score
           </div>
         </div>
-        <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3 text-center md:p-4">
-          <div className="font-data text-2xl font-black text-white md:text-3xl">
+        <div className="rounded-lg border border-white/5 bg-white/[0.02] p-2 text-center sm:p-3 sm:rounded-xl md:p-4">
+          <div className="font-data text-base font-black text-white sm:text-2xl md:text-3xl">
             {getDecisionLabel(decision)}
           </div>
-          <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-slate-500 sm:text-[10px]">
             Decizie
           </div>
         </div>
-        <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3 text-center md:p-4">
-          <div className="font-data text-2xl font-black text-white md:text-3xl">
+        <div className="rounded-lg border border-white/5 bg-white/[0.02] p-2 text-center sm:p-3 sm:rounded-xl md:p-4">
+          <div className="font-data text-base font-black text-white sm:text-2xl md:text-3xl">
             {conviction === "HIGH" ? "Ridicată" : conviction === "MEDIUM" ? "Moderată" : "Scăzută"}
           </div>
-          <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-slate-500 sm:text-[10px]">
             Convingere
           </div>
         </div>
@@ -343,7 +347,11 @@ function HeroGaugeSVG({ score, decision }: { score: number; decision: string }) 
   const label = getDecisionLabel(decision);
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto block">
+    <svg
+      viewBox={`0 0 ${size} ${size}`}
+      className="mx-auto block w-full max-w-[260px] sm:max-w-[300px]"
+      preserveAspectRatio="xMidYMid meet"
+    >
       <defs>
         <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#ef4444" />
@@ -581,7 +589,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
         {/* ─── 1. HERO GAUGE ─── */}
         <Section id="hero" title="Scor agregat" icon="🎯">
           <motion.div
-            className="glass-card py-10 md:py-14"
+            className="glass-card py-7 md:py-14"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
