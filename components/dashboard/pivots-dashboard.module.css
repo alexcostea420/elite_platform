@@ -58,24 +58,37 @@
 /* ── Section Title ── */
 .sectionTitle {
   font-family: var(--font-head);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--text);
-  margin: 40px 0 16px;
-  padding-left: 14px;
-  border-left: 3px solid var(--accent);
-  letter-spacing: 0.3px;
+  color: var(--accent);
+  margin: 48px 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+.sectionTitle::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  flex-shrink: 0;
+}
+
 .stSub {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 400;
   color: var(--muted);
   letter-spacing: 0;
+  text-transform: none;
 }
 
 /* ── Cards ── */
@@ -108,9 +121,12 @@
   gap: 8px;
 }
 
-.cardAccentSolar { border-left: 3px solid var(--solar); }
-.cardAccentTeal { border-left: 3px solid var(--cycle); }
-.cardAccentGreen { border-left: 3px solid var(--fib); }
+.cardAccentSolar { box-shadow: inset 3px 0 0 0 var(--solar); }
+.cardAccentTeal { box-shadow: inset 3px 0 0 0 var(--cycle); }
+.cardAccentGreen { box-shadow: inset 3px 0 0 0 var(--fib); }
+.cardAccentSolar:hover { box-shadow: inset 3px 0 0 0 var(--solar), 0 0 0 1px rgba(245, 158, 11, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4); }
+.cardAccentTeal:hover { box-shadow: inset 3px 0 0 0 var(--cycle), 0 0 0 1px rgba(6, 182, 212, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4); }
+.cardAccentGreen:hover { box-shadow: inset 3px 0 0 0 var(--fib), 0 0 0 1px rgba(16, 185, 129, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4); }
 
 /* ── Philosophy Box ── */
 .philosophy {
@@ -385,23 +401,35 @@
 
 /* ── Score Widget ── */
 .scoreWidget {
-  background: rgba(255, 255, 255, 0.03);
+  position: relative;
+  background:
+    radial-gradient(ellipse at top right, rgba(16, 185, 129, 0.06), transparent 55%),
+    rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-radius: 14px;
-  padding: 20px 24px;
+  border-radius: 16px;
+  padding: 24px 28px;
   margin-bottom: 24px;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   flex-wrap: wrap;
+  overflow: hidden;
 }
 
-.swDate { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 4px; }
-.swScore { font-family: var(--font-mono); font-size: 40px; font-weight: 700; line-height: 1; animation: scorePop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-.swLabel { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-top: 4px; }
-.swStatus { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); }
+.scoreWidget::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 30%);
+  pointer-events: none;
+}
+
+.swDate { font-size: 10px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.4px; }
+.swScore { font-family: var(--font-mono); font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -1.5px; animation: scorePop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.swLabel { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-top: 6px; font-weight: 600; }
+.swStatus { padding: 6px 14px; border-radius: 20px; font-size: 10px; font-weight: 700; font-family: var(--font-mono); letter-spacing: 0.8px; text-transform: uppercase; }
 .swActive { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
 .swInactive { background: rgba(100, 116, 139, 0.1); color: var(--muted); border: 1px solid rgba(100, 116, 139, 0.2); }
 .swWatch { background: rgba(245, 158, 11, 0.12); color: var(--solar); border: 1px solid rgba(245, 158, 11, 0.25); }
