@@ -1281,7 +1281,7 @@ export default function PivotsDashboard() {
         {/* Stats */}
         <div className={cx(s.grid4, s.mb20, s.reveal)}>
           <div className={s.stat}><div className={s.statVal} style={{ color: "var(--solar)" }}>5</div><div className={s.statLbl}>Metode Primare</div><div className={s.statSub}>Eclipse, Halving, Fibonacci, Pi Cycle</div></div>
-          <div className={s.stat}><div className={s.statVal} style={{ color: "var(--cycle)" }}>6</div><div className={s.statLbl}>Metode Secundare</div><div className={s.statSub}>Ciclu C, Lună, Gann, Ian, DOM, Electoral</div></div>
+          <div className={s.stat}><div className={s.statVal} style={{ color: "var(--cycle)" }}>5</div><div className={s.statLbl}>Metode Secundare</div><div className={s.statSub}>Lună, Gann, Ian, DOM, Electoral</div></div>
           <div className={s.stat}><div className={s.statVal} style={{ color: "var(--fib)" }}>4+</div><div className={s.statLbl}>Scor Minim Activare</div><div className={s.statSub}>Optimizat prin backtest</div></div>
           <div className={s.stat}><div className={s.statVal} style={{ color: "var(--halving)" }}>3144</div><div className={s.statLbl}>Bare Analizate</div><div className={s.statSub}>DOM: 2017–2026 · Eclipse/Cicluri: 2012–2026</div></div>
         </div>
@@ -1509,7 +1509,6 @@ export default function PivotsDashboard() {
             <ConceptGroup conceptKey="lunar" data={CONCEPTS.lunar} />
           </div>
           <ConceptGroup conceptKey="halving" data={CONCEPTS.halving} />
-          <ConceptGroup conceptKey="cycle" data={CONCEPTS.cycle} />
           <ConceptGroup conceptKey="pi" data={CONCEPTS.pi} />
         </Section>
 
@@ -1799,7 +1798,6 @@ export default function PivotsDashboard() {
                 <tr><td><strong style={{ color: "var(--fib)" }}>Fibonacci pe Timp</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s2)}>2</span></span></td><td><span style={{ color: "var(--green)", fontWeight: 600 }}>Niveluri Fibonacci aplicate pe calendar.</span> 5 din 9 niveluri au marcat un pivot. Rată: 56%.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> Nivel 1.272 = <strong>15 Mai 2025</strong> → high local $103k</td></tr>
                 <tr><td><strong style={{ color: "var(--pi)" }}>Pi Cycle Top</strong></td><td><span style={{ display: "flex", alignItems: "center", gap: 8 }}><span className={cx(s.tag, s.tagP)}>PRIMAR</span><span className={cx(s.score, s.s3)}>3</span></span></td><td><span style={{ color: "var(--red)", fontWeight: 600 }}>Semnalul nuclear - cel mai rar.</span> 2/2 ori a marcat top de ciclu macro.</td><td className={s.small}><span style={{ color: "var(--green)" }}>✓</span> <strong>Apr 2021</strong> → top local $64k</td></tr>
                 {[
-                  { name: "Ciclu Scurt - 86 zile", desc: "Un ciclu de ~86 de zile (Intermediate Cycle). BTC formează un low local la fiecare 2–3 luni.", ex: "Mediană istorică: 84 zile între bottom-uri intermediare." },
                   { name: "Faza Lunii", desc: "La Lună Nouă și Lună Plină (ciclu de 29.5 zile), BTC prezintă o tendință ușoară de inversare.", ex: "Efect statistic moderat - nu folosi singur." },
                   { name: "Intervale Gann", desc: "Piețele reacționează la intervale specifice de timp: 30, 45, 90, 180, 360 zile. Cel mai puternic: 180 zile.", ex: "7 Apr 2025 + 180 zile = 5 Oct 2025 = ATH $126,000 ✓" },
                   { name: "Sezonier Ianuarie", desc: "BTC formează low-uri cu +79% mai des în perioada 16 Ianuarie – 15 Februarie.", ex: "Ian 2015 → bottom $152 ✓ · Ian 2023 → bottom $16,500 ✓" },
