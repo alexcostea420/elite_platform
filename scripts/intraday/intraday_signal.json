@@ -1,0 +1,210 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-25T14:17:03.564510+00:00",
+  "btc_price": 77693.14,
+  "btc_change_24h": -0.263,
+  "btc_high_24h": 78233.18,
+  "btc_low_24h": 77264.08,
+  "btc_volume_24h_usd": 544581778.764324,
+  "score": 58,
+  "bias": "NEUTRU",
+  "bias_text": "F\u0103r\u0103 edge clar \u2014 a\u0219teapt\u0103 setup mai curat",
+  "conviction": "LOW",
+  "components": {
+    "rsi_multi_tf": {
+      "raw": -0.03,
+      "weight": 0.18,
+      "contribution": -0.005
+    },
+    "macd_1h": {
+      "raw": 1.0,
+      "weight": 0.1,
+      "contribution": 0.1
+    },
+    "vwap": {
+      "raw": 0.155,
+      "weight": 0.1,
+      "contribution": 0.015
+    },
+    "pivots": {
+      "raw": -0.011,
+      "weight": 0.07,
+      "contribution": -0.001
+    },
+    "funding": {
+      "raw": 0.0,
+      "weight": 0.12,
+      "contribution": 0.0
+    },
+    "oi_delta": {
+      "raw": 0.0,
+      "weight": 0.07,
+      "contribution": 0.0
+    },
+    "ls_divergence": {
+      "raw": 0.009,
+      "weight": 0.08,
+      "contribution": 0.001
+    },
+    "taker": {
+      "raw": 0.0,
+      "weight": 0.08,
+      "contribution": 0.0
+    },
+    "whale_flow": {
+      "raw": 0.0,
+      "weight": 0.1,
+      "contribution": 0.0
+    },
+    "macro_context": {
+      "raw": 0.467,
+      "weight": 0.1,
+      "contribution": 0.047
+    }
+  },
+  "indicators": {
+    "rsi_15m": 55.0,
+    "rsi_1h": 50.6,
+    "rsi_4h": 52.9,
+    "rsi_1d": 67.4,
+    "macd_1h": {
+      "macd": -30.904584898074972,
+      "signal": -56.81556551389295,
+      "hist": 25.910980615817977,
+      "hist_prev": 24.86783085879234
+    },
+    "atr_1h": 157.71428571428572,
+    "bb_1h": {
+      "upper": 77776.25315808592,
+      "lower": 77326.01684191407,
+      "sma": 77551.135,
+      "width_pct": 0.5805670235153272
+    },
+    "vwap": 77573.12353408604,
+    "pivots": {
+      "pivot": 77716.06666666667,
+      "r1": 78225.33333333333,
+      "r2": 79055.26666666666,
+      "s1": 76886.13333333333,
+      "s2": 76376.86666666667,
+      "y_high": 78546.0,
+      "y_low": 77206.8,
+      "y_close": 77395.4
+    }
+  },
+  "crowd": {
+    "funding_pct": -0.006235,
+    "funding_8h_avg": -0.00349,
+    "oi_value_usd": 7443810691.023063,
+    "oi_delta_pct_12h": -0.22,
+    "global_ls": {
+      "long_pct": 44.379999999999995,
+      "short_pct": 55.620000000000005,
+      "ratio": 0.7979
+    },
+    "top_trader_ls": {
+      "long_pct": 44.55,
+      "short_pct": 55.45,
+      "ratio": 0.8034
+    },
+    "taker_ratio": {
+      "buy_vol": 944.502,
+      "sell_vol": 949.1759999999999,
+      "ratio": 0.9950757288427015
+    }
+  },
+  "whale_flow_6h": null,
+  "macro_context": {
+    "risk_v2_score": 64,
+    "risk_v2_decision": "HOLD",
+    "risk_v2_conviction": "LOW"
+  },
+  "volatility": {
+    "label": "sc\u0103zut\u0103",
+    "atr_pct": 0.20299641089842133,
+    "level": "low"
+  },
+  "session": {
+    "active": "EU + US",
+    "next": "Asia",
+    "minutes_to_next": 583
+  },
+  "setups": {
+    "long": {
+      "conditions": [
+        {
+          "text": "Macro suport\u0103 (Risk Score > 50)",
+          "met": true
+        },
+        {
+          "text": "RSI 1h sub 65 (nu overbought)",
+          "met": true
+        },
+        {
+          "text": "Pre\u021b peste VWAP zilnic",
+          "met": true
+        },
+        {
+          "text": "Funding nu e extrem long",
+          "met": true
+        },
+        {
+          "text": "Whale flow 6h NET pozitiv sau neutru",
+          "met": true
+        }
+      ],
+      "met": 5,
+      "total": 5
+    },
+    "short": {
+      "conditions": [
+        {
+          "text": "Macro fragil (Risk Score < 50)",
+          "met": false
+        },
+        {
+          "text": "RSI 1h peste 60 (overbought)",
+          "met": false
+        },
+        {
+          "text": "Pre\u021b sub VWAP zilnic",
+          "met": false
+        },
+        {
+          "text": "Funding extrem long (long squeeze setup)",
+          "met": false
+        },
+        {
+          "text": "Whale flow 6h NET negativ",
+          "met": false
+        }
+      ],
+      "met": 0,
+      "total": 5
+    },
+    "squeeze": {
+      "conditions": [
+        {
+          "text": "Bollinger Bands str\u00e2nse (BB width < 2%)",
+          "met": true
+        },
+        {
+          "text": "Funding extrem (>0.04% sau <-0.03%)",
+          "met": false
+        },
+        {
+          "text": "OI \u00een cre\u0219tere (>3% \u00een 12h)",
+          "met": false
+        }
+      ],
+      "met": 1,
+      "total": 3
+    }
+  },
+  "alerts": [
+    {
+      "text": "Bollinger Bands str\u00e2nse \u2014 mi\u0219care iminent\u0103 (direc\u021bie necunoscut\u0103)",
+      "severity": "amber"
+    }
+  ]
+}
