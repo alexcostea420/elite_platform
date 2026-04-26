@@ -146,7 +146,7 @@ export default async function HomePage() {
                 </div>
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card flex h-48 w-48 flex-col items-center justify-center rounded-full border border-accent-emerald/30">
-                    <span className="text-5xl font-bold text-accent-emerald">67</span>
+                    <span className="text-5xl font-bold text-accent-emerald">83</span>
                     <span className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent-emerald/80">CUMPARA</span>
                   </div>
                 </div>
