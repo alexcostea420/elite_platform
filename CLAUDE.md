@@ -216,8 +216,7 @@ For YouTube recordings. Add ?blur=1 to URL:
 ## UPCOMING (after PFA April 29)
 - Stripe live keys → enable card payments
 - CUI in footer (placeholder now)
-- MEXC copytrade onboarding flow
-- Telegram notifications bot for members
+- MEXC copytrade onboarding flow (stays Coming Soon)
 
 ## EMAIL AUTOMATION (~/Playground/email-automation/)
 Cristian Chifoi newsletter. Rules:

@@ -346,7 +346,6 @@ export default async function UpgradePage() {
                       {[
                         "Copytrade V5 bot (10+ active)",
                         "Dashboard performanță",
-                        "Notificări Telegram",
                       ].map((perk) => (
                         <li key={perk} className="flex items-start gap-2 text-slate-400">
                           <span className="text-slate-600">✓</span>
