@@ -13,6 +13,8 @@ type SearchItem = {
 const SEARCH_ITEMS: SearchItem[] = [
   // Dashboard
   { label: "Dashboard", href: "/dashboard", icon: "🏠", group: "Pagini" },
+  { label: "Astăzi", href: "/dashboard/today", icon: "🗓️", group: "Pagini" },
+  { label: "Portofoliul Tău", href: "/dashboard/portfolio", icon: "💼", group: "Pagini" },
   { label: "Video-uri", href: "/dashboard/videos", icon: "🎬", group: "Pagini" },
   { label: "Resurse", href: "/dashboard/resurse", icon: "📚", group: "Pagini" },
   { label: "Indicatori TradingView", href: "/dashboard/indicators", icon: "📈", group: "Pagini" },
@@ -22,12 +24,14 @@ const SEARCH_ITEMS: SearchItem[] = [
   // { label: "Pivoți BTC", href: "/dashboard/pivots", icon: "🔮", group: "Research" }, // Admin-only
   // Countertrade hidden until verified (admin-only)
   { label: "Calendar Economic", href: "/dashboard/calendar", icon: "📅", group: "Research" },
+  { label: "Macro Dashboard", href: "/dashboard/macro", icon: "🌐", group: "Research" },
   { label: "Whale Tracker Hyperliquid", href: "/tools/whale-tracker", icon: "🐋", group: "Research" },
   { label: "Știri Crypto Live", href: "/dashboard/news", icon: "📰", group: "Research" },
   // Trading
   { label: "Risk Score BTC", href: "/dashboard/risk-score", icon: "🎯", group: "Trading" },
   { label: "Should I Trade?", href: "/dashboard/should-i-trade", icon: "⚡", group: "Trading" },
   // Account
+  { label: "Sesiuni 1-la-1 cu Alex", href: "/sesiuni", icon: "🎓", group: "Cont" },
   { label: "Upgrade / Plăți", href: "/upgrade", icon: "💳", group: "Cont" },
   { label: "Track Record - Performanță", href: "/track-record", icon: "📊", group: "Cont" },
   { label: "Conectează Discord", href: "/auth/discord", icon: "💬", group: "Cont" },

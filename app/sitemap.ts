@@ -25,6 +25,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: getAbsoluteRouteUrl("/sesiuni", "app"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
       url: getAbsoluteRouteUrl("/track-record", "app"),
       lastModified: now,
       changeFrequency: "daily",

@@ -267,6 +267,7 @@ export const footerLinks = {
     { href: "#despre", label: "Despre" },
     { href: "#beneficii", label: "Beneficii" },
     { href: "#preturi", label: "Prețuri" },
+    { href: "/sesiuni", label: "Sesiuni 1-la-1" },
     { href: "#faq", label: "FAQ" }
   ],
   legal: [
