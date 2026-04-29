@@ -24,9 +24,10 @@ export type TodaySnapshot = {
     wallet_count: number;
     top_assets: Array<{
       asset: string;
-      price: number;
-      smart_net_pct: number;
-      signal: string;
+      net_notional_usd: number;
+      long_count: number;
+      short_count: number;
+      side: string;
     }>;
     updated: string;
   } | null;
@@ -120,21 +121,21 @@ export function TodayClient({ snapshot }: { snapshot: TodaySnapshot }) {
   return (
     <div className="space-y-6">
       {/* HERO: Risk Score + BTC Snapshot */}
-      <section className={`glass-card rounded-2xl border p-6 ${risk ? decisionBg(risk.decision) : "border-white/10"}`}>
+      <section className={`glass-card rounded-2xl border p-4 sm:p-6 ${risk ? decisionBg(risk.decision) : "border-white/10"}`}>
         {risk ? (
-          <div className="grid gap-6 md:grid-cols-[auto,1fr,auto] md:items-center">
-            <div className="flex items-center gap-5">
-              <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full border border-white/10 bg-black/30">
-                <span className={`font-data text-4xl font-bold ${decisionColor(risk.decision)}`}>{risk.score}</span>
+          <div className="space-y-5 md:grid md:grid-cols-[auto,1fr,auto] md:items-center md:gap-6 md:space-y-0">
+            <div className="flex items-center gap-4 sm:gap-5">
+              <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-full border border-white/10 bg-black/30 sm:h-24 sm:w-24">
+                <span className={`font-data text-3xl font-bold sm:text-4xl ${decisionColor(risk.decision)}`}>{risk.score}</span>
                 <span className="text-[10px] uppercase tracking-wider text-slate-500">Risk Score</span>
               </div>
-              <div>
-                <p className={`text-2xl font-bold ${decisionColor(risk.decision)}`}>{decisionLabel(risk.decision)}</p>
+              <div className="min-w-0 flex-1">
+                <p className={`text-xl font-bold sm:text-2xl ${decisionColor(risk.decision)}`}>{decisionLabel(risk.decision)}</p>
                 <p className="mt-1 text-sm text-slate-400">{risk.decision_text}</p>
                 <p className="mt-1 text-xs text-slate-500">Convicție: <span className="text-slate-300">{risk.conviction}</span></p>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
               <Stat label="BTC" value={`$${risk.btc_price.toLocaleString("ro-RO", { maximumFractionDigits: 0 })}`} sub={
                 risk.btc_24h_change != null ? `${risk.btc_24h_change >= 0 ? "+" : ""}${risk.btc_24h_change.toFixed(2)}% 24h` : ""
               } subTone={risk.btc_24h_change != null ? (risk.btc_24h_change >= 0 ? "pos" : "neg") : "neutral"} />
@@ -147,7 +148,7 @@ export function TodayClient({ snapshot }: { snapshot: TodaySnapshot }) {
             </div>
             <Link
               href="/dashboard/risk-score"
-              className="self-start rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-200 transition hover:bg-white/10 md:self-center"
+              className="inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-200 transition hover:bg-white/10 md:w-auto md:self-center"
             >
               Vezi detalii →
             </Link>
@@ -190,25 +191,30 @@ export function TodayClient({ snapshot }: { snapshot: TodaySnapshot }) {
 
       {/* Whale top assets */}
       {whale && whale.top_assets.length > 0 ? (
-        <section className="glass-card rounded-2xl border border-white/10 p-6">
-          <div className="mb-4 flex items-center justify-between">
+        <section className="glass-card rounded-2xl border border-white/10 p-4 sm:p-6">
+          <div className="mb-4 flex items-start justify-between gap-3">
             <div>
               <p className="section-label mb-1">Whale Flow Top 3</p>
               <h2 className="text-lg font-bold text-white">Ce fac whale-urile chiar acum</h2>
+              <p className="mt-1 text-xs text-slate-500">Top 20 portofele Hyperliquid · actualizat acum {timeAgo(whale.updated)}</p>
             </div>
-            <Link href="/tools/whale-tracker" className="text-xs font-semibold uppercase tracking-wider text-emerald-400 hover:text-emerald-300">Toate →</Link>
+            <Link href="/tools/whale-tracker" className="shrink-0 text-xs font-semibold uppercase tracking-wider text-emerald-400 hover:text-emerald-300">Toate →</Link>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
             {whale.top_assets.map((a) => (
               <div key={a.asset} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
                 <div className="flex items-baseline justify-between">
                   <span className="font-bold text-white">{a.asset}</span>
-                  <span className="font-data text-sm text-slate-300">${a.price.toLocaleString("ro-RO", { maximumFractionDigits: 2 })}</span>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${a.side === "LONG" ? "text-emerald-400" : a.side === "SHORT" ? "text-rose-400" : "text-slate-400"}`}>
+                    {a.side === "LONG" ? "Long" : a.side === "SHORT" ? "Short" : "Mixt"}
+                  </span>
                 </div>
-                <p className={`mt-2 text-xs ${a.smart_net_pct >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-                  Smart Net: {a.smart_net_pct >= 0 ? "+" : ""}{a.smart_net_pct.toFixed(1)}%
+                <p className={`mt-2 font-data text-lg font-bold tabular-nums ${a.net_notional_usd >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                  {a.net_notional_usd >= 0 ? "+" : ""}{formatUsd(a.net_notional_usd)}
                 </p>
-                <p className="mt-1 text-xs text-slate-500">{a.signal}</p>
+                <p className="mt-1 text-xs text-slate-500">
+                  {a.long_count} long · {a.short_count} short
+                </p>
               </div>
             ))}
           </div>
@@ -216,7 +222,7 @@ export function TodayClient({ snapshot }: { snapshot: TodaySnapshot }) {
       ) : null}
 
       {/* Today's economic calendar */}
-      <section className="glass-card rounded-2xl border border-white/10 p-6">
+      <section className="glass-card rounded-2xl border border-white/10 p-4 sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <p className="section-label mb-1">Calendar Economic — Azi</p>
@@ -253,7 +259,7 @@ export function TodayClient({ snapshot }: { snapshot: TodaySnapshot }) {
       </section>
 
       {/* News feed */}
-      <section className="glass-card rounded-2xl border border-white/10 p-6">
+      <section className="glass-card rounded-2xl border border-white/10 p-4 sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <p className="section-label mb-1">Știri Critice</p>
