@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { AuroraBg } from "@/components/ui/aurora-bg";
 import { Container } from "@/components/ui/container";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { HeroGrowthChart } from "@/components/marketing/hero-growth-chart";
 
 export function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -80,10 +79,6 @@ export function HeroSection() {
                 <span><span className="font-semibold text-white">7</span> Zile Trial</span>
               </div>
             </div>
-          </div>
-
-          <div className="mx-auto mt-14 md:mt-20">
-            <HeroGrowthChart />
           </div>
         </Container>
       </section>
