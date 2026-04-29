@@ -1,10 +1,17 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import { AuroraBg } from "@/components/ui/aurora-bg";
 import { Container } from "@/components/ui/container";
+import { CountUp } from "@/components/ui/count-up";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -36,26 +43,47 @@ export function HeroSection() {
         <AuroraBg />
         <div className="absolute inset-0 grid-glow opacity-20" />
         <Container className="relative z-10">
-          <div className="mx-auto max-w-4xl text-center">
+          <motion.div
+            className="mx-auto max-w-4xl text-center"
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.12, delayChildren: 0.1 }}
+          >
             <div className="flex flex-col items-center gap-6 md:gap-8">
-              <div className="inline-flex rounded-full border border-accent-emerald/30 bg-surface-graphite px-4 py-2">
+              <motion.div
+                variants={fadeUp}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="inline-flex rounded-full border border-accent-emerald/30 bg-surface-graphite px-4 py-2"
+              >
                 <span className="font-semibold text-accent-emerald">350+ traderi activi · Peste 50 membri Elite</span>
-              </div>
+              </motion.div>
               <div className="space-y-6">
-                <h1 className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl animate-scale-in">
+                <motion.h1
+                  variants={fadeUp}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-3xl font-bold leading-tight text-white sm:text-5xl md:text-7xl"
+                >
                   Investește și tranzacționează
                   <br />
                   <span className="gradient-text">cu un plan clar.</span>
-                </h1>
-                <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl md:text-2xl">
+                </motion.h1>
+                <motion.p
+                  variants={fadeUp}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl md:text-2xl"
+                >
                   Comunitate de investitori și traderi cu rezultate reale.
                   <br className="hidden sm:block" />
                   Risk Score săptămânal, analize live, indicatori exclusivi și portofoliu transparent.
                   <br className="hidden sm:block" />
                   Începe gratuit - 7 zile acces complet.
-                </p>
+                </motion.p>
               </div>
-              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <motion.div
+                variants={fadeUp}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+              >
                 <MagneticButton
                   href="/signup"
                   className="accent-button gradient-border-animated w-full rounded-xl px-6 py-4 text-base font-bold sm:w-auto sm:min-w-[220px] sm:px-8 sm:text-lg"
@@ -68,18 +96,38 @@ export function HeroSection() {
                 >
                   Vezi prezentarea
                 </MagneticButton>
-              </div>
-              <div className="mt-4 flex items-center gap-6 text-sm text-slate-500">
-                <span><span className="font-semibold text-white">350+</span> Traderi</span>
+              </motion.div>
+              <motion.div
+                variants={fadeUp}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-slate-500"
+              >
+                <span>
+                  <span className="font-semibold text-white tabular-nums">
+                    <CountUp end={350} duration={1400} />+
+                  </span> Traderi
+                </span>
                 <span className="h-3 w-px bg-white/10" />
-                <span><span className="font-semibold text-white">55+</span> Video-uri</span>
+                <span>
+                  <span className="font-semibold text-white tabular-nums">
+                    <CountUp end={55} duration={1400} />+
+                  </span> Video-uri
+                </span>
                 <span className="h-3 w-px bg-white/10" />
-                <span><span className="font-semibold text-white">4+</span> Ani Experiență</span>
+                <span>
+                  <span className="font-semibold text-white tabular-nums">
+                    <CountUp end={4} duration={1200} />+
+                  </span> Ani Experiență
+                </span>
                 <span className="h-3 w-px bg-white/10" />
-                <span><span className="font-semibold text-white">7</span> Zile Trial</span>
-              </div>
+                <span>
+                  <span className="font-semibold text-white tabular-nums">
+                    <CountUp end={7} duration={1200} />
+                  </span> Zile Trial
+                </span>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </Container>
       </section>
 
