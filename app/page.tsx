@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { AlexsBrainSection } from "@/components/marketing/alexs-brain-section";
+import { HeroIntro } from "@/components/marketing/hero-intro";
 import { HeroSection } from "@/components/marketing/hero-section";
 import { TrackRecordTeaser } from "@/components/marketing/track-record-teaser";
 import { Container } from "@/components/ui/container";
@@ -99,6 +100,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         type="application/ld+json"
       />
+      <HeroIntro />
       <Navbar mode="marketing" />
       <main>
         {/* 1. Hero */}
