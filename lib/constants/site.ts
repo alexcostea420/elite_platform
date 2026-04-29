@@ -25,6 +25,7 @@ export const marketingNav = [
   { href: "/#despre", label: "Despre" },
   { href: "/#beneficii", label: "Beneficii" },
   { href: "/#preturi", label: "Prețuri" },
+  { href: "/sesiuni", label: "Sesiuni 1-la-1" },
   { href: "/#testimoniale", label: "Testimoniale" },
   { href: "/#faq", label: "FAQ" },
   { href: "/track-record", label: "Track Record" },
