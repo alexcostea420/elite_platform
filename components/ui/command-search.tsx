@@ -11,34 +11,32 @@ type SearchItem = {
 };
 
 const SEARCH_ITEMS: SearchItem[] = [
-  // Dashboard
+  // Pagini
   { label: "Dashboard", href: "/dashboard", icon: "🏠", group: "Pagini" },
-  { label: "Astăzi", href: "/dashboard/today", icon: "🗓️", group: "Pagini" },
-  { label: "Portofoliul Tău", href: "/dashboard/portfolio", icon: "💼", group: "Pagini" },
-  { label: "Video-uri", href: "/dashboard/videos", icon: "🎬", group: "Pagini" },
-  { label: "Resurse", href: "/dashboard/resurse", icon: "📚", group: "Pagini" },
-  { label: "Indicatori TradingView", href: "/dashboard/indicators", icon: "📈", group: "Pagini" },
-  // Research
-  { label: "Stocks - Portofoliu Acțiuni", href: "/dashboard/stocks", icon: "💹", group: "Research" },
-  { label: "Crypto Screener", href: "/dashboard/crypto", icon: "₿", group: "Research" },
-  // { label: "Pivoți BTC", href: "/dashboard/pivots", icon: "🔮", group: "Research" }, // Admin-only
-  // Countertrade hidden until verified (admin-only)
-  { label: "Calendar Economic", href: "/dashboard/calendar", icon: "📅", group: "Research" },
-  { label: "Macro Dashboard", href: "/dashboard/macro", icon: "🌐", group: "Research" },
-  { label: "Whale Tracker Hyperliquid", href: "/tools/whale-tracker", icon: "🐋", group: "Research" },
-  { label: "Știri Crypto Live", href: "/dashboard/news", icon: "📰", group: "Research" },
+  // Educație
+  { label: "Video-uri", href: "/dashboard/videos", icon: "🎬", group: "Educație" },
+  { label: "Resurse", href: "/dashboard/resurse", icon: "📚", group: "Educație" },
+  { label: "Indicatori TradingView", href: "/dashboard/indicators", icon: "📈", group: "Educație" },
+  { label: "Știri Crypto", href: "/dashboard/news", icon: "📰", group: "Educație" },
+  { label: "Alex's Brain - Bot Discord", href: "/dashboard/ask-alex", icon: "🧠", group: "Educație" },
+  // Invest
+  { label: "Stocks", href: "/dashboard/stocks", icon: "💹", group: "Invest" },
+  { label: "Crypto", href: "/dashboard/crypto", icon: "₿", group: "Invest" },
+  { label: "Risk Score BTC", href: "/dashboard/risk-score", icon: "🎯", group: "Invest" },
+  { label: "Macro Economy", href: "/dashboard/macro", icon: "🏛️", group: "Invest" },
+  { label: "Pivoți de Timp", href: "/dashboard/pivots", icon: "🔮", group: "Invest" },
+  { label: "Portofoliul Tău", href: "/dashboard/portfolio", icon: "💼", group: "Invest" },
   // Trading
-  { label: "Risk Score BTC", href: "/dashboard/risk-score", icon: "🎯", group: "Trading" },
   { label: "Should I Trade?", href: "/dashboard/should-i-trade", icon: "⚡", group: "Trading" },
-  { label: "Calculator Position Sizing", href: "/tools/calculator", icon: "🧮", group: "Trading" },
-  { label: "Jurnal Trading", href: "/tools/journal", icon: "📓", group: "Trading" },
-  // Account
+  { label: "Jurnal + Calculator Sizing", href: "/tools/journal", icon: "📓", group: "Trading" },
+  { label: "Whale Tracker Hyperliquid", href: "/tools/whale-tracker", icon: "🐋", group: "Trading" },
+  { label: "Liquidation Map", href: "/tools/liquidation-map", icon: "🎯", group: "Trading" },
+  { label: "Calendar Economic", href: "/dashboard/calendar", icon: "📅", group: "Trading" },
+  // Cont
   { label: "Sesiuni 1-la-1 cu Alex", href: "/sesiuni", icon: "🎓", group: "Cont" },
   { label: "Upgrade / Plăți", href: "/upgrade", icon: "💳", group: "Cont" },
   { label: "Track Record - Performanță", href: "/track-record", icon: "📊", group: "Cont" },
   { label: "Conectează Discord", href: "/auth/discord", icon: "💬", group: "Cont" },
-  // External
-  { label: "Alex's Brain - Bot Discord", href: "/dashboard/ask-alex", icon: "🧠", group: "Pagini" },
   { label: "Bot Trading", href: "/bots", icon: "🤖", group: "Cont" },
 ];
 

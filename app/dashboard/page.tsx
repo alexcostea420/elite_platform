@@ -407,7 +407,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         Testează <span className="text-accent-emerald">TOTUL</span> gratuit
                       </h2>
                       <p className="mt-3 max-w-xl text-sm text-slate-300">
-                        Deblochezi {totalVideos}+ video-uri, <span className="font-semibold text-white">Risk Score</span>, <span className="font-semibold text-white">Whale Tracker</span>, <span className="font-semibold text-white">Macro Dashboard</span>, indicatori TradingView și Discord Elite.
+                        Deblochezi {totalVideos}+ video-uri, <span className="font-semibold text-white">Risk Score</span>, <span className="font-semibold text-white">Whale Tracker</span>, <span className="font-semibold text-white">Macro Economy</span>, indicatori TradingView și Discord Elite.
                       </p>
                       <p className="mt-2 text-xs text-slate-500">Fără card. Se dezactivează automat.</p>
                     </div>
