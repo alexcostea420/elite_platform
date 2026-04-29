@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS portfolio_price_cache (
   price_usd     numeric(20, 8) NOT NULL,
   source        text NOT NULL,
   fetched_at    timestamptz NOT NULL DEFAULT now(),
-  PRIMARY KEY (asset_key, COALESCE(on_date, '1900-01-01'::date))
+  CONSTRAINT portfolio_price_cache_key UNIQUE NULLS NOT DISTINCT (asset_key, on_date)
 );
 
 CREATE INDEX IF NOT EXISTS portfolio_price_cache_recent_idx
