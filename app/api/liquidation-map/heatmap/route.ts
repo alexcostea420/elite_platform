@@ -26,22 +26,27 @@ async function fetchJson<T>(url: string): Promise<T | null> {
       cache: "no-store",
       headers: { "User-Agent": "EliteLiqMap/1.0" },
     });
-    if (!r.ok) return null;
+    if (!r.ok) {
+      console.error(`[liquidation-map] ${url} → HTTP ${r.status}`);
+      return null;
+    }
     return (await r.json()) as T;
-  } catch {
+  } catch (e) {
+    console.error(`[liquidation-map] ${url} → fetch threw:`, e instanceof Error ? e.message : e);
     return null;
   }
 }
 
-type BybitEnvelope<T> = { retCode: number; result?: { list?: T } };
+type OkxEnvelope<T> = { code: string; data?: T };
 
 async function fetchKlines(): Promise<Kline[]> {
-  const data = await fetchJson<BybitEnvelope<string[][]>>(
-    `https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=60&limit=${HOURS}`,
+  // OKX market candles: [ts, o, h, l, c, vol(contracts), volCcy(BTC), volCcyQuote(USD), confirm]
+  const data = await fetchJson<OkxEnvelope<string[][]>>(
+    `https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1H&limit=${HOURS}`,
   );
-  const rows = data?.result?.list;
+  const rows = data?.data;
   if (!Array.isArray(rows)) return [];
-  // Bybit returns newest-first; reverse to oldest-first
+  // OKX returns newest-first; reverse to oldest-first
   return rows
     .slice()
     .reverse()
@@ -53,51 +58,48 @@ async function fetchKlines(): Promise<Kline[]> {
         h: Number(row[2]),
         l: Number(row[3]),
         c: Number(row[4]),
-        v: Number(row[5]),
+        v: Number(row[6]), // volCcy = volume in BTC
       } as Kline;
     })
     .filter((k): k is Kline => k !== null && Number.isFinite(k.o));
 }
 
-async function fetchOI(currentPrice: number): Promise<OISnap[]> {
-  const data = await fetchJson<BybitEnvelope<Array<{ openInterest: string; timestamp: string }>>>(
-    `https://api.bybit.com/v5/market/open-interest?category=linear&symbol=BTCUSDT&intervalTime=1h&limit=${HOURS}`,
+async function fetchOI(_currentPrice: number): Promise<OISnap[]> {
+  // OKX returns OI in USD already: [ts, oiUSD, volUSD]
+  const data = await fetchJson<OkxEnvelope<string[][]>>(
+    `https://www.okx.com/api/v5/rubik/stat/contracts/open-interest-volume?ccy=BTC&period=1H`,
   );
-  const rows = data?.result?.list;
+  const rows = data?.data;
   if (!Array.isArray(rows)) return [];
-  // Bybit returns newest-first and OI in BTC units → convert to USD with current price
   return rows
     .slice()
     .reverse()
     .map((row) => ({
-      t: Number(row.timestamp),
-      oi_usd: Number(row.openInterest) * currentPrice,
+      t: Number(row[0]),
+      oi_usd: Number(row[1]),
     }))
     .filter((s) => Number.isFinite(s.oi_usd) && s.oi_usd > 0);
 }
 
 async function fetchFundingNow(): Promise<{ funding_pct: number } | null> {
-  const data = await fetchJson<BybitEnvelope<Array<{ fundingRate: string }>>>(
-    `https://api.bybit.com/v5/market/funding/history?category=linear&symbol=BTCUSDT&limit=1`,
+  const data = await fetchJson<OkxEnvelope<Array<{ fundingRate: string }>>>(
+    `https://www.okx.com/api/v5/public/funding-rate?instId=BTC-USDT-SWAP`,
   );
-  const rows = data?.result?.list;
+  const rows = data?.data;
   if (!Array.isArray(rows) || rows.length === 0) return null;
   const r = Number(rows[0].fundingRate);
   return Number.isFinite(r) ? { funding_pct: r * 100 } : null;
 }
 
 async function fetchLSNow(): Promise<{ ls_ratio: number } | null> {
-  const data = await fetchJson<
-    BybitEnvelope<Array<{ buyRatio: string; sellRatio: string }>>
-  >(
-    `https://api.bybit.com/v5/market/account-ratio?category=linear&symbol=BTCUSDT&period=1h&limit=1`,
+  // OKX long/short account ratio: data is [[ts, ratio], ...] where ratio = longAcc/shortAcc
+  const data = await fetchJson<OkxEnvelope<string[][]>>(
+    `https://www.okx.com/api/v5/rubik/stat/contracts/long-short-account-ratio?ccy=BTC&period=1H`,
   );
-  const rows = data?.result?.list;
+  const rows = data?.data;
   if (!Array.isArray(rows) || rows.length === 0) return null;
-  const buy = Number(rows[0].buyRatio);
-  const sell = Number(rows[0].sellRatio);
-  if (!Number.isFinite(buy) || !Number.isFinite(sell) || sell <= 0) return null;
-  return { ls_ratio: buy / sell };
+  const r = Number(rows[0][1]);
+  return Number.isFinite(r) ? { ls_ratio: r } : null;
 }
 
 function buildHeatmap(klines: Kline[], oi: OISnap[]) {
@@ -198,7 +200,11 @@ export async function GET() {
   ]);
 
   if (klines.length === 0) {
-    return NextResponse.json({ error: "Bybit unavailable" }, { status: 502 });
+    console.error("[liquidation-map] klines empty — Bybit kline endpoint failed");
+    return NextResponse.json(
+      { error: "Bybit unavailable (klines empty)", debug: "kline-fetch-failed" },
+      { status: 502 },
+    );
   }
 
   const currentPrice = klines[klines.length - 1].c;
