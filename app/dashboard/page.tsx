@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { DiscordConnectPrompt } from "@/components/dashboard/discord-connect-prompt";
 import { OnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
+import { TodayDigest, type WhaleDigest } from "@/components/dashboard/today-digest";
 import { TrialButton } from "@/components/dashboard/trial-button";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
@@ -11,7 +12,10 @@ import { Container } from "@/components/ui/container";
 import { VideoTemplateThumbnail } from "@/components/ui/video-thumbnail";
 import { getDiscordRoleLabel, syncDiscordRole } from "@/lib/discord/server";
 import { buildPageMetadata } from "@/lib/seo";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import {
+  createServerSupabaseClient,
+  createServiceRoleSupabaseClient,
+} from "@/lib/supabase/server";
 import { getDisplayIdentity } from "@/lib/utils/identity";
 
 type SubscriptionTier = "free" | "elite" | null;
@@ -67,7 +71,15 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     redirect("/login?next=/dashboard");
   }
 
-  const [{ data: profile }, { data: latestVideos }, { count: videoCount }, { data: riskScoreRow }] = await Promise.all([
+  const serviceSupabase = createServiceRoleSupabaseClient();
+  const [
+    { data: profile },
+    { data: latestVideos },
+    { count: videoCount },
+    { data: riskScoreRow },
+    consensusRes,
+    walletsCountRes,
+  ] = await Promise.all([
     supabase
       .from("profiles")
       .select(
@@ -90,7 +102,59 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .select("data, updated_at")
       .eq("data_type", "risk_score_v2")
       .maybeSingle(),
+    serviceSupabase
+      .from("whale_consensus")
+      .select("asset,long_count,short_count,net_long_notional_usd,dominant_side,updated_at")
+      .order("updated_at", { ascending: false })
+      .limit(50),
+    serviceSupabase
+      .from("whale_wallets")
+      .select("address", { count: "exact", head: true }),
   ]);
+
+  const consensus = consensusRes.data ?? [];
+  const walletCount = walletsCountRes.count ?? 0;
+  const totalLongUsd = consensus
+    .filter((c) => c.dominant_side === "LONG")
+    .reduce((sum, c) => sum + Math.abs(c.net_long_notional_usd ?? 0), 0);
+  const totalShortUsd = consensus
+    .filter((c) => c.dominant_side === "SHORT")
+    .reduce((sum, c) => sum + Math.abs(c.net_long_notional_usd ?? 0), 0);
+  const netSentiment = totalLongUsd - totalShortUsd;
+  const sentimentLabel =
+    walletCount === 0
+      ? "Indisponibil"
+      : netSentiment > totalShortUsd * 0.5
+        ? "Bullish"
+        : netSentiment < -totalLongUsd * 0.5
+          ? "Bearish"
+          : "Neutru";
+  const topAssets = consensus
+    .slice()
+    .sort(
+      (a, b) =>
+        Math.abs(b.net_long_notional_usd ?? 0) - Math.abs(a.net_long_notional_usd ?? 0),
+    )
+    .slice(0, 3)
+    .map((c) => ({
+      asset: c.asset,
+      net_notional_usd: c.net_long_notional_usd ?? 0,
+      long_count: c.long_count ?? 0,
+      short_count: c.short_count ?? 0,
+      side: c.dominant_side ?? "FLAT",
+    }));
+  const whaleDigest: WhaleDigest =
+    walletCount > 0 && consensus.length > 0
+      ? {
+          net_sentiment: netSentiment,
+          sentiment_label: sentimentLabel,
+          smart_long_usd: totalLongUsd,
+          smart_short_usd: totalShortUsd,
+          wallet_count: walletCount,
+          top_assets: topAssets,
+          updated: consensus[0]?.updated_at ?? new Date().toISOString(),
+        }
+      : null;
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isAdmin = profile?.role === "admin";
@@ -134,15 +198,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     { href: "/dashboard/macro", icon: "🌐", title: "Macro", desc: "21 metrici globale" },
   ];
 
-  const eliteTimingTools = [
-    { href: "/tools/whale-tracker", icon: "🐋", title: "Whale Tracker", desc: "Top 20 portofele Hyperliquid" },
-    { href: "/dashboard/calendar", icon: "📅", title: "Calendar", desc: "Evenimente economice live" },
-    { href: "/dashboard/news", icon: "📰", title: "Știri Crypto", desc: "Feed agregat 5 surse" },
-    { href: "/dashboard/indicators", icon: "📊", title: "Indicatori", desc: "TradingView Elite" },
-  ];
-
   const eliteLearnTools = [
     { href: "/dashboard/videos", icon: "🎥", title: "Biblioteca Video", desc: `${totalVideos}+ analize` },
+    { href: "/dashboard/indicators", icon: "📊", title: "Indicatori TradingView", desc: "Indicatori Elite" },
     { href: "/dashboard/ask-alex", icon: "🧠", title: "Alex's Brain", desc: "Asistent AI de trading" },
     { href: "/dashboard/resurse", icon: "📚", title: "Resurse", desc: "Ghiduri și materiale" },
   ];
@@ -251,6 +309,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 </section>
               )}
 
+              {/* Today digest: whale sentiment + today's calendar + news headlines */}
+              <TodayDigest whale={whaleDigest} />
+
               {/* Analiză Live */}
               <section className="mb-8 animate-fade-in-up stagger-3">
                 <div className="mb-4 flex items-center justify-between">
@@ -261,23 +322,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 </div>
                 <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
                   {eliteLiveTools.map((tool) => (
-                    <Link key={tool.title} className="glass-card group p-5 transition-all hover:border-accent-emerald/30" href={tool.href}>
-                      <div className="text-2xl">{tool.icon}</div>
-                      <h3 className="mt-2 text-sm font-semibold text-white group-hover:text-accent-emerald">{tool.title}</h3>
-                      <p className="mt-1 text-xs text-slate-500">{tool.desc}</p>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-
-              {/* Timing & Semnale */}
-              <section className="mb-8 animate-fade-in-up stagger-4">
-                <div className="mb-4">
-                  <p className="section-label mb-1">Timing & Semnale</p>
-                  <h2 className="text-lg font-semibold text-white">Informații la minut pentru decizii</h2>
-                </div>
-                <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
-                  {eliteTimingTools.map((tool) => (
                     <Link key={tool.title} className="glass-card group p-5 transition-all hover:border-accent-emerald/30" href={tool.href}>
                       <div className="text-2xl">{tool.icon}</div>
                       <h3 className="mt-2 text-sm font-semibold text-white group-hover:text-accent-emerald">{tool.title}</h3>
