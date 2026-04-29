@@ -30,6 +30,8 @@ const SEARCH_ITEMS: SearchItem[] = [
   // Trading
   { label: "Risk Score BTC", href: "/dashboard/risk-score", icon: "🎯", group: "Trading" },
   { label: "Should I Trade?", href: "/dashboard/should-i-trade", icon: "⚡", group: "Trading" },
+  { label: "Calculator Position Sizing", href: "/tools/calculator", icon: "🧮", group: "Trading" },
+  { label: "Jurnal Trading", href: "/tools/journal", icon: "📓", group: "Trading" },
   // Account
   { label: "Sesiuni 1-la-1 cu Alex", href: "/sesiuni", icon: "🎓", group: "Cont" },
   { label: "Upgrade / Plăți", href: "/upgrade", icon: "💳", group: "Cont" },
