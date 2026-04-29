@@ -1125,7 +1125,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
         </Section>
 
         {/* ─── 8. GLOSSARY (NEW) ─── */}
-        <Section id="glossary" title="Glosar — termeni explicați" icon="📚" defaultOpen={false}>
+        <Section id="glossary" title="Glosar — termeni explicați" icon="📚" defaultOpen={true}>
           <GlossarySection />
         </Section>
 
