@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { AuroraBg } from "@/components/ui/aurora-bg";
 import { Container } from "@/components/ui/container";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { ParticlesBg } from "@/components/ui/particles-bg";
+import { HeroGrowthChart } from "@/components/marketing/hero-growth-chart";
 
 export function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -36,7 +36,6 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-hero-radial opacity-90" />
         <AuroraBg />
         <div className="absolute inset-0 grid-glow opacity-20" />
-        <ParticlesBg className="z-[1]" />
         <Container className="relative z-10">
           <div className="mx-auto max-w-4xl text-center">
             <div className="flex flex-col items-center gap-6 md:gap-8">
@@ -81,6 +80,10 @@ export function HeroSection() {
                 <span><span className="font-semibold text-white">7</span> Zile Trial</span>
               </div>
             </div>
+          </div>
+
+          <div className="mx-auto mt-14 md:mt-20">
+            <HeroGrowthChart />
           </div>
         </Container>
       </section>
