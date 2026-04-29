@@ -81,6 +81,7 @@ export const dashboardNavGroups = [
       { href: "/dashboard/risk-score", label: "Risk Score", icon: "🎯" },
       { href: "/dashboard/should-i-trade", label: "Should I Trade?", icon: "⚡" },
       { href: "/dashboard/portfolio", label: "Portofoliu", icon: "💼", badge: "NEW" },
+      { href: "/tools/calculator", label: "Calculator Sizing", icon: "🧮", badge: "NEW" },
     ],
   },
 ];
