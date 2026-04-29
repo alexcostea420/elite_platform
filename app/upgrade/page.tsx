@@ -223,7 +223,7 @@ export default async function UpgradePage() {
             <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
               {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => (
                 <article key={plan.name} className={`relative flex flex-col rounded-[1.5rem] p-6 sm:p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow-strong" : "panel card-hover"}`}>
-                  {plan.badge ? <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent-emerald px-4 py-1 text-sm font-bold text-crypto-dark">{plan.badge}</div> : null}
+                  {plan.badge ? <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent-emerald px-4 py-1 text-xs font-bold uppercase tracking-wider text-crypto-dark shadow-md">{plan.badge}</div> : null}
                   <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
                   <div className="mb-6 mt-3">
                     {isVeteran && veteranPrices[plan.name] ? (
