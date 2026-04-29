@@ -10,19 +10,22 @@ const HOURS = 168; // 7 days × 24h
 const BUCKET_SPAN_PCT = 0.18; // build buckets across ±18% from current price (covers 5x liq levels)
 const NUM_ROWS = 110; // vertical resolution
 
-// Retail leverage distribution (rough, based on Hyperliquid + CEX surveys)
+// Retail leverage distribution: heavy on low/medium leverage (where serious money sits),
+// thin tail on high leverage (degens). Tuned so 25x+ shows as visible "magnet" but doesn't dominate.
 const LEVERAGE_TIERS: Array<{ lev: number; weight: number }> = [
-  { lev: 5, weight: 0.32 },
-  { lev: 10, weight: 0.26 },
+  { lev: 5, weight: 0.36 },
+  { lev: 10, weight: 0.28 },
   { lev: 20, weight: 0.18 },
   { lev: 25, weight: 0.10 },
-  { lev: 50, weight: 0.08 },
-  { lev: 75, weight: 0.04 },
-  { lev: 100, weight: 0.02 },
+  { lev: 50, weight: 0.05 },
+  { lev: 100, weight: 0.03 },
 ];
 const MM_RATE = 0.005; // ~0.5% maintenance margin (BTC tier 1)
-// Symmetric kernel applied around each projected liq price (smooths peaks)
-const BLUR_KERNEL = [0.05, 0.15, 0.6, 0.15, 0.05];
+// Wider kernel → smoother vertical bands (in price direction)
+const BLUR_KERNEL = [0.04, 0.10, 0.18, 0.22, 0.18, 0.10, 0.04, 0.01];
+// Temporal smoothing window: positions stay open for hours, so density on horizontal axis
+// should not be choppy. ±5h moving average with linear falloff.
+const TEMPORAL_HALF_WINDOW = 5;
 
 type Kline = {
   t: number;
@@ -190,15 +193,34 @@ function buildHeatmap(klines: Kline[], oi: OISnap[], lsRatioNow: number | null) 
     }
   }
 
-  // Normalize per global max → 0..1, then apply gentle log compression so a few mega-clusters
-  // don't wash out the rest.
+  // Temporal smoothing pass: each row gets a moving average across hours so bands
+  // appear continuous rather than punctate per hour.
+  const T = klines.length;
+  for (let pi = 0; pi < numBuckets; pi++) {
+    const original = grid[pi].slice();
+    for (let hi = 0; hi < T; hi++) {
+      let sum = 0;
+      let weightSum = 0;
+      for (let dh = -TEMPORAL_HALF_WINDOW; dh <= TEMPORAL_HALF_WINDOW; dh++) {
+        const h2 = hi + dh;
+        if (h2 < 0 || h2 >= T) continue;
+        const w = 1 - Math.abs(dh) / (TEMPORAL_HALF_WINDOW + 1);
+        sum += original[h2] * w;
+        weightSum += w;
+      }
+      grid[pi][hi] = weightSum > 0 ? sum / weightSum : 0;
+    }
+  }
+
+  // Normalize per global max → 0..1, then apply gentle gamma compression so a few mega-clusters
+  // don't wash out the rest, but contrast stays high enough to spot "magnet" zones.
   let max = 0;
   for (const row of grid) for (const v of row) if (v > max) max = v;
   if (max > 0) {
     for (let i = 0; i < grid.length; i++) {
       for (let j = 0; j < grid[i].length; j++) {
         const norm = grid[i][j] / max;
-        grid[i][j] = norm > 0 ? Math.pow(norm, 0.55) : 0;
+        grid[i][j] = norm > 0 ? Math.pow(norm, 0.65) : 0;
       }
     }
   }

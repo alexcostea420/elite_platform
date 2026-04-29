@@ -219,7 +219,14 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
           className="block w-full"
           style={{ minWidth: "720px", height: "auto", maxHeight: "720px" }}
         >
-          {/* Background gradient zones (faint guide bands) */}
+          {/* Gaussian blur filter so cell grid renders as smooth gradient, not bricks */}
+          <defs>
+            <filter id="heatBlur" x="-5%" y="-5%" width="110%" height="110%">
+              <feGaussianBlur stdDeviation="1.2" />
+            </filter>
+          </defs>
+
+          {/* Background fill */}
           <rect
             x={PAD_LEFT}
             y={PAD_TOP}
@@ -229,25 +236,26 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
           />
 
           {/* Heatmap cells — bottom-up (row 0 = lowest price = bottom of canvas) */}
-          {data.heatmap.map((row, rowIdx) => {
-            const y = PAD_TOP + (numRows - 1 - rowIdx) * cellH;
-            return row.map((value, colIdx) => {
-              if (value < 0.025) return null;
-              const x = PAD_LEFT + colIdx * cellW;
-              return (
-                <rect
-                  key={`${rowIdx}-${colIdx}`}
-                  x={x.toFixed(2)}
-                  y={y.toFixed(2)}
-                  width={(cellW + 0.6).toFixed(2)}
-                  height={(cellH + 0.6).toFixed(2)}
-                  fill={colorFor(value)}
-                  opacity={0.55 + value * 0.45}
-                  shapeRendering="crispEdges"
-                />
-              );
-            });
-          })}
+          <g filter="url(#heatBlur)">
+            {data.heatmap.map((row, rowIdx) => {
+              const y = PAD_TOP + (numRows - 1 - rowIdx) * cellH;
+              return row.map((value, colIdx) => {
+                if (value < 0.015) return null;
+                const x = PAD_LEFT + colIdx * cellW;
+                return (
+                  <rect
+                    key={`${rowIdx}-${colIdx}`}
+                    x={x.toFixed(2)}
+                    y={y.toFixed(2)}
+                    width={(cellW + 1).toFixed(2)}
+                    height={(cellH + 1).toFixed(2)}
+                    fill={colorFor(value)}
+                    opacity={0.5 + value * 0.5}
+                  />
+                );
+              });
+            })}
+          </g>
 
           {/* Right-side concentration panel: total density per price row */}
           {sideTotals.max > 0 &&
