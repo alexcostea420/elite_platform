@@ -1,25 +1,25 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-29T20:00:08.594949+00:00",
-  "btc_price": 75596.45,
-  "btc_change_24h": -1.038,
+  "timestamp": "2026-04-29T20:10:08.983336+00:00",
+  "btc_price": 75648.23,
+  "btc_change_24h": -0.932,
   "btc_high_24h": 77904.93,
   "btc_low_24h": 74937.52,
-  "btc_volume_24h_usd": 1353926459.834214,
-  "score": 41,
+  "btc_volume_24h_usd": 1359104139.994814,
+  "score": 46,
   "bias": "NEUTRU",
   "bias_text": "F\u0103r\u0103 edge clar \u2014 a\u0219teapt\u0103 setup mai curat",
   "conviction": "LOW",
   "components": {
     "rsi_multi_tf": {
-      "raw": 0.054,
+      "raw": 0.04,
       "weight": 0.18,
-      "contribution": 0.01
+      "contribution": 0.007
     },
     "macd_1h": {
-      "raw": -1.0,
+      "raw": -0.2,
       "weight": 0.1,
-      "contribution": -0.1
+      "contribution": -0.02
     },
     "vwap": {
       "raw": -1.0,
@@ -27,9 +27,9 @@
       "contribution": -0.1
     },
     "pivots": {
-      "raw": -0.35,
+      "raw": -0.329,
       "weight": 0.07,
-      "contribution": -0.024
+      "contribution": -0.023
     },
     "funding": {
       "raw": 0.0,
@@ -37,9 +37,9 @@
       "contribution": 0.0
     },
     "oi_delta": {
-      "raw": -0.2,
+      "raw": 0.0,
       "weight": 0.07,
-      "contribution": -0.014
+      "contribution": 0.0
     },
     "ls_divergence": {
       "raw": 0.014,
@@ -47,9 +47,9 @@
       "contribution": 0.001
     },
     "taker": {
-      "raw": 0.0,
+      "raw": 0.2,
       "weight": 0.08,
-      "contribution": 0.0
+      "contribution": 0.016
     },
     "whale_flow": {
       "raw": 0.0,
@@ -63,24 +63,24 @@
     }
   },
   "indicators": {
-    "rsi_15m": 39.6,
-    "rsi_1h": 34.0,
-    "rsi_4h": 38.3,
-    "rsi_1d": 55.4,
+    "rsi_15m": 41.7,
+    "rsi_1h": 35.2,
+    "rsi_4h": 38.9,
+    "rsi_1d": 55.7,
     "macd_1h": {
-      "macd": -248.4760779348726,
-      "signal": -67.44982747400219,
-      "hist": -181.02625046087041,
-      "hist_prev": -170.26543392128755
+      "macd": -285.045737556371,
+      "signal": -110.99961232435103,
+      "hist": -174.04612523202,
+      "hist_prev": -181.179424711924
     },
-    "atr_1h": 538.8928571428561,
+    "atr_1h": 521.75,
     "bb_1h": {
-      "upper": 77977.85217934579,
-      "lower": 75405.74782065424,
-      "sma": 76691.80000000002,
-      "width_pct": 3.3538192592839744
+      "upper": 78020.02458537876,
+      "lower": 75274.14541462125,
+      "sma": 76647.085,
+      "width_pct": 3.582496543420424
     },
-    "vwap": 76504.84756018316,
+    "vwap": 76493.79783902301,
     "pivots": {
       "pivot": 76461.23333333334,
       "r1": 77286.86666666667,
@@ -95,28 +95,28 @@
   "crowd": {
     "funding_pct": 0.0035710000000000004,
     "funding_8h_avg": 0.00068,
-    "oi_value_usd": 7165202943.562755,
-    "oi_delta_pct_12h": -5.14,
+    "oi_value_usd": 7188966080.438609,
+    "oi_delta_pct_12h": -4.78,
     "global_ls": {
-      "long_pct": 50.849999999999994,
-      "short_pct": 49.15,
-      "ratio": 1.0346
+      "long_pct": 50.92,
+      "short_pct": 49.08,
+      "ratio": 1.0375
     },
     "top_trader_ls": {
-      "long_pct": 51.129999999999995,
-      "short_pct": 48.870000000000005,
-      "ratio": 1.0462
+      "long_pct": 51.21,
+      "short_pct": 48.79,
+      "ratio": 1.0496
     },
     "taker_ratio": {
-      "buy_vol": 3186.8940000000002,
-      "sell_vol": 3164.0919999999996,
-      "ratio": 1.0072064908352856
+      "buy_vol": 3445.1620000000003,
+      "sell_vol": 3276.834,
+      "ratio": 1.051369095901715
     }
   },
   "whale_flow_6h": {
-    "long_usd": 62726090.41,
-    "short_usd": 11323500.0,
-    "net_usd": 51402590.41,
+    "long_usd": 62756834.42999999,
+    "short_usd": 11329050.0,
+    "net_usd": 51427784.42999999,
     "fill_count": 0,
     "smart_long_pct": 84.7,
     "signal": "BULLISH"
@@ -128,13 +128,13 @@
   },
   "volatility": {
     "label": "normal\u0103",
-    "atr_pct": 0.7128547136047474,
+    "atr_pct": 0.6897054960836493,
     "level": "normal"
   },
   "session": {
     "active": "US",
     "next": "Asia",
-    "minutes_to_next": 240
+    "minutes_to_next": 230
   },
   "setups": {
     "long": {
