@@ -105,7 +105,8 @@ async function joinDiscordGuild(discordUserId: string, userAccessToken: string) 
     },
   );
 
-  if (!response.ok) {
+  // 201 = added, 204 = already a member. Both fine.
+  if (!response.ok && response.status !== 204) {
     throw new Error(`Discord guild join failed with status ${response.status}.`);
   }
 }
@@ -241,11 +242,59 @@ export async function syncDiscordRole({
     await joinDiscordGuild(discordUserId, userAccessToken);
   }
 
-  await Promise.all([
-    addDiscordRole(discordUserId, desiredRoleId),
-    removeDiscordRole(discordUserId, roleToRemove),
-  ]);
+  // Add the desired role first — if this fails, we throw and the caller knows
+  // sync did not complete. Only AFTER the new role is in place do we attempt
+  // to remove the old one. A failure to remove the previous role is logged
+  // but does not fail the whole sync (the user still has correct access).
+  await addDiscordRole(discordUserId, desiredRoleId);
+
+  try {
+    await removeDiscordRole(discordUserId, roleToRemove);
+  } catch (error) {
+    console.error("[discord] failed to remove previous role", {
+      profileId,
+      discordUserId,
+      roleToRemove,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+
   await markDiscordRoleSynced(profileId);
+}
+
+export async function sendDiscordDm(discordUserId: string, content: string) {
+  const { botToken } = getDiscordGuildConfig();
+
+  const channelResponse = await fetch("https://discord.com/api/v10/users/@me/channels", {
+    method: "POST",
+    headers: {
+      Authorization: `Bot ${botToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ recipient_id: discordUserId }),
+  });
+
+  if (!channelResponse.ok) {
+    throw new Error(`Discord DM channel create failed with status ${channelResponse.status}.`);
+  }
+
+  const channel = (await channelResponse.json()) as { id: string };
+
+  const messageResponse = await fetch(
+    `https://discord.com/api/v10/channels/${channel.id}/messages`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bot ${botToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content }),
+    },
+  );
+
+  if (!messageResponse.ok) {
+    throw new Error(`Discord DM send failed with status ${messageResponse.status}.`);
+  }
 }
 
 /**
