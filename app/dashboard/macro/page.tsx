@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { ExchangeFlowsPanel } from "@/components/dashboard/exchange-flows-panel";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
@@ -63,6 +64,9 @@ export default async function MacroPage() {
             </p>
           </div>
           <MacroClient initialData={macroData} />
+          <div className="mt-8">
+            <ExchangeFlowsPanel />
+          </div>
         </Container>
       </main>
       <Footer />
