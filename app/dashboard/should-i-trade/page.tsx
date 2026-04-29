@@ -34,7 +34,7 @@ export default async function ShouldITradePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, elite_since, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, elite_since, role, is_veteran")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -42,12 +42,13 @@ export default async function ShouldITradePage() {
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
   const isAdmin = profile?.role === "admin";
+  const isVeteran = profile?.is_veteran === true;
 
-  // Time-gate (admins skip)
+  // Time-gate (admins + veterani sar peste)
   if (!isAdmin) {
-    const unlocked = hasPassedTimeGate(profile?.elite_since ?? null);
+    const unlocked = hasPassedTimeGate(profile?.elite_since ?? null, isVeteran);
     if (!unlocked) {
-      const daysRemaining = getDaysUntilUnlock(profile?.elite_since ?? null);
+      const daysRemaining = getDaysUntilUnlock(profile?.elite_since ?? null, isVeteran);
       return (
         <>
           <Navbar mode="dashboard" userIdentity={identity} />

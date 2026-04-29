@@ -74,7 +74,7 @@ export default async function IndicatorsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, elite_since, role")
+    .select("full_name, subscription_tier, subscription_status, subscription_expires_at, elite_since, role, is_veteran")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -83,8 +83,10 @@ export default async function IndicatorsPage() {
   }
 
   const identity = getDisplayIdentity(profile?.full_name ?? null, user.email);
-  const unlocked = hasPassedTimeGate(profile?.elite_since ?? null);
-  const daysRemaining = getDaysUntilUnlock(profile?.elite_since ?? null);
+  const isVeteran = profile?.is_veteran === true;
+  const isAdmin = profile?.role === "admin";
+  const unlocked = isAdmin || hasPassedTimeGate(profile?.elite_since ?? null, isVeteran);
+  const daysRemaining = getDaysUntilUnlock(profile?.elite_since ?? null, isVeteran);
   const eliteDays = getEliteDays(profile?.elite_since ?? null) ?? 0;
 
   return (
