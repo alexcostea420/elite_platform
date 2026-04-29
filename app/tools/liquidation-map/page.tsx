@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { LiquidationHeatmap } from "@/components/dashboard/liquidation-heatmap";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
@@ -158,10 +159,20 @@ export default async function LiquidationMapPage() {
       <Navbar mode="dashboard" userIdentity={identity} />
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 md:pt-28">
         <div className="mb-8">
-          <p className="section-label mb-2">Smart Money · Hyperliquid</p>
+          <p className="section-label mb-2">Liquidation Pressure · BTC</p>
           <h1 className="text-2xl font-bold text-white sm:text-3xl">Liquidation Map</h1>
           <p className="mt-2 max-w-3xl text-sm text-slate-400">
-            Unde s-ar lichida pozițiile celor mai profitabile 20 de portofele de pe Hyperliquid. Estimat din entry × (1 ± 1/leverage). Aglomerările apropiate de preț sunt zone de presiune unde poți vedea cascade.
+            Hartă de presiune pe BTC: unde s-au acumulat pozițiile cu leverage în ultima săptămână (Open Interest istoric × volum). Zonele luminoase sunt clusters dense — ținte naturale pentru cascade de lichidări.
+          </p>
+        </div>
+
+        <LiquidationHeatmap />
+
+        <div className="mt-10 mb-6">
+          <p className="section-label mb-2">Smart Money · Hyperliquid</p>
+          <h2 className="text-xl font-bold text-white sm:text-2xl">Nivele lichidare top 20 portofele</h2>
+          <p className="mt-2 max-w-3xl text-sm text-slate-400">
+            Unde s-ar lichida pozițiile celor mai profitabile 20 de portofele de pe Hyperliquid. Estimat din entry × (1 ± 1/leverage).
           </p>
         </div>
         <LiquidationMapClient assets={assets} updatedAt={updatedAt} />
