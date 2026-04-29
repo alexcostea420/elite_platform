@@ -1,5 +1,6 @@
 import "server-only";
 
+import { sendDiscordDm, syncDiscordRole } from "@/lib/discord/server";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 import {
   generateReferenceAmount,
@@ -202,6 +203,16 @@ export async function confirmPayment(
 
   if (!payment) {
     return { success: false, error: "Payment not found or already processed." };
+  }
+
+  // Reject confirmations on stale pending payments (window is ~30min from creation).
+  // Prevents reusing an old payment_id with a fresh tx_hash long after the user moved on.
+  const chainCfg = getPaymentConfig(payment.chain as PaymentChain);
+  const timeoutMs = chainCfg.paymentTimeoutMinutes * 60 * 1000;
+  const ageMs = Date.now() - new Date(payment.created_at).getTime();
+  if (ageMs > timeoutMs) {
+    console.error(`Payment ${paymentId} stale: age=${Math.round(ageMs / 60000)}m > window=${chainCfg.paymentTimeoutMinutes}m`);
+    return { success: false, error: "Payment window expired." };
   }
 
   // Validate amount matches expected (tolerance $0.20)
@@ -431,10 +442,8 @@ export async function expireOverdueProfiles(): Promise<number> {
     return 0;
   }
 
-  const botToken = process.env.DISCORD_BOT_TOKEN;
-  const guildId = process.env.DISCORD_GUILD_ID;
-  const eliteRoleId = process.env.DISCORD_ROLE_ELITE_ID;
-  const soldatRoleId = process.env.DISCORD_ROLE_SOLDAT_ID;
+  const expiryDmContent =
+    "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.\n\n—\n\n🔒 Acest bot NU cere bani și NU procesează plăți.\nToate plățile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\nFii atent la DM-uri suspecte — raportează-le lui Alex.";
 
   for (const profile of expired) {
     await supabase
@@ -445,42 +454,29 @@ export async function expireOverdueProfiles(): Promise<number> {
       })
       .eq("id", profile.id);
 
-    // Discord: remove Elite role, add Soldat, send DM
-    if (profile.discord_user_id && botToken && guildId) {
+    if (profile.discord_user_id) {
       try {
-        const headers = { Authorization: `Bot ${botToken}`, "Content-Type": "application/json" };
-        const baseUrl = "https://discord.com/api/v10";
+        await syncDiscordRole({
+          profileId: profile.id,
+          discordUserId: profile.discord_user_id,
+          subscriptionTier: "free",
+        });
+      } catch (error) {
+        console.error("[expireOverdueProfiles] discord role sync failed", {
+          profileId: profile.id,
+          discordUserId: profile.discord_user_id,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
 
-        // Remove Elite role
-        if (eliteRoleId) {
-          await fetch(`${baseUrl}/guilds/${guildId}/members/${profile.discord_user_id}/roles/${eliteRoleId}`, {
-            method: "DELETE", headers,
-          });
-        }
-
-        // Add Soldat role
-        if (soldatRoleId) {
-          await fetch(`${baseUrl}/guilds/${guildId}/members/${profile.discord_user_id}/roles/${soldatRoleId}`, {
-            method: "PUT", headers,
-          });
-        }
-
-        // Send DM
-        const dmChannel = await fetch(`${baseUrl}/users/@me/channels`, {
-          method: "POST", headers,
-          body: JSON.stringify({ recipient_id: profile.discord_user_id }),
-        }).then((r) => r.json());
-
-        if (dmChannel?.id) {
-          await fetch(`${baseUrl}/channels/${dmChannel.id}/messages`, {
-            method: "POST", headers,
-            body: JSON.stringify({
-              content: "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.\n\n—\n\n🔒 Acest bot NU cere bani si NU proceseaza plati.\nToate platile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\nFii atent la DM-uri suspecte - raporteaza-le lui Alex.",
-            }),
-          });
-        }
-      } catch {
-        // Discord notification failed, but profile is already expired
+      try {
+        await sendDiscordDm(profile.discord_user_id, expiryDmContent);
+      } catch (error) {
+        console.error("[expireOverdueProfiles] discord DM failed", {
+          profileId: profile.id,
+          discordUserId: profile.discord_user_id,
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     }
   }

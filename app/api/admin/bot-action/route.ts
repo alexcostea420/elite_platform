@@ -21,7 +21,8 @@ export async function POST(request: NextRequest) {
   if (!action || !user_id) return NextResponse.json({ error: "Missing params" }, { status: 400 });
 
   if (action === "extend") {
-    const daysToAdd = parseInt(days) || 30;
+    const parsedDays = parseInt(days);
+    const daysToAdd = Number.isFinite(parsedDays) && parsedDays >= 1 && parsedDays <= 365 ? parsedDays : 30;
 
     // Find the latest subscription for this user
     const { data: sub } = await serviceSupabase

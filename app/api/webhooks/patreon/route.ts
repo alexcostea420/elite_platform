@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
+import { syncDiscordRole } from "@/lib/discord/server";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 const WEBHOOK_SECRET = process.env.PATREON_WEBHOOK_SECRET ?? "";
@@ -42,6 +43,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
+    const supabase = createServiceRoleSupabaseClient();
+
+    // Replay protection: hash the raw body and reject duplicates.
+    // Patreon doesn't sign a timestamp, so without this anyone who captures a
+    // valid signed payload could resend it indefinitely to re-grant Elite.
+    const eventHash = crypto.createHash("sha256").update(rawBody).digest("hex");
+    const { error: dedupError } = await supabase
+      .from("webhook_events")
+      .insert({ provider: "patreon", event_id: eventHash });
+    if (dedupError && (dedupError as { code?: string }).code === "23505") {
+      console.warn(`Patreon webhook: duplicate event ${eventHash.slice(0, 12)} (${event})`);
+      return NextResponse.json({ ok: true, duplicate: true });
+    }
+
     const payload = JSON.parse(rawBody);
     const memberData = payload.data?.attributes;
     const email = memberData?.email;
@@ -50,8 +65,6 @@ export async function POST(request: NextRequest) {
     const pledgeAmountCents = memberData?.currently_entitled_amount_cents ?? 0;
 
     console.log(`Patreon webhook: ${event} | email=${email} | status=${patronStatus} | charge=${lastChargeStatus} | cents=${pledgeAmountCents}`);
-
-    const supabase = createServiceRoleSupabaseClient();
 
     // ─── members:create ────────────────────────────────────────
     if (event === "members:create" || event === "members:pledge:create") {
@@ -68,7 +81,7 @@ export async function POST(request: NextRequest) {
         const now = new Date();
         const { data: profile } = await supabase
           .from("profiles")
-          .select("subscription_expires_at, subscription_status")
+          .select("subscription_expires_at, subscription_status, discord_user_id")
           .eq("id", user.id)
           .maybeSingle();
 
@@ -92,6 +105,21 @@ export async function POST(request: NextRequest) {
         }).eq("id", user.id);
 
         console.log(`Patreon: activated Elite for ${email}, expires ${finalExpiry.toISOString()}`);
+
+        if (profile?.discord_user_id) {
+          try {
+            await syncDiscordRole({
+              profileId: user.id,
+              discordUserId: profile.discord_user_id,
+              subscriptionTier: "elite",
+            });
+          } catch (error) {
+            console.error("[patreon] discord role sync failed on activate", {
+              userId: user.id,
+              error: error instanceof Error ? error.message : String(error),
+            });
+          }
+        }
       } else {
         // User doesn't have account → create invite + send email
         // DEDUP: check if an active invite already exists for this email
@@ -150,7 +178,7 @@ export async function POST(request: NextRequest) {
         if (user) {
           const { data: profile } = await supabase
             .from("profiles")
-            .select("subscription_expires_at")
+            .select("subscription_expires_at, subscription_status, discord_user_id")
             .eq("id", user.id)
             .maybeSingle();
 
@@ -161,6 +189,8 @@ export async function POST(request: NextRequest) {
           const startFrom = currentExpiry > now ? currentExpiry : now;
           const expiresAt = new Date(startFrom.getTime() + 30 * 24 * 60 * 60 * 1000);
 
+          const wasNotElite = profile?.subscription_status !== "active";
+
           await supabase.from("profiles").update({
             subscription_tier: "elite",
             subscription_status: "active",
@@ -168,6 +198,24 @@ export async function POST(request: NextRequest) {
           }).eq("id", user.id);
 
           console.log(`Patreon: ${email} renewed, expires ${expiresAt.toISOString()}`);
+
+          // Re-sync Discord on renew (cheap, idempotent) and especially when
+          // the profile was previously expired and the user is being lifted
+          // back to Elite.
+          if (profile?.discord_user_id && wasNotElite) {
+            try {
+              await syncDiscordRole({
+                profileId: user.id,
+                discordUserId: profile.discord_user_id,
+                subscriptionTier: "elite",
+              });
+            } catch (error) {
+              console.error("[patreon] discord role sync failed on renew", {
+                userId: user.id,
+                error: error instanceof Error ? error.message : String(error),
+              });
+            }
+          }
         } else {
           // Paying but no account — same logic as create: make invite if none exists
           const { data: existingInvites } = await supabase

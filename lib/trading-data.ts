@@ -221,36 +221,6 @@ export function getMacroDashboard() {
   return readTradingData<MacroDashboardData>("macro_dashboard", "data/macro_dashboard.json");
 }
 
-// ── Whale Tracker ──────────────────────────────────────────
-
-export type WhaleData = {
-  timestamp: string;
-  positioning: Array<{
-    asset: string;
-    price: number;
-    funding: number;
-    open_interest: number;
-    smart_net_pct: number;
-    smart_long_pct: number;
-    divergence_score: number;
-    signal: string;
-    [key: string]: unknown;
-  }>;
-  sentiment: {
-    net_sentiment: number;
-    sentiment_label: string;
-    total_smart_long_usd: number;
-    total_smart_short_usd: number;
-    [key: string]: unknown;
-  };
-  wallet_count: number;
-  scan_duration_s: number;
-};
-
-export function getWhaleData() {
-  return readTradingData<WhaleData>("whale_tracker", "scripts/v2/whale_data.json");
-}
-
 // ── Intraday Signal ────────────────────────────────────────
 
 export type IntradayComponent = {
