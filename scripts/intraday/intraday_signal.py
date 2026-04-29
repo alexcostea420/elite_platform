@@ -38,7 +38,76 @@ SCRIPT_DIR = Path(__file__).parent
 OUTPUT_FILE = SCRIPT_DIR / "intraday_signal.json"
 PROJECT_ROOT = SCRIPT_DIR.parent.parent
 RISK_SCORE_FILE = PROJECT_ROOT / "scripts" / "v2" / "risk_score_v2.json"
-WHALE_FILE = PROJECT_ROOT / "scripts" / "v2" / "whale_data.json"
+ENV_FILE = PROJECT_ROOT / ".env.local"
+
+
+def load_env():
+    env = {}
+    if ENV_FILE.exists():
+        for line in ENV_FILE.read_text().splitlines():
+            line = line.strip()
+            if "=" in line and not line.startswith("#"):
+                key, _, val = line.partition("=")
+                env[key.strip()] = val.strip()
+    return env
+
+
+def fetch_supabase(env, path):
+    url_base = env.get("NEXT_PUBLIC_SUPABASE_URL", "")
+    key = env.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    if not url_base or not key:
+        return None
+    try:
+        req = urllib.request.Request(
+            f"{url_base}/rest/v1/{path}",
+            headers={"apikey": key, "Authorization": f"Bearer {key}"},
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read())
+    except Exception as e:
+        print(f"[WARN] supabase fetch failed {path}: {e}", file=sys.stderr)
+        return None
+
+
+def whale_flow_btc_supabase(env):
+    """Pulls BTC whale exposure from Hyperliquid tracker (whale_positions + whale_fills).
+
+    Returns dict with long_usd / short_usd / net_usd / fill_count / signal,
+    or None if no data. Uses current open positions + last 6h fills.
+    """
+    positions = fetch_supabase(env, "whale_positions?asset=eq.BTC&is_current=eq.true&select=direction,notional_usd,leverage")
+    if positions is None:
+        return None
+    long_usd = sum(float(p.get("notional_usd") or 0) for p in positions if p.get("direction") == "LONG")
+    short_usd = sum(float(p.get("notional_usd") or 0) for p in positions if p.get("direction") == "SHORT")
+    long_count = sum(1 for p in positions if p.get("direction") == "LONG")
+    short_count = sum(1 for p in positions if p.get("direction") == "SHORT")
+    if long_count == 0 and short_count == 0:
+        return None
+
+    # Fills last 6h for activity count
+    six_h_ago = (datetime.now(timezone.utc) - timedelta(hours=6)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    fills = fetch_supabase(env, f"whale_fills?asset=eq.BTC&filled_at=gte.{six_h_ago}&select=direction,action_type")
+    fill_count = len(fills) if fills else 0
+
+    net_usd = long_usd - short_usd
+    total_usd = long_usd + short_usd
+    smart_long_pct = (long_usd / total_usd * 100) if total_usd > 0 else 50
+    if smart_long_pct >= 65:
+        signal = "BULLISH"
+    elif smart_long_pct <= 35:
+        signal = "BEARISH"
+    else:
+        signal = "NEUTRAL"
+
+    return {
+        "long_usd": long_usd,
+        "short_usd": short_usd,
+        "net_usd": net_usd,
+        "fill_count": fill_count,
+        "smart_long_pct": round(smart_long_pct, 1),
+        "signal": signal,
+    }
 
 
 # ──────────────────────────────────────────
@@ -618,7 +687,7 @@ def main():
     spot = fetch_spot_price()
 
     risk_v2 = load_json_safe(RISK_SCORE_FILE)
-    whale_data = load_json_safe(WHALE_FILE)
+    env = load_env()
 
     # 2. Compute indicators
     rsi_15m = rsi(df_15m["close"].values) if df_15m is not None else None
@@ -640,7 +709,7 @@ def main():
     if oi_hist and len(oi_hist) >= 12:
         oi_delta_pct = (oi_hist[-1]["oi"] - oi_hist[-12]["oi"]) / oi_hist[-12]["oi"] * 100
 
-    whale_flow = whale_flow_6h(whale_data)
+    whale_flow = whale_flow_btc_supabase(env)
 
     # 3. Build component scores
     state = {

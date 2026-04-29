@@ -1,35 +1,35 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-25T14:17:03.564510+00:00",
-  "btc_price": 77693.14,
-  "btc_change_24h": -0.263,
-  "btc_high_24h": 78233.18,
-  "btc_low_24h": 77264.08,
-  "btc_volume_24h_usd": 544581778.764324,
-  "score": 58,
+  "timestamp": "2026-04-29T12:41:14.396925+00:00",
+  "btc_price": 77146.01,
+  "btc_change_24h": 1.091,
+  "btc_high_24h": 77904.93,
+  "btc_low_24h": 75666.6,
+  "btc_volume_24h_usd": 1123882632.4870734,
+  "score": 53,
   "bias": "NEUTRU",
   "bias_text": "F\u0103r\u0103 edge clar \u2014 a\u0219teapt\u0103 setup mai curat",
   "conviction": "LOW",
   "components": {
     "rsi_multi_tf": {
-      "raw": -0.03,
+      "raw": -0.003,
       "weight": 0.18,
-      "contribution": -0.005
+      "contribution": -0.001
     },
     "macd_1h": {
-      "raw": 1.0,
+      "raw": 0.2,
       "weight": 0.1,
-      "contribution": 0.1
+      "contribution": 0.02
     },
     "vwap": {
-      "raw": 0.155,
+      "raw": 0.003,
       "weight": 0.1,
-      "contribution": 0.015
+      "contribution": 0.0
     },
     "pivots": {
-      "raw": -0.011,
+      "raw": 0.277,
       "weight": 0.07,
-      "contribution": -0.001
+      "contribution": 0.019
     },
     "funding": {
       "raw": 0.0,
@@ -42,14 +42,14 @@
       "contribution": 0.0
     },
     "ls_divergence": {
-      "raw": 0.009,
+      "raw": -0.014,
       "weight": 0.08,
-      "contribution": 0.001
+      "contribution": -0.001
     },
     "taker": {
-      "raw": 0.0,
+      "raw": -0.4,
       "weight": 0.08,
-      "contribution": 0.0
+      "contribution": -0.032
     },
     "whale_flow": {
       "raw": 0.0,
@@ -57,77 +57,84 @@
       "contribution": 0.0
     },
     "macro_context": {
-      "raw": 0.467,
+      "raw": 0.5,
       "weight": 0.1,
-      "contribution": 0.047
+      "contribution": 0.05
     }
   },
   "indicators": {
-    "rsi_15m": 55.0,
-    "rsi_1h": 50.6,
-    "rsi_4h": 52.9,
-    "rsi_1d": 67.4,
+    "rsi_15m": 45.0,
+    "rsi_1h": 54.4,
+    "rsi_4h": 49.7,
+    "rsi_1d": 60.8,
     "macd_1h": {
-      "macd": -30.904584898074972,
-      "signal": -56.81556551389295,
-      "hist": 25.910980615817977,
-      "hist_prev": 24.86783085879234
+      "macd": 194.34842676503467,
+      "signal": 98.76031729168206,
+      "hist": 95.58810947335262,
+      "hist_prev": 135.14205442360756
     },
-    "atr_1h": 157.71428571428572,
+    "atr_1h": 391.1857142857147,
     "bb_1h": {
-      "upper": 77776.25315808592,
-      "lower": 77326.01684191407,
-      "sma": 77551.135,
-      "width_pct": 0.5805670235153272
+      "upper": 77753.01752040278,
+      "lower": 75812.41247959722,
+      "sma": 76782.715,
+      "width_pct": 2.5273983093793437
     },
-    "vwap": 77573.12353408604,
+    "vwap": 77143.65831460097,
     "pivots": {
-      "pivot": 77716.06666666667,
-      "r1": 78225.33333333333,
-      "r2": 79055.26666666666,
-      "s1": 76886.13333333333,
-      "s2": 76376.86666666667,
-      "y_high": 78546.0,
-      "y_low": 77206.8,
-      "y_close": 77395.4
+      "pivot": 76461.23333333334,
+      "r1": 77286.86666666667,
+      "r2": 78275.63333333333,
+      "s1": 75472.46666666667,
+      "s2": 74646.83333333334,
+      "y_high": 77450.0,
+      "y_low": 75635.6,
+      "y_close": 76298.1
     }
   },
   "crowd": {
-    "funding_pct": -0.006235,
-    "funding_8h_avg": -0.00349,
-    "oi_value_usd": 7443810691.023063,
-    "oi_delta_pct_12h": -0.22,
+    "funding_pct": -0.00284,
+    "funding_8h_avg": 0.00124,
+    "oi_value_usd": 7696117657.9168,
+    "oi_delta_pct_12h": 3.21,
     "global_ls": {
-      "long_pct": 44.379999999999995,
-      "short_pct": 55.620000000000005,
-      "ratio": 0.7979
+      "long_pct": 42.82,
+      "short_pct": 57.18,
+      "ratio": 0.7489
     },
     "top_trader_ls": {
-      "long_pct": 44.55,
-      "short_pct": 55.45,
-      "ratio": 0.8034
+      "long_pct": 42.54,
+      "short_pct": 57.46,
+      "ratio": 0.7403
     },
     "taker_ratio": {
-      "buy_vol": 944.502,
-      "sell_vol": 949.1759999999999,
-      "ratio": 0.9950757288427015
+      "buy_vol": 3940.446999999999,
+      "sell_vol": 5080.627,
+      "ratio": 0.7755828168452434
     }
   },
-  "whale_flow_6h": null,
+  "whale_flow_6h": {
+    "long_usd": 64067194.0,
+    "short_usd": 11565600.0,
+    "net_usd": 52501594.0,
+    "fill_count": 0,
+    "smart_long_pct": 84.7,
+    "signal": "BULLISH"
+  },
   "macro_context": {
-    "risk_v2_score": 64,
-    "risk_v2_decision": "HOLD",
-    "risk_v2_conviction": "LOW"
+    "risk_v2_score": 65,
+    "risk_v2_decision": "BUY",
+    "risk_v2_conviction": "MEDIUM"
   },
   "volatility": {
     "label": "sc\u0103zut\u0103",
-    "atr_pct": 0.20299641089842133,
+    "atr_pct": 0.5070718683775283,
     "level": "low"
   },
   "session": {
-    "active": "EU + US",
-    "next": "Asia",
-    "minutes_to_next": 583
+    "active": "EU",
+    "next": "US",
+    "minutes_to_next": 19
   },
   "setups": {
     "long": {
@@ -186,7 +193,7 @@
       "conditions": [
         {
           "text": "Bollinger Bands str\u00e2nse (BB width < 2%)",
-          "met": true
+          "met": false
         },
         {
           "text": "Funding extrem (>0.04% sau <-0.03%)",
@@ -194,7 +201,7 @@
         },
         {
           "text": "OI \u00een cre\u0219tere (>3% \u00een 12h)",
-          "met": false
+          "met": true
         }
       ],
       "met": 1,
@@ -203,7 +210,7 @@
   },
   "alerts": [
     {
-      "text": "Bollinger Bands str\u00e2nse \u2014 mi\u0219care iminent\u0103 (direc\u021bie necunoscut\u0103)",
+      "text": "Deschidere US \u00een 19min \u2014 volatilitate crescut\u0103 probabil\u0103",
       "severity": "amber"
     }
   ]
