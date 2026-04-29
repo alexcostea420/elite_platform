@@ -12,6 +12,7 @@ import {
   getVerdictCopy,
 } from "@/lib/data/risk-score-data";
 import type { RiskScoreData, RiskScoreComponent } from "@/lib/trading-data";
+import { RiskScoreHistoryChart } from "@/components/dashboard/risk-score-history-chart";
 
 /* ────────────────────────────────────────────────────────────
    Helpers (mirrored from previous page.tsx)
@@ -591,6 +592,11 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
 
         {/* ─── 0. VERDICT HERO (NEW) ─── */}
         <VerdictHero decision={riskScore.decision} score={riskScore.score} conviction={riskScore.conviction} />
+
+        {/* ─── 0.5 HISTORICAL CHART ─── */}
+        <Section id="history" title="Istoric scor" icon="📈" defaultOpen={true}>
+          <RiskScoreHistoryChart />
+        </Section>
 
         {/* ─── 1. HERO GAUGE ─── */}
         <Section id="hero" title="Scor agregat" icon="🎯">
