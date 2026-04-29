@@ -147,10 +147,41 @@ export function PortfolioDashboard() {
     [transactions, loadAll],
   );
 
+  const advancedStats = useMemo(() => {
+    const withPnl = holdings.filter((h) => h.pnlUsd != null && h.pnlPct != null);
+    const winners = withPnl.filter((h) => (h.pnlUsd ?? 0) > 0);
+    const losers = withPnl.filter((h) => (h.pnlUsd ?? 0) < 0);
+    const sortedByPnlPct = [...withPnl].sort(
+      (a, b) => (b.pnlPct ?? 0) - (a.pnlPct ?? 0),
+    );
+    const best = sortedByPnlPct[0] ?? null;
+    const worst = sortedByPnlPct[sortedByPnlPct.length - 1] ?? null;
+
+    let cryptoValue = 0;
+    let stocksValue = 0;
+    for (const h of holdings) {
+      const v = h.currentValueUsd ?? 0;
+      if (h.asset.type === "crypto") cryptoValue += v;
+      else stocksValue += v;
+    }
+    const totalValue = cryptoValue + stocksValue;
+    const cryptoPct = totalValue > 0 ? (cryptoValue / totalValue) * 100 : 0;
+    const stocksPct = totalValue > 0 ? (stocksValue / totalValue) * 100 : 0;
+
+    return {
+      winners: winners.length,
+      losers: losers.length,
+      best,
+      worst,
+      cryptoPct,
+      stocksPct,
+    };
+  }, [holdings]);
+
   const stats = useMemo(
     () => [
       {
-        label: "Investit",
+        label: "Investiție inițială",
         value: fmtUsd(totals.totalCostUsd, { compact: true }),
         tone: "neutral" as const,
       },
@@ -188,6 +219,35 @@ export function PortfolioDashboard() {
           <StatCard key={s.label} {...s} />
         ))}
       </section>
+
+      {holdings.length > 0 && !loading ? (
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <MiniCard
+            label="Câștigătoare"
+            value={`${advancedStats.winners} / ${holdings.length}`}
+            tone="pos"
+          />
+          <MiniCard
+            label="În pierdere"
+            value={`${advancedStats.losers} / ${holdings.length}`}
+            tone={advancedStats.losers > 0 ? "neg" : "neutral"}
+          />
+          <MiniCard
+            label="Cea mai bună"
+            value={
+              advancedStats.best
+                ? `${advancedStats.best.asset.symbol} ${fmtPct(advancedStats.best.pnlPct ?? 0)}`
+                : "—"
+            }
+            tone="pos"
+          />
+          <MiniCard
+            label="Mix Crypto / Stocks"
+            value={`${advancedStats.cryptoPct.toFixed(0)}% / ${advancedStats.stocksPct.toFixed(0)}%`}
+            tone="neutral"
+          />
+        </section>
+      ) : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-xs text-slate-500">
@@ -269,6 +329,25 @@ function StatCard({
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <p className="text-[10px] uppercase tracking-wider text-slate-500">{label}</p>
       <p className={`mt-1 font-data text-2xl font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+
+function MiniCard({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "pos" | "neg" | "neutral";
+}) {
+  const color =
+    tone === "pos" ? "text-emerald-300" : tone === "neg" ? "text-rose-300" : "text-slate-200";
+  return (
+    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
+      <p className="text-[10px] uppercase tracking-wider text-slate-500">{label}</p>
+      <p className={`mt-0.5 font-data text-base font-bold tabular-nums ${color}`}>{value}</p>
     </div>
   );
 }
