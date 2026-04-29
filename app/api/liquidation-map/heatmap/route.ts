@@ -7,7 +7,22 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 const HOURS = 168; // 7 days × 24h
-const BUCKET_SPAN_PCT = 0.12; // build buckets across ±12% from current price
+const BUCKET_SPAN_PCT = 0.18; // build buckets across ±18% from current price (covers 5x liq levels)
+const NUM_ROWS = 110; // vertical resolution
+
+// Retail leverage distribution (rough, based on Hyperliquid + CEX surveys)
+const LEVERAGE_TIERS: Array<{ lev: number; weight: number }> = [
+  { lev: 5, weight: 0.32 },
+  { lev: 10, weight: 0.26 },
+  { lev: 20, weight: 0.18 },
+  { lev: 25, weight: 0.10 },
+  { lev: 50, weight: 0.08 },
+  { lev: 75, weight: 0.04 },
+  { lev: 100, weight: 0.02 },
+];
+const MM_RATE = 0.005; // ~0.5% maintenance margin (BTC tier 1)
+// Symmetric kernel applied around each projected liq price (smooths peaks)
+const BLUR_KERNEL = [0.05, 0.15, 0.6, 0.15, 0.05];
 
 type Kline = {
   t: number;
@@ -102,7 +117,7 @@ async function fetchLSNow(): Promise<{ ls_ratio: number } | null> {
   return Number.isFinite(r) ? { ls_ratio: r } : null;
 }
 
-function buildHeatmap(klines: Kline[], oi: OISnap[]) {
+function buildHeatmap(klines: Kline[], oi: OISnap[], lsRatioNow: number | null) {
   if (klines.length === 0) {
     return null;
   }
@@ -110,12 +125,20 @@ function buildHeatmap(klines: Kline[], oi: OISnap[]) {
   const currentPrice = klines[klines.length - 1].c;
   const minBucket = currentPrice * (1 - BUCKET_SPAN_PCT);
   const maxBucket = currentPrice * (1 + BUCKET_SPAN_PCT);
-  const bucketSize = Math.max(50, Math.round((maxBucket - minBucket) / 80 / 50) * 50); // ~80 rows, snap to $50
-  const numBuckets = Math.ceil((maxBucket - minBucket) / bucketSize);
+  const bucketSize = (maxBucket - minBucket) / NUM_ROWS;
+  const numBuckets = NUM_ROWS;
   const priceBuckets: number[] = [];
   for (let i = 0; i < numBuckets; i++) {
     priceBuckets.push(Math.round(minBucket + i * bucketSize));
   }
+
+  // Long share from LS ratio (ratio = longs / shorts). Clamp to a reasonable band.
+  let longShare = 0.5;
+  if (lsRatioNow != null && Number.isFinite(lsRatioNow) && lsRatioNow > 0) {
+    longShare = lsRatioNow / (lsRatioNow + 1);
+    longShare = Math.max(0.35, Math.min(0.65, longShare));
+  }
+  const shortShare = 1 - longShare;
 
   // Index OI by hour timestamp for join with klines
   const oiByHour = new Map<number, number>();
@@ -129,37 +152,53 @@ function buildHeatmap(klines: Kline[], oi: OISnap[]) {
     new Array(klines.length).fill(0),
   );
 
+  // Helper: stamp weighted cluster around a target liq price using blur kernel
+  const stamp = (priceTarget: number, hourIdx: number, amount: number) => {
+    if (priceTarget < minBucket || priceTarget > maxBucket) return;
+    const center = Math.floor((priceTarget - minBucket) / bucketSize);
+    const half = Math.floor(BLUR_KERNEL.length / 2);
+    for (let k = 0; k < BLUR_KERNEL.length; k++) {
+      const idx = center + (k - half);
+      if (idx < 0 || idx >= numBuckets) continue;
+      grid[idx][hourIdx] += amount * BLUR_KERNEL[k];
+    }
+  };
+
   for (let hi = 0; hi < klines.length; hi++) {
     const k = klines[hi];
     const hourKey = Math.floor(k.t / 3600000) * 3600000;
     const oiUsd = oiByHour.get(hourKey) ?? 0;
     if (oiUsd === 0) continue;
 
-    const lo = Math.max(minBucket, Math.min(k.l, k.h));
-    const hi_ = Math.min(maxBucket, Math.max(k.l, k.h));
-    if (hi_ <= lo) continue;
+    // Use close as the "average opening price" for that hour
+    const refPrice = k.c;
 
-    const startIdx = Math.max(0, Math.floor((lo - minBucket) / bucketSize));
-    const endIdx = Math.min(numBuckets - 1, Math.floor((hi_ - minBucket) / bucketSize));
-    const bucketCount = endIdx - startIdx + 1;
-    if (bucketCount <= 0) continue;
+    for (const tier of LEVERAGE_TIERS) {
+      // Liq distance with maintenance margin. effective = (1 - MM_RATE * lev) / lev ≈ 1/lev - MM_RATE
+      const liqDist = 1 / tier.lev - MM_RATE;
+      if (liqDist <= 0) continue;
 
-    // Volume-weighted: spread OI across the candle's price range, weighted by hourly volume
-    const weight = oiUsd * Math.min(1, k.v / 1000); // dampen huge volumes
-    const perBucket = weight / bucketCount;
+      const longLiq = refPrice * (1 - liqDist);
+      const shortLiq = refPrice * (1 + liqDist);
 
-    for (let pi = startIdx; pi <= endIdx; pi++) {
-      grid[pi][hi] += perBucket;
+      // Activity: weight slightly by hourly volume to reflect new positions opened
+      const activity = 1 + Math.min(2, k.v / Math.max(1, oiUsd / refPrice / 50));
+      const baseAmount = oiUsd * tier.weight * activity;
+
+      stamp(longLiq, hi, baseAmount * longShare);
+      stamp(shortLiq, hi, baseAmount * shortShare);
     }
   }
 
-  // Normalize per global max → 0..1
+  // Normalize per global max → 0..1, then apply gentle log compression so a few mega-clusters
+  // don't wash out the rest.
   let max = 0;
   for (const row of grid) for (const v of row) if (v > max) max = v;
   if (max > 0) {
     for (let i = 0; i < grid.length; i++) {
       for (let j = 0; j < grid[i].length; j++) {
-        grid[i][j] = grid[i][j] / max;
+        const norm = grid[i][j] / max;
+        grid[i][j] = norm > 0 ? Math.pow(norm, 0.55) : 0;
       }
     }
   }
@@ -200,9 +239,9 @@ export async function GET() {
   ]);
 
   if (klines.length === 0) {
-    console.error("[liquidation-map] klines empty — Bybit kline endpoint failed");
+    console.error("[liquidation-map] klines empty — OKX kline endpoint failed");
     return NextResponse.json(
-      { error: "Bybit unavailable (klines empty)", debug: "kline-fetch-failed" },
+      { error: "OKX unavailable (klines empty)", debug: "kline-fetch-failed" },
       { status: 502 },
     );
   }
@@ -210,7 +249,7 @@ export async function GET() {
   const currentPrice = klines[klines.length - 1].c;
   const oi = await fetchOI(currentPrice);
 
-  const heatmap = buildHeatmap(klines, oi);
+  const heatmap = buildHeatmap(klines, oi, ls?.ls_ratio ?? null);
   if (!heatmap) {
     return NextResponse.json({ error: "Could not build heatmap" }, { status: 500 });
   }

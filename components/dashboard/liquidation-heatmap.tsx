@@ -19,12 +19,13 @@ type HeatmapResponse = {
 };
 
 const STOPS = [
-  { v: 0, c: [10, 6, 22] },
-  { v: 0.15, c: [40, 12, 70] },
-  { v: 0.4, c: [120, 26, 110] },
-  { v: 0.65, c: [210, 70, 100] },
-  { v: 0.85, c: [240, 145, 90] },
-  { v: 1, c: [255, 230, 180] },
+  { v: 0, c: [8, 6, 18] },
+  { v: 0.1, c: [30, 14, 60] },
+  { v: 0.3, c: [90, 18, 110] },
+  { v: 0.5, c: [170, 36, 130] },
+  { v: 0.7, c: [230, 90, 90] },
+  { v: 0.85, c: [250, 170, 70] },
+  { v: 1, c: [255, 240, 180] },
 ];
 
 function colorFor(v: number): string {
@@ -117,9 +118,10 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
 
   const numCols = data.candles.length;
   const numRows = data.heatmap.length;
-  const VIEW_W = 1200;
-  const VIEW_H = 540;
-  const cellW = (VIEW_W - PAD_LEFT - PAD_RIGHT) / numCols;
+  const VIEW_W = 1280;
+  const VIEW_H = 700;
+  const SIDE_W = 90; // right-side concentration panel width (in viewport units)
+  const cellW = (VIEW_W - PAD_LEFT - PAD_RIGHT - SIDE_W) / numCols;
   const cellH = (VIEW_H - PAD_TOP - PAD_BOTTOM) / numRows;
 
   // Price → SVG y (price_buckets[0] is lowest price; row 0 should be at bottom of canvas)
@@ -143,6 +145,15 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
       .join(" ");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.candles, cellW]);
+
+  // Right-side concentration: sum density per price row (across all hours)
+  const sideTotals = useMemo(() => {
+    const totals: number[] = data.heatmap.map((row) =>
+      row.reduce((s, v) => s + v, 0),
+    );
+    const max = totals.reduce((m, v) => (v > m ? v : m), 0);
+    return { totals, max };
+  }, [data.heatmap]);
 
   // Y-axis ticks every ~5 buckets
   const yTicks = useMemo(() => {
@@ -177,12 +188,12 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
             Liquidation Pressure · BTC · 7 zile
           </p>
           <h3 className="mt-1 text-lg font-bold text-white sm:text-xl">
-            Unde se acumulează pozițiile cu leverage
+            Unde se lichidează pozițiile cu leverage
           </h3>
-          <p className="mt-1 max-w-xl text-xs text-slate-400">
-            Hartă derivată din Open Interest istoric Binance + volum tranzacționat.
-            Zonele luminoase = clusters dense unde traderii au deschis poziții (potențiale ținte
-            pentru cascade de lichidări).
+          <p className="mt-1 max-w-2xl text-xs text-slate-400">
+            Pentru fiecare oră, distribuim Open Interest pe trepte tipice de leverage (5x, 10x, 25x, 50x, 100x)
+            și marcăm prețurile la care s-ar declanșa lichidările. Bara din dreapta = concentrarea
+            cumulată per nivel de preț. Zonele galben-portocalii = magneți pentru cascade.
           </p>
         </div>
 
@@ -201,32 +212,81 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-white/5 bg-[#06060a]">
+      <div className="overflow-x-auto rounded-xl border border-white/5 bg-[#05050a]">
         <svg
           viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
           preserveAspectRatio="none"
           className="block w-full"
-          style={{ minWidth: "640px", height: "auto", maxHeight: "560px" }}
+          style={{ minWidth: "720px", height: "auto", maxHeight: "720px" }}
         >
+          {/* Background gradient zones (faint guide bands) */}
+          <rect
+            x={PAD_LEFT}
+            y={PAD_TOP}
+            width={VIEW_W - PAD_LEFT - PAD_RIGHT - SIDE_W}
+            height={VIEW_H - PAD_TOP - PAD_BOTTOM}
+            fill="#070611"
+          />
+
           {/* Heatmap cells — bottom-up (row 0 = lowest price = bottom of canvas) */}
           {data.heatmap.map((row, rowIdx) => {
             const y = PAD_TOP + (numRows - 1 - rowIdx) * cellH;
             return row.map((value, colIdx) => {
-              if (value < 0.04) return null; // skip near-empty cells for perf
+              if (value < 0.025) return null;
               const x = PAD_LEFT + colIdx * cellW;
               return (
                 <rect
                   key={`${rowIdx}-${colIdx}`}
                   x={x.toFixed(2)}
                   y={y.toFixed(2)}
-                  width={(cellW + 0.5).toFixed(2)}
-                  height={(cellH + 0.5).toFixed(2)}
+                  width={(cellW + 0.6).toFixed(2)}
+                  height={(cellH + 0.6).toFixed(2)}
                   fill={colorFor(value)}
+                  opacity={0.55 + value * 0.45}
                   shapeRendering="crispEdges"
                 />
               );
             });
           })}
+
+          {/* Right-side concentration panel: total density per price row */}
+          {sideTotals.max > 0 &&
+            sideTotals.totals.map((total, rowIdx) => {
+              const norm = total / sideTotals.max;
+              if (norm < 0.02) return null;
+              const y = PAD_TOP + (numRows - 1 - rowIdx) * cellH;
+              const barW = (SIDE_W - 16) * norm;
+              return (
+                <rect
+                  key={`side-${rowIdx}`}
+                  x={VIEW_W - PAD_RIGHT - SIDE_W + 8}
+                  y={y.toFixed(2)}
+                  width={barW.toFixed(2)}
+                  height={(cellH + 0.6).toFixed(2)}
+                  fill={colorFor(Math.pow(norm, 0.6))}
+                  opacity={0.85}
+                  shapeRendering="crispEdges"
+                />
+              );
+            })}
+          {/* Side panel separator */}
+          <line
+            x1={VIEW_W - PAD_RIGHT - SIDE_W + 4}
+            x2={VIEW_W - PAD_RIGHT - SIDE_W + 4}
+            y1={PAD_TOP}
+            y2={VIEW_H - PAD_BOTTOM}
+            stroke="rgba(255,255,255,0.06)"
+            strokeWidth={1}
+          />
+          <text
+            x={VIEW_W - PAD_RIGHT - SIDE_W + 8}
+            y={PAD_TOP - 2}
+            fill="#64748b"
+            fontSize={9}
+            fontFamily="var(--font-data, monospace)"
+          >
+            CONCENTRARE
+          </text>
 
           {/* Y-axis price labels */}
           {yTicks.map((p) => {
@@ -235,17 +295,17 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
               <g key={`y-${p}`}>
                 <line
                   x1={PAD_LEFT}
-                  x2={VIEW_W - PAD_RIGHT}
+                  x2={VIEW_W - PAD_RIGHT - SIDE_W}
                   y1={y}
                   y2={y}
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke="rgba(255,255,255,0.035)"
                   strokeWidth={1}
                 />
                 <text
                   x={PAD_LEFT - 6}
                   y={y + 3}
                   fill="#64748b"
-                  fontSize={10}
+                  fontSize={11}
                   textAnchor="end"
                   fontFamily="var(--font-data, monospace)"
                 >
@@ -270,12 +330,21 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
             </text>
           ))}
 
-          {/* Candle close path */}
+          {/* Candle close path — drop shadow first for legibility over hot cells */}
           <path
             d={candlePath}
             fill="none"
-            stroke="#10b981"
-            strokeWidth={1.4}
+            stroke="#000000"
+            strokeWidth={3.6}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            opacity={0.55}
+          />
+          <path
+            d={candlePath}
+            fill="none"
+            stroke="#5eead4"
+            strokeWidth={1.6}
             strokeLinejoin="round"
             strokeLinecap="round"
             opacity={0.95}
@@ -284,20 +353,30 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
           {/* Current price marker */}
           <line
             x1={PAD_LEFT}
-            x2={VIEW_W - PAD_RIGHT}
+            x2={VIEW_W - PAD_RIGHT - SIDE_W}
             y1={currentY}
             y2={currentY}
             stroke="#10b981"
-            strokeWidth={1}
-            strokeDasharray="4 4"
-            opacity={0.7}
+            strokeWidth={1.2}
+            strokeDasharray="6 4"
+            opacity={0.85}
+          />
+          <rect
+            x={VIEW_W - PAD_RIGHT - SIDE_W - 56}
+            y={currentY - 11}
+            width={52}
+            height={16}
+            rx={3}
+            fill="#10b981"
+            opacity={0.95}
           />
           <text
-            x={VIEW_W - PAD_RIGHT - 4}
-            y={currentY - 4}
-            fill="#10b981"
-            fontSize={10}
-            textAnchor="end"
+            x={VIEW_W - PAD_RIGHT - SIDE_W - 30}
+            y={currentY + 1}
+            fill="#04111a"
+            fontSize={11}
+            fontWeight="700"
+            textAnchor="middle"
             fontFamily="var(--font-data, monospace)"
           >
             {formatPrice(data.current_price)}
@@ -311,8 +390,8 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
           <Legend />
         </div>
         <p className="text-[10px] text-slate-600">
-          Surse: Binance Futures (klines + OI hist + funding + L/S). Actualizat la fiecare
-          încărcare a paginii.
+          Surse: OKX (klines + OI USD + funding + L/S). Levereje asumate: 5/10/20/25/50/75/100x.
+          Maintenance margin ≈ 0.5%. Actualizat la fiecare încărcare a paginii.
         </p>
       </div>
     </section>
