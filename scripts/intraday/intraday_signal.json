@@ -1,20 +1,20 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-29T20:10:08.983336+00:00",
-  "btc_price": 75648.23,
-  "btc_change_24h": -0.932,
+  "timestamp": "2026-04-29T20:35:08.339421+00:00",
+  "btc_price": 75663.78,
+  "btc_change_24h": -0.992,
   "btc_high_24h": 77904.93,
   "btc_low_24h": 74937.52,
-  "btc_volume_24h_usd": 1359104139.994814,
-  "score": 46,
+  "btc_volume_24h_usd": 1372378619.883031,
+  "score": 44,
   "bias": "NEUTRU",
   "bias_text": "F\u0103r\u0103 edge clar \u2014 a\u0219teapt\u0103 setup mai curat",
   "conviction": "LOW",
   "components": {
     "rsi_multi_tf": {
-      "raw": 0.04,
+      "raw": 0.029,
       "weight": 0.18,
-      "contribution": 0.007
+      "contribution": 0.005
     },
     "macd_1h": {
       "raw": -0.2,
@@ -27,7 +27,7 @@
       "contribution": -0.1
     },
     "pivots": {
-      "raw": -0.329,
+      "raw": -0.323,
       "weight": 0.07,
       "contribution": -0.023
     },
@@ -47,9 +47,9 @@
       "contribution": 0.001
     },
     "taker": {
-      "raw": 0.2,
+      "raw": -0.4,
       "weight": 0.08,
-      "contribution": 0.016
+      "contribution": -0.032
     },
     "whale_flow": {
       "raw": 0.0,
@@ -63,24 +63,24 @@
     }
   },
   "indicators": {
-    "rsi_15m": 41.7,
-    "rsi_1h": 35.2,
-    "rsi_4h": 38.9,
-    "rsi_1d": 55.7,
+    "rsi_15m": 43.6,
+    "rsi_1h": 36.4,
+    "rsi_4h": 39.4,
+    "rsi_1d": 55.8,
     "macd_1h": {
-      "macd": -285.045737556371,
-      "signal": -110.99961232435103,
-      "hist": -174.04612523202,
+      "macd": -280.1796406902722,
+      "signal": -110.02639295113127,
+      "hist": -170.15324773914094,
       "hist_prev": -181.179424711924
     },
-    "atr_1h": 521.75,
+    "atr_1h": 526.778571428571,
     "bb_1h": {
-      "upper": 78020.02458537876,
-      "lower": 75274.14541462125,
-      "sma": 76647.085,
-      "width_pct": 3.582496543420424
+      "upper": 78013.80974901459,
+      "lower": 75286.46025098543,
+      "sma": 76650.13500000001,
+      "width_pct": 3.5581796405566113
     },
-    "vwap": 76493.79783902301,
+    "vwap": 76477.7364385674,
     "pivots": {
       "pivot": 76461.23333333334,
       "r1": 77286.86666666667,
@@ -108,15 +108,15 @@
       "ratio": 1.0496
     },
     "taker_ratio": {
-      "buy_vol": 3445.1620000000003,
-      "sell_vol": 3276.834,
-      "ratio": 1.051369095901715
+      "buy_vol": 3240.075,
+      "sell_vol": 3759.5009999999997,
+      "ratio": 0.8618364511673224
     }
   },
   "whale_flow_6h": {
-    "long_usd": 62756834.42999999,
-    "short_usd": 11329050.0,
-    "net_usd": 51427784.42999999,
+    "long_usd": 62851559.21,
+    "short_usd": 11346150.0,
+    "net_usd": 51505409.21,
     "fill_count": 0,
     "smart_long_pct": 84.7,
     "signal": "BULLISH"
@@ -128,13 +128,13 @@
   },
   "volatility": {
     "label": "normal\u0103",
-    "atr_pct": 0.6897054960836493,
+    "atr_pct": 0.6962096942930568,
     "level": "normal"
   },
   "session": {
     "active": "US",
     "next": "Asia",
-    "minutes_to_next": 230
+    "minutes_to_next": 205
   },
   "setups": {
     "long": {

@@ -79,17 +79,22 @@ export type RiskScoreData = {
   derivatives: {
     funding_rate: number;
     funding_pct: number;
+    funding_pct_now?: number;
     oi_value: number;
-    oi_delta_pct: number;
+    oi_delta_pct?: number;
+    oi_delta_pct_7d?: number;
     ls_ratio: number;
+    ls_ratio_now?: number;
     long_pct: number;
     short_pct: number;
     taker_buy_vol: number;
     taker_sell_vol: number;
     taker_ratio: number;
+    taker_ratio_now?: number;
     basis_pct: number;
     spot_price: number;
     futures_price: number;
+    timeframe?: string;
   };
   indicators: Record<string, unknown>;
   fear_greed: { value: number; label: string };

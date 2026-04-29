@@ -1078,9 +1078,14 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                 viewport={{ once: true }}
                 transition={{ duration: 0.4 }}
               >
-                <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  Derivate (detalii)
-                </h3>
+                <div className="mb-4 flex items-baseline justify-between">
+                  <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    Derivate — medie 7 zile
+                  </h3>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-600">
+                    {deriv.timeframe ?? "1d (7-day avg)"}
+                  </span>
+                </div>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                   <div>
                     <p className="text-xs text-slate-500">Open Interest</p>
@@ -1089,18 +1094,25 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                     </p>
                     <p
                       className={`text-xs ${
-                        safeNum(deriv.oi_delta_pct) >= 0 ? "text-emerald-400" : "text-red-400"
+                        safeNum(deriv.oi_delta_pct_7d ?? deriv.oi_delta_pct) >= 0
+                          ? "text-emerald-400"
+                          : "text-red-400"
                       }`}
                     >
-                      {safeNum(deriv.oi_delta_pct) >= 0 ? "+" : ""}
-                      {safeNum(deriv.oi_delta_pct).toFixed(2)}% 4H
+                      {safeNum(deriv.oi_delta_pct_7d ?? deriv.oi_delta_pct) >= 0 ? "+" : ""}
+                      {safeNum(deriv.oi_delta_pct_7d ?? deriv.oi_delta_pct).toFixed(2)}% 7D
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Ratio L/S</p>
+                    <p className="text-xs text-slate-500">L/S 7d</p>
                     <p className="font-data text-lg font-bold text-white">
                       {safeNum(deriv.ls_ratio).toFixed(2)}
                     </p>
+                    {deriv.ls_ratio_now != null && (
+                      <p className="text-[10px] text-slate-500">
+                        acum: {safeNum(deriv.ls_ratio_now).toFixed(2)}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <p className="text-xs text-slate-500">Basis</p>
@@ -1113,10 +1125,15 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Taker Buy/Sell</p>
+                    <p className="text-xs text-slate-500">Taker 7d</p>
                     <p className="font-data text-lg font-bold text-white">
                       {safeNum(deriv.taker_ratio).toFixed(2)}
                     </p>
+                    {deriv.taker_ratio_now != null && (
+                      <p className="text-[10px] text-slate-500">
+                        acum: {safeNum(deriv.taker_ratio_now).toFixed(2)}
+                      </p>
+                    )}
                   </div>
                 </div>
               </motion.div>
