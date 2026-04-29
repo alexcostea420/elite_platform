@@ -2,6 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import {
+  CalculatorPanel,
+  type CalculatorDraft,
+} from "@/components/journal/calculator-panel";
+
 type Trade = {
   id: string;
   symbol: string;
@@ -18,19 +23,6 @@ type Trade = {
   status: "open" | "win" | "loss" | "breakeven";
   pnl: number | null; // computed when closed
   rMultiple: number | null;
-  createdAt: string;
-};
-
-type CalculatorDraft = {
-  symbol: string;
-  direction: "long" | "short";
-  entry: number;
-  stop: number;
-  target: number | null;
-  qty: number;
-  riskAmount: number;
-  rrPlanned: number | null;
-  leverage: number;
   createdAt: string;
 };
 
@@ -110,23 +102,13 @@ export function JournalClient() {
 
   useEffect(() => {
     setTrades(loadTrades());
-    // Calculator hand-off
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("from") === "calculator") {
-        try {
-          const raw = sessionStorage.getItem("journal_draft");
-          if (raw) {
-            setDraftFromCalc(JSON.parse(raw));
-            sessionStorage.removeItem("journal_draft");
-            setShowAdd(true);
-          }
-        } catch {
-          // ignore
-        }
-      }
-    }
   }, []);
+
+  const openDraftFromCalc = (draft: CalculatorDraft) => {
+    setEditId(null);
+    setDraftFromCalc(draft);
+    setShowAdd(true);
+  };
 
   const upsertTrade = (t: Trade) => {
     setTrades((prev) => {
@@ -164,6 +146,8 @@ export function JournalClient() {
 
   return (
     <div className="space-y-6">
+      <CalculatorPanel onSaveAsDraft={openDraftFromCalc} />
+
       <StatsPanel stats={stats} totalTrades={filtered.length} />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
