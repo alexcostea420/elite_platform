@@ -33,12 +33,18 @@ async function fetchJson<T>(url: string): Promise<T | null> {
   }
 }
 
+type BybitEnvelope<T> = { retCode: number; result?: { list?: T } };
+
 async function fetchKlines(): Promise<Kline[]> {
-  const data = await fetchJson<unknown[]>(
-    `https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1h&limit=${HOURS}`,
+  const data = await fetchJson<BybitEnvelope<string[][]>>(
+    `https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=60&limit=${HOURS}`,
   );
-  if (!Array.isArray(data)) return [];
-  return data
+  const rows = data?.result?.list;
+  if (!Array.isArray(rows)) return [];
+  // Bybit returns newest-first; reverse to oldest-first
+  return rows
+    .slice()
+    .reverse()
     .map((row) => {
       if (!Array.isArray(row) || row.length < 7) return null;
       return {
@@ -53,35 +59,45 @@ async function fetchKlines(): Promise<Kline[]> {
     .filter((k): k is Kline => k !== null && Number.isFinite(k.o));
 }
 
-async function fetchOI(): Promise<OISnap[]> {
-  const data = await fetchJson<Array<{ timestamp: number; sumOpenInterestValue: string }>>(
-    `https://fapi.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=1h&limit=${HOURS}`,
+async function fetchOI(currentPrice: number): Promise<OISnap[]> {
+  const data = await fetchJson<BybitEnvelope<Array<{ openInterest: string; timestamp: string }>>>(
+    `https://api.bybit.com/v5/market/open-interest?category=linear&symbol=BTCUSDT&intervalTime=1h&limit=${HOURS}`,
   );
-  if (!Array.isArray(data)) return [];
-  return data
+  const rows = data?.result?.list;
+  if (!Array.isArray(rows)) return [];
+  // Bybit returns newest-first and OI in BTC units → convert to USD with current price
+  return rows
+    .slice()
+    .reverse()
     .map((row) => ({
       t: Number(row.timestamp),
-      oi_usd: Number(row.sumOpenInterestValue),
+      oi_usd: Number(row.openInterest) * currentPrice,
     }))
     .filter((s) => Number.isFinite(s.oi_usd) && s.oi_usd > 0);
 }
 
 async function fetchFundingNow(): Promise<{ funding_pct: number } | null> {
-  const data = await fetchJson<Array<{ fundingRate: string }>>(
-    `https://fapi.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&limit=1`,
+  const data = await fetchJson<BybitEnvelope<Array<{ fundingRate: string }>>>(
+    `https://api.bybit.com/v5/market/funding/history?category=linear&symbol=BTCUSDT&limit=1`,
   );
-  if (!Array.isArray(data) || data.length === 0) return null;
-  const r = Number(data[0].fundingRate);
+  const rows = data?.result?.list;
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  const r = Number(rows[0].fundingRate);
   return Number.isFinite(r) ? { funding_pct: r * 100 } : null;
 }
 
 async function fetchLSNow(): Promise<{ ls_ratio: number } | null> {
-  const data = await fetchJson<Array<{ longShortRatio: string }>>(
-    `https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=1h&limit=1`,
+  const data = await fetchJson<
+    BybitEnvelope<Array<{ buyRatio: string; sellRatio: string }>>
+  >(
+    `https://api.bybit.com/v5/market/account-ratio?category=linear&symbol=BTCUSDT&period=1h&limit=1`,
   );
-  if (!Array.isArray(data) || data.length === 0) return null;
-  const r = Number(data[0].longShortRatio);
-  return Number.isFinite(r) ? { ls_ratio: r } : null;
+  const rows = data?.result?.list;
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  const buy = Number(rows[0].buyRatio);
+  const sell = Number(rows[0].sellRatio);
+  if (!Number.isFinite(buy) || !Number.isFinite(sell) || sell <= 0) return null;
+  return { ls_ratio: buy / sell };
 }
 
 function buildHeatmap(klines: Kline[], oi: OISnap[]) {
@@ -174,16 +190,19 @@ export async function GET() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const [klines, oi, funding, ls] = await Promise.all([
+  // Klines first — needed to get current price for OI USD conversion
+  const [klines, funding, ls] = await Promise.all([
     fetchKlines(),
-    fetchOI(),
     fetchFundingNow(),
     fetchLSNow(),
   ]);
 
   if (klines.length === 0) {
-    return NextResponse.json({ error: "Binance unavailable" }, { status: 502 });
+    return NextResponse.json({ error: "Bybit unavailable" }, { status: 502 });
   }
+
+  const currentPrice = klines[klines.length - 1].c;
+  const oi = await fetchOI(currentPrice);
 
   const heatmap = buildHeatmap(klines, oi);
   if (!heatmap) {
