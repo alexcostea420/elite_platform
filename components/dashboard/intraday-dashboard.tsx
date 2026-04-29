@@ -108,14 +108,14 @@ export default function IntradayDashboard({
   const macdHist = ind.macd_1h?.hist ?? 0;
 
   return (
-    <main className="pb-12 pt-[72px] md:pt-20">
+    <main className="pb-12 pt-[56px] md:pt-[76px]">
       {/* ━━ STICKY HEADER ━━ */}
       <div
-        className="sticky top-[56px] z-30 border-b backdrop-blur-xl"
+        className="sticky top-[56px] z-30 border-b backdrop-blur-xl md:top-[76px]"
         style={{ borderColor: `${bs.color}33`, background: `linear-gradient(90deg, ${bs.color}10, transparent)` }}
       >
         <Container>
-          <div className="flex h-[58px] items-center justify-between gap-2">
+          <div className="flex h-[52px] items-center justify-between gap-2 md:h-[58px]">
             <div className="flex items-center gap-2 sm:gap-3">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: bs.color }} />
@@ -246,10 +246,10 @@ export default function IntradayDashboard({
 
         {/* ━━ CHART ━━ */}
         <section
-          className="glass-card mt-4 overflow-hidden p-1 md:p-2"
+          className="glass-card mt-4 overflow-hidden p-2 md:p-3"
           style={{ boxShadow: `0 0 30px ${bs.glow}` }}
         >
-          <div className="h-[42vh] min-h-[320px] md:h-[55vh] md:min-h-[440px]">
+          <div className="h-[460px] sm:h-[520px] md:h-[600px] lg:h-[640px]">
             <TradingViewChart />
           </div>
         </section>

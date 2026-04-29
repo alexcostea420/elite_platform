@@ -3,26 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 
 export function TradingViewChart() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
   const [showZones, setShowZones] = useState(false);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const host = widgetRef.current;
+    if (!host) return;
 
     const studies: string[] = [];
     if (showZones) {
-      // MA 50 + MA 200 + VWAP - useful for intraday levels
       studies.push("MAExp@tv-basicstudies");
       studies.push("VWAP@tv-basicstudies");
     }
 
-    const script = document.createElement("script");
-    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-    script.type = "text/javascript";
-    script.async = true;
-    script.innerHTML = JSON.stringify({
-      width: "100%",
-      height: "100%",
+    const config = {
+      autosize: true,
       symbol: "BINANCE:BTCUSDT",
       interval: "15",
       timezone: "Europe/Bucharest",
@@ -39,37 +34,45 @@ export function TradingViewChart() {
       allow_symbol_change: true,
       support_host: "https://www.tradingview.com",
       studies,
-    });
+    };
 
-    containerRef.current.innerHTML = "";
-    containerRef.current.appendChild(script);
+    while (host.firstChild) host.removeChild(host.firstChild);
+    const slot = document.createElement("div");
+    slot.className = "tradingview-widget-container__widget";
+    slot.style.height = "100%";
+    slot.style.width = "100%";
+    host.appendChild(slot);
+
+    const script = document.createElement("script");
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.type = "text/javascript";
+    script.async = true;
+    script.text = JSON.stringify(config);
+    host.appendChild(script);
   }, [showZones]);
 
   return (
-    <div>
-      <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--text-secondary)]">
-          BTC/USDT - 15 min
+    <div className="flex h-full flex-col">
+      <div className="mb-2 flex items-center justify-between px-1">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 sm:text-xs">
+          BTC/USDT · 15min
         </p>
         <button
-          className={`glass-card rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+          className={`rounded-lg border px-2.5 py-1 text-[10px] font-semibold transition sm:text-xs ${
             showZones
-              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-              : "text-[var(--text-secondary)]"
+              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+              : "border-white/10 bg-white/[0.02] text-slate-400 hover:bg-white/[0.04]"
           }`}
           onClick={() => setShowZones((v) => !v)}
           type="button"
         >
-          {showZones ? "EMA + VWAP ON" : "Indicatori OFF"}
+          {showZones ? "EMA + VWAP" : "Indicatori"}
         </button>
       </div>
       <div
-        className="tradingview-widget-container overflow-hidden rounded-2xl"
-        ref={containerRef}
-        style={{ height: "clamp(400px, 60vh, 700px)", width: "100%", border: "1px solid var(--border-subtle)" }}
-      >
-        <div className="tradingview-widget-container__widget" style={{ height: "100%", width: "100%" }} />
-      </div>
+        ref={widgetRef}
+        className="tradingview-widget-container relative min-h-0 flex-1 overflow-hidden rounded-xl border border-white/5"
+      />
     </div>
   );
 }
