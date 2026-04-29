@@ -98,34 +98,6 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
               >
                 Prelungeste
               </Link>
-              {isAdmin && (
-                <>
-                  <Link
-                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
-                    href="/admin/dashboard"
-                  >
-                    ⚙️ Admin
-                  </Link>
-                  <Link
-                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
-                    href="/admin/invites"
-                  >
-                    ⚙️ Invites
-                  </Link>
-                  <Link
-                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
-                    href="/admin/videos"
-                  >
-                    ⚙️ Videos
-                  </Link>
-                  <Link
-                    className="text-sm font-medium text-amber-400 hover:text-amber-300"
-                    href="/admin/payments"
-                  >
-                    ⚙️ Payments
-                  </Link>
-                </>
-              )}
             </div>
 
             {/* Search + Mobile hamburger + profile */}
@@ -140,6 +112,7 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
                 displayName={userIdentity?.displayName ?? "Membru"}
                 initials={userIdentity?.initials ?? "M"}
                 settingsHref={settingsHref}
+                isAdmin={isAdmin}
               />
             </div>
           </>

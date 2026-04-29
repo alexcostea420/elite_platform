@@ -10,6 +10,7 @@ type ProfileMenuProps = {
   displayName: string;
   initials: string;
   settingsHref: string;
+  isAdmin?: boolean;
 };
 
 export function ProfileMenu({
@@ -17,6 +18,7 @@ export function ProfileMenu({
   displayName,
   initials,
   settingsHref,
+  isAdmin = false,
 }: ProfileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -76,6 +78,43 @@ export function ProfileMenu({
           >
             Setări
           </Link>
+          {isAdmin ? (
+            <>
+              <div className="my-1 border-t border-white/5" />
+              <p className="px-4 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-400/70">
+                Admin
+              </p>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/dashboard"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Admin
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/invites"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Invites
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/videos"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Videos
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/payments"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Payments
+              </Link>
+              <div className="my-1 border-t border-white/5" />
+            </>
+          ) : null}
           <form action={logoutAction}>
             <button
               className="block w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-accent-emerald"
