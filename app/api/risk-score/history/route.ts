@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 const DEFAULT_DAYS = 365;
-const MAX_DAYS = 730;
+const MAX_DAYS = 4000;
 
 export async function GET(request: Request) {
   const supabase = createServerSupabaseClient();
@@ -43,7 +43,8 @@ export async function GET(request: Request) {
     .from("risk_score_history")
     .select("date, total_score, level, btc_price")
     .gte("date", sinceStr)
-    .order("date", { ascending: true });
+    .order("date", { ascending: true })
+    .limit(MAX_DAYS);
 
   if (error) {
     console.error("[risk-score/history]", error.message);

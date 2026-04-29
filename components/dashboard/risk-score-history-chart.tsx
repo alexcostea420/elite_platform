@@ -23,14 +23,18 @@ type HistoryRow = {
 type RangeOption = { label: string; days: number };
 
 const RANGES: RangeOption[] = [
-  { label: "30Z", days: 30 },
   { label: "90Z", days: 90 },
-  { label: "180Z", days: 180 },
   { label: "1A", days: 365 },
+  { label: "2A", days: 730 },
+  { label: "4A", days: 1460 },
+  { label: "Tot", days: 4000 },
 ];
 
-function formatDate(iso: string) {
+function formatDate(iso: string, withYear = false) {
   const d = new Date(iso);
+  if (withYear) {
+    return d.toLocaleDateString("ro-RO", { month: "short", year: "2-digit" });
+  }
   return d.toLocaleDateString("ro-RO", { day: "2-digit", month: "short" });
 }
 
@@ -41,7 +45,7 @@ function formatPrice(value: number | null | undefined) {
 }
 
 export function RiskScoreHistoryChart() {
-  const [range, setRange] = useState<RangeOption>(RANGES[3]);
+  const [range, setRange] = useState<RangeOption>(RANGES[4]);
   const [rows, setRows] = useState<HistoryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -167,7 +171,7 @@ export function RiskScoreHistoryChart() {
               <XAxis
                 dataKey="date"
                 tick={{ fill: "#64748b", fontSize: 10 }}
-                tickFormatter={formatDate}
+                tickFormatter={(v) => formatDate(v as string, range.days > 365)}
                 minTickGap={40}
                 axisLine={{ stroke: "rgba(255,255,255,0.05)" }}
                 tickLine={false}
