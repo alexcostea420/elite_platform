@@ -39,9 +39,11 @@ export default function ConfidentialitatePage() {
               </p>
               <ul className="mt-2 list-none space-y-1 pl-0">
                 <li>
-                  <strong className="text-white">PFA Costea Alexandru-Marian</strong>
+                  <strong className="text-white">Costea Cristian-Alexandru PFA</strong>
                 </li>
-                <li>CUI: [Se va completa după înregistrare]</li>
+                <li>CUI: 54517198</li>
+                <li>Nr. registrul comerțului: F2026020803003</li>
+                <li>Sediu: B-dul Bucureștii Noi 136, parter, ap. 5, Sector 1, București</li>
                 <li>
                   Email:{" "}
                   <a
@@ -247,7 +249,7 @@ export default function ConfidentialitatePage() {
                 </a>
               </p>
               <p className="mt-1 text-sm text-slate-500">
-                PFA Costea Alexandru-Marian - Armata de Traderi
+                Costea Cristian-Alexandru PFA - Armata de Traderi
               </p>
             </Section>
           </div>

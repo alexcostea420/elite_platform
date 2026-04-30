@@ -38,11 +38,12 @@ export default function TermeniPage() {
               </p>
               <ul className="list-disc space-y-1 pl-5 mt-2">
                 <li>
-                  <strong>PFA Costea Alexandru-Marian</strong>
+                  <strong>Costea Cristian-Alexandru PFA</strong>
                 </li>
-                <li>Cod CAEN: 6312 – Activități ale portalurilor web</li>
-                <li>CUI: [Se va completa după înregistrare]</li>
-                <li>Sediu: [Se va completa după înregistrare]</li>
+                <li>Cod CAEN: 6391 – Activități ale portalurilor web</li>
+                <li>CUI: 54517198</li>
+                <li>Nr. registrul comerțului: F2026020803003</li>
+                <li>Sediu: B-dul Bucureștii Noi 136, parter, ap. 5, Sector 1, București</li>
                 <li>
                   Email:{" "}
                   <a
