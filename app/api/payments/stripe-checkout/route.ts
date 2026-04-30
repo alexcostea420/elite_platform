@@ -71,9 +71,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ clientSecret: session.client_secret });
   } catch (error) {
-    console.error("Stripe checkout error:", error);
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error("Stripe checkout error:", detail, error);
     return NextResponse.json(
-      { error: "Eroare la crearea sesiunii de plată." },
+      { error: "Eroare la crearea sesiunii de plată.", detail },
       { status: 500 },
     );
   }
