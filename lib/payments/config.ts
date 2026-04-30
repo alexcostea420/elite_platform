@@ -45,7 +45,7 @@ export function getPaymentConfig(chain: PaymentChain = "ARB") {
     walletAddress: wallet,
     chain,
     currency: "USDT" as PaymentCurrency,
-    paymentTimeoutMinutes: 30,
+    paymentTimeoutMinutes: 60,
     basePrices: {
       "30_days": 49,
       "90_days": 137,
@@ -60,7 +60,7 @@ export function getPaymentConfig(chain: PaymentChain = "ARB") {
       "bot_monthly": 98,
       "bot_monthly_elite": 45,
     } as Record<string, number>,
-    toleranceUsd: 0.2,
+    toleranceUsd: 0.5,
   };
 }
 

@@ -32,7 +32,7 @@ TOKENS = {
 ARBISCAN_API = "https://api.etherscan.io/v2/api"
 ARBISCAN_CHAIN_ID = "42161"  # Arbitrum One
 CHECK_INTERVAL = 30
-AMOUNT_TOLERANCE = 0.20  # $0.20 tolerance (exchange fees)
+AMOUNT_TOLERANCE = 0.50  # $0.50 tolerance (CEX fees + USDT/USDC stablecoin drift)
 
 
 def load_env():

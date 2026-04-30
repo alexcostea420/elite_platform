@@ -215,8 +215,9 @@ export async function confirmPayment(
     return { success: false, error: "Payment window expired." };
   }
 
-  // Validate amount matches expected (tolerance $0.20)
-  const tolerance = 0.2;
+  // Validate amount matches expected (tolerance $0.50 — covers stablecoin price drift,
+  // currency mismatches like USDT-vs-USDC, and CEX withdrawal fees)
+  const tolerance = 0.5;
   if (Math.abs(amountReceived - payment.reference_amount) > tolerance) {
     console.error(`Payment amount mismatch: expected ${payment.reference_amount}, received ${amountReceived}`);
     return { success: false, error: "Amount mismatch." };
