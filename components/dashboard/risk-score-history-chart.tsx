@@ -187,8 +187,12 @@ export function RiskScoreHistoryChart() {
               <YAxis
                 yAxisId="price"
                 orientation="right"
+                scale="log"
+                domain={["dataMin", "dataMax"]}
+                allowDataOverflow
                 tick={{ fill: "#475569", fontSize: 10 }}
                 tickFormatter={formatPrice}
+                ticks={[5000, 10000, 25000, 50000, 100000]}
                 axisLine={false}
                 tickLine={false}
               />
