@@ -185,13 +185,14 @@ For YouTube recordings. Add ?blur=1 to URL:
 - Prices, sparklines, % remain visible (hook for viewers)
 
 ## DESIGN SYSTEM
+- **Skill:** Use `page-design-system` skill before ANY UI/page/dashboard work — enforces theme + branding + layout + animations + fonts + sizes + mobile (375px) checklist. Mandatory pre-delivery walk-through.
 - Background: #09090B (crypto-dark)
 - Accent: #10B981 (emerald)
-- Glass cards: bg-card with backdrop-blur, subtle borders
-- Font: General Sans (headings), JetBrains Mono (data/numbers)
-- Animations: Framer Motion, price-flash, live-dot pulse, skeleton shimmer
-- All numbers: tabular-nums class for alignment
-- Mobile-first responsive
+- Glass cards: `glass-card` class (never raw bg-white/5)
+- Font: General Sans (Fontshare loads 400/500/600/700 only — **never use `font-black`**, max is `font-bold`). JetBrains Mono / `font-data` for numbers
+- Animations: shared classes in globals.css (`card-hover`, `animate-fade-in-up`, `live-dot`, `price-flash`, `skeleton`). Framer Motion only for orchestrated/scroll/layout animations
+- All numbers: `tabular-nums` + `font-mono` or `font-data`
+- Mobile-first: every page must work at 375px (iPhone SE/mini) — no horizontal scroll, tap targets ≥44px
 
 ## CODING RULES
 - Never touch ~/trading-bot/ code
