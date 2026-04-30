@@ -500,7 +500,7 @@ function CompareAllTable({
               <th className="px-3 py-2 sm:px-4">Alternativă</th>
               <th className="px-3 py-2 text-right sm:px-4">Valoare azi</th>
               <th className="px-3 py-2 text-right sm:px-4">Randament</th>
-              <th className="px-3 py-2 text-right sm:px-4">vs Alegere</th>
+              <th className="px-3 py-2 text-right sm:px-4">Avantajul tău</th>
             </tr>
           </thead>
           <tbody>
@@ -531,9 +531,12 @@ function CompareAllTable({
                       );
                     }
                     const pct = r.pnlPct ?? 0;
-                    const delta = r.deltaValueUsd ?? 0;
+                    // "Avantajul tău" = how much MORE your choice currently is worth vs the alternative.
+                    // Positive number = your choice was better (green, good for you).
+                    // Negative number = the alternative would have done better (red, missed gain).
+                    const advantage = -(r.deltaValueUsd ?? 0);
                     const pctColor = pct > 0 ? "text-emerald-400" : pct < 0 ? "text-rose-400" : "text-slate-300";
-                    const deltaColor = delta > 0 ? "text-rose-300" : delta < 0 ? "text-emerald-300" : "text-slate-400";
+                    const advColor = advantage > 0 ? "text-emerald-300" : advantage < 0 ? "text-rose-300" : "text-slate-400";
                     return (
                       <tr key={r.altKey} className="border-b border-white/5 last:border-0">
                         <td className="px-3 py-2.5 sm:px-4">
@@ -546,9 +549,9 @@ function CompareAllTable({
                         <td className={`px-3 py-2.5 text-right font-data tabular-nums sm:px-4 ${pctColor}`}>
                           {fmtPct(pct)}
                         </td>
-                        <td className={`px-3 py-2.5 text-right font-data tabular-nums sm:px-4 ${deltaColor}`}>
-                          {delta > 0 ? "+" : ""}
-                          {fmtUsd(delta)}
+                        <td className={`px-3 py-2.5 text-right font-data tabular-nums sm:px-4 ${advColor}`}>
+                          {advantage > 0 ? "+" : ""}
+                          {fmtUsd(advantage)}
                         </td>
                       </tr>
                     );
@@ -560,8 +563,8 @@ function CompareAllTable({
         </table>
       </div>
       <div className="border-t border-white/10 px-4 py-2 text-[11px] text-slate-500">
-        Verde la &ldquo;vs Alegere&rdquo; = ai bătut alternativa. Roșu = alternativa ar fi adus
-        mai mult.
+        Verde la &ldquo;Avantajul tău&rdquo; = alegerea ta valorează mai mult azi. Roșu =
+        alternativa ar fi adus mai mult.
       </div>
     </div>
   );
