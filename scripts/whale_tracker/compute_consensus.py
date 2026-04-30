@@ -72,11 +72,11 @@ def main():
             assets[asset]["shorts"].append(leverage)
             assets[asset]["short_notional"] += notional
 
-    # Clear old consensus
-    supabase_req("DELETE", "whale_consensus", "asset=neq.___placeholder___")
-
     now_iso = datetime.now(timezone.utc).isoformat()
 
+    # Build all rows, then upsert in one POST + delete only stale assets.
+    # (Old approach: DELETE everything + N POSTs — heavy on disk IO.)
+    rows = []
     for asset, data in sorted(assets.items(), key=lambda x: -(x[1]["long_notional"] + x[1]["short_notional"])):
         long_count = len(data["longs"])
         short_count = len(data["shorts"])
@@ -91,7 +91,7 @@ def main():
         else:
             dominant = "NEUTRAL"
 
-        row = {
+        rows.append({
             "asset": asset,
             "long_count": long_count,
             "short_count": short_count,
@@ -100,8 +100,15 @@ def main():
             "avg_short_leverage": round(avg_short_lev, 1) if avg_short_lev else None,
             "dominant_side": dominant,
             "updated_at": now_iso,
-        }
-        supabase_req("POST", "whale_consensus", "on_conflict=asset", row)
+        })
+
+    if rows:
+        supabase_req("POST", "whale_consensus", "on_conflict=asset", rows)
+
+    # Delete stale assets (no longer in current top-20 positions)
+    if assets:
+        current_assets = ",".join(f'"{a}"' for a in assets.keys())
+        supabase_req("DELETE", "whale_consensus", f"asset=not.in.({current_assets})")
 
     log(f"SUMMARY: consensus computed for {len(assets)} assets")
     log("compute_consensus done.")

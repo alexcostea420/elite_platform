@@ -129,7 +129,9 @@ def main():
         # Mark old positions as not current
         supabase_req("PATCH", "whale_positions", f"address=eq.{addr}&is_current=eq.true", {"is_current": False})
 
-        # Insert new positions
+        # Build new positions in a batch (one POST instead of N)
+        position_rows = []
+        history_rows = []
         for p in positions:
             pos = p.get("position", p)
             coin = pos.get("coin", "")
@@ -155,13 +157,16 @@ def main():
                 "notional_usd": round(notional, 2),
                 "snapshot_at": now_iso, "is_current": True,
             }
-            supabase_req("POST", "whale_positions", "", row)
+            position_rows.append(row)
 
-            # Also append to history
             hist_row = dict(row)
             del hist_row["is_current"]
-            supabase_req("POST", "whale_positions_history", "", hist_row)
+            history_rows.append(hist_row)
             total_positions += 1
+
+        if position_rows:
+            supabase_req("POST", "whale_positions", "", position_rows)
+            supabase_req("POST", "whale_positions_history", "", history_rows)
 
         # 2. Fetch fills
         try:
@@ -174,6 +179,7 @@ def main():
 
         known_tid = last_tids.get(addr, "")
         new_fills = 0
+        fill_rows = []
         for f in fills[:200]:
             tid = str(f.get("tid", ""))
             # Skip fills we already have (they come sorted newest first)
@@ -203,15 +209,18 @@ def main():
             else:
                 dir_simple = direction
 
-            row = {
+            fill_rows.append({
                 "address": addr, "asset": coin, "direction": dir_simple,
                 "price": px, "size": sz, "notional_usd": round(notional, 2),
                 "closed_pnl": float(f.get("closedPnl", "0")),
                 "action_type": action, "filled_at": filled_at, "tid": tid,
-            }
-            supabase_req("POST", "whale_fills", "on_conflict=tid", row)
+            })
             new_fills += 1
             total_fills += 1
+
+        # Batch insert fills (one POST per wallet instead of N)
+        if fill_rows:
+            supabase_req("POST", "whale_fills", "on_conflict=tid", fill_rows)
 
         # Update last_activity
         if fills:
@@ -220,10 +229,16 @@ def main():
                 latest_at = datetime.fromtimestamp(latest_ms / 1000, tz=timezone.utc).isoformat()
                 supabase_req("PATCH", "whale_wallets", f"address=eq.{addr}", {"last_activity": latest_at})
 
-    # Cleanup: delete positions_history older than 90 days
-    cutoff = (now - timedelta(days=90)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    # Cleanup: delete positions_history older than 14 days (was 90)
+    # Reduced retention to cut index/storage IO. 14d covers the dashboard's history charts.
+    cutoff = (now - timedelta(days=14)).strftime("%Y-%m-%dT%H:%M:%SZ")
     supabase_req("DELETE", "whale_positions_history", f"snapshot_at=lt.{cutoff}")
-    log("Cleaned up positions_history older than 90 days")
+    log("Cleaned up positions_history older than 14 days")
+
+    # Cleanup: delete fills older than 30 days. Activity feed only shows recent fills.
+    fill_cutoff = (now - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    supabase_req("DELETE", "whale_fills", f"filled_at=lt.{fill_cutoff}")
+    log("Cleaned up fills older than 30 days")
 
     log(f"SUMMARY: {total_positions} positions, {total_fills} new fills ({skipped_fills} skipped) for {len(wallets)} wallets")
     log("fetch_positions_fills done.")

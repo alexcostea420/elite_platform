@@ -6,6 +6,7 @@ import {
   expireOverdueProfiles,
   expireOverdueSubscriptions,
 } from "@/lib/payments/server";
+import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 /**
  * Cron endpoint to expire pending payments and overdue subscriptions.
@@ -31,6 +32,10 @@ export async function GET(request: NextRequest) {
       expireOverdueProfiles(),
       expireBotSubscriptions(),
     ]);
+
+    // Trim rate_limits rows older than 24h. Cheap, prevents unbounded growth.
+    const service = createServiceRoleSupabaseClient();
+    await service.rpc("trim_rate_limits");
 
     return NextResponse.json({
       success: true,
