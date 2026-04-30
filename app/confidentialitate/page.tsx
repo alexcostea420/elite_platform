@@ -146,11 +146,16 @@ export default function ConfidentialitatePage() {
 
             <Section title="6. Cookies">
               <p>
-                Folosim cookie-uri esențiale pentru autentificare și funcționarea
-                platformei. Stripe poate seta cookie-uri necesare pentru prevenirea
-                fraudei și procesarea plăților. Serviciile terțe (Google Analytics,
-                Meta Pixel) pot seta cookie-uri de urmărire. Poți dezactiva
-                cookie-urile din setările browser-ului tău.
+                Folosim cookie-uri esențiale pentru autentificare și funcționarea platformei.
+              </p>
+              <p className="mt-3">
+                Stripe poate seta cookie-uri necesare pentru prevenirea fraudei și procesarea plăților.
+              </p>
+              <p className="mt-3">
+                Serviciile terțe (Google Analytics, Meta Pixel) pot seta cookie-uri de urmărire.
+              </p>
+              <p className="mt-3">
+                Poți dezactiva cookie-urile din setările browser-ului tău.
               </p>
             </Section>
 

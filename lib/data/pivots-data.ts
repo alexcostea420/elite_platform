@@ -434,7 +434,7 @@ export interface VerdictSummary {
   title: string;
   emoji: string;
   shortDescription: string;
-  longDescription: string;
+  longDescription: string | string[];
   doNow: string[];
   dontDo: string[];
   confidenceScore: number;
@@ -449,7 +449,11 @@ export const CURRENT_VERDICT: VerdictSummary = {
   title: 'ZONĂ DE ACUMULARE',
   emoji: '🎯',
   shortDescription: 'BTC e în zonă de cumpărare istorică. Convergență de 6 indicatori on-chain + ciclu.',
-  longDescription: 'Toate metricile cheie (MVRV Z-Score, Mayer Multiple, Puell Multiple, NUPL, RHODL) arată zonă de bottom de ciclu. Drawdown -47% de la ATH ($126K → $67K) este în linia istorică (-52% la -57% prognozat). Ciclul „1064/364 zile" sugerează bottom-ul în jur de Octombrie 2026.',
+  longDescription: [
+    'Toate metricile cheie (MVRV Z-Score, Mayer Multiple, Puell Multiple, NUPL, RHODL) arată zonă de bottom de ciclu.',
+    'Drawdown -47% de la ATH ($126K → $67K) este în linia istorică (-52% la -57% prognozat).',
+    'Ciclul „1064/364 zile" sugerează bottom-ul în jur de Octombrie 2026.',
+  ],
   doNow: [
     'DCA gradual — nu intra cu tot capitalul deodată',
     'Țintește zone $54K–$60K pentru ofertă agresivă',

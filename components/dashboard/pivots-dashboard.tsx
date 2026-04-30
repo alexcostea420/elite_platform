@@ -114,9 +114,13 @@ function VerdictHero() {
         {v.title}
       </h2>
       <p className={s.verdictDesc}>
-        <span className={s.verdictDescStrong}>{v.shortDescription}</span>{" "}
-        {v.longDescription}
+        <span className={s.verdictDescStrong}>{v.shortDescription}</span>
       </p>
+      {(Array.isArray(v.longDescription) ? v.longDescription : [v.longDescription]).map((line, i) => (
+        <p key={i} className={s.verdictDesc} style={{ marginTop: 10 }}>
+          {line}
+        </p>
+      ))}
 
       <div className={s.verdictMetrics}>
         <div className={s.verdictMetric}>
@@ -1274,8 +1278,10 @@ export default function PivotsDashboard() {
 
         {/* Philosophy */}
         <div className={cx(s.philosophy, s.reveal)}>
-          <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare. Este un <strong>sistem de alerte bazat pe timp</strong> - identifică ferestre în care BTC are șanse mai mari să formeze un pivot semnificativ. Când o fereastră se activează, verifici singur indicatorii tehnici pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
-          <p style={{ marginTop: 8, color: "#94a3b8" }}>O fereastră necesită <strong>scor ≥ 4 + cel puțin o metodă PRIMARĂ</strong>. Metodele secundare singure nu pot declanșa un semnal.</p>
+          <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare.</p>
+          <p style={{ marginTop: 10 }}>Este un <strong>sistem de alerte bazat pe timp</strong> — identifică ferestre în care BTC are șanse mai mari să formeze un pivot semnificativ.</p>
+          <p style={{ marginTop: 10 }}>Când o fereastră se activează, verifici singur indicatorii tehnici pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
+          <p style={{ marginTop: 14, color: "#94a3b8" }}>O fereastră necesită <strong>scor ≥ 4 + cel puțin o metodă PRIMARĂ</strong>. Metodele secundare singure nu pot declanșa un semnal.</p>
         </div>
 
         {/* Stats */}
@@ -1515,7 +1521,9 @@ export default function PivotsDashboard() {
         {/* ── BLOOD MOON ── */}
         <Section id="s-blood" title="Blood Moon Bottom Pattern" subtitle="a 3-a eclipsă lunară totală = bottom de ciclu" icon={<span className={cx(s.astroIcon, s.bloodMoon)} />}>
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Pattern:</strong> Eclipsele lunare totale (Blood Moons) vin în serii de 3-4 în fiecare ciclu BTC, urmate de o pauză de ~2.5 ani fără niciuna. <strong style={{ color: "var(--green)" }}>A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong> - confirmat pe toate cele 3 cicluri anterioare. După ultima Blood Moon, BTC a urcat masiv în fiecare caz.</p>
+            <p><strong>Pattern:</strong> Eclipsele lunare totale (Blood Moons) vin în serii de 3-4 în fiecare ciclu BTC, urmate de o pauză de ~2.5 ani fără niciuna.</p>
+            <p style={{ marginTop: 10 }}><strong style={{ color: "var(--green)" }}>A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong> — confirmat pe toate cele 3 cicluri anterioare.</p>
+            <p style={{ marginTop: 10 }}>După ultima Blood Moon, BTC a urcat masiv în fiecare caz.</p>
           </div>
           <div className={cx(s.card, s.reveal, s.mb20)}>
             <h2 className={s.cardH2}><span className={cx(s.astroIcon, s.bloodMoon)} style={{ width: 20, height: 20 }} /> Blood Moon Serii - Istoric Complet</h2>
@@ -1579,7 +1587,9 @@ export default function PivotsDashboard() {
         {/* ── MERCURY RETROGRADE ── */}
         <Section id="s-mercury" title="Mercury Retrograde & BTC" subtitle="performanță în cele 21 de perioade cu date (2019–2026)">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Ce este:</strong> Mercury Retrograde = perioadă de ~3 săptămâni când Mercur pare să meargă înapoi pe cer (de 3 ori pe an). Traderii astro cred că aduce <strong>volatilitate și inversări</strong>. Pattern-ul depinde de trend: în bear market BTC scade, în bull market BTC urcă. <strong style={{ color: "var(--solar)" }}>Nu este predictiv singur</strong> - a fost testat și eliminat din indicatorul Pine Script.</p>
+            <p><strong>Ce este:</strong> Mercury Retrograde = perioadă de ~3 săptămâni când Mercur pare să meargă înapoi pe cer (de 3 ori pe an).</p>
+            <p style={{ marginTop: 10 }}>Traderii astro cred că aduce <strong>volatilitate și inversări</strong>. Pattern-ul depinde de trend: în bear market BTC scade, în bull market BTC urcă.</p>
+            <p style={{ marginTop: 10 }}><strong style={{ color: "var(--solar)" }}>Nu este predictiv singur</strong> — a fost testat și eliminat din indicatorul Pine Script.</p>
           </div>
           <div className={cx(s.card, s.reveal, s.mb20)}>
             <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--pi)" }} />Mercury Retrograde - Performanță BTC (21 perioade verificate)</h2>
@@ -1703,8 +1713,10 @@ export default function PivotsDashboard() {
         {/* ── SHMITA ── */}
         <Section id="s-shmita" title="Ciclul Shmita - 7 Ani">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic - al 7-lea an dintr-un ciclu de 7. În Tora, este an de &quot;eliberare&quot;: datorii iertate, pământ lăsat să se odihnească. Popularizat în finanțe de Rabbi Jonathan Cahn (<em>The Mystery of the Shemitah</em>, 2014). Corelație remarcabilă cu crizele financiare majore.</p>
-            <p style={{ marginTop: 8, color: "#94a3b8" }}>⚠️ Corelație observațională, nu cauzalitate dovedită. Folosit ca context macro, nu ca semnal de intrare.</p>
+            <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic — al 7-lea an dintr-un ciclu de 7.</p>
+            <p style={{ marginTop: 10 }}>În Tora, este an de &quot;eliberare&quot;: datorii iertate, pământ lăsat să se odihnească.</p>
+            <p style={{ marginTop: 10 }}>Popularizat în finanțe de Rabbi Jonathan Cahn (<em>The Mystery of the Shemitah</em>, 2014). Corelație remarcabilă cu crizele financiare majore.</p>
+            <p style={{ marginTop: 14, color: "#94a3b8" }}>⚠️ Corelație observațională, nu cauzalitate dovedită. Folosit ca context macro, nu ca semnal de intrare.</p>
           </div>
           <div className={cx(s.grid2, s.reveal)}>
             <div className={s.card}>
@@ -1753,7 +1765,9 @@ export default function PivotsDashboard() {
         {/* ── HALVING + SHMITA ── */}
         <Section id="s-halving" title="Confluență Halving + Shmita">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Observație cheie:</strong> Când fereastra de top post-halving (12–18 luni) se suprapune cu un an Shmita, rezultatul istoric este un <strong>top exploziv urmat de crash major</strong>. Când NU se suprapun (Halvinguri 2 și 4), ciclul bear este mai &quot;normal&quot;. Halving 5 + Shmita 2028–2029 recreează exact setup-ul Halvingului 3.</p>
+            <p><strong>Observație cheie:</strong> Când fereastra de top post-halving (12–18 luni) se suprapune cu un an Shmita, rezultatul istoric este un <strong>top exploziv urmat de crash major</strong>.</p>
+            <p style={{ marginTop: 10 }}>Când NU se suprapun (Halvinguri 2 și 4), ciclul bear este mai &quot;normal&quot;.</p>
+            <p style={{ marginTop: 10 }}>Halving 5 + Shmita 2028–2029 recreează exact setup-ul Halvingului 3.</p>
           </div>
           <div className={cx(s.card, s.reveal)}>
             <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--halving)" }} />Comparație Cicluri - Top Post-Halving vs. Shmita</h2>

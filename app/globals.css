@@ -21,11 +21,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   @apply bg-crypto-dark text-slate-100 antialiased;
   background-color: #09090B;
+  overflow-x: hidden;
 }
 
 a,

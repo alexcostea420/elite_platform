@@ -64,11 +64,10 @@ export default function CumSaIncepiTradingPage() {
               </h2>
               <div className="rounded-2xl border border-white/10 bg-surface-graphite p-6 md:p-8">
                 <p className="text-lg leading-relaxed text-slate-300">
-                  Trading-ul crypto înseamnă cumpărarea și vânzarea de criptomonede
-                  (Bitcoin, Ethereum, Solana etc.) cu scopul de a obține profit din
-                  fluctuațiile de preț. Spre deosebire de investiția pe termen lung,
-                  trading-ul presupune decizii active bazate pe analiză tehnică,
-                  fundamentală sau sentimentul pieței.
+                  Trading-ul crypto înseamnă cumpărarea și vânzarea de criptomonede (Bitcoin, Ethereum, Solana etc.) cu scopul de a obține profit din fluctuațiile de preț.
+                </p>
+                <p className="mt-4 text-lg leading-relaxed text-slate-300">
+                  Spre deosebire de investiția pe termen lung, trading-ul presupune decizii active bazate pe analiză tehnică, fundamentală sau sentimentul pieței.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed text-slate-300">
                   Piața crypto funcționează 24/7, ceea ce o face una dintre cele mai

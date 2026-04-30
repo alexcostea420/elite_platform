@@ -52,11 +52,10 @@ export default function RambursarePage() {
                 ce accesul la platformă a fost activat.
               </p>
               <p className="mt-3">
-                Aceasta este în conformitate cu <strong className="text-white">OUG 34/2014</strong> (transpunerea
-                Directivei 2011/83/UE privind drepturile consumatorilor), care prevede că
-                dreptul de retragere nu se aplică contractelor de furnizare de conținut
-                digital care nu este livrat pe un suport material, atunci când prestarea a
-                început cu acordul prealabil expres al consumatorului.
+                Aceasta este în conformitate cu <strong className="text-white">OUG 34/2014</strong> (transpunerea Directivei 2011/83/UE privind drepturile consumatorilor).
+              </p>
+              <p className="mt-3">
+                Legislația prevede că dreptul de retragere nu se aplică contractelor de furnizare de conținut digital care nu este livrat pe un suport material, atunci când prestarea a început cu acordul prealabil expres al consumatorului.
               </p>
             </Section>
 
