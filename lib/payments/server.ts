@@ -1,6 +1,6 @@
 import "server-only";
 
-import { sendDiscordDm, syncDiscordRole } from "@/lib/discord/server";
+import { queueDiscordExpiryReminders, sendDiscordDm, syncDiscordRole } from "@/lib/discord/server";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 import {
   generateReferenceAmount,
@@ -351,6 +351,26 @@ export async function confirmPayment(
     }
   } catch (err) {
     console.error("confirmPayment: failed to enqueue expiry reminders", err);
+  }
+
+  // Mirror the email reminders on Discord for users who connected their account.
+  try {
+    const { data: discordProfile } = await supabase
+      .from("profiles")
+      .select("discord_user_id")
+      .eq("id", payment.user_id)
+      .maybeSingle();
+
+    if (discordProfile?.discord_user_id) {
+      await queueDiscordExpiryReminders(
+        payment.user_id,
+        discordProfile.discord_user_id,
+        expiresAt,
+        planConfig.label,
+      );
+    }
+  } catch (err) {
+    console.error("confirmPayment: failed to enqueue discord expiry reminders", err);
   }
 
   return { success: true, error: null };

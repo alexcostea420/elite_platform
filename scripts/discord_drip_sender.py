@@ -41,6 +41,8 @@ def send_discord_dm(discord_user_id: str, message: str) -> bool:
     headers = {
         "Authorization": f"Bot {DISCORD_BOT_TOKEN}",
         "Content-Type": "application/json",
+        # Discord/Cloudflare returns 403 (error 1010) without a UA on bot calls.
+        "User-Agent": "ArmataElitePayments (https://app.armatadetraderi.com, 1.0)",
     }
 
     # Create DM channel

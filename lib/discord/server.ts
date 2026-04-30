@@ -2,6 +2,9 @@ import "server-only";
 
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
+// Discord/Cloudflare returns 403 (error 1010) on bot calls without a UA.
+const DISCORD_USER_AGENT = "ArmataElitePlatform (https://app.armatadetraderi.com, 1.0)";
+
 export type DiscordSubscriptionTier = "free" | "elite" | null;
 
 type DiscordOAuthConfig = {
@@ -98,6 +101,7 @@ async function joinDiscordGuild(discordUserId: string, userAccessToken: string) 
       headers: {
         Authorization: `Bot ${botToken}`,
         "Content-Type": "application/json",
+        "User-Agent": DISCORD_USER_AGENT,
       },
       body: JSON.stringify({
         access_token: userAccessToken,
@@ -119,6 +123,7 @@ async function addDiscordRole(discordUserId: string, roleId: string) {
       method: "PUT",
       headers: {
         Authorization: `Bot ${botToken}`,
+        "User-Agent": DISCORD_USER_AGENT,
       },
     },
   );
@@ -136,6 +141,7 @@ async function removeDiscordRole(discordUserId: string, roleId: string) {
       method: "DELETE",
       headers: {
         Authorization: `Bot ${botToken}`,
+        "User-Agent": DISCORD_USER_AGENT,
       },
     },
   );
@@ -270,6 +276,7 @@ export async function sendDiscordDm(discordUserId: string, content: string) {
     headers: {
       Authorization: `Bot ${botToken}`,
       "Content-Type": "application/json",
+      "User-Agent": DISCORD_USER_AGENT,
     },
     body: JSON.stringify({ recipient_id: discordUserId }),
   });
@@ -287,6 +294,7 @@ export async function sendDiscordDm(discordUserId: string, content: string) {
       headers: {
         Authorization: `Bot ${botToken}`,
         "Content-Type": "application/json",
+        "User-Agent": DISCORD_USER_AGENT,
       },
       body: JSON.stringify({ content }),
     },
@@ -343,4 +351,53 @@ export async function queueDiscordDripMessages(userId: string, discordUserId: st
   }));
 
   await supabase.from("discord_drip_queue").insert(rows);
+}
+
+/**
+ * Queue Discord DM expiry reminders mirroring the email expiry_7d / expiry_1d.
+ * Called from confirmPayment after a successful purchase. Cancels any pending
+ * reminders from a previous payment first (renewal case) so the user does not
+ * get reminded for a subscription that has already been extended.
+ */
+export async function queueDiscordExpiryReminders(
+  userId: string,
+  discordUserId: string,
+  expiresAt: Date,
+  planLabel: string,
+) {
+  const supabase = createServiceRoleSupabaseClient();
+
+  await supabase
+    .from("discord_drip_queue")
+    .delete()
+    .eq("discord_user_id", discordUserId)
+    .in("message_type", ["expiry_7d", "expiry_1d"])
+    .eq("sent", false);
+
+  const reminders = [
+    {
+      user_id: userId,
+      discord_user_id: discordUserId,
+      message_type: "expiry_7d",
+      message_text:
+        `⏰ **Abonamentul tău Elite (${planLabel}) expiră peste 7 zile.**\n\n` +
+        `Reînnoiește din timp ca să nu pierzi accesul la indicatori, video-uri și canalele Elite.\n\n` +
+        `👉 https://app.armatadetraderi.com/upgrade` +
+        ANTI_SCAM_FOOTER,
+      send_at: new Date(expiresAt.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      user_id: userId,
+      discord_user_id: discordUserId,
+      message_type: "expiry_1d",
+      message_text:
+        `🚨 **Abonamentul tău Elite expiră MÂINE.**\n\n` +
+        `Dacă vrei să continui, plătește astăzi — altfel rolul Elite va fi scos automat.\n\n` +
+        `👉 https://app.armatadetraderi.com/upgrade` +
+        ANTI_SCAM_FOOTER,
+      send_at: new Date(expiresAt.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ];
+
+  await supabase.from("discord_drip_queue").insert(reminders);
 }
