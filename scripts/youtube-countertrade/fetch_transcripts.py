@@ -191,21 +191,43 @@ def _fetch_via_whisper(video_id: str):
         duration = 0  # ffprobe missing — proceed anyway
 
     log.info(f"  ({video_id}): transcribing {duration:.0f}s audio with mlx-whisper turbo...")
-    try:
-        import mlx_whisper
-        result = mlx_whisper.transcribe(
-            str(audio_path),
-            path_or_hf_repo=WHISPER_MODEL,
-            language="ro",
-            initial_prompt=WHISPER_INITIAL_PROMPT,
-            verbose=False,
+    # Run whisper in a subprocess so a Metal GPU abort (uncaught C++ exception)
+    # cannot kill the parent. Retry up to 3 times on non-zero exit.
+    transcript_out = tmp_dir / f"{video_id}.transcript.txt"
+    text = None
+    for attempt in range(3):
+        helper = (
+            "import sys, json, mlx_whisper;"
+            f"r=mlx_whisper.transcribe(sys.argv[1],"
+            f" path_or_hf_repo={WHISPER_MODEL!r},"
+            f" language='ro',"
+            f" initial_prompt={WHISPER_INITIAL_PROMPT!r},"
+            f" verbose=False);"
+            f"open(sys.argv[2],'w',encoding='utf-8').write((r.get('text') or '').strip())"
         )
-        text = (result.get("text") or "").strip()
-    except Exception as e:
-        log.warning(f"  ({video_id}): whisper transcription failed - {e}")
-        text = None
-    finally:
-        audio_path.unlink(missing_ok=True)
+        try:
+            res = subprocess.run(
+                ["python3", "-c", helper, str(audio_path), str(transcript_out)],
+                capture_output=True, text=True, timeout=900,
+            )
+        except subprocess.TimeoutExpired:
+            log.warning(f"  ({video_id}): whisper timeout attempt {attempt+1}/3")
+            continue
+
+        if res.returncode == 0 and transcript_out.exists():
+            text = transcript_out.read_text(encoding="utf-8").strip()
+            break
+
+        err = (res.stderr or "")[-300:]
+        if "METAL" in err or "GPU" in err or "Command buffer" in err or res.returncode < 0:
+            log.warning(f"  ({video_id}): GPU/abort attempt {attempt+1}/3, retrying in {5*(attempt+1)}s")
+            import time as _t; _t.sleep(5 * (attempt + 1))
+            continue
+        log.warning(f"  ({video_id}): whisper subprocess failed (rc={res.returncode}) - {err[:200]}")
+        break
+
+    transcript_out.unlink(missing_ok=True)
+    audio_path.unlink(missing_ok=True)
 
     return text if text and len(text) > 20 else None
 

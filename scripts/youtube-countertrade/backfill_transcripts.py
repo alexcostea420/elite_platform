@@ -21,6 +21,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
 from channels import CHANNELS
+from fetch_transcripts import extract_transcript as extract_with_fallbacks
 
 TRANSCRIPTS_DIR = Path("transcripts")
 TRANSCRIPTS_DIR.mkdir(exist_ok=True)
@@ -78,25 +79,12 @@ def list_channel_videos(channel_name, channel_info, start_date, end_date):
         return []
 
 
-def fetch_transcript(video_id):
-    """Fetch transcript for a video."""
+def fetch_transcript(video_id, channel_name="?"):
+    """Fetch transcript using full fallback chain (api → yt-dlp subs → mlx-whisper)."""
     cache_file = TRANSCRIPTS_DIR / f"{video_id}.txt"
     if cache_file.exists() and cache_file.stat().st_size > 50:
         return cache_file.read_text(encoding="utf-8")
-
-    try:
-        formatter = TextFormatter()
-        for lang in [["ro"], ["en"]]:
-            try:
-                transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=lang)
-                text = formatter.format_transcript(transcript)
-                cache_file.write_text(text, encoding="utf-8")
-                return text
-            except Exception:
-                continue
-        return None
-    except Exception:
-        return None
+    return extract_with_fallbacks(video_id, channel_name)
 
 
 def main():
@@ -116,8 +104,8 @@ def main():
         log.info(f"    Found {len(videos)} videos in range")
 
         for v in videos:
-            # Fetch transcript
-            transcript = fetch_transcript(v["id"])
+            # Fetch transcript (uses api → yt-dlp subs → mlx-whisper fallback)
+            transcript = fetch_transcript(v["id"], channel_name)
             time.sleep(1)  # Rate limit
 
             entry = {
