@@ -259,7 +259,7 @@ def main():
                 supabase_post("email_drip_queue", {
                     "email": email,
                     "template": "patreon_welcome",
-                    "subject": "Bine ai venit in Armata de Traderi - activeaza-ti contul",
+                    "subject": "Bine ai venit în Armata de Traderi - activează-ți contul",
                     "scheduled_at": datetime.now(timezone.utc).isoformat(),
                     "status": "pending",
                 })

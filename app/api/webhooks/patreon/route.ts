@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
           user_id: null,
           email,
           template: "patreon_welcome",
-          subject: "Bine ai venit in Armata de Traderi - activeaza-ti contul",
+          subject: "Bine ai venit în Armata de Traderi - activează-ți contul",
           scheduled_at: new Date().toISOString(),
         });
 

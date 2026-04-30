@@ -316,38 +316,40 @@ export async function confirmPayment(
   }
 
   // Queue expiry reminder emails (7 days + 1 day before expiry)
+  // Dedup: cancel any pending expiry reminders from a previous payment (renewal case)
   try {
-    const { data: userData } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("id", payment.user_id)
-      .maybeSingle();
-
     const { data: authUser } = await supabase.auth.admin.getUserById(payment.user_id);
     const email = authUser?.user?.email;
 
     if (email) {
+      await supabase
+        .from("email_drip_queue")
+        .update({ status: "cancelled" })
+        .eq("user_id", payment.user_id)
+        .in("template", ["expiry_7d", "expiry_1d"])
+        .eq("status", "pending");
+
       const reminderEmails = [
         {
           user_id: payment.user_id,
           email,
           template: "expiry_7d",
-          subject: "Abonamentul tau Elite expira in 7 zile",
+          subject: "Abonamentul tău Elite expiră în 7 zile",
           scheduled_at: new Date(expiresAt.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
         },
         {
           user_id: payment.user_id,
           email,
           template: "expiry_1d",
-          subject: "Abonamentul tau Elite expira maine",
+          subject: "Abonamentul tău Elite expiră mâine",
           scheduled_at: new Date(expiresAt.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
         },
       ];
 
       await supabase.from("email_drip_queue").insert(reminderEmails);
     }
-  } catch {
-    // Non-critical - don't fail payment over email queue
+  } catch (err) {
+    console.error("confirmPayment: failed to enqueue expiry reminders", err);
   }
 
   return { success: true, error: null };

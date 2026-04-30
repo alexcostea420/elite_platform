@@ -96,7 +96,7 @@ export async function POST() {
       { user_id: user.id, email: user.email, template: "welcome", subject: "Contul tău Elite e activ - uite ce să faci prima dată", scheduled_at: now.toISOString() },
       { user_id: user.id, email: user.email, template: "value_day1", subject: "Greșeala #1 care costă bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 48 * h).toISOString() },
       { user_id: user.id, email: user.email, template: "social_proof", subject: "\"De când am intrat în Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 120 * h).toISOString() },
-      { user_id: user.id, email: user.email, template: "trial_expiry", subject: "Accesul tău Elite se închide mâine", scheduled_at: new Date(now.getTime() + 156 * h).toISOString() },
+      { user_id: user.id, email: user.email, template: "trial_expiry", subject: "Accesul tău Elite se închide mâine", scheduled_at: new Date(now.getTime() + 144 * h).toISOString() },
     ]);
 
     return NextResponse.json({ ok: true, expires_at: trialExpires.toISOString() });

@@ -145,7 +145,27 @@ export async function signupAction(formData: FormData) {
       );
     }
 
-    // Trial is opt-in - user activates from dashboard
+    // Welcome email — encourage trial activation. Trial itself is opt-in from dashboard.
+    try {
+      const service = createServiceRoleSupabaseClient();
+      const { data: existing } = await service
+        .from("email_drip_queue")
+        .select("id")
+        .eq("user_id", data.user.id)
+        .eq("template", "welcome_signup")
+        .limit(1);
+      if (!existing || existing.length === 0) {
+        await service.from("email_drip_queue").insert({
+          user_id: data.user.id,
+          email,
+          template: "welcome_signup",
+          subject: "Bine ai venit. Ai 7 zile Elite gratuite",
+          scheduled_at: new Date().toISOString(),
+        });
+      }
+    } catch (err) {
+      console.error("signupAction: failed to enqueue welcome_signup", err);
+    }
   }
 
   if (data.user && data.session) {
