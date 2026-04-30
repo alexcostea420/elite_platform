@@ -66,7 +66,7 @@ export default async function HomePage() {
     {
       label: "ANALIZĂ SĂPTĂMÂNALĂ",
       title: "Știi exact când să cumperi",
-      desc: "Pe 5-6 februarie 2026, când BTC era la 60.000$, scorul a fost 86 — semnal clar de cumpărare. Bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri. Actualizat săptămânal.",
+      desc: "Pe 5-6 februarie 2026, când BTC era la 60.000$, scorul a fost 86. Semnal clar de cumpărare. Bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri. Actualizat săptămânal.",
     },
     {
       label: "16 ACȚIUNI MONITORIZATE",
