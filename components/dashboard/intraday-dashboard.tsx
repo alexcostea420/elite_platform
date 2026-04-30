@@ -121,7 +121,7 @@ export default function IntradayDashboard({
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: bs.color }} />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full" style={{ background: bs.color }} />
               </span>
-              <span className="font-display text-sm font-black tracking-wide sm:text-base md:text-lg" style={{ color: bs.color }}>
+              <span className="font-display text-sm font-bold tracking-wide sm:text-base md:text-lg" style={{ color: bs.color }}>
                 {bs.label}
               </span>
               <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500 md:inline">
@@ -162,7 +162,7 @@ export default function IntradayDashboard({
           </div>
 
           <h1
-            className="mb-2 flex flex-wrap items-center gap-2 text-xl font-black leading-tight sm:gap-3 sm:text-3xl md:text-4xl"
+            className="mb-2 flex flex-wrap items-center gap-2 text-xl font-bold leading-tight sm:gap-3 sm:text-3xl md:text-4xl"
             style={{ color: bs.color }}
           >
             <span className="text-3xl sm:text-4xl md:text-5xl">{bs.emoji}</span>
@@ -205,7 +205,7 @@ export default function IntradayDashboard({
         {data.alerts.length > 0 && (
           <section className="mt-3 overflow-x-auto scrollbar-none">
             <div className="flex items-center gap-2 pb-1">
-              <span className="shrink-0 text-[9px] font-black uppercase tracking-[0.32em] text-slate-600">Alerte</span>
+              <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.32em] text-slate-600">Alerte</span>
               {data.alerts.map((a, i) => (
                 <span
                   key={i}
@@ -230,7 +230,7 @@ export default function IntradayDashboard({
             { tf: "1d", v: ind.rsi_1d },
           ].map(({ tf, v }) => (
             <div key={tf} className={`glass-card flex flex-col gap-1 p-3 ${rsiColor(v)}`}>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">RSI {tf}</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500">RSI {tf}</span>
               <span className="font-data text-xl font-bold tabular-nums">{v != null ? v.toFixed(0) : "--"}</span>
               <span className="text-[10px] font-semibold opacity-90">{rsiLabel(v)}</span>
             </div>
@@ -257,7 +257,7 @@ export default function IntradayDashboard({
         {/* ━━ KEY LEVELS ━━ */}
         {ind.pivots && (
           <section className="mt-4">
-            <h3 className="mb-2 text-[10px] font-black uppercase tracking-[0.32em] text-slate-500">Niveluri cheie</h3>
+            <h3 className="mb-2 text-[10px] font-bold uppercase tracking-[0.32em] text-slate-500">Niveluri cheie</h3>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
               <LevelChip label="VWAP zi" value={ind.vwap} active />
               <LevelChip label="R2" value={ind.pivots.r2} bear />
@@ -303,7 +303,7 @@ export default function IntradayDashboard({
           <div className="glass-card p-4">
             <div className="mb-2 flex items-center gap-2">
               <span className="text-base">🐋</span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Whale Flow</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500">Whale Flow</span>
             </div>
             {data.whale_flow_6h ? (
               <>
@@ -325,7 +325,7 @@ export default function IntradayDashboard({
           <div className="glass-card p-4">
             <div className="mb-2 flex items-center gap-2">
               <span className="text-base">📊</span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">MACD 1h</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500">MACD 1h</span>
             </div>
             {ind.macd_1h ? (
               <>
@@ -346,7 +346,7 @@ export default function IntradayDashboard({
           <div className="glass-card p-4">
             <div className="mb-2 flex items-center gap-2">
               <span className="text-base">🌐</span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Context Macro</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500">Context Macro</span>
             </div>
             <p className="font-data text-lg font-bold text-white">
               Risk Score {data.macro_context.risk_v2_score ?? "--"}
@@ -482,7 +482,7 @@ function CrowdCard({
 }) {
   return (
     <article className="glass-card flex flex-col gap-1.5 p-3 md:p-4">
-      <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">{label}</span>
+      <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500">{label}</span>
       <p className={`font-data text-base font-bold tabular-nums ${color}`}>{value}</p>
       {bar != null && (
         <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-white/5">
@@ -498,7 +498,7 @@ function CrowdCard({
 function Glossary({ title, body }: { title: string; body: string }) {
   return (
     <div className="rounded-lg border border-white/5 bg-white/[0.02] p-3">
-      <p className="mb-1 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-400">{title}</p>
+      <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-400">{title}</p>
       <p>{body}</p>
     </div>
   );

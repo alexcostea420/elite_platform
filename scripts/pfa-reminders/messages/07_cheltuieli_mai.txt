@@ -1,0 +1,22 @@
+📂 Reminder PFA — Cheltuieli mai 2026 (5 iunie)
+
+Strânge și urcă în Solo facturile primite în mai 2026 pe PFA:
+
+• Vercel
+• Cloudflare
+• Supabase
+• Resend
+• Anthropic (factura din 17 mai)
+• OpenAI (dacă e cazul)
+• GitHub
+• Domeniu armatadetraderi.com (dacă a fost reînnoire)
+• Orice serviciu plătit cu Revolut Business
+
+Toate sunt deductibile → reduc impozitul. Solo le procesează după upload.
+
+Ce trebuie să verifici pe fiecare factură:
+✅ Numele PFA: "Costea Cristian-Alexandru PFA" (sau echivalent)
+✅ CUI-ul: 54517198 sau RO54517198
+✅ Data în mai 2026 (nu înainte de 29 aprilie)
+
+Dacă vreo factură e încă pe persoana fizică → contactează furnizorul să o reemiteze pe PFA.

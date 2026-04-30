@@ -266,7 +266,7 @@ function VerdictHero({
       </div>
 
       <h2
-        className="mb-3 flex flex-wrap items-center gap-2 text-lg font-black leading-tight sm:gap-3 sm:text-2xl md:text-4xl"
+        className="mb-3 flex flex-wrap items-center gap-2 text-lg font-bold leading-tight sm:gap-3 sm:text-2xl md:text-4xl"
         style={{ color: v.color }}
       >
         <span className="text-2xl sm:text-3xl md:text-5xl">{v.emoji}</span>
@@ -279,7 +279,7 @@ function VerdictHero({
 
       <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3 md:mb-6 md:gap-5">
         <div className="rounded-lg border border-white/5 bg-white/[0.02] p-2 text-center sm:p-3 sm:rounded-xl md:p-4">
-          <div className="font-data text-base font-black sm:text-2xl md:text-3xl" style={{ color: v.color }}>
+          <div className="font-data text-base font-bold sm:text-2xl md:text-3xl" style={{ color: v.color }}>
             {score}
             <span className="ml-0.5 text-[10px] font-medium text-slate-500 sm:ml-1 sm:text-sm">/100</span>
           </div>
@@ -288,7 +288,7 @@ function VerdictHero({
           </div>
         </div>
         <div className="rounded-lg border border-white/5 bg-white/[0.02] p-2 text-center sm:p-3 sm:rounded-xl md:p-4">
-          <div className="font-data text-base font-black text-white sm:text-2xl md:text-3xl">
+          <div className="font-data text-base font-bold text-white sm:text-2xl md:text-3xl">
             {getDecisionLabel(decision)}
           </div>
           <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-slate-500 sm:text-[10px]">
@@ -296,7 +296,7 @@ function VerdictHero({
           </div>
         </div>
         <div className="rounded-lg border border-white/5 bg-white/[0.02] p-2 text-center sm:p-3 sm:rounded-xl md:p-4">
-          <div className="font-data text-base font-black text-white sm:text-2xl md:text-3xl">
+          <div className="font-data text-base font-bold text-white sm:text-2xl md:text-3xl">
             {conviction === "HIGH" ? "Ridicată" : conviction === "MEDIUM" ? "Moderată" : "Scăzută"}
           </div>
           <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-slate-500 sm:text-[10px]">
@@ -763,7 +763,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                 </p>
               </div>
               <h3
-                className="font-data text-5xl font-black"
+                className="font-data text-5xl font-bold"
                 style={{ color: fgValue <= 30 ? "#ef4444" : fgValue <= 60 ? "#f59e0b" : "#22c55e" }}
               >
                 {fgValue}
@@ -807,7 +807,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                 </p>
               </div>
               <h3
-                className="font-data text-5xl font-black"
+                className="font-data text-5xl font-bold"
                 style={{ color: pctFromAth >= -5 ? "#22c55e" : pctFromAth >= -20 ? "#f59e0b" : "#ef4444" }}
               >
                 {pctFromAth >= 0 ? "ATH" : `${pctFromAth.toFixed(0)}%`}
@@ -847,7 +847,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                   <InfoTooltip text={INDICATOR_BY_KEY.halving_cycle.full} label="Halving" />
                 </p>
               </div>
-              <h3 className="font-data text-5xl font-black text-white">
+              <h3 className="font-data text-5xl font-bold text-white">
                 {halvingDays != null ? halvingDays : "--"}
               </h3>
               <p className="mt-1 text-sm font-medium text-violet-400">{halvingPhase(halvingDays)}</p>

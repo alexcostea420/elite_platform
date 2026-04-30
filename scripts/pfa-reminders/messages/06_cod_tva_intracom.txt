@@ -1,0 +1,20 @@
+🔔 Reminder PFA — Cod TVA intracomunitar (22 mai)
+
+Au trecut ~3 săptămâni de la formularul 091. Ai primit codul RO + 8 cifre de la ANAF?
+
+Cum verifici:
+• Întreabă-l pe Robert (Solo) în chat
+• Sau verifică direct în SPV (anaf.ro → Spațiu Privat Virtual)
+• Sau caută pe https://www.anaf.ro/PlatitorTVA/ după CUI 54517198
+
+După primire, update billing peste tot cu RO54517198:
+• Anthropic ✅ (sper că ai apucat înainte de 17 mai)
+• Vercel
+• Cloudflare
+• Resend
+• Supabase
+• OpenAI (dacă plătești API)
+• GitHub
+• Stripe (când finalizezi)
+
+Cu cod RO la fiecare → primești facturi fără TVA (taxare inversă), plătești 19% în RO prin form 301 (deductibil).

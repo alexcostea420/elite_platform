@@ -1,0 +1,9 @@
+🔔 Reminder PFA — Procura status (4 mai)
+
+Status check:
+
+1) Ai mers la notar? Dacă nu, prioritate maximă azi/mâine.
+2) Ai uploadat procura scanată în Solo? Fără asta nu pornește procesul SPV.
+3) Robert ți-a confirmat că procura e ok și că pornește activarea SPV?
+
+Dacă toate 3 sunt ✅ → ești pe drumul bun, urmează SPV (1-3 zile) și formular 091.

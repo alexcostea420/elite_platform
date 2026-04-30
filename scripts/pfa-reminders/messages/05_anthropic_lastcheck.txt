@@ -1,0 +1,9 @@
+🚨 LAST CHECK — Anthropic facturează MÂINE
+
+Ai actualizat billing-ul Anthropic pe PFA?
+
+➡️ console.anthropic.com/settings/billing
+
+Dacă nu, fă-o ACUM, ai câteva ore. Dacă lași factura pe persoana fizică, NU o poți deduce → pierzi ~€50-100/lună la impozit.
+
+Verifică și: Vercel, Cloudflare, Resend, Supabase, GitHub — au și ele billing periodic, e bine să le actualizezi pe toate până la sfârșitul lunii.
