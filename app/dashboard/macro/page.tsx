@@ -50,19 +50,19 @@ export default async function MacroPage() {
   return (
     <>
       <Navbar mode="dashboard" userIdentity={identity} />
-      <main className="pb-16 pt-24 md:pt-28">
-        <Container>
-          <div className="mb-8">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-              Macro Intelligence
+      <main className="min-h-screen bg-surface-night pb-16 pt-24 md:pt-28">
+        <Container className="max-w-7xl">
+          <header className="mb-8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 sm:text-xs">
+              Dashboard · Macro Intelligence
             </p>
-            <h1 className="text-3xl font-bold text-white md:text-4xl">
+            <h1 className="gradient-text mt-2 font-display text-3xl font-bold md:text-4xl">
               Macro Dashboard
             </h1>
-            <p className="mt-2 text-sm text-white/50">
-              Lichiditate, rate, credit, cross-asset signals, calendar economic. Actualizat la fiecare 4 ore.
+            <p className="mt-2 text-sm text-slate-400">
+              Lichiditate, rate, credit, cross-asset și calendar economic. Actualizat la fiecare 4 ore.
             </p>
-          </div>
+          </header>
           <MacroClient initialData={macroData} />
           <div className="mt-8">
             <ExchangeFlowsPanel />

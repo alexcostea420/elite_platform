@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 import { CardCheckoutClient } from "./checkout-client";
 
@@ -11,7 +13,18 @@ export const metadata: Metadata = {
   robots: "noindex",
 };
 
-export default function CardPayPage() {
+export default async function CardPayPage() {
+  // Stripe is in test mode until PFA is open — admins only
+  const supabase = createServerSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/upgrade");
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (profile?.role !== "admin") redirect("/upgrade");
+
   return (
     <>
       <Navbar mode="dashboard" />

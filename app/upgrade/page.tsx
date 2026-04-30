@@ -75,7 +75,7 @@ export default async function UpgradePage() {
   const offerSchema = getUpgradeOfferSchema();
 
   // Check if user is logged in, veteran, and has used trial
-  const stripeEnabled = isStripeEnabled();
+  let stripeEnabled = false;
   let isVeteran = false;
   let isLoggedIn = false;
   let hasUsedTrial = false;
@@ -87,11 +87,13 @@ export default async function UpgradePage() {
       isLoggedIn = true;
       const { data: profile } = await supabase
         .from("profiles")
-        .select("is_veteran, full_name, trial_used_at")
+        .select("is_veteran, full_name, trial_used_at, role")
         .eq("id", user.id)
         .maybeSingle();
       isVeteran = profile?.is_veteran ?? false;
       hasUsedTrial = !!profile?.trial_used_at;
+      // Stripe is in test mode until PFA is open — gate to admins only
+      stripeEnabled = isStripeEnabled() && profile?.role === "admin";
       const name = profile?.full_name ?? user.email ?? "Membru";
       userIdentity = {
         displayName: name,

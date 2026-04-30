@@ -32,9 +32,17 @@ export async function POST(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("is_veteran")
+      .select("is_veteran, role")
       .eq("id", user.id)
       .maybeSingle();
+
+    // Stripe is in test mode until PFA is open — admins only
+    if (profile?.role !== "admin") {
+      return NextResponse.json(
+        { error: "Plățile cu cardul nu sunt disponibile momentan." },
+        { status: 503 },
+      );
+    }
 
     const priceEur = profile?.is_veteran ? plan.veteranPriceEur : plan.priceEur;
     const amountCents = Math.round(priceEur * 100);
