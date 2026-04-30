@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type StripePayButtonProps = {
@@ -8,32 +9,12 @@ type StripePayButtonProps = {
 };
 
 export function StripePayButton({ plan, highlighted }: StripePayButtonProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const handleClick = async () => {
+  const handleClick = () => {
     setLoading(true);
-    try {
-      const res = await fetch("/api/payments/stripe-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.error ?? "Eroare la procesarea plății.");
-        return;
-      }
-
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch {
-      alert("Eroare de conexiune. Încearcă din nou.");
-    } finally {
-      setLoading(false);
-    }
+    router.push(`/upgrade/pay/card?plan=${encodeURIComponent(plan)}`);
   };
 
   return (
@@ -50,7 +31,7 @@ export function StripePayButton({ plan, highlighted }: StripePayButtonProps) {
       {loading ? (
         <>
           <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          Se procesează...
+          Se deschide…
         </>
       ) : (
         <>💳 Plătește cu cardul</>

@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     if (!stripeConfig) {
       return NextResponse.json(
         { error: "Plățile cu cardul nu sunt disponibile momentan." },
-        { status: 503 }
+        { status: 503 },
       );
     }
 
@@ -30,7 +30,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Plan invalid" }, { status: 400 });
     }
 
-    // Check if veteran
     const { data: profile } = await supabase
       .from("profiles")
       .select("is_veteran")
@@ -40,11 +39,11 @@ export async function POST(request: NextRequest) {
     const priceEur = profile?.is_veteran ? plan.veteranPriceEur : plan.priceEur;
     const amountCents = Math.round(priceEur * 100);
 
-    // Dynamic import Stripe (only when needed)
     const Stripe = (await import("stripe")).default;
     const stripe = new Stripe(stripeConfig.secretKey);
 
     const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded_page",
       mode: "payment",
       payment_method_types: ["card"],
       customer_email: user.email,
@@ -67,16 +66,15 @@ export async function POST(request: NextRequest) {
         plan_days: String(plan.days),
         is_veteran: profile?.is_veteran ? "true" : "false",
       },
-      success_url: `${stripeConfig.successUrl}?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: stripeConfig.cancelUrl,
+      return_url: `${stripeConfig.successUrl}?session_id={CHECKOUT_SESSION_ID}`,
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ clientSecret: session.client_secret });
   } catch (error) {
     console.error("Stripe checkout error:", error);
     return NextResponse.json(
       { error: "Eroare la crearea sesiunii de plată." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
