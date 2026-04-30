@@ -1,33 +1,69 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 import { fmtPct, fmtUsd } from "./portfolio-dashboard";
-import { ASSETS } from "@/lib/portfolio/assets";
+import {
+  ASSETS,
+  BENCHMARK_ETF_KEYS,
+  SCREENER_STOCK_KEYS,
+  TOP_CRYPTO_KEYS,
+  getAsset,
+} from "@/lib/portfolio/assets";
 
-const BENCHMARK_GROUPS: { label: string; items: { key: string; label: string; sub: string }[] }[] = [
+type BenchmarkItem = { key: string; label: string; sub: string };
+type BenchmarkGroup = { label: string; items: BenchmarkItem[] };
+
+function buildItem(key: string): BenchmarkItem | null {
+  const a = getAsset(key);
+  if (!a) return null;
+  // USDC kept as a "cash" benchmark only when explicitly listed; not in default groups.
+  return { key: a.key, label: a.symbol, sub: a.name };
+}
+
+const BENCHMARK_GROUPS: BenchmarkGroup[] = [
   {
-    label: "Crypto",
-    items: [
-      { key: "crypto:bitcoin", label: "BTC", sub: "Bitcoin" },
-      { key: "crypto:ethereum", label: "ETH", sub: "Ethereum" },
-      { key: "crypto:solana", label: "SOL", sub: "Solana" },
-      { key: "crypto:usd-coin", label: "USDC", sub: "Cash echivalent" },
-    ],
+    label: "Crypto (top 20)",
+    items: TOP_CRYPTO_KEYS.map(buildItem).filter((x): x is BenchmarkItem => x !== null),
   },
   {
-    label: "Stocks / ETFs",
-    items: [
-      { key: "stock:SPY", label: "SPY", sub: "S&P 500" },
-      { key: "stock:QQQ", label: "QQQ", sub: "Nasdaq 100" },
-      { key: "stock:GLD", label: "GLD", sub: "Gold" },
-      { key: "stock:NVDA", label: "NVDA", sub: "Nvidia" },
-      { key: "stock:MSTR", label: "MSTR", sub: "MicroStrategy" },
-    ],
+    label: "Stocks (screener)",
+    items: SCREENER_STOCK_KEYS.map(buildItem).filter((x): x is BenchmarkItem => x !== null),
+  },
+  {
+    label: "ETF / Macro",
+    items: BENCHMARK_ETF_KEYS.map(buildItem).filter((x): x is BenchmarkItem => x !== null),
   },
 ];
 
 const ALL_BENCHMARKS = BENCHMARK_GROUPS.flatMap((g) => g.items);
+
+// Concurrency limit for the parallel compare-all fetch.
+// Prevents Yahoo / CoinGecko rate limiting on first warm-up of the cache.
+const COMPARE_CONCURRENCY = 6;
+
+async function runWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>,
+  onProgress?: (done: number, total: number) => void,
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let cursor = 0;
+  let done = 0;
+  async function worker() {
+    while (true) {
+      const i = cursor++;
+      if (i >= items.length) return;
+      results[i] = await fn(items[i]);
+      done++;
+      onProgress?.(done, items.length);
+    }
+  }
+  const workers = Array.from({ length: Math.min(limit, items.length) }, () => worker());
+  await Promise.all(workers);
+  return results;
+}
 
 export type WhatIfSeed = {
   originalAssetKey: string;
@@ -64,6 +100,7 @@ type CompareRow = {
   altKey: string;
   altLabel: string;
   altSub: string;
+  altGroup: string;
   ok: boolean;
   currentValueUsd?: number;
   pnlPct?: number;
@@ -96,6 +133,9 @@ export function WhatIfModal({
 
   const [compareRows, setCompareRows] = useState<CompareRow[]>([]);
   const [compareLoading, setCompareLoading] = useState(false);
+  const [compareProgress, setCompareProgress] = useState<{ done: number; total: number } | null>(
+    null,
+  );
 
   const otherAssets = useMemo(
     () =>
@@ -157,15 +197,30 @@ export function WhatIfModal({
     };
   }, [mode, altKey, seed]);
 
-  // Compare-all fetch
+  // Compare-all fetch (throttled to avoid CoinGecko / Yahoo rate limits on cold cache)
   useEffect(() => {
     if (mode !== "compare-all") return;
     let cancelled = false;
+
+    type Candidate = BenchmarkItem & { group: string };
+    const candidates: Candidate[] = BENCHMARK_GROUPS.flatMap((g) =>
+      g.items
+        .filter((b) => b.key !== seed.originalAssetKey)
+        .map((b) => ({ ...b, group: g.label })),
+    );
+
     async function runAll() {
       setCompareLoading(true);
-      const candidates = ALL_BENCHMARKS.filter((b) => b.key !== seed.originalAssetKey);
-      const results = await Promise.all(
-        candidates.map(async (b): Promise<CompareRow> => {
+      setCompareRows([]);
+      setCompareProgress({ done: 0, total: candidates.length });
+
+      const results = await runWithConcurrency(
+        candidates,
+        COMPARE_CONCURRENCY,
+        async (b): Promise<CompareRow> => {
+          if (cancelled) {
+            return { altKey: b.key, altLabel: b.label, altSub: b.sub, altGroup: b.group, ok: false };
+          }
           try {
             const r = await fetch("/api/portfolio/what-if", {
               method: "POST",
@@ -180,24 +235,42 @@ export function WhatIfModal({
             });
             const j = await r.json();
             if (!r.ok) {
-              return { altKey: b.key, altLabel: b.label, altSub: b.sub, ok: false, error: j?.error };
+              return {
+                altKey: b.key,
+                altLabel: b.label,
+                altSub: b.sub,
+                altGroup: b.group,
+                ok: false,
+                error: j?.error,
+              };
             }
             return {
               altKey: b.key,
               altLabel: b.label,
               altSub: b.sub,
+              altGroup: b.group,
               ok: true,
               currentValueUsd: j.alternative.currentValueUsd,
               pnlPct: j.alternative.pnlPct,
               deltaValueUsd: j.delta.valueUsd,
             };
           } catch {
-            return { altKey: b.key, altLabel: b.label, altSub: b.sub, ok: false, error: "fetch_failed" };
+            return {
+              altKey: b.key,
+              altLabel: b.label,
+              altSub: b.sub,
+              altGroup: b.group,
+              ok: false,
+              error: "fetch_failed",
+            };
           }
-        }),
+        },
+        (done, total) => {
+          if (!cancelled) setCompareProgress({ done, total });
+        },
       );
+
       if (!cancelled) {
-        // Sort by alternative pnlPct desc (ok rows first)
         results.sort((a, b) => {
           if (a.ok && !b.ok) return -1;
           if (!a.ok && b.ok) return 1;
@@ -205,6 +278,7 @@ export function WhatIfModal({
         });
         setCompareRows(results);
         setCompareLoading(false);
+        setCompareProgress(null);
       }
     }
     void runAll();
@@ -311,10 +385,10 @@ export function WhatIfModal({
                     onChange={(e) => e.target.value && setAltKey(e.target.value)}
                     className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white focus:border-emerald-400/40 focus:outline-none"
                   >
-                    <option value="">— alege —</option>
+                    <option value="">- alege -</option>
                     {otherAssets.map((a) => (
                       <option key={a.key} value={a.key}>
-                        {a.symbol} — {a.name}
+                        {a.symbol} · {a.name}
                       </option>
                     ))}
                   </select>
@@ -339,6 +413,7 @@ export function WhatIfModal({
             <CompareAllTable
               rows={compareRows}
               loading={compareLoading}
+              progress={compareProgress}
               originalAssetName={seed.originalAssetName}
             />
           )}
@@ -346,8 +421,8 @@ export function WhatIfModal({
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4 text-[12px] text-amber-200/90">
             <p className="font-semibold text-amber-200">📚 Lecție, nu regret</p>
             <p className="mt-1 text-amber-100/70">
-              Comparațiile sunt educaționale. La momentul deciziei nu știai cum vor evolua prețurile
-              — asta e &ldquo;hindsight bias&rdquo;. Folosește datele pentru a-ți rafina procesul
+              Comparațiile sunt educaționale. La momentul deciziei nu știai cum vor evolua prețurile.
+              Asta este &ldquo;hindsight bias&rdquo;. Folosește datele pentru a-ți rafina procesul
               decizional, nu pentru a regreta.
             </p>
           </div>
@@ -360,16 +435,34 @@ export function WhatIfModal({
 function CompareAllTable({
   rows,
   loading,
+  progress,
   originalAssetName,
 }: {
   rows: CompareRow[];
   loading: boolean;
+  progress: { done: number; total: number } | null;
   originalAssetName: string;
 }) {
   if (loading) {
+    const pct = progress && progress.total > 0
+      ? Math.round((progress.done / progress.total) * 100)
+      : 0;
     return (
-      <div className="rounded-xl border border-white/10 bg-white/[0.02] p-8 text-center text-sm text-slate-500">
-        Se calculează toate alternativele…
+      <div className="rounded-xl border border-white/10 bg-white/[0.02] p-8 text-center">
+        <p className="text-sm text-slate-400">Se calculează toate alternativele.</p>
+        {progress ? (
+          <>
+            <div className="mx-auto mt-3 h-1.5 w-48 overflow-hidden rounded-full bg-white/5">
+              <div
+                className="h-full bg-emerald-400/70 transition-all duration-300"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <p className="mt-2 text-[11px] text-slate-500 tabular-nums">
+              {progress.done} / {progress.total}
+            </p>
+          </>
+        ) : null}
       </div>
     );
   }
@@ -379,6 +472,18 @@ function CompareAllTable({
         Nicio alternativă disponibilă.
       </div>
     );
+  }
+
+  // Pre-sort already done by caller (best pnlPct first).
+  // Group rows by altGroup for readability while preserving global rank order inside.
+  const groupOrder: string[] = [];
+  const grouped = new Map<string, CompareRow[]>();
+  for (const r of rows) {
+    if (!grouped.has(r.altGroup)) {
+      groupOrder.push(r.altGroup);
+      grouped.set(r.altGroup, []);
+    }
+    grouped.get(r.altGroup)!.push(r);
   }
 
   return (
@@ -392,48 +497,63 @@ function CompareAllTable({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/5 text-left text-[10px] uppercase tracking-wider text-slate-500">
-              <th className="px-4 py-2">Alternativă</th>
-              <th className="px-4 py-2 text-right">Valoare azi</th>
-              <th className="px-4 py-2 text-right">Randament</th>
-              <th className="px-4 py-2 text-right">vs Alegere</th>
+              <th className="px-3 py-2 sm:px-4">Alternativă</th>
+              <th className="px-3 py-2 text-right sm:px-4">Valoare azi</th>
+              <th className="px-3 py-2 text-right sm:px-4">Randament</th>
+              <th className="px-3 py-2 text-right sm:px-4">vs Alegere</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => {
-              if (!r.ok) {
-                return (
-                  <tr key={r.altKey} className="border-b border-white/5 last:border-0">
-                    <td className="px-4 py-2.5">
-                      <span className="font-bold text-white">{r.altLabel}</span>
-                      <span className="ml-2 text-[11px] text-slate-500">{r.altSub}</span>
-                    </td>
-                    <td colSpan={3} className="px-4 py-2.5 text-right text-[11px] text-slate-500">
-                      Nu am preț istoric
+            {groupOrder.map((groupLabel) => {
+              const groupRows = grouped.get(groupLabel) ?? [];
+              return (
+                <Fragment key={groupLabel}>
+                  <tr className="bg-white/[0.015]">
+                    <td
+                      colSpan={4}
+                      className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500 sm:px-4"
+                    >
+                      {groupLabel}
                     </td>
                   </tr>
-                );
-              }
-              const pct = r.pnlPct ?? 0;
-              const delta = r.deltaValueUsd ?? 0;
-              const pctColor = pct > 0 ? "text-emerald-400" : pct < 0 ? "text-rose-400" : "text-slate-300";
-              const deltaColor = delta > 0 ? "text-rose-300" : delta < 0 ? "text-emerald-300" : "text-slate-400";
-              return (
-                <tr key={r.altKey} className="border-b border-white/5 last:border-0">
-                  <td className="px-4 py-2.5">
-                    <span className="font-bold text-white">{r.altLabel}</span>
-                    <span className="ml-2 text-[11px] text-slate-500">{r.altSub}</span>
-                  </td>
-                  <td className="px-4 py-2.5 text-right font-data tabular-nums text-white">
-                    {fmtUsd(r.currentValueUsd ?? 0)}
-                  </td>
-                  <td className={`px-4 py-2.5 text-right font-data tabular-nums ${pctColor}`}>
-                    {fmtPct(pct)}
-                  </td>
-                  <td className={`px-4 py-2.5 text-right font-data tabular-nums ${deltaColor}`}>
-                    {delta > 0 ? "+" : ""}
-                    {fmtUsd(delta)}
-                  </td>
-                </tr>
+                  {groupRows.map((r) => {
+                    if (!r.ok) {
+                      return (
+                        <tr key={r.altKey} className="border-b border-white/5 last:border-0">
+                          <td className="px-3 py-2.5 sm:px-4">
+                            <span className="font-bold text-white">{r.altLabel}</span>
+                            <span className="ml-2 text-[11px] text-slate-500">{r.altSub}</span>
+                          </td>
+                          <td colSpan={3} className="px-3 py-2.5 text-right text-[11px] text-slate-500 sm:px-4">
+                            Nu am preț istoric
+                          </td>
+                        </tr>
+                      );
+                    }
+                    const pct = r.pnlPct ?? 0;
+                    const delta = r.deltaValueUsd ?? 0;
+                    const pctColor = pct > 0 ? "text-emerald-400" : pct < 0 ? "text-rose-400" : "text-slate-300";
+                    const deltaColor = delta > 0 ? "text-rose-300" : delta < 0 ? "text-emerald-300" : "text-slate-400";
+                    return (
+                      <tr key={r.altKey} className="border-b border-white/5 last:border-0">
+                        <td className="px-3 py-2.5 sm:px-4">
+                          <span className="font-bold text-white">{r.altLabel}</span>
+                          <span className="ml-2 text-[11px] text-slate-500">{r.altSub}</span>
+                        </td>
+                        <td className="px-3 py-2.5 text-right font-data tabular-nums text-white sm:px-4">
+                          {fmtUsd(r.currentValueUsd ?? 0)}
+                        </td>
+                        <td className={`px-3 py-2.5 text-right font-data tabular-nums sm:px-4 ${pctColor}`}>
+                          {fmtPct(pct)}
+                        </td>
+                        <td className={`px-3 py-2.5 text-right font-data tabular-nums sm:px-4 ${deltaColor}`}>
+                          {delta > 0 ? "+" : ""}
+                          {fmtUsd(delta)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </Fragment>
               );
             })}
           </tbody>

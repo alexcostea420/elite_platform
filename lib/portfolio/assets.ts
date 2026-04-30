@@ -84,6 +84,13 @@ const STOCKS: Asset[] = [
   { key: "stock:MSTR", type: "stock", name: "MicroStrategy", symbol: "MSTR", yahooSymbol: "MSTR", group: "US Stocks" },
   { key: "stock:COIN", type: "stock", name: "Coinbase", symbol: "COIN", yahooSymbol: "COIN", group: "US Stocks" },
   { key: "stock:HOOD", type: "stock", name: "Robinhood", symbol: "HOOD", yahooSymbol: "HOOD", group: "US Stocks" },
+  { key: "stock:GOOG", type: "stock", name: "Alphabet (Google C)", symbol: "GOOG", yahooSymbol: "GOOG", group: "US Stocks" },
+  { key: "stock:ORCL", type: "stock", name: "Oracle", symbol: "ORCL", yahooSymbol: "ORCL", group: "US Stocks" },
+  { key: "stock:PLTR", type: "stock", name: "Palantir", symbol: "PLTR", yahooSymbol: "PLTR", group: "US Stocks" },
+  { key: "stock:SHOP", type: "stock", name: "Shopify", symbol: "SHOP", yahooSymbol: "SHOP", group: "US Stocks" },
+  { key: "stock:PYPL", type: "stock", name: "PayPal", symbol: "PYPL", yahooSymbol: "PYPL", group: "US Stocks" },
+  { key: "stock:MARA", type: "stock", name: "Marathon Digital", symbol: "MARA", yahooSymbol: "MARA", group: "US Stocks" },
+  { key: "stock:CRCL", type: "stock", name: "Circle", symbol: "CRCL", yahooSymbol: "CRCL", group: "US Stocks" },
 ];
 
 const ETFS: Asset[] = [
@@ -102,7 +109,7 @@ const INDICES: Asset[] = [
   {
     key: "index:bet",
     type: "index",
-    name: "BET (Bursa București — via Tradeville ETF)",
+    name: "BET (Bursa București, via Tradeville ETF)",
     symbol: "BET",
     yahooSymbol: "TVBETETF.RO",
     nativeCurrency: "RON",
@@ -111,6 +118,59 @@ const INDICES: Asset[] = [
 ];
 
 export const ASSETS: Asset[] = [...CRYPTO, ...STOCKS, ...ETFS, ...INDICES];
+
+// Top 20 crypto by market cap, excluding stablecoins (USDT, USDC).
+// Used by What-If "Compară toate" benchmark group.
+export const TOP_CRYPTO_KEYS: string[] = [
+  "crypto:bitcoin",
+  "crypto:ethereum",
+  "crypto:binancecoin",
+  "crypto:solana",
+  "crypto:ripple",
+  "crypto:dogecoin",
+  "crypto:the-open-network",
+  "crypto:cardano",
+  "crypto:tron",
+  "crypto:avalanche-2",
+  "crypto:shiba-inu",
+  "crypto:polkadot",
+  "crypto:chainlink",
+  "crypto:bitcoin-cash",
+  "crypto:near",
+  "crypto:matic-network",
+  "crypto:litecoin",
+  "crypto:internet-computer",
+  "crypto:uniswap",
+  "crypto:stellar",
+];
+
+// Tickers tracked by the stock screener (app/api/stocks/route.ts).
+// Kept in sync manually; if a ticker is added there, mirror it here + in STOCKS above.
+export const SCREENER_STOCK_KEYS: string[] = [
+  "stock:TSLA",
+  "stock:COIN",
+  "stock:HOOD",
+  "stock:MSTR",
+  "stock:MARA",
+  "stock:CRCL",
+  "stock:GOOG",
+  "stock:META",
+  "stock:NVDA",
+  "stock:AAPL",
+  "stock:MSFT",
+  "stock:AMZN",
+  "stock:PYPL",
+  "stock:SHOP",
+  "stock:PLTR",
+  "stock:ORCL",
+];
+
+// ETFs surfaced as macro benchmarks in the What-If tool.
+export const BENCHMARK_ETF_KEYS: string[] = [
+  "stock:SPY",
+  "stock:QQQ",
+  "stock:GLD",
+];
 
 const ASSET_BY_KEY = new Map(ASSETS.map((a) => [a.key, a]));
 
