@@ -39,20 +39,29 @@ export async function GET(request: Request) {
   since.setUTCDate(since.getUTCDate() - days);
   const sinceStr = since.toISOString().slice(0, 10);
 
-  const { data, error } = await supabase
-    .from("risk_score_history")
-    .select("date, total_score, level, btc_price")
-    .gte("date", sinceStr)
-    .order("date", { ascending: true })
-    .limit(MAX_DAYS);
+  // Supabase caps single requests at 1000 rows. Paginate when the requested
+  // window exceeds that, otherwise long-range views silently truncate.
+  const PAGE = 1000;
+  const rows: Array<{ date: string; total_score: number; level: string; btc_price: number | null }> = [];
+  for (let offset = 0; offset < MAX_DAYS; offset += PAGE) {
+    const { data, error } = await supabase
+      .from("risk_score_history")
+      .select("date, total_score, level, btc_price")
+      .gte("date", sinceStr)
+      .order("date", { ascending: true })
+      .range(offset, offset + PAGE - 1);
 
-  if (error) {
-    console.error("[risk-score/history]", error.message);
-    return NextResponse.json({ error: "Database error" }, { status: 500 });
+    if (error) {
+      console.error("[risk-score/history]", error.message);
+      return NextResponse.json({ error: "Database error" }, { status: 500 });
+    }
+    if (!data || data.length === 0) break;
+    rows.push(...data);
+    if (data.length < PAGE) break;
   }
 
   return NextResponse.json({
     days,
-    rows: data ?? [],
+    rows,
   });
 }
