@@ -40,7 +40,11 @@ export async function POST(request: NextRequest) {
     const amountCents = Math.round(priceEur * 100);
 
     const Stripe = (await import("stripe")).default;
-    const stripe = new Stripe(stripeConfig.secretKey);
+    const stripe = new Stripe(stripeConfig.secretKey, {
+      httpClient: Stripe.createNodeHttpClient(),
+      timeout: 20000,
+      maxNetworkRetries: 1,
+    });
 
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded_page",
