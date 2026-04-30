@@ -28,6 +28,10 @@ LOOKBACK_DAYS = 1
 TRANSCRIPTS_DIR = Path("transcripts")
 TRANSCRIPTS_DIR.mkdir(exist_ok=True)
 
+WHISPER_MODEL = "mlx-community/whisper-large-v3-turbo"
+WHISPER_INITIAL_PROMPT = "Transcriere în limba română cu diacritice: ă, â, î, ș, ț."
+WHISPER_MAX_DURATION_SEC = 3600  # skip audios longer than 1h to keep cron under control
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -134,6 +138,78 @@ def _fetch_via_ytdlp(video_id: str):
     return None
 
 
+def _fetch_via_whisper(video_id: str):
+    """Last-resort fallback: download audio with yt-dlp + transcribe locally with mlx-whisper."""
+    try:
+        import mlx_whisper  # noqa: F401
+    except ImportError:
+        log.warning("  mlx-whisper not installed - skipping whisper fallback")
+        return None
+
+    url = f"https://www.youtube.com/watch?v={video_id}"
+    tmp_dir = TRANSCRIPTS_DIR / "_whisper_tmp"
+    tmp_dir.mkdir(exist_ok=True)
+    out_template = str(tmp_dir / f"{video_id}.%(ext)s")
+
+    # android_vr client bypasses YouTube's PO Token / SABR streaming block (as of 2026-04)
+    cmd = [
+        "python3", "-m", "yt_dlp",
+        "--extractor-args", "youtube:player_client=android_vr",
+        "-f", "bestaudio/best",
+        "--no-playlist",
+        "--no-warnings",
+        "-o", out_template,
+        url,
+    ]
+    try:
+        subprocess.run(cmd, capture_output=True, timeout=300, check=False)
+    except subprocess.TimeoutExpired:
+        log.warning(f"  ({video_id}): yt-dlp audio download timed out")
+        return None
+    except FileNotFoundError:
+        return None
+
+    # Find downloaded audio (any extension yt-dlp picked)
+    audio_files = list(tmp_dir.glob(f"{video_id}.*"))
+    if not audio_files:
+        return None
+    audio_path = audio_files[0]
+
+    # Skip very long audios — daily cron should stay bounded
+    try:
+        probe = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", str(audio_path)],
+            capture_output=True, text=True, timeout=10,
+        )
+        duration = float(probe.stdout.strip() or 0)
+        if duration > WHISPER_MAX_DURATION_SEC:
+            log.warning(f"  ({video_id}): audio too long ({duration:.0f}s) - skipping whisper")
+            audio_path.unlink(missing_ok=True)
+            return None
+    except (subprocess.TimeoutExpired, ValueError, FileNotFoundError):
+        duration = 0  # ffprobe missing — proceed anyway
+
+    log.info(f"  ({video_id}): transcribing {duration:.0f}s audio with mlx-whisper turbo...")
+    try:
+        import mlx_whisper
+        result = mlx_whisper.transcribe(
+            str(audio_path),
+            path_or_hf_repo=WHISPER_MODEL,
+            language="ro",
+            initial_prompt=WHISPER_INITIAL_PROMPT,
+            verbose=False,
+        )
+        text = (result.get("text") or "").strip()
+    except Exception as e:
+        log.warning(f"  ({video_id}): whisper transcription failed - {e}")
+        text = None
+    finally:
+        audio_path.unlink(missing_ok=True)
+
+    return text if text and len(text) > 20 else None
+
+
 def extract_transcript(video_id: str, channel: str):
     # Check cache first
     cache_path = TRANSCRIPTS_DIR / f"{video_id}.txt"
@@ -156,18 +232,31 @@ def extract_transcript(video_id: str, channel: str):
     except Exception as e:
         log.info(f"  {channel} ({video_id}): primary method failed, trying yt-dlp...")
 
-    # Fallback: yt-dlp
+    # Fallback 1: yt-dlp subtitles
     try:
         text = _fetch_via_ytdlp(video_id)
         if text:
             cache_path = TRANSCRIPTS_DIR / f"{video_id}.txt"
             cache_path.write_text(text, encoding="utf-8")
-            log.info(f"  {channel} ({video_id}): yt-dlp fallback succeeded")
+            log.info(f"  {channel} ({video_id}): yt-dlp subtitle fallback succeeded")
             return text
         else:
-            log.warning(f"  {channel} ({video_id}): yt-dlp found no subtitles")
+            log.info(f"  {channel} ({video_id}): no subtitles, trying whisper...")
     except Exception as e2:
-        log.warning(f"  {channel} ({video_id}): yt-dlp fallback also failed - {e2}")
+        log.warning(f"  {channel} ({video_id}): yt-dlp subtitle fallback failed - {e2}")
+
+    # Fallback 2: download audio + mlx-whisper local transcription
+    try:
+        text = _fetch_via_whisper(video_id)
+        if text:
+            cache_path = TRANSCRIPTS_DIR / f"{video_id}.txt"
+            cache_path.write_text(text, encoding="utf-8")
+            log.info(f"  {channel} ({video_id}): whisper fallback succeeded ({len(text)} chars)")
+            return text
+        else:
+            log.warning(f"  {channel} ({video_id}): whisper fallback returned empty")
+    except Exception as e3:
+        log.warning(f"  {channel} ({video_id}): whisper fallback failed - {e3}")
 
     return None
 
