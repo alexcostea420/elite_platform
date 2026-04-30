@@ -16,7 +16,6 @@ type CryptoData = {
   pctFromATH: number;
   cyclePeak: number;
   pctFromCyclePeak: number;
-  sparkline: number[];
   image: string;
 };
 
@@ -116,17 +115,17 @@ function getRSILabel(rsi: number): string {
 function getNearestZone(price: number, zones: CryptoZones | undefined): { label: string; direction: "buy" | "sell" | "in" } {
   if (!zones) return { label: "-", direction: "in" };
   if (price <= zones.buy1) {
-    const pct = zones.buy2 > 0 ? ((price - zones.buy2) / zones.buy2 * 100) : 0;
-    return { label: `${pct.toFixed(0)}% > B2`, direction: "buy" };
+    const pct = zones.buy2 > 0 ? Math.abs(((price - zones.buy2) / zones.buy2) * 100) : 0;
+    return { label: `🛒 -${pct.toFixed(0)}% până Cumpără 2`, direction: "buy" };
   }
   if (price >= zones.sell1) {
-    const pct = zones.sell2 > 0 ? ((zones.sell2 - price) / price * 100) : 0;
-    return { label: `${pct.toFixed(0)}% → S2`, direction: "sell" };
+    const pct = zones.sell2 > 0 ? Math.abs(((zones.sell2 - price) / price) * 100) : 0;
+    return { label: `💰 +${pct.toFixed(0)}% până Vinde 2`, direction: "sell" };
   }
-  const toB1 = ((price - zones.buy1) / price) * 100;
-  const toS1 = ((zones.sell1 - price) / price) * 100;
-  if (toB1 < toS1) return { label: `${toB1.toFixed(0)}% > B1`, direction: "buy" };
-  return { label: `${toS1.toFixed(0)}% → S1`, direction: "sell" };
+  const toB1 = Math.abs(((price - zones.buy1) / price) * 100);
+  const toS1 = Math.abs(((zones.sell1 - price) / price) * 100);
+  if (toB1 < toS1) return { label: `🛒 -${toB1.toFixed(0)}% până Cumpără 1`, direction: "buy" };
+  return { label: `💰 +${toS1.toFixed(0)}% până Vinde 1`, direction: "sell" };
 }
 
 function LiveCountdown({ updatedAt }: { updatedAt: string }) {
@@ -155,6 +154,17 @@ function getSignalStyle(signal: string) {
   return { color: "text-slate-400", bg: "bg-white/5 border-white/10", dot: "bg-slate-500" };
 }
 
+function getSignalDisplay(signal: string): { label: string; sub: string } {
+  switch (signal) {
+    case "BUY 2": return { label: "Cumpără 2", sub: "agresiv" };
+    case "BUY 1": return { label: "Cumpără 1", sub: "alocă ~50%" };
+    case "SELL 1": return { label: "Vinde 1", sub: "parțial" };
+    case "SELL 2": return { label: "Vinde 2", sub: "tot" };
+    case "WAIT": return { label: "Așteaptă", sub: "" };
+    default: return { label: signal, sub: "" };
+  }
+}
+
 function formatPrice(n: number): string {
   if (n >= 1000) return `$${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
   if (n >= 1) return `$${n.toFixed(2)}`;
@@ -179,31 +189,6 @@ function getZonePosition(value: number, low: number, high: number) {
   const range = high - low;
   if (range <= 0) return 50;
   return Math.max(0, Math.min(100, ((value - low) / range) * 100));
-}
-
-// Mini sparkline SVG with gradient fill
-function Sparkline({ data, color }: { data: number[]; color: string }) {
-  if (data.length < 2) return <div className="h-6 w-16" />;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const w = 64;
-  const h = 24;
-  const points = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-  const gradId = `cg-${color.replace("#", "")}`;
-
-  return (
-    <svg width={w} height={h} className="inline-block opacity-80">
-      <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
-      <polygon points={`0,${h} ${points} ${w},${h}`} fill={`url(#${gradId})`} />
-    </svg>
-  );
 }
 
 // Skeleton components
@@ -343,9 +328,7 @@ export function CryptoClient() {
     const signal = getSignal(zones, c.price);
     // Weekly RSI from API (Yahoo Finance, 14-period on weekly closes)
     const rsi = rsiData[c.symbol] ?? null;
-    // Use last 48 points for visual sparkline
-    const sparkVisual = c.sparkline.slice(-48);
-    return { ...c, signal, zones, rank: i + 1, rsi, sparkVisual };
+    return { ...c, signal, zones, rank: i + 1, rsi };
   });
 
   // Global stats
@@ -450,6 +433,45 @@ export function CryptoClient() {
         </div>
       </div>
 
+      {/* "Cum citesc?" — friendly guide for new users */}
+      <details className="glass-card group px-5 py-3 [&_summary::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between text-sm">
+          <span className="flex items-center gap-2 font-semibold text-white">
+            <span className="text-base">📖</span> Cum citesc tabelul?
+          </span>
+          <span className="text-xs text-slate-500 group-open:rotate-180 transition">▼</span>
+        </summary>
+        <div className="mt-4 grid gap-4 text-xs leading-relaxed text-slate-300 sm:grid-cols-2">
+          <div>
+            <p className="font-semibold text-emerald-400">Zonele Cumpără / Vinde</p>
+            <p className="mt-1 text-slate-400">
+              Niveluri de preț calculate de Alex. <strong className="text-emerald-400">Cumpără 1</strong> e zona bună de intrare (alocă ~50%), <strong className="text-emerald-400">Cumpără 2</strong> e agresiv (restul). <strong className="text-orange-400">Vinde 1</strong> = profit parțial, <strong className="text-orange-400">Vinde 2</strong> = ieșire completă.
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-blue-400">RSI săptămânal</p>
+            <p className="mt-1 text-slate-400">
+              Indicator între 0–100. Sub 30 = supravândut (oportunitate). Peste 70 = supracumpărat (atenție la corecție). Calculat pe închiderile săptămânale.
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-amber-400">% Vârf</p>
+            <p className="mt-1 text-slate-400">
+              Cât de departe e prețul actual de maximul ciclului. -80% înseamnă că e nevoie de +400% ca să revină la vârf.
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-slate-200">Acțiunea</p>
+            <p className="mt-1 text-slate-400">
+              Recomandarea curentă pe baza zonelor. <strong>Așteaptă</strong> = nimic de făcut acum. Cumpără/Vinde apar când prețul atinge zone.
+            </p>
+          </div>
+        </div>
+        <p className="mt-4 border-t border-white/5 pt-3 text-[11px] text-slate-500">
+          Datele sunt orientative, nu sfaturi de investiție. Fă-ți propria cercetare.
+        </p>
+      </details>
+
       {/* RSI Legend */}
       <div className="flex flex-wrap items-center gap-2 text-[11px]">
         <span className="text-slate-500 font-semibold">RSI Weekly:</span>
@@ -540,13 +562,12 @@ export function CryptoClient() {
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("price")}>Preț</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change24h")}>24h {sortBy === "change24h" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change7d")}>7d {sortBy === "change7d" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
-                <th className="px-4 py-3">7d Chart</th>
-                <th className="px-4 py-3">RSI</th>
+                <th className="px-4 py-3" title="Relative Strength Index pe săptămânal. ≤30 = supravândut (bun de cumpărat), ≥70 = supracumpărat (atenție la corecție).">RSI <span className="text-slate-600">ⓘ</span></th>
                 <th className="px-4 py-3">Market Cap</th>
-                <th className="px-4 py-3">Zonă</th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromCyclePeak")}>% Vârf {sortBy === "pctFromCyclePeak" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
-                <th className="px-4 py-3">Range</th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("signal")}>Semnal {sortBy === "signal" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
+                <th className="px-4 py-3" title="Cât de aproape e prețul de cea mai apropiată zonă de Cumpără sau Vinde.">Zonă <span className="text-slate-600">ⓘ</span></th>
+                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromCyclePeak")} title="Cât de departe e prețul actual de vârful ciclului. -80% înseamnă scăzut foarte mult de la maxim.">% Vârf <span className="text-slate-600">ⓘ</span> {sortBy === "pctFromCyclePeak" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
+                <th className="px-4 py-3" title="Poziția prețului între zona Cumpără 2 (stânga) și Vinde 2 (dreapta).">Range <span className="text-slate-600">ⓘ</span></th>
+                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("signal")} title="Acțiunea recomandată pe baza zonelor: Cumpără 1/2, Vinde 1/2 sau Așteaptă.">Acțiune <span className="text-slate-600">ⓘ</span> {sortBy === "signal" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
               </tr>
             </thead>
             <tbody>
@@ -556,10 +577,10 @@ export function CryptoClient() {
                 const pos = zones ? getPricePosition(coin.price, zones.buy2, zones.sell2) : 50;
                 const buy1Pos = zones ? getZonePosition(zones.buy1, zones.buy2, zones.sell2) : 0;
                 const sell1Pos = zones ? getZonePosition(zones.sell1, zones.buy2, zones.sell2) : 100;
-                const sparkColor = coin.change7d >= 0 ? "#22c55e" : "#ef4444";
                 const flash = flashMap[coin.symbol];
                 const rsiColor = coin.rsi !== null ? getRSIColor(coin.rsi) : "";
                 const rsiLabel = coin.rsi !== null ? getRSILabel(coin.rsi) : "";
+                const sigDisplay = getSignalDisplay(coin.signal);
 
                 return (
                   <tr key={coin.id} className={`border-b border-white/5 transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
@@ -582,9 +603,6 @@ export function CryptoClient() {
                       <span className={`font-data font-semibold tabular-nums ${coin.change7d >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                         {coin.change7d >= 0 ? "+" : ""}{coin.change7d.toFixed(2)}%
                       </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Sparkline data={coin.sparkVisual} color={sparkColor} />
                     </td>
                     <td className="px-4 py-3">
                       {blur ? (
@@ -632,10 +650,15 @@ export function CryptoClient() {
                       {blur ? (
                         <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
                       ) : (
-                        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
-                          <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                          {coin.signal}
-                        </span>
+                        <div className="flex flex-col items-start gap-0.5">
+                          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
+                            <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                            {sigDisplay.label}
+                          </span>
+                          {sigDisplay.sub && (
+                            <span className="text-[10px] text-slate-500">{sigDisplay.sub}</span>
+                          )}
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -654,9 +677,9 @@ export function CryptoClient() {
           const pos = zones ? getPricePosition(coin.price, zones.buy2, zones.sell2) : 50;
           const buy1Pos = zones ? getZonePosition(zones.buy1, zones.buy2, zones.sell2) : 0;
           const sell1Pos = zones ? getZonePosition(zones.sell1, zones.buy2, zones.sell2) : 100;
-          const sparkColor = coin.change7d >= 0 ? "#22c55e" : "#ef4444";
           const flash = flashMap[coin.symbol];
           const rsiColor = coin.rsi !== null ? getRSIColor(coin.rsi) : "";
+          const sigDisplay = getSignalDisplay(coin.signal);
 
           return (
             <div key={coin.id} className={`glass-card px-4 py-4 ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
@@ -675,7 +698,7 @@ export function CryptoClient() {
                   )}
                   <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
                     <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                    {coin.signal}
+                    {sigDisplay.label}
                   </span>
                 </div>
               </div>
@@ -687,7 +710,9 @@ export function CryptoClient() {
                     {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(2)}%
                   </span>
                 </div>
-                <Sparkline data={coin.sparkVisual} color={sparkColor} />
+                {sigDisplay.sub && (
+                  <span className="text-[11px] text-slate-500">{sigDisplay.sub}</span>
+                )}
               </div>
 
               <div className="mt-2 flex gap-4 text-xs text-slate-500">
