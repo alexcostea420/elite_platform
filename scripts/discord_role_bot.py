@@ -50,6 +50,7 @@ def discord_api(method, endpoint, token, data=None):
     headers = {
         "Authorization": f"Bot {token}",
         "Content-Type": "application/json",
+        "User-Agent": "ArmataElitePayments (https://app.armatadetraderi.com, 1.0)",
     }
     if data:
         req = urllib.request.Request(url, data=json.dumps(data).encode(), headers=headers, method=method)
