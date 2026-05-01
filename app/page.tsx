@@ -67,7 +67,7 @@ export default async function HomePage() {
       label: "ANALIZĂ SĂPTĂMÂNALĂ",
       title: "Știi exact când să cumperi",
       desc: [
-        "Pe 5 februarie 2026, când BTC era la $63k, scorul a fost 86 — semnal clar de cumpărare.",
+        "Pe 5 februarie 2026, când BTC era la $63k, scorul a fost 86. Semnal clar de cumpărare.",
         "Bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri.",
         "Actualizat săptămânal.",
       ],
