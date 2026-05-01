@@ -177,12 +177,12 @@ function InfoTooltip({
 function Section({
   id,
   title,
-  icon,
   children,
   defaultOpen = true,
 }: {
   id: string;
   title: string;
+  /** Deprecated, kept for compatibility but no longer rendered */
   icon?: string;
   children: React.ReactNode;
   defaultOpen?: boolean;
@@ -199,7 +199,6 @@ function Section({
   return (
     <section id={id} className="mb-6 scroll-mt-24 md:mb-8">
       <div className="mb-4 flex items-center gap-2">
-        {icon && <span className="text-lg">{icon}</span>}
         <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-300">{title}</h2>
         {hasInfo && <InfoTooltip id={id} label={title} />}
         <button
@@ -230,10 +229,20 @@ function VerdictHero({
   decision,
   score,
   conviction,
+  price,
+  btc24h,
+  regimeInfo,
+  dcaMult,
+  updatedAt,
 }: {
   decision: string;
   score: number;
   conviction: string;
+  price: number;
+  btc24h?: number | null;
+  regimeInfo?: { regime: string; modifier: number } | null;
+  dcaMult?: number | null;
+  updatedAt: Date;
 }) {
   const v = getVerdictCopy(decision, score);
   return (
@@ -266,10 +275,9 @@ function VerdictHero({
       </div>
 
       <h2
-        className="mb-3 flex flex-wrap items-center gap-2 text-lg font-bold leading-tight sm:gap-3 sm:text-2xl md:text-4xl"
+        className="mb-3 text-lg font-bold leading-tight sm:text-2xl md:text-4xl"
         style={{ color: v.color }}
       >
-        <span className="text-2xl sm:text-3xl md:text-5xl">{v.emoji}</span>
         {v.title}
       </h2>
 
@@ -305,136 +313,73 @@ function VerdictHero({
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
-          <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-400">
-            ✓ Ce să faci acum
-          </div>
-          <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
-            {v.doNow.map((item, i) => (
-              <li key={i} className="flex gap-2">
-                <span className="text-emerald-400">•</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
-          <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-red-400">
-            ✗ Ce să NU faci
-          </div>
-          <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
-            {v.dontDo.map((item, i) => (
-              <li key={i} className="flex gap-2">
-                <span className="text-red-400">•</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* BTC price + meta pills (consolidated from former hero gauge section) */}
+      <div className="mb-5 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+        <span className="font-data">
+          BTC <span className="font-semibold text-white">${formatNumber(price)}</span>
+          {btc24h != null && (
+            <span className={`ml-2 ${btc24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+              {btc24h >= 0 ? "+" : ""}
+              {btc24h.toFixed(1)}%
+            </span>
+          )}
+        </span>
+        {regimeInfo && (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-slate-400">
+            {regimeInfo.regime}
+            <span className={regimeInfo.modifier >= 0 ? "text-emerald-400" : "text-red-400"}>
+              ({regimeInfo.modifier >= 0 ? "+" : ""}
+              {regimeInfo.modifier})
+            </span>
+          </span>
+        )}
+        {dcaMult != null && (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-slate-400">
+            DCA {dcaMult}x
+          </span>
+        )}
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-slate-500">
+          {updatedAt.toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}{" "}
+          {updatedAt.toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
+        </span>
       </div>
+
+      {/* Prescriptive guidance behind a disclosure (kept for newcomers, no longer takes the hero spot) */}
+      <details className="group rounded-xl border border-white/5 bg-white/[0.02] p-4">
+        <summary className="flex cursor-pointer items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 hover:text-emerald-400">
+          <span>Cum interpretez scorul</span>
+          <span className="text-emerald-400 transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
+            <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-400">
+              Ce poți face
+            </div>
+            <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
+              {v.doNow.map((item, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="text-emerald-400">·</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
+            <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-red-400">
+              Ce să eviți
+            </div>
+            <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
+              {v.dontDo.map((item, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="text-red-400">·</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </details>
     </motion.div>
-  );
-}
-
-/* ────────────────────────────────────────────────────────────
-   Hero Gauge — animated SVG (kept as-is from previous page)
-   ──────────────────────────────────────────────────────────── */
-
-function HeroGaugeSVG({ score, decision }: { score: number; decision: string }) {
-  const { hex, glow } = scoreColor(score);
-  const size = 300;
-  const cx = size / 2;
-  const cy = size / 2;
-  const outerR = 138;
-  const mainR = 120;
-  const strokeW = 14;
-  const circumference = 2 * Math.PI * mainR;
-  const progress = (score / 100) * circumference;
-  const label = getDecisionLabel(decision);
-
-  return (
-    <svg
-      viewBox={`0 0 ${size} ${size}`}
-      className="mx-auto block w-full max-w-[260px] sm:max-w-[300px]"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <defs>
-        <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ef4444" />
-          <stop offset="40%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#22c55e" />
-        </linearGradient>
-        <filter id="gauge-glow">
-          <feGaussianBlur stdDeviation="6" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      <circle
-        cx={cx}
-        cy={cy}
-        r={outerR}
-        fill="none"
-        stroke="url(#gauge-grad)"
-        strokeWidth="2"
-        opacity="0.4"
-        filter="url(#gauge-glow)"
-      />
-      <circle cx={cx} cy={cy} r={mainR} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={strokeW} strokeLinecap="round" />
-      <circle
-        cx={cx}
-        cy={cy}
-        r={mainR}
-        fill="none"
-        stroke={hex}
-        strokeWidth={strokeW}
-        strokeDasharray={`${progress} ${circumference}`}
-        strokeLinecap="round"
-        transform={`rotate(-90 ${cx} ${cy})`}
-        style={{ filter: `drop-shadow(0 0 8px ${glow})` }}
-      >
-        <animate
-          attributeName="stroke-dasharray"
-          from={`0 ${circumference}`}
-          to={`${progress} ${circumference}`}
-          dur="1.2s"
-          fill="freeze"
-          calcMode="spline"
-          keySplines="0.25 0.1 0.25 1"
-          keyTimes="0;1"
-        />
-      </circle>
-      <text
-        x={cx}
-        y={cy - 12}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill={hex}
-        fontSize="64"
-        fontWeight="900"
-        fontFamily="var(--font-mono), monospace"
-      >
-        <animate attributeName="opacity" from="0" to="1" dur="0.6s" fill="freeze" />
-        {score}
-      </text>
-      <text
-        x={cx}
-        y={cy + 32}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill={hex}
-        fontSize="16"
-        fontWeight="700"
-        letterSpacing="0.2em"
-        opacity="0.85"
-      >
-        {label}
-      </text>
-    </svg>
   );
 }
 
@@ -590,66 +535,25 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
           </p>
         </div>
 
-        {/* ─── 0. VERDICT HERO (NEW) ─── */}
-        <VerdictHero decision={riskScore.decision} score={riskScore.score} conviction={riskScore.conviction} />
+        {/* ─── HERO + HISTORY ─── */}
+        <VerdictHero
+          decision={riskScore.decision}
+          score={riskScore.score}
+          conviction={riskScore.conviction}
+          price={price}
+          btc24h={riskScore.btc_24h_change}
+          regimeInfo={riskScore.regime_info ?? null}
+          dcaMult={riskScore.dca_mult ?? null}
+          updatedAt={updatedAt}
+        />
 
-        {/* ─── 0.5 HISTORICAL CHART ─── */}
-        <Section id="history" title="Istoric scor" icon="📈" defaultOpen={true}>
+        <Section id="history" title="Istoric scor" defaultOpen={true}>
           <RiskScoreHistoryChart />
-        </Section>
-
-        {/* ─── 1. HERO GAUGE ─── */}
-        <Section id="hero" title="Scor agregat" icon="🎯">
-          <motion.div
-            className="glass-card py-7 md:py-14"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="flex w-full flex-col items-center px-4 text-center">
-              <HeroGaugeSVG score={riskScore.score} decision={riskScore.decision} />
-
-              <p className="mt-3 font-data text-sm text-slate-500">
-                BTC: <span className="font-semibold text-white">${formatNumber(price)}</span>
-                {riskScore.btc_24h_change != null && (
-                  <span
-                    className={`ml-2 ${
-                      riskScore.btc_24h_change >= 0 ? "text-emerald-400" : "text-red-400"
-                    }`}
-                  >
-                    {riskScore.btc_24h_change >= 0 ? "+" : ""}
-                    {riskScore.btc_24h_change.toFixed(1)}%
-                  </span>
-                )}
-              </p>
-
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                {riskScore.regime_info && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
-                    🌍 {riskScore.regime_info.regime}
-                    <span className={riskScore.regime_info.modifier >= 0 ? "text-emerald-400" : "text-red-400"}>
-                      ({riskScore.regime_info.modifier >= 0 ? "+" : ""}
-                      {riskScore.regime_info.modifier})
-                    </span>
-                  </span>
-                )}
-                {riskScore.dca_mult != null && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-400">
-                    💰 DCA: {riskScore.dca_mult}x
-                  </span>
-                )}
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs text-slate-500">
-                  🕐 {updatedAt.toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" })}{" "}
-                  {updatedAt.toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" })}
-                </span>
-              </div>
-            </div>
-          </motion.div>
         </Section>
 
         {/* ─── 2. LAYER SCORES ─── */}
         {riskScore.layer_scores && (
-          <Section id="layers" title="Scor pe straturi" icon="🧱">
+          <Section id="layers" title="Scor pe straturi">
             <motion.div
               className="grid grid-cols-2 gap-3 md:grid-cols-5 md:gap-4"
               initial="hidden"
@@ -659,12 +563,12 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
               }}
             >
               {[
-                { key: "onchain", label: "On-Chain", weight: "30%", icon: "⛓️" },
-                { key: "technical", label: "Tehnic", weight: "20%", icon: "📈" },
-                { key: "macro", label: "Macro", weight: "25%", icon: "🏦" },
-                { key: "derivatives", label: "Derivate", weight: "15%", icon: "📊" },
-                { key: "cycle", label: "Ciclu", weight: "10%", icon: "🔄" },
-              ].map(({ key, label, weight, icon }) => {
+                { key: "onchain", label: "On-Chain", weight: "30%" },
+                { key: "technical", label: "Tehnic", weight: "20%" },
+                { key: "macro", label: "Macro", weight: "25%" },
+                { key: "derivatives", label: "Derivate", weight: "15%" },
+                { key: "cycle", label: "Ciclu", weight: "10%" },
+              ].map(({ key, label, weight }) => {
                 const val = safeNum((riskScore.layer_scores as Record<string, number>)?.[key], 50);
                 const { hex: layerHex } = scoreColor(val);
                 return (
@@ -676,8 +580,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                       show: { opacity: 1, y: 0 },
                     }}
                   >
-                    <span className="text-2xl">{icon}</span>
-                    <h4 className="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</h4>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</h4>
                     <p className="mt-1 font-data text-3xl font-bold" style={{ color: layerHex }}>
                       {val}
                     </p>
@@ -700,7 +603,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
 
         {/* ─── 3. FLAGS + OVERRIDES ─── */}
         {(riskScore.flags?.length || overrides.length > 0) && (
-          <Section id="flags" title="Semnale active" icon="⚠️">
+          <Section id="flags" title="Semnale active">
             <div className="space-y-3">
               {riskScore.flags?.map((flag, i) => (
                 <motion.div
@@ -711,7 +614,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                   transition={{ delay: i * 0.05 }}
                   style={{ borderColor: "rgba(245,158,11,0.25)", background: "rgba(245,158,11,0.05)" }}
                 >
-                  <span className="mt-0.5 shrink-0 text-amber-400">⚠️</span>
+                  <span className="mt-0.5 shrink-0 font-bold text-amber-400">!</span>
                   <p className="text-sm leading-relaxed text-amber-200">{flag}</p>
                 </motion.div>
               ))}
@@ -724,7 +627,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                   transition={{ delay: (riskScore.flags?.length ?? 0) * 0.05 + i * 0.05 }}
                   style={{ borderColor: "rgba(239,68,68,0.25)", background: "rgba(239,68,68,0.05)" }}
                 >
-                  <span className="mt-0.5 shrink-0 text-red-400">🚨</span>
+                  <span className="mt-0.5 shrink-0 font-bold text-red-400">!</span>
                   <p className="text-sm leading-relaxed text-red-200">{override}</p>
                 </motion.div>
               ))}
@@ -733,7 +636,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
         )}
 
         {/* ─── 4. ARGUMENT CARDS ─── */}
-        <Section id="arguments" title="3 argumente principale" icon="📌">
+        <Section id="arguments" title="3 argumente principale">
           <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
             {/* Card 1: Fear & Greed */}
             <motion.article
@@ -744,7 +647,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
             >
               <div className="mb-4 flex items-center gap-3">
                 <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl font-data text-base font-bold"
                   style={{
                     background:
                       fgValue <= 30
@@ -755,10 +658,10 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                     color: fgValue <= 30 ? "#ef4444" : fgValue <= 60 ? "#f59e0b" : "#22c55e",
                   }}
                 >
-                  {fgValue <= 30 ? "😨" : fgValue <= 60 ? "😐" : "🤑"}
+                  FG
                 </div>
                 <p className="flex items-center text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
-                  Frica si Lacomie
+                  Frică și lăcomie
                   <InfoTooltip text={INDICATOR_BY_KEY.fear_greed.full} label="Fear & Greed" />
                 </p>
               </div>
@@ -788,7 +691,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
             >
               <div className="mb-4 flex items-center gap-3">
                 <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl font-data text-base font-bold"
                   style={{
                     background:
                       pctFromAth >= -5
@@ -799,10 +702,10 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                     color: pctFromAth >= -5 ? "#22c55e" : pctFromAth >= -20 ? "#f59e0b" : "#ef4444",
                   }}
                 >
-                  📊
+                  DD
                 </div>
                 <p className="flex items-center text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
-                  Distanta de la ATH
+                  Distanță de la ATH
                   <InfoTooltip text={INDICATOR_BY_KEY.drawdown.full} label="Drawdown" />
                 </p>
               </div>
@@ -837,10 +740,10 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
             >
               <div className="mb-4 flex items-center gap-3">
                 <div
-                  className="flex h-10 w-10 items-center justify-center rounded-xl text-lg"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl font-data text-base font-bold"
                   style={{ background: "rgba(139,92,246,0.15)", color: "#a78bfa" }}
                 >
-                  ⏳
+                  HC
                 </div>
                 <p className="flex items-center text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
                   Ciclul Halving
@@ -870,7 +773,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
 
         {/* ─── 5. SENTIMENT METER ─── */}
         {safeNum(deriv.long_pct) > 0 && (
-          <Section id="sentiment" title="Sentiment derivate" icon="📊">
+          <Section id="sentiment" title="Sentiment derivate">
             <div className="glass-card px-6 py-7 md:px-10">
               <div className="relative">
                 <div className="h-3 w-full rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-emerald-500" />
@@ -928,23 +831,21 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
 
         {/* ─── 6. MACRO SNAPSHOT ─── */}
         {macroDataAvailable && (
-          <Section id="macro" title="Snapshot macro" icon="🏦">
+          <Section id="macro" title="Snapshot macro">
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {[
-                { key: "fear_greed", label: "Fear & Greed", value: String(fgValue), rawVal: fgValue, icon: "😨" },
+                { key: "fear_greed", label: "Fear & Greed", value: String(fgValue), rawVal: fgValue },
                 {
                   key: "vix",
                   label: "VIX",
-                  value: safeNum(macro.vix) > 0 ? safeNum(macro.vix).toFixed(1) : "—",
+                  value: safeNum(macro.vix) > 0 ? safeNum(macro.vix).toFixed(1) : "-",
                   rawVal: safeNum(macro.vix),
-                  icon: "📉",
                 },
                 {
                   key: "dxy",
                   label: "DXY",
-                  value: safeNum(macro.dxy) > 0 ? safeNum(macro.dxy).toFixed(1) : "—",
+                  value: safeNum(macro.dxy) > 0 ? safeNum(macro.dxy).toFixed(1) : "-",
                   rawVal: safeNum(macro.dxy),
-                  icon: "💵",
                 },
                 {
                   key: "fed_funds_rate",
@@ -952,22 +853,20 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                   value:
                     safeNum(macro.fed_funds_rate) > 0
                       ? `${safeNum(macro.fed_funds_rate).toFixed(2)}%`
-                      : "—",
+                      : "-",
                   rawVal: safeNum(macro.fed_funds_rate),
-                  icon: "🏦",
                 },
-              ].map(({ key, label, value, rawVal, icon }) => {
+              ].map(({ key, label, value, rawVal }) => {
                 const dotColor = getMacroColor(key, rawVal);
                 const info = INDICATOR_BY_KEY[key];
                 return (
                   <article key={key} className="glass-card px-5 py-5">
                     <div className="mb-2 flex items-center justify-between">
-                      <span className="text-lg">{icon}</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600">{label}</span>
                       <span className={`inline-block h-2.5 w-2.5 rounded-full ${dotColor}`} />
                     </div>
                     <p className="font-data text-2xl font-bold text-white">{value}</p>
                     <p className="mt-1 flex items-center text-xs text-slate-500">
-                      {label}
                       {info && <InfoTooltip text={info.full} label={label} />}
                     </p>
                   </article>
@@ -978,7 +877,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
         )}
 
         {/* ─── 7. DETAILED INDICATORS (FIXED key mapping) ─── */}
-        <Section id="details" title="Toți indicatorii" icon="🔍" defaultOpen={true}>
+        <Section id="details" title="Toți indicatorii" defaultOpen={true}>
           <div className="space-y-4">
             {INDICATOR_GROUPS.map((g) => {
               const items = componentsByGroup[g.group] ?? [];
@@ -1059,7 +958,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
 
                             <p className="mt-1.5 hidden text-xs text-slate-600 md:block">{why}</p>
                             {info?.source && (
-                              <p className="mt-1 text-[10px] text-slate-700">📎 {info.source}</p>
+                              <p className="mt-1 text-[10px] text-slate-700">Sursă: {info.source}</p>
                             )}
                           </div>
                         );
@@ -1080,7 +979,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
               >
                 <div className="mb-4 flex items-baseline justify-between">
                   <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Derivate — medie 7 zile
+                    Derivate, medie 7 zile
                   </h3>
                   <span className="text-[10px] uppercase tracking-wider text-slate-600">
                     {deriv.timeframe ?? "1d (7-day avg)"}
@@ -1142,7 +1041,7 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
         </Section>
 
         {/* ─── 8. GLOSSARY (NEW) ─── */}
-        <Section id="glossary" title="Glosar — termeni explicați" icon="📚" defaultOpen={true}>
+        <Section id="glossary" title="Glosar: termeni explicați" defaultOpen={true}>
           <GlossarySection />
         </Section>
 

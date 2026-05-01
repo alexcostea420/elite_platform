@@ -187,7 +187,7 @@ function OnChainSection() {
   return (
     <>
       <p className={cx(s.small, s.muted, s.mb20, s.reveal)}>
-        6 indicatori on-chain verificați Aprilie 2026 — surse: Glassnode,
+        6 indicatori on-chain verificați Aprilie 2026. Surse: Glassnode,
         BitcoinMagazinePro, CoinGlass, CoinDesk. Fiecare are <strong style={{ color: "var(--text)" }}>hit rate istoric verificat</strong>.
       </p>
       <div className={cx(s.onchainGrid, s.reveal)}>
@@ -1279,7 +1279,7 @@ export default function PivotsDashboard() {
         {/* Philosophy */}
         <div className={cx(s.philosophy, s.reveal)}>
           <p><strong>Filozofie:</strong> Elite-Pivots NU este un semnal de tranzacționare.</p>
-          <p style={{ marginTop: 10 }}>Este un <strong>sistem de alerte bazat pe timp</strong> — identifică ferestre în care BTC are șanse mai mari să formeze un pivot semnificativ.</p>
+          <p style={{ marginTop: 10 }}>Este un <strong>sistem de alerte bazat pe timp</strong>: identifică ferestre în care BTC are șanse mai mari să formeze un pivot semnificativ.</p>
           <p style={{ marginTop: 10 }}>Când o fereastră se activează, verifici singur indicatorii tehnici pentru a confirma direcția. Indicatorul îți spune <em>când să fii atent</em>, nu ce să faci.</p>
           <p style={{ marginTop: 14, color: "#94a3b8" }}>O fereastră necesită <strong>scor ≥ 4 + cel puțin o metodă PRIMARĂ</strong>. Metodele secundare singure nu pot declanșa un semnal.</p>
         </div>
@@ -1522,7 +1522,7 @@ export default function PivotsDashboard() {
         <Section id="s-blood" title="Blood Moon Bottom Pattern" subtitle="a 3-a eclipsă lunară totală = bottom de ciclu" icon={<span className={cx(s.astroIcon, s.bloodMoon)} />}>
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
             <p><strong>Pattern:</strong> Eclipsele lunare totale (Blood Moons) vin în serii de 3-4 în fiecare ciclu BTC, urmate de o pauză de ~2.5 ani fără niciuna.</p>
-            <p style={{ marginTop: 10 }}><strong style={{ color: "var(--green)" }}>A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong> — confirmat pe toate cele 3 cicluri anterioare.</p>
+            <p style={{ marginTop: 10 }}><strong style={{ color: "var(--green)" }}>A 3-a (sau ultima) Blood Moon din fiecare serie a marcat bottom-ul ciclului BTC</strong>, confirmat pe toate cele 3 cicluri anterioare.</p>
             <p style={{ marginTop: 10 }}>După ultima Blood Moon, BTC a urcat masiv în fiecare caz.</p>
           </div>
           <div className={cx(s.card, s.reveal, s.mb20)}>
@@ -1589,7 +1589,7 @@ export default function PivotsDashboard() {
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
             <p><strong>Ce este:</strong> Mercury Retrograde = perioadă de ~3 săptămâni când Mercur pare să meargă înapoi pe cer (de 3 ori pe an).</p>
             <p style={{ marginTop: 10 }}>Traderii astro cred că aduce <strong>volatilitate și inversări</strong>. Pattern-ul depinde de trend: în bear market BTC scade, în bull market BTC urcă.</p>
-            <p style={{ marginTop: 10 }}><strong style={{ color: "var(--solar)" }}>Nu este predictiv singur</strong> — a fost testat și eliminat din indicatorul Pine Script.</p>
+            <p style={{ marginTop: 10 }}><strong style={{ color: "var(--solar)" }}>Nu este predictiv singur</strong>, a fost testat și eliminat din indicatorul Pine Script.</p>
           </div>
           <div className={cx(s.card, s.reveal, s.mb20)}>
             <h2 className={s.cardH2}><span className={s.dot} style={{ background: "var(--pi)" }} />Mercury Retrograde - Performanță BTC (21 perioade verificate)</h2>
@@ -1713,7 +1713,7 @@ export default function PivotsDashboard() {
         {/* ── SHMITA ── */}
         <Section id="s-shmita" title="Ciclul Shmita - 7 Ani">
           <div className={cx(s.philosophy, s.reveal)} style={{ marginBottom: 16 }}>
-            <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic — al 7-lea an dintr-un ciclu de 7.</p>
+            <p><strong>Ce este Shmita?</strong> Anul sabatic ebraic, al 7-lea an dintr-un ciclu de 7.</p>
             <p style={{ marginTop: 10 }}>În Tora, este an de &quot;eliberare&quot;: datorii iertate, pământ lăsat să se odihnească.</p>
             <p style={{ marginTop: 10 }}>Popularizat în finanțe de Rabbi Jonathan Cahn (<em>The Mystery of the Shemitah</em>, 2014). Corelație remarcabilă cu crizele financiare majore.</p>
             <p style={{ marginTop: 14, color: "#94a3b8" }}>⚠️ Corelație observațională, nu cauzalitate dovedită. Folosit ca context macro, nu ca semnal de intrare.</p>

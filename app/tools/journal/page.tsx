@@ -56,7 +56,7 @@ export default async function JournalPage() {
           <p className="mt-2 max-w-2xl text-sm text-slate-400">
             Calculator de position sizing integrat: calculezi mărimea, salvezi direct în jurnal,
             vezi statistici reale (win rate, profit factor, expectancy) și calendar P&amp;L.
-            Datele rămân pe device — privacy-first.
+            Datele rămân pe device, privacy-first.
           </p>
         </div>
         <JournalClient />

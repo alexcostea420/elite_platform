@@ -41,6 +41,65 @@ function formatTime(dateStr: string): string {
   return d.toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" });
 }
 
+type EventMeta = {
+  flag: string;
+  country: string;
+  typeAbbr: string;
+  typeLabel: string;
+  typeColor: string;
+  isInflation: boolean;
+};
+
+function getEventMeta(title: string): EventMeta {
+  let flag = "🇺🇸";
+  let country = "US";
+  if (/\b(ecb|euro\s?zone|eurozone|euro area)\b/i.test(title)) { flag = "🇪🇺"; country = "EU"; }
+  else if (/\b(boe|bank of england|uk|britain|sterling|gbp)\b/i.test(title)) { flag = "🇬🇧"; country = "UK"; }
+  else if (/\b(boj|bank of japan|japan|yen|jpy)\b/i.test(title)) { flag = "🇯🇵"; country = "JP"; }
+  else if (/\b(china|pboc|yuan|cny)\b/i.test(title)) { flag = "🇨🇳"; country = "CN"; }
+
+  let typeAbbr = "·";
+  let typeLabel = "Altele";
+  let typeColor = "bg-slate-500/15 text-slate-400";
+  let isInflation = false;
+
+  if (/\b(fomc|fed|rate decision|interest rate|ecb|boe|boj|pboc|powell|lagarde)\b/i.test(title)) {
+    typeAbbr = "CB"; typeLabel = "Bancă centrală"; typeColor = "bg-purple-500/15 text-purple-300";
+  } else if (/\b(cpi|pce|ppi|inflation|core)\b/i.test(title)) {
+    typeAbbr = "IN"; typeLabel = "Inflație"; typeColor = "bg-rose-500/15 text-rose-300";
+    isInflation = true;
+  } else if (/\b(nfp|nonfarm|payrolls|unemployment|jobless|employment|jobs|adp)\b/i.test(title)) {
+    typeAbbr = "MU"; typeLabel = "Muncă"; typeColor = "bg-blue-500/15 text-blue-300";
+  } else if (/\b(gdp|growth|industrial production|retail sales)\b/i.test(title)) {
+    typeAbbr = "GR"; typeLabel = "Creștere"; typeColor = "bg-emerald-500/15 text-emerald-300";
+  } else if (/\b(pmi|confidence|sentiment|ism|consumer)\b/i.test(title)) {
+    typeAbbr = "SE"; typeLabel = "Sentiment"; typeColor = "bg-amber-500/15 text-amber-300";
+  }
+
+  return { flag, country, typeAbbr, typeLabel, typeColor, isInflation };
+}
+
+function ImpactDot({ impact }: { impact: "high" | "medium" | "low" }) {
+  const cls =
+    impact === "high"
+      ? "bg-red-500"
+      : impact === "medium"
+      ? "bg-amber-500"
+      : "bg-yellow-300/70";
+  return <span className={`inline-block h-2.5 w-2.5 shrink-0 rounded-full ${cls}`} aria-hidden="true" />;
+}
+
+function TypeChip({ meta }: { meta: EventMeta }) {
+  return (
+    <span
+      className={`inline-flex h-5 shrink-0 items-center justify-center rounded px-1.5 text-[10px] font-bold tracking-wide ${meta.typeColor}`}
+      title={meta.typeLabel}
+    >
+      {meta.typeAbbr}
+    </span>
+  );
+}
+
 function groupByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
   const groups: Record<string, CalendarEvent[]> = {};
   for (const event of events) {
@@ -144,7 +203,9 @@ function HistoryView({ events, loading }: { events: HistoricalEvent[]; loading: 
   if (events.length === 0) {
     return (
       <div className="glass-card p-8 text-center">
-        <div className="text-4xl">📊</div>
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-bold tracking-wider text-slate-400">
+          N/A
+        </div>
         <h2 className="mt-4 text-xl font-bold text-white">Date istorice indisponibile</h2>
         <p className="mt-2 text-slate-400">Încearcă din nou mai târziu.</p>
       </div>
@@ -159,20 +220,27 @@ function HistoryView({ events, loading }: { events: HistoricalEvent[]; loading: 
     byMonth[month].push(e);
   }
 
-  function getSurpriseColor(actual: string | number | null, forecast: string | number | null): string {
+  function getSurpriseColor(
+    actual: string | number | null,
+    forecast: string | number | null,
+    isInflation: boolean,
+  ): string {
     if (actual == null || forecast == null || actual === "" || forecast === "") return "text-slate-400";
     const a = parseFloat(String(actual).replace(/[^0-9.-]/g, ""));
     const f = parseFloat(String(forecast).replace(/[^0-9.-]/g, ""));
     if (isNaN(a) || isNaN(f)) return "text-slate-400";
-    if (a > f) return "text-emerald-400";
-    if (a < f) return "text-red-400";
-    return "text-amber-400";
+    if (a === f) return "text-amber-400";
+    // For inflation, hotter = bearish for risk assets
+    const aboveIsBullish = !isInflation;
+    const aboveExpect = a > f;
+    if (aboveExpect === aboveIsBullish) return "text-emerald-400";
+    return "text-red-400";
   }
 
   return (
     <div className="space-y-6">
       <p className="text-sm text-slate-500">
-        Rezultatele evenimentelor economice din ultimele luni. Verde = peste așteptări. Roșu = sub așteptări.
+        Rezultatele evenimentelor economice din ultimele luni. Pentru inflație, peste așteptări = bearish pentru active de risc.
       </p>
 
       {Object.entries(byMonth).map(([month, monthEvents]) => (
@@ -182,19 +250,24 @@ function HistoryView({ events, loading }: { events: HistoricalEvent[]; loading: 
           </h3>
           <div className="space-y-2">
             {monthEvents.map((e, i) => {
+              const meta = getEventMeta(e.event);
               const actual = e.actual != null && e.actual !== "" ? String(e.actual) : "-";
               const forecast = e.forecast != null && e.forecast !== "" ? String(e.forecast) : "-";
               const previous = e.previous != null && e.previous !== "" ? String(e.previous) : "-";
-              const surpriseColor = getSurpriseColor(e.actual, e.forecast);
+              const surpriseColor = getSurpriseColor(e.actual, e.forecast, meta.isInflation);
 
               return (
                 <div key={`${e.date}-${e.event}-${i}`} className="glass-card px-4 py-3 md:px-5">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold text-white">{e.event}</p>
-                      <p className="text-xs text-slate-500">
-                        {new Date(e.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" })}
-                      </p>
+                    <div className="flex min-w-0 flex-1 items-center gap-2">
+                      <span className="text-base leading-none" aria-label={meta.country}>{meta.flag}</span>
+                      <TypeChip meta={meta} />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-semibold text-white">{e.event}</p>
+                        <p className="text-xs text-slate-500">
+                          {new Date(e.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" })}
+                        </p>
+                      </div>
                     </div>
                     <div className="flex gap-4 text-xs sm:gap-6">
                       <div className="text-center">
@@ -220,8 +293,8 @@ function HistoryView({ events, loading }: { events: HistoricalEvent[]; loading: 
 
       <div className="rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-center">
         <p className="text-xs text-slate-600">
-          Date din Trading Economics. Verde = peste așteptări (pozitiv piață).
-          Roșu = sub așteptări (negativ piață). Impactul real depinde de context.
+          Date din Trading Economics. Verde = bullish pentru active de risc, roșu = bearish.
+          Pentru inflație, peste așteptări înseamnă roșu (Fed mai restrictiv). Impactul real depinde de context.
         </p>
       </div>
     </div>
@@ -242,7 +315,9 @@ function WeekView({
   if (events.length === 0) {
     return (
       <div className="glass-card p-8 text-center">
-        <div className="text-4xl">📅</div>
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-bold tracking-wider text-slate-400">
+          —
+        </div>
         <h2 className="mt-4 text-xl font-bold text-white">Niciun eveniment săptămâna asta</h2>
         <p className="mt-2 text-slate-400">Verifică din nou luni pentru evenimentele săptămânii.</p>
       </div>
@@ -254,35 +329,36 @@ function WeekView({
 
   // Find next upcoming event for hero card
   const nextEvent = events.find((e) => new Date(e.date).getTime() > now);
+  const nextMeta = nextEvent ? getEventMeta(nextEvent.title) : null;
 
   return (
     <div className="space-y-6">
       {/* Hero: Next upcoming event */}
-      {nextEvent && (
+      {nextEvent && nextMeta && (
         <div
           className={`glass-card overflow-hidden p-6 md:p-8 ${
             nextEvent.impact === "high"
               ? "border-red-500/30"
-              : "border-amber-500/20"
+              : nextEvent.impact === "medium"
+              ? "border-amber-500/20"
+              : "border-yellow-500/15"
           }`}
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <span
-                  className={`inline-block h-3 w-3 rounded-full ${
-                    nextEvent.impact === "high"
-                      ? "bg-red-500 animate-pulse"
-                      : "bg-amber-500"
-                  }`}
-                />
+                <ImpactDot impact={nextEvent.impact} />
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Următorul eveniment
                 </span>
               </div>
-              <h2 className="mt-2 text-2xl font-bold text-white">
-                {nextEvent.titleRo}
-              </h2>
+              <div className="mt-2 flex items-center gap-2">
+                <span className="text-xl leading-none" aria-label={nextMeta.country}>{nextMeta.flag}</span>
+                <TypeChip meta={nextMeta} />
+                <h2 className="text-2xl font-bold text-white">
+                  {nextEvent.titleRo}
+                </h2>
+              </div>
               <p className="mt-1 text-sm text-slate-400">
                 {formatDate(nextEvent.date)} la {formatTime(nextEvent.date)}
               </p>
@@ -318,14 +394,27 @@ function WeekView({
       )}
 
       {/* Legend */}
-      <div className="flex items-center gap-4 text-xs text-slate-500">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-500" />
-          Impact mare
+          <ImpactDot impact="high" /> Impact mare
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-amber-500" />
-          Impact mediu
+          <ImpactDot impact="medium" /> Impact mediu
+        </span>
+        <span className="flex items-center gap-1.5">
+          <ImpactDot impact="low" /> Impact mic
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-flex h-4 items-center rounded bg-purple-500/15 px-1 text-[9px] font-bold text-purple-300">CB</span>
+          Bancă centrală
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-flex h-4 items-center rounded bg-rose-500/15 px-1 text-[9px] font-bold text-rose-300">IN</span>
+          Inflație
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-flex h-4 items-center rounded bg-blue-500/15 px-1 text-[9px] font-bold text-blue-300">MU</span>
+          Muncă
         </span>
       </div>
 
@@ -351,6 +440,7 @@ function WeekView({
                 const eventTime = new Date(event.date).getTime();
                 const isExpanded = expandedEvent === `${day}-${event.title}`;
                 const isPastEvent = eventTime < now;
+                const meta = getEventMeta(event.title);
 
                 return (
                   <button
@@ -365,15 +455,10 @@ function WeekView({
                     }
                     type="button"
                   >
-                    <div className="flex items-center gap-3">
-                      {/* Impact dot */}
-                      <span
-                        className={`inline-block h-2.5 w-2.5 shrink-0 rounded-full ${
-                          event.impact === "high"
-                            ? "bg-red-500"
-                            : "bg-amber-500"
-                        }`}
-                      />
+                    <div className="flex items-center gap-2.5">
+                      <ImpactDot impact={event.impact} />
+                      <span className="text-base leading-none" aria-label={meta.country}>{meta.flag}</span>
+                      <TypeChip meta={meta} />
 
                       {/* Event info */}
                       <div className="min-w-0 flex-1">

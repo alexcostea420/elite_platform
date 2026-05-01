@@ -162,7 +162,7 @@ export default async function LiquidationMapPage() {
           <p className="section-label mb-2">Liquidation Pressure · BTC</p>
           <h1 className="text-2xl font-bold text-white sm:text-3xl">Liquidation Map</h1>
           <p className="mt-2 max-w-3xl text-sm text-slate-400">
-            Hartă de presiune pe BTC: unde s-au acumulat pozițiile cu leverage în ultima săptămână (Open Interest istoric × volum). Zonele luminoase sunt clusters dense — ținte naturale pentru cascade de lichidări.
+            Hartă de presiune pe BTC: unde s-au acumulat pozițiile cu leverage în ultima săptămână (Open Interest istoric × volum). Zonele luminoase sunt clusters dense, ținte naturale pentru cascade de lichidări.
           </p>
         </div>
 

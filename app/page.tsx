@@ -148,8 +148,9 @@ export default async function HomePage() {
                 </div>
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card flex h-48 w-48 flex-col items-center justify-center rounded-full border border-accent-emerald/30">
-                    <span className="text-5xl font-bold text-accent-emerald">83</span>
-                    <span className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent-emerald/80">CUMPARA</span>
+                    <span className="text-5xl font-bold text-accent-emerald">{riskScore}</span>
+                    <span className="mt-1 text-sm font-semibold uppercase tracking-wider text-accent-emerald/80">{riskDecision}</span>
+                    <span className="mt-1 text-[10px] text-slate-500">scor live</span>
                   </div>
                 </div>
               </div>
@@ -158,22 +159,27 @@ export default async function HomePage() {
               <div className="flex flex-col-reverse items-center gap-10 md:flex-row">
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card w-full max-w-sm space-y-2 rounded-2xl p-5">
+                    <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                      <span>Mostră dashboard</span>
+                      <span className="rounded border border-slate-700/50 bg-slate-800/40 px-1.5 py-0.5 text-[9px] text-slate-400">exemplu</span>
+                    </div>
                     <div className="flex items-center justify-between border-b border-slate-700/50 pb-2 text-xs text-slate-500">
-                      <span>Acțiune</span><span>Preț</span><span>Semnal</span>
+                      <span>Acțiune</span><span>Zonă</span><span>Semnal</span>
                     </div>
                     {[
-                      { ticker: "TSLA", price: "$360.59", signal: "HOLD", color: "text-yellow-400", bg: "bg-yellow-500/10" },
-                      { ticker: "MSFT", price: "$373.46", signal: "BUY", color: "text-accent-emerald", bg: "bg-accent-emerald/10" },
-                      { ticker: "GOOG", price: "$294.46", signal: "SELL", color: "text-red-400", bg: "bg-red-500/10" },
-                      { ticker: "NVDA", price: "$177.39", signal: "HOLD", color: "text-yellow-400", bg: "bg-yellow-500/10" },
-                      { ticker: "ORCL", price: "$146.38", signal: "BUY", color: "text-accent-emerald", bg: "bg-accent-emerald/10" },
+                      { ticker: "TSLA", zone: "S1", signal: "HOLD", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+                      { ticker: "MSFT", zone: "B2", signal: "BUY", color: "text-accent-emerald", bg: "bg-accent-emerald/10" },
+                      { ticker: "GOOG", zone: "S2", signal: "SELL", color: "text-red-400", bg: "bg-red-500/10" },
+                      { ticker: "NVDA", zone: "S1", signal: "HOLD", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+                      { ticker: "ORCL", zone: "B1", signal: "BUY", color: "text-accent-emerald", bg: "bg-accent-emerald/10" },
                     ].map((s) => (
                       <div key={s.ticker} className="flex items-center justify-between py-1">
                         <span className="font-mono text-sm font-bold text-white w-14">{s.ticker}</span>
-                        <span className="font-mono text-xs text-slate-400">{s.price}</span>
+                        <span className="font-mono text-xs text-slate-400">{s.zone}</span>
                         <span className={`rounded ${s.bg} px-2 py-0.5 text-xs font-semibold ${s.color}`}>{s.signal}</span>
                       </div>
                     ))}
+                    <p className="pt-1 text-[10px] text-slate-600">Date live în /dashboard/stocks (16 acțiuni).</p>
                   </div>
                 </div>
                 <div className="flex-1 space-y-4">
@@ -192,14 +198,18 @@ export default async function HomePage() {
                 </div>
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card w-full max-w-sm space-y-4 rounded-2xl p-6">
+                    <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                      <span>Calendar pivoți</span>
+                      <span className="rounded border border-slate-700/50 bg-slate-800/40 px-1.5 py-0.5 text-[9px] text-slate-400">exemplu</span>
+                    </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-white">Convergență Pivoți</span>
+                      <span className="text-sm font-semibold text-white">Convergență metode</span>
                       <span className="font-mono text-xs text-accent-emerald">3/9</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-slate-700">
                       <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-accent-emerald to-emerald-400" />
                     </div>
-                    <p className="text-xs text-slate-500">3 metode active din 9 analizate</p>
+                    <p className="text-xs text-slate-500">Eclipse, Fibonacci, Gann, Halving, Blood Moon.</p>
                   </div>
                 </div>
               </div>

@@ -11,7 +11,7 @@ import { getDisplayIdentity } from "@/lib/utils/identity";
 export const metadata: Metadata = buildPageMetadata({
   title: "Portofoliul Tău | Armata de Traderi",
   description:
-    "Tracker portofoliu Elite: introdu tranzacțiile (crypto + acțiuni + BET), vezi P&L real și compară cu alternative — ce s-ar fi întâmplat dacă alegeai altceva.",
+    "Tracker portofoliu Elite: introdu tranzacțiile (crypto + acțiuni + BET), vezi P&L real și compară cu alternative. Ce s-ar fi întâmplat dacă alegeai altceva.",
   keywords: ["portofoliu crypto", "portfolio tracker", "what if", "elite trading"],
   path: "/dashboard/portfolio",
   host: "app",
@@ -51,7 +51,7 @@ export default async function PortfolioPage() {
           <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Portofoliul Tău</h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-400">
             Adaugă tranzacțiile reale (crypto + acțiuni US + BET). Calculez automat
-            cost mediu, valoare curentă, P&amp;L. Și un &ldquo;What if&rdquo; — ce-ai fi avut acum
+            cost mediu, valoare curentă, P&amp;L. Și un &ldquo;What if&rdquo;: ce-ai fi avut acum
             dacă cumpărai altceva pe aceeași dată cu aceiași bani.
           </p>
         </header>

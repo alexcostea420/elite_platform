@@ -24,7 +24,7 @@ const PRESETS = [
 type RiskMode = "percent" | "fixed";
 
 function formatUsdt(n: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   const v = n.toLocaleString("en-US", {
     maximumFractionDigits: 2,
     minimumFractionDigits: 2,
@@ -33,7 +33,7 @@ function formatUsdt(n: number): string {
 }
 
 function formatUnits(n: number): string {
-  if (!Number.isFinite(n) || n <= 0) return "—";
+  if (!Number.isFinite(n) || n <= 0) return "-";
   if (n < 0.001) return n.toExponential(2);
   if (n < 1) return n.toLocaleString("en-US", { maximumFractionDigits: 6 });
   if (n < 100) return n.toLocaleString("en-US", { maximumFractionDigits: 4 });

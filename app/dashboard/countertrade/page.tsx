@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { CountertradeDashboard } from "@/components/dashboard/countertrade-dashboard";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { ComingSoon } from "@/components/ui/coming-soon";
 import { Container } from "@/components/ui/container";
 import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
@@ -42,18 +42,7 @@ export default async function CountertradePage() {
       <>
         <Navbar mode="dashboard" userIdentity={identity} />
         <main className="pb-16 pt-24 md:pt-28">
-          <Container>
-            <section className="panel p-8 text-center md:p-12">
-              <div className="mb-4 text-5xl">🚀</div>
-              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mx-auto mt-4 max-w-lg text-slate-400">
-                Analiza contrarian YouTube va fi disponibilă în curând.
-              </p>
-              <Link className="accent-button mt-6 inline-block" href="/dashboard">
-                Înapoi la Dashboard
-              </Link>
-            </section>
-          </Container>
+          <ComingSoon description="Analiza contrarian YouTube va fi disponibilă în curând." />
         </main>
         <Footer compact />
       </>

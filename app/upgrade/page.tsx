@@ -58,6 +58,33 @@ const veteranPrices: Record<string, string> = {
   "12 Luni": "€300",
 };
 
+const monthsForPlan: Record<string, number> = {
+  "30 Zile": 1,
+  "3 Luni": 3,
+  "12 Luni": 12,
+};
+
+function parseEur(price: string): number {
+  const n = parseFloat(price.replace(/[^0-9.]/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function perMonthEquivalent(price: string, months: number): string {
+  if (months <= 1) return "";
+  const total = parseEur(price);
+  if (total <= 0) return "";
+  const perMonth = total / months;
+  return `≈ €${perMonth.toFixed(0)}/lună`;
+}
+
+function discountVsMonthly(price: string, months: number, monthlyPrice: number): number {
+  if (months <= 1) return 0;
+  const total = parseEur(price);
+  if (total <= 0 || monthlyPrice <= 0) return 0;
+  const baseline = monthlyPrice * months;
+  return Math.round(((baseline - total) / baseline) * 100);
+}
+
 
 const binancePayUrls: Record<string, string> = {
   "30 Zile": "https://s.binance.com/ZJYlR2d9",
@@ -223,7 +250,13 @@ export default async function UpgradePage() {
 
             {/* Paid Plans */}
             <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
-              {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => (
+              {pricingPlans.filter((plan) => plan.name !== "Încearcă Gratis!").map((plan) => {
+                const months = monthsForPlan[plan.name] ?? 1;
+                const effectivePrice = isVeteran && veteranPrices[plan.name] ? veteranPrices[plan.name] : plan.price;
+                const monthlyBaseline = isVeteran ? 33 : 49;
+                const perMonth = perMonthEquivalent(effectivePrice, months);
+                const discount = discountVsMonthly(effectivePrice, months, monthlyBaseline);
+                return (
                 <article key={plan.name} className={`relative flex flex-col rounded-[1.5rem] p-6 sm:p-8 ${plan.highlighted ? "card-hover border-2 border-accent-emerald bg-surface-graphite shadow-glow-strong" : "panel card-hover"}`}>
                   {plan.badge ? <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent-emerald px-4 py-1 text-xs font-bold uppercase tracking-wider text-crypto-dark shadow-md">{plan.badge}</div> : null}
                   <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
@@ -238,8 +271,16 @@ export default async function UpgradePage() {
                       <span className="text-5xl font-bold text-accent-emerald">{plan.price}</span>
                     )}
                     {plan.period ? <span className="text-slate-400">{plan.period}</span> : null}
+                    {perMonth && (
+                      <div className="mt-2 font-data text-base font-semibold text-slate-300 tabular-nums">{perMonth}</div>
+                    )}
                     <div className="mt-1 text-sm text-slate-500">{plan.details}</div>
-                    {plan.savings ? <div className="mt-2 text-sm font-semibold text-crypto-green">{plan.savings}</div> : null}
+                    {discount > 0 && (
+                      <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-400">
+                        <span>−{discount}%</span>
+                        <span className="text-emerald-400/80">vs. plata lunară</span>
+                      </div>
+                    )}
                   </div>
                   <ul className="flex-1 space-y-3">
                     {plan.perks.map((perk) => (
@@ -275,7 +316,8 @@ export default async function UpgradePage() {
                     )}
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
           </section>
 

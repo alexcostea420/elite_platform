@@ -10,7 +10,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   title: "Bot Trading Automat | MEXC Copytrade",
   description:
-    "Bot de trading automat care copiaza tranzactiile pe contul tau MEXC. Sizing automat, 24/7, zero acces la fonduri.",
+    "Bot de trading automat care copiază tranzacțiile pe contul tău MEXC. Sizing automat, 24/7, zero acces la fonduri.",
   keywords: [
     "bot trading",
     "copytrade crypto",
@@ -56,19 +56,19 @@ const faqItems = [
     a: "Conectezi contul MEXC prin API (read-only + trade). Botul nostru copiază automat tranzacțiile pe contul tău, cu sizing ajustat la balanța ta.",
   },
   {
-    q: "Este sigur? Poate botul sa retraga fonduri?",
+    q: "Este sigur? Poate botul să retragă fonduri?",
     a: "Nu. API-ul MEXC pe care îl configurezi nu permite retrageri. Fondurile tale rămân 100% sub controlul tău.",
   },
   {
-    q: "Care e balanta minima recomandata?",
-    a: "$100 este minimul recomandat pentru a beneficia de diversificarea completa.",
+    q: "Care e balanța minimă recomandată?",
+    a: "$100 este minimul recomandat pentru a beneficia de diversificarea completă.",
   },
   {
     q: "Ce se întâmplă dacă piața scade?",
     a: "Botul are management de risc integrat: stop-loss pe fiecare poziție, limită maximă de expunere, și reducere automată în perioadele de volatilitate extremă.",
   },
   {
-    q: "Pot opri botul oricand?",
+    q: "Pot opri botul oricând?",
     a: "Da, poți dezactiva copytrade-ul instant din dashboard. Pozițiile deschise pot fi închise manual sau automat.",
   },
   {
@@ -175,7 +175,7 @@ export default function BotsPage() {
               <ul className="mt-6 space-y-3">
                 {[
                   "Copytrade automat 24/7",
-                  "Sizing automat dupa balanta",
+                  "Sizing automat după balanță",
                   "Dashboard cu statistici",
                   "Suport dedicat",
                 ].map((item) => (
@@ -202,12 +202,12 @@ export default function BotsPage() {
               </div>
               <p className="mt-1 text-sm text-green-400">Economisești $53/lună față de Standard</p>
               <p className="mt-2 text-sm text-slate-400">
-                Pret redus exclusiv pentru membrii cu abonament Elite activ.
+                Preț redus exclusiv pentru membrii cu abonament Elite activ.
               </p>
               <ul className="mt-6 space-y-3">
                 {[
                   "Tot ce include Standard",
-                  "Pret redus cu 54%",
+                  "Preț redus cu 54%",
                   "Acces comunitate Elite",
                   "Semnale premium + analize",
                   "Suport prioritar",

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { ComingSoon } from "@/components/ui/coming-soon";
 import { Container } from "@/components/ui/container";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -180,18 +181,7 @@ export default async function SignalsPage() {
       <>
         <Navbar mode="dashboard" userIdentity={identity} />
         <main className="pb-16 pt-24 md:pt-28">
-          <Container>
-            <section className="panel p-8 text-center md:p-12">
-              <div className="text-5xl mb-4">🚀</div>
-              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mt-4 max-w-lg mx-auto text-slate-400">
-                Această secțiune va fi disponibilă în curând. Lucrăm la ea!
-              </p>
-              <Link className="accent-button mt-6 inline-block" href="/dashboard">
-                Inapoi la Dashboard
-              </Link>
-            </section>
-          </Container>
+          <ComingSoon description="Această secțiune va fi disponibilă în curând. Lucrăm la ea!" />
         </main>
         <Footer compact />
       </>

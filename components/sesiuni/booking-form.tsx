@@ -13,8 +13,8 @@ const TOPICS = [
 ];
 
 const PACKAGES = [
-  { value: "single", label: "1 oră — €75" },
-  { value: "triple", label: "Pachet 3 ore — €197" },
+  { value: "single", label: "1 oră · €75" },
+  { value: "triple", label: "Pachet 3 ore · €197" },
 ];
 
 const EXPERIENCE = [

@@ -33,7 +33,7 @@ const subjects = [
   {
     icon: "🪙",
     title: "Cum îți alegi monedele",
-    desc: "Criterii de selecție, screening, sectoare, narrative. Nu îți spun ce să cumperi — îți arăt cum gândesc eu, ca să decizi singur.",
+    desc: "Criterii de selecție, screening, sectoare, narrative. Nu îți spun ce să cumperi, îți arăt cum gândesc eu, ca să decizi singur.",
   },
   {
     icon: "📈",
@@ -95,15 +95,15 @@ const packages = [
 const faqs = [
   {
     q: "Pentru cine sunt aceste sesiuni?",
-    a: "Pentru oricine vrea să învețe să-și configureze singur instrumentele de trading și să-și gestioneze portofoliul. Începători (cei mai mulți) — pleci cu un setup complet. Intermediari — clarificări pe risk management și screening. Pentru traderi activi care vor coaching pe execuție, ar fi nevoie de mai multe ședințe (3+).",
+    a: "Pentru oricine vrea să învețe să-și configureze singur instrumentele de trading și să-și gestioneze portofoliul. Începători (cei mai mulți): pleci cu un setup complet. Intermediari: clarificări pe risk management și screening. Pentru traderi activi care vor coaching pe execuție, ar fi nevoie de mai multe ședințe (3+).",
   },
   {
     q: "E același lucru cu abonamentul Elite?",
-    a: "Nu. Elite (€49/lună) e accesul la comunitate, video-uri, indicatori, dashboard-uri și analize live. Sesiunile 1-la-1 sunt timpul meu personal cu tine, custom pe situația ta. Multe persoane folosesc ambele — Elite pentru flow-ul zilnic, sesiuni 1-la-1 pentru clarificări mari.",
+    a: "Nu. Elite (€49/lună) e accesul la comunitate, video-uri, indicatori, dashboard-uri și analize live. Sesiunile 1-la-1 sunt timpul meu personal cu tine, custom pe situația ta. Multe persoane folosesc ambele: Elite pentru flow-ul zilnic, sesiuni 1-la-1 pentru clarificări mari.",
   },
   {
     q: "Promiteți profit garantat?",
-    a: "Nu. Niciodată. Te învăț cum să gândești, cum să-ți configurezi instrumentele, cum să eviți greșelile clasice. Profit nu garantează nimeni — și dacă cineva îți promite, fugi.",
+    a: "Nu. Niciodată. Te învăț cum să gândești, cum să-ți configurezi instrumentele, cum să eviți greșelile clasice. Profit nu garantează nimeni. Dacă cineva îți promite, fugi.",
   },
   {
     q: "Cum se desfășoară o ședință?",
@@ -111,7 +111,7 @@ const faqs = [
   },
   {
     q: "Ce pregătesc înainte?",
-    a: "După ce trimiți cererea, primești un email cu 3-5 întrebări scurte (cât experiență ai, ce vrei să rezolvi, ce platforme folosești). În baza răspunsurilor, vin pregătit cu un plan concret — nu pierdem timp pe introduceri.",
+    a: "După ce trimiți cererea, primești un email cu 3-5 întrebări scurte (cât experiență ai, ce vrei să rezolvi, ce platforme folosești). În baza răspunsurilor, vin pregătit cu un plan concret, nu pierdem timp pe introduceri.",
   },
   {
     q: "Pot plăti cu crypto?",
@@ -123,7 +123,7 @@ const faqs = [
   },
   {
     q: "Cât timp are valabilitate pachetul?",
-    a: "6 luni de la prima ședință. Cele 3 ore le programezi cum îți convine — săptămâna asta toate, sau câte una pe lună.",
+    a: "6 luni de la prima ședință. Cele 3 ore le programezi cum îți convine: săptămâna asta toate, sau câte una pe lună.",
   },
 ];
 
@@ -166,7 +166,7 @@ export default async function SesiuniPage() {
               Învață să tranzacționezi <span className="gradient-text">singur</span>
             </h1>
             <p className="mx-auto mt-5 max-w-3xl text-lg text-slate-300">
-              Ședințe individuale cu Alex Costea. Pleci cu TradingView configurat, monedele alese, portofoliul urmărit — toate făcute de tine, nu copiate de la altcineva.
+              Ședințe individuale cu Alex Costea. Pleci cu TradingView configurat, monedele alese, portofoliul urmărit, toate făcute de tine, nu copiate de la altcineva.
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-500">
               Nu vând semnale. Te învăț cadrul ca să nu mai ai nevoie de mine.

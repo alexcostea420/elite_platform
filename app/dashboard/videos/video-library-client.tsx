@@ -1,8 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { VideoTemplateThumbnail } from "@/components/ui/video-thumbnail";
+
+const VIEWED_KEY = "video-library-viewed-ids";
+
+function readViewed(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = localStorage.getItem(VIEWED_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return new Set(Array.isArray(parsed) ? parsed : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function writeViewed(ids: Set<string>) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(VIEWED_KEY, JSON.stringify([...ids]));
+  } catch {}
+}
 
 type VideoRow = {
   id: string;
@@ -43,7 +64,24 @@ export function VideoLibraryClient({
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [showNewOnly, setShowNewOnly] = useState(false);
+  const [showUnwatchedOnly, setShowUnwatchedOnly] = useState(false);
   const [showOldVideos, setShowOldVideos] = useState(false);
+  const [viewedIds, setViewedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setViewedIds(readViewed());
+  }, []);
+
+  useEffect(() => {
+    if (!selectedVideoId) return;
+    setViewedIds((prev) => {
+      if (prev.has(selectedVideoId)) return prev;
+      const next = new Set(prev);
+      next.add(selectedVideoId);
+      writeViewed(next);
+      return next;
+    });
+  }, [selectedVideoId]);
 
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -60,14 +98,24 @@ export function VideoLibraryClient({
       if (search && !v.title.toLowerCase().includes(search.toLowerCase())) return false;
       if (activeTag && (!v.tags || !v.tags.includes(activeTag))) return false;
       if (showNewOnly && !isNew(v.upload_date)) return false;
+      if (showUnwatchedOnly && viewedIds.has(v.id)) return false;
       return true;
     });
-  }, [videos, search, activeTag, showNewOnly]);
+  }, [videos, search, activeTag, showNewOnly, showUnwatchedOnly, viewedIds]);
 
-  const hasFilters = search !== "" || activeTag !== null || showNewOnly;
+  const hasFilters = search !== "" || activeTag !== null || showNewOnly || showUnwatchedOnly;
   const tierOrder = { free: 1, elite: 2 };
   const canAccess = (required: "free" | "elite") =>
     userTier !== null && tierOrder[userTier] >= tierOrder[required];
+
+  const accessibleVideos = useMemo(
+    () => videos.filter((v) => canAccess(v.tier_required)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [videos, userTier],
+  );
+  const watchedAccessible = accessibleVideos.filter((v) => viewedIds.has(v.id)).length;
+  const totalAccessible = accessibleVideos.length;
+  const progressPct = totalAccessible > 0 ? (watchedAccessible / totalAccessible) * 100 : 0;
 
   // Selected video (from URL param)
   const selectedVideo = selectedVideoId
@@ -182,6 +230,29 @@ export function VideoLibraryClient({
         </Link>
       )}
 
+      {/* WATCH PROGRESS */}
+      {totalAccessible > 0 && (
+        <section className="glass-card mb-6 p-4 md:p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">Progres bibliotecă</p>
+              <p className="mt-1 font-data text-base font-bold text-white tabular-nums">
+                {watchedAccessible} / {totalAccessible} <span className="text-xs font-normal text-slate-400">vizionate</span>
+              </p>
+            </div>
+            <span className="font-data text-xl font-bold tabular-nums text-accent-emerald">
+              {Math.round(progressPct)}%
+            </span>
+          </div>
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/5">
+            <div
+              className="h-full rounded-full bg-accent-emerald transition-all duration-500"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+        </section>
+      )}
+
       {/* SEARCH + FILTER BAR */}
       <section className="glass-card mb-8 p-4 md:p-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
@@ -227,6 +298,20 @@ export function VideoLibraryClient({
             NOU
           </button>
 
+          {/* Nevizionate toggle */}
+          <button
+            aria-label="Arata doar video-urile nevizionate"
+            aria-pressed={showUnwatchedOnly}
+            onClick={() => setShowUnwatchedOnly(!showUnwatchedOnly)}
+            className={`rounded-xl border px-4 py-2.5 text-sm font-semibold transition ${
+              showUnwatchedOnly
+                ? "border-accent-emerald bg-accent-emerald/20 text-accent-emerald"
+                : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:text-white"
+            }`}
+          >
+            Nevizionate
+          </button>
+
           {/* Clear filters */}
           {hasFilters && (
             <button
@@ -234,6 +319,7 @@ export function VideoLibraryClient({
                 setSearch("");
                 setActiveTag(null);
                 setShowNewOnly(false);
+                setShowUnwatchedOnly(false);
               }}
               className="text-sm text-slate-500 hover:text-white transition"
             >
@@ -274,6 +360,7 @@ export function VideoLibraryClient({
                 const locked = !canAccess(video.tier_required);
                 const isSelected = video.id === selectedVideoId;
                 const videoIsNew = isNew(video.upload_date);
+                const watched = viewedIds.has(video.id);
                 return locked ? (
                   <div key={video.id} className="glass-card overflow-hidden opacity-60">
                     <div className="relative overflow-hidden">
@@ -287,10 +374,16 @@ export function VideoLibraryClient({
                     <div className="p-5"><h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3></div>
                   </div>
                 ) : (
-                  <Link key={video.id} href={`/dashboard/videos?video=${video.id}`} className={`glass-card group overflow-hidden transition-all ${isSelected ? "border-accent-emerald shadow-glow" : ""}`}>
+                  <Link key={video.id} href={`/dashboard/videos?video=${video.id}`} className={`glass-card group overflow-hidden transition-all ${isSelected ? "border-accent-emerald shadow-glow" : ""} ${watched ? "opacity-75" : ""}`}>
                     <div className="relative overflow-hidden">
                       <VideoTemplateThumbnail date={video.upload_date} tag={video.category} thumbnailUrl={video.thumbnail_url} youtubeId={video.youtube_id} title={video.title} />
-                      {videoIsNew && <div className="absolute right-3 top-3 rounded-md bg-accent-emerald px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-crypto-dark">NOU</div>}
+                      {videoIsNew && !watched && <div className="absolute right-3 top-3 rounded-md bg-accent-emerald px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-crypto-dark">NOU</div>}
+                      {watched && (
+                        <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-crypto-ink/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 backdrop-blur-sm">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+                          Vizionat
+                        </div>
+                      )}
                     </div>
                     <div className="p-5">
                       <h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3>
@@ -321,6 +414,7 @@ export function VideoLibraryClient({
                     const locked = !canAccess(video.tier_required);
             const isSelected = video.id === selectedVideoId;
             const videoIsNew = isNew(video.upload_date);
+            const watched = viewedIds.has(video.id);
 
             if (locked) {
               return (
@@ -366,7 +460,7 @@ export function VideoLibraryClient({
                 href={`/dashboard/videos?video=${video.id}`}
                 className={`glass-card group overflow-hidden transition-all ${
                   isSelected ? "border-accent-emerald shadow-glow" : ""
-                }`}
+                } ${watched ? "opacity-75" : ""}`}
               >
                 <div className="relative overflow-hidden">
                   <VideoTemplateThumbnail
@@ -377,9 +471,15 @@ export function VideoLibraryClient({
                     title={video.title}
                   />
                   {/* NOU badge */}
-                  {videoIsNew && (
+                  {videoIsNew && !watched && (
                     <div className="absolute right-3 top-3 rounded-md bg-accent-emerald px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-crypto-dark">
                       NOU
+                    </div>
+                  )}
+                  {watched && (
+                    <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-crypto-ink/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 backdrop-blur-sm">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+                      Vizionat
                     </div>
                   )}
                   {/* Duration overlay */}

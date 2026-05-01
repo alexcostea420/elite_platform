@@ -105,6 +105,74 @@ function rankChange(rank: number, prev: number | null): React.ReactNode {
   return null;
 }
 
+// ─── KPI Strip ─────────────────────────────────────────────────
+function KpiStrip({
+  wallets,
+  positions,
+  consensus,
+}: {
+  wallets: Wallet[];
+  positions: Position[];
+  consensus: Consensus[];
+}) {
+  const netLong = consensus.reduce((sum, c) => sum + (c.net_long_notional_usd ?? 0), 0);
+  const totalLongs = consensus.reduce((sum, c) => sum + (c.long_count ?? 0), 0);
+  const totalShorts = consensus.reduce((sum, c) => sum + (c.short_count ?? 0), 0);
+  const biasPct = totalLongs + totalShorts > 0 ? Math.round((totalLongs / (totalLongs + totalShorts)) * 100) : 50;
+  const biasLabel = biasPct >= 60 ? "BULLISH" : biasPct <= 40 ? "BEARISH" : "MIXT";
+  const biasColor = biasPct >= 60 ? "text-emerald-400" : biasPct <= 40 ? "text-red-400" : "text-amber-400";
+
+  const topWhale = [...wallets].sort((a, b) => b.pnl_90d - a.pnl_90d)[0];
+  const biggestPos = [...positions].sort((a, b) => b.notional_usd - a.notional_usd)[0];
+  const newWallets = wallets.filter((w) => w.previous_rank === null).length;
+  const climbers = wallets.filter((w) => w.previous_rank !== null && w.previous_rank > w.rank).length;
+
+  const tiles = [
+    {
+      label: "Bias whales",
+      value: biasLabel,
+      sub: `${biasPct}% long · ${100 - biasPct}% short`,
+      color: biasColor,
+    },
+    {
+      label: "Net exposure",
+      value: `${netLong >= 0 ? "+" : ""}${formatUsd(netLong)}`,
+      sub: netLong >= 0 ? "long bias" : "short bias",
+      color: netLong >= 0 ? "text-emerald-400" : "text-red-400",
+    },
+    {
+      label: "Top whale 90d",
+      value: topWhale ? formatUsd(topWhale.pnl_90d) : "-",
+      sub: topWhale ? (topWhale.display_name ?? shortAddr(topWhale.address)) : "",
+      color: "text-white",
+    },
+    {
+      label: "Cea mai mare poziție",
+      value: biggestPos ? formatUsd(biggestPos.notional_usd) : "-",
+      sub: biggestPos ? `${biggestPos.asset} · ${biggestPos.direction}` : "",
+      color: biggestPos?.direction === "LONG" ? "text-emerald-400" : biggestPos?.direction === "SHORT" ? "text-red-400" : "text-white",
+    },
+    {
+      label: "Mișcări săptămânale",
+      value: `${newWallets + climbers}`,
+      sub: `${newWallets} noi · ${climbers} urcă`,
+      color: "text-accent-emerald",
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+      {tiles.map((t) => (
+        <div key={t.label} className="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-3">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">{t.label}</p>
+          <p className={`mt-1 font-data text-lg font-bold tabular-nums ${t.color}`}>{t.value}</p>
+          {t.sub && <p className="mt-0.5 truncate text-[10px] text-slate-600">{t.sub}</p>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ─── Skeleton ──────────────────────────────────────────────────
 function SkeletonCards({ count }: { count: number }) {
   return (
@@ -394,6 +462,10 @@ function WalletDetail({ wallet, positions, fills }: { wallet: Wallet; positions:
   const [pnlData, setPnlData] = useState<PnlDay[]>([]);
 
   useEffect(() => {
+    setPnlData([]);
+  }, [wallet.address]);
+
+  useEffect(() => {
     if (tab === "pnl" && !pnlData.length) {
       fetch(`/api/whale-tracker/pnl?address=${wallet.address}`)
         .then((r) => r.json())
@@ -608,6 +680,9 @@ export function WhaleTrackerClient() {
           <span>Ranking: săptămânal</span>
         </div>
       </div>
+
+      {/* KPI strip */}
+      <KpiStrip wallets={wallets} positions={positions} consensus={consensus} />
 
       {/* Consensus strip */}
       <div>

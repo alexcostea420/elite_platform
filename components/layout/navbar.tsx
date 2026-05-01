@@ -63,7 +63,7 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
 
   return (
     <nav
-      aria-label={mode === "marketing" ? "Navigare principala publica" : "Navigare principala cont"}
+      aria-label={mode === "marketing" ? "Navigare principală publică" : "Navigare principală cont"}
       className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-crypto-dark/95 backdrop-blur-sm"
     >
       <Container className="flex items-center justify-between py-2.5 md:py-4">
@@ -90,13 +90,13 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
                 className="text-sm font-medium text-slate-200 hover:text-accent-emerald"
                 href="/bots"
               >
-                🤖 Bot
+                Bot
               </Link>
               <Link
                 className="text-sm font-semibold text-accent-emerald hover:text-accent-soft"
                 href="/upgrade"
               >
-                Prelungeste
+                Prelungește
               </Link>
             </div>
 
@@ -139,7 +139,7 @@ export async function Navbar({ mode = "marketing", userIdentity, isAdmin = false
                 Cont
               </Link>
               <Link className="accent-button flex min-h-[36px] items-center justify-center whitespace-nowrap px-3 py-1.5 text-[11px] md:min-h-[44px] md:px-5 md:py-3 md:text-sm" href={marketingPrimaryHref}>
-                Intra
+                Intră
               </Link>
             </div>
           </>

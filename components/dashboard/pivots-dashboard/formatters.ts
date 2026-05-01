@@ -3,7 +3,7 @@ export function cx(...classes: (string | false | null | undefined)[]) {
 }
 
 export function fmtP(v: number | null | undefined): string {
-  if (v == null) return "—";
+  if (v == null) return "-";
   if (v >= 1000)
     return "$" + (v / 1000).toFixed(v >= 10000 ? 0 : 1) + "K";
   return "$" + Math.round(v);

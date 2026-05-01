@@ -50,7 +50,7 @@ export type HoldingsResponse = {
 };
 
 export function fmtUsd(n: number, opts?: { compact?: boolean }): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   if (opts?.compact && Math.abs(n) >= 10000) {
     return n.toLocaleString("en-US", {
       style: "currency",
@@ -67,13 +67,13 @@ export function fmtUsd(n: number, opts?: { compact?: boolean }): string {
 }
 
 export function fmtPct(n: number, withSign = true): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   const sign = withSign && n > 0 ? "+" : "";
   return `${sign}${n.toFixed(2)}%`;
 }
 
 export function fmtQty(n: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   if (Math.abs(n) >= 1) return n.toLocaleString("en-US", { maximumFractionDigits: 4 });
   return n.toLocaleString("en-US", { maximumFractionDigits: 8 });
 }
@@ -237,7 +237,7 @@ export function PortfolioDashboard() {
             value={
               advancedStats.best
                 ? `${advancedStats.best.asset.symbol} ${fmtPct(advancedStats.best.pnlPct ?? 0)}`
-                : "—"
+                : "-"
             }
             tone="pos"
           />
@@ -301,7 +301,7 @@ export function PortfolioDashboard() {
 
       <p className="pt-4 text-center text-xs text-slate-600">
         Tracker educațional. Performanțele trecute nu garantează rezultate viitoare.
-        Datele sunt private — doar tu le vezi.
+        Datele sunt private, doar tu le vezi.
       </p>
 
       {addOpen ? (
@@ -360,7 +360,7 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
       </div>
       <h3 className="text-lg font-bold text-white">Începe cu prima tranzacție</h3>
       <p className="mx-auto mt-2 max-w-md text-sm text-slate-400">
-        Introdu o cumpărare reală — asset, cantitate, preț, dată. De acolo vezi
+        Introdu o cumpărare reală: asset, cantitate, preț, dată. De acolo vezi
         cost mediu, P&amp;L, și poți compara cu &ldquo;ce-ar fi fost dacă luam altceva&rdquo;.
       </p>
       <button

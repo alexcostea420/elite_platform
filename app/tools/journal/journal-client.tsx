@@ -37,7 +37,7 @@ function todayIso(): string {
 }
 
 function fmtUsd(n: number | null | undefined): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "-";
   const sign = n < 0 ? "-" : "";
   return `${sign}$${Math.abs(n).toLocaleString("en-US", {
     maximumFractionDigits: 2,
@@ -46,7 +46,7 @@ function fmtUsd(n: number | null | undefined): string {
 }
 
 function fmtPct(n: number | null | undefined, withSign = true): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "-";
   const sign = withSign && n > 0 ? "+" : "";
   return `${sign}${n.toFixed(2)}%`;
 }
@@ -459,7 +459,7 @@ function TradeTable({
                     {t.entry.toLocaleString("en-US")}
                   </td>
                   <td className="py-3 text-right font-data tabular-nums text-slate-300">
-                    {t.exit != null ? t.exit.toLocaleString("en-US") : "—"}
+                    {t.exit != null ? t.exit.toLocaleString("en-US") : "-"}
                   </td>
                   <td className="py-3 text-right font-data tabular-nums text-slate-400">
                     {t.qty.toLocaleString("en-US", { maximumFractionDigits: 6 })}
@@ -468,7 +468,7 @@ function TradeTable({
                     {fmtUsd(t.pnl)}
                   </td>
                   <td className={`py-3 text-right font-data tabular-nums ${rColor}`}>
-                    {r != null ? `${r >= 0 ? "+" : ""}${r.toFixed(2)}R` : "—"}
+                    {r != null ? `${r >= 0 ? "+" : ""}${r.toFixed(2)}R` : "-"}
                   </td>
                   <td className="px-5 py-3 text-right">
                     <div className="flex justify-end gap-1">

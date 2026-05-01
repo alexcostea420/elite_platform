@@ -39,7 +39,7 @@ function formatDate(iso: string, withYear = false) {
 }
 
 function formatPrice(value: number | null | undefined) {
-  if (value == null || !Number.isFinite(value)) return "—";
+  if (value == null || !Number.isFinite(value)) return "-";
   if (value >= 1000) return `$${Math.round(value / 1000)}k`;
   return `$${Math.round(value)}`;
 }
@@ -209,7 +209,7 @@ export function RiskScoreHistoryChart() {
                 labelFormatter={(value) => formatDate(value as string)}
                 formatter={(value, name) => {
                   const num = typeof value === "number" ? value : Number(value);
-                  if (!Number.isFinite(num)) return ["—", String(name)];
+                  if (!Number.isFinite(num)) return ["-", String(name)];
                   if (name === "score") return [`${Math.round(num)}/100`, "Scor"];
                   if (name === "price") return [`$${Math.round(num).toLocaleString("en-US")}`, "BTC"];
                   return [String(value), String(name)];
@@ -242,7 +242,7 @@ export function RiskScoreHistoryChart() {
 
       <p className="mt-3 text-[10px] text-slate-600">
         Linia verde = scorul agregat (0–100). Linia portocalie punctată = preț BTC pe axa dreaptă.
-        Backfill-ul (până în {chartData[0]?.date ?? "—"}) e calculat fără derivative Binance —
+        Backfill-ul (până în {chartData[0]?.date ?? "-"}) e calculat fără derivative Binance,
         scorul e ~85% fidel față de cel live.
       </p>
     </section>

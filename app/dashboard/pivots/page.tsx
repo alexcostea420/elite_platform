@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import PivotsDashboard from "@/components/dashboard/pivots-dashboard";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { ComingSoon } from "@/components/ui/coming-soon";
 import { hasEliteAccess } from "@/lib/auth/elite-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -40,18 +41,10 @@ export default async function PivotsPage() {
       <>
         <Navbar mode="dashboard" userIdentity={identity} />
         <main className="pb-16 pt-24 md:pt-28">
-          <div className="mx-auto max-w-lg px-4 py-12">
-            <div className="panel p-8 text-center md:p-12">
-              <div className="mb-4 text-5xl">🔮</div>
-              <h2 className="text-3xl font-bold text-white">Coming Soon</h2>
-              <p className="mx-auto mt-4 max-w-lg text-slate-400">
-                Dashboard-ul de Pivoți BTC va fi disponibil în curând. Lucrăm la el!
-              </p>
-              <a className="accent-button mt-6 inline-block" href="/dashboard">
-                Înapoi la Dashboard
-              </a>
-            </div>
-          </div>
+          <ComingSoon
+            icon="🔮"
+            description="Dashboard-ul de Pivoți BTC va fi disponibil în curând. Lucrăm la el!"
+          />
         </main>
         <Footer compact />
       </>

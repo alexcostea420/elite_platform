@@ -21,21 +21,21 @@ type PlanInfo = {
 const PLAN_MAP: Record<string, PlanInfo> = {
   elite_monthly: {
     slug: "elite_monthly",
-    label: "Elite — 30 zile",
+    label: "Elite, 30 zile",
     days: 30,
     priceEur: 49,
     veteranPriceEur: 33,
   },
   elite_3mo: {
     slug: "elite_3mo",
-    label: "Elite — 3 luni",
+    label: "Elite, 3 luni",
     days: 90,
     priceEur: 137,
     veteranPriceEur: 100,
   },
   elite_annual: {
     slug: "elite_annual",
-    label: "Elite — 12 luni",
+    label: "Elite, 12 luni",
     days: 365,
     priceEur: 497,
     veteranPriceEur: 300,
@@ -150,7 +150,7 @@ function PlanSummary({ plan }: { plan: PlanInfo }) {
         </p>
         {plan.veteranPriceEur < plan.priceEur ? (
           <p className="mt-3 text-xs text-amber-300/80">
-            Reducere veteran disponibilă (€{plan.veteranPriceEur}) — se aplică
+            Reducere veteran disponibilă (€{plan.veteranPriceEur}). Se aplică
             automat dacă ai contul marcat veteran.
           </p>
         ) : null}

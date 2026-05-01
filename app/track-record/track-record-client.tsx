@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AreaChart, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ComposedChart } from "recharts";
+
+type Range = "1L" | "3L" | "Toate";
+const RANGES: Range[] = ["1L", "3L", "Toate"];
 
 type Stats = {
   starting_equity: number;
@@ -41,6 +44,7 @@ export function LivePerformanceSection() {
   const [curve, setCurve] = useState<EquityPoint[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
+  const [range, setRange] = useState<Range>("Toate");
 
   const fetchData = useCallback(() => {
     fetch("/api/track-record")
@@ -60,6 +64,30 @@ export function LivePerformanceSection() {
     return () => clearInterval(interval);
   }, [fetchData]);
 
+  const chartData = useMemo(() => {
+    if (curve.length === 0) return [];
+    const cutoffDays = range === "1L" ? 30 : range === "3L" ? 90 : null;
+    let filtered = curve;
+    if (cutoffDays !== null) {
+      const cutoff = Date.now() - cutoffDays * 86_400_000;
+      filtered = curve.filter((p) => new Date(p.date).getTime() >= cutoff);
+      if (filtered.length < 2) filtered = curve;
+    }
+    let peak = -Infinity;
+    return filtered.map((p) => {
+      peak = Math.max(peak, p.equity);
+      const drawdown = peak > 0 ? ((p.equity - peak) / peak) * 100 : 0;
+      return {
+        date: new Date(p.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" }),
+        equity: p.equity,
+        peak,
+        drawdown,
+      };
+    });
+  }, [curve, range]);
+
+  const startingEquity = chartData.length > 0 ? chartData[0].equity : null;
+
   if (loading) {
     return (
       <div className="space-y-6 py-10">
@@ -73,11 +101,6 @@ export function LivePerformanceSection() {
   }
 
   if (!stats) return null;
-
-  const chartData = curve.map((p) => ({
-    date: new Date(p.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" }),
-    equity: p.equity,
-  }));
 
   return (
     <div className="space-y-8 py-10">
@@ -117,26 +140,66 @@ export function LivePerformanceSection() {
       {/* Equity Curve */}
       {chartData.length > 2 && (
         <div className="glass-card p-4 sm:p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-400">Equity Curve</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold text-slate-400">Equity Curve</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {RANGES.map((r) => {
+                const active = range === r;
+                return (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRange(r)}
+                    className={`rounded-md border px-2.5 py-1 text-[11px] font-semibold transition ${
+                      active
+                        ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                        : "border-white/10 bg-white/[0.02] text-slate-400 hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={260}>
+            <ComposedChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
               <defs>
                 <linearGradient id="eqGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10B981" stopOpacity={0.3} />
+                  <stop offset="0%" stopColor="#10B981" stopOpacity={0.35} />
                   <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" tick={{ fill: "#5A7168", fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
-              <YAxis tick={{ fill: "#5A7168", fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}`} width={50} />
+              <XAxis dataKey="date" tick={{ fill: "#5A7168", fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" minTickGap={28} />
+              <YAxis
+                tick={{ fill: "#5A7168", fontSize: 10 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v: number) => (v >= 1000 ? `$${(v / 1000).toFixed(1)}k` : `$${v.toFixed(0)}`)}
+                width={52}
+                domain={["auto", "auto"]}
+              />
+              {startingEquity !== null && (
+                <ReferenceLine y={startingEquity} stroke="#475569" strokeDasharray="3 3" strokeOpacity={0.5} />
+              )}
               <Tooltip
                 contentStyle={{ background: "#0D1F18", border: "1px solid rgba(16,185,129,0.2)", borderRadius: 8, fontSize: 12 }}
                 labelStyle={{ color: "#fff", fontWeight: 600 }}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                formatter={(value: any) => [`$${Number(value).toFixed(2)}`, "Equity"]}
+                formatter={(value: any, name: any) => {
+                  if (name === "peak") return [`$${Number(value).toFixed(2)}`, "Peak"];
+                  return [`$${Number(value).toFixed(2)}`, "Equity"];
+                }}
               />
+              <Line type="monotone" dataKey="peak" stroke="#F59E0B" strokeDasharray="4 4" strokeOpacity={0.6} strokeWidth={1} dot={false} isAnimationActive={false} />
               <Area type="monotone" dataKey="equity" stroke="#10B981" strokeWidth={2} fill="url(#eqGrad)" />
-            </AreaChart>
+            </ComposedChart>
           </ResponsiveContainer>
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+            <span className="flex items-center gap-1.5"><span className="h-0.5 w-3 bg-emerald-400" /> Equity</span>
+            <span className="flex items-center gap-1.5"><span className="h-0.5 w-3 border-t border-dashed border-amber-400" /> Peak (high-water mark)</span>
+            <span className="flex items-center gap-1.5"><span className="h-0.5 w-3 border-t border-dashed border-slate-500" /> Start</span>
+          </div>
         </div>
       )}
 
@@ -221,7 +284,7 @@ export function LivePerformanceSection() {
       {/* CTA */}
       <div className="text-center">
         <Link className="accent-button px-8 py-4 text-lg font-bold" href="/upgrade#copytrade">
-          Copytrade - €45/lună pentru membri Elite →
+          Copytrade · €45/lună pentru membri Elite →
         </Link>
         <p className="mt-3 text-xs text-slate-600">Disponibil în curând. Intră în Elite pentru acces prioritar.</p>
       </div>

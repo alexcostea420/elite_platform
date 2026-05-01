@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 
+import { ComingSoon } from "@/components/ui/coming-soon";
 import { Container } from "@/components/ui/container";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -12,8 +13,8 @@ import { getDisplayIdentity } from "@/lib/utils/identity";
 export const revalidate = 60;
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Bot Dashboard | Performanta Trading Bot",
-  description: "Monitorizeza performanta botului de trading: equity, pozitii deschise, PnL.",
+  title: "Bot Dashboard | Performanță Trading Bot",
+  description: "Monitorizează performanța botului de trading: equity, poziții deschise, PnL.",
   keywords: ["bot trading", "copytrade dashboard", "MEXC bot"],
   path: "/bots/dashboard",
   host: "app",
@@ -60,16 +61,11 @@ export default async function BotDashboardPage() {
       <>
         <Navbar mode="dashboard" userIdentity={{ displayName: identity.displayName, initials: identity.initials }} />
         <main className="pb-16 pt-24 md:pt-28">
-          <Container>
-            <div className="mx-auto max-w-lg py-20 text-center">
-              <div className="text-5xl">🤖</div>
-              <h1 className="mt-6 text-3xl font-bold text-white">Bot Trading - Coming Soon</h1>
-              <p className="mt-4 text-slate-400">Botul de copytrade este in dezvoltare. Vei primi o notificare cand va fi disponibil.</p>
-              <Link className="mt-8 inline-block rounded-xl bg-accent-emerald px-6 py-3 font-semibold text-crypto-dark hover:bg-accent-soft" href="/dashboard">
-                Inapoi la Dashboard
-              </Link>
-            </div>
-          </Container>
+          <ComingSoon
+            icon="🤖"
+            title="Bot Trading · Coming Soon"
+            description="Botul de copytrade este în dezvoltare. Vei primi o notificare când va fi disponibil."
+          />
         </main>
         <Footer compact />
       </>
@@ -113,17 +109,17 @@ export default async function BotDashboardPage() {
                   <span className="text-sm text-slate-400">{"MEXC"}</span>
                 </div>
                 <p className="mt-2 text-xl font-bold text-white">
-                  {isExpired ? "Subscriptia bot a expirat" : `${daysLeft} zile ramase`}
+                  {isExpired ? "Subscripția bot a expirat" : `${daysLeft} zile rămase`}
                 </p>
                 <p className="text-sm text-slate-400">
                   {isExpired
-                    ? "Reaboneaza-te pentru a continua copytrade-ul"
-                    : `Expira pe ${new Date(botSub?.expires_at ?? "").toLocaleDateString("ro-RO")}`}
+                    ? "Reabonează-te pentru a continua copytrade-ul"
+                    : `Expiră pe ${new Date(botSub?.expires_at ?? "").toLocaleDateString("ro-RO")}`}
                 </p>
               </div>
               {isExpired && (
                 <Link className="rounded-xl bg-accent-emerald px-5 py-2.5 text-sm font-semibold text-crypto-dark hover:bg-accent-soft" href="/upgrade">
-                  Reaboneaza-te
+                  Reabonează-te
                 </Link>
               )}
             </div>
@@ -135,15 +131,15 @@ export default async function BotDashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-semibold ${apiKeyExpiring ? "text-amber-400" : "text-slate-400"}`}>
-                    {apiKeyExpiring ? "⚠️ API Key expira curand!" : "🔑 API Key MEXC"}
+                    {apiKeyExpiring ? "⚠️ API Key expiră curând!" : "🔑 API Key MEXC"}
                   </p>
                   <p className="text-xs text-slate-500">
-                    {apiKeyDaysLeft === 0 ? "API key expirat - regenereaza din MEXC" : `${apiKeyDaysLeft} zile pana la expirare (90 zile de la creare)`}
+                    {apiKeyDaysLeft === 0 ? "API key expirat, regenerează din MEXC" : `${apiKeyDaysLeft} zile până la expirare (90 zile de la creare)`}
                   </p>
                 </div>
                 {apiKeyExpiring && (
                   <a className="rounded-lg bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-400 hover:bg-amber-500/20" href="https://www.mexc.com/user/openapi" target="_blank" rel="noreferrer">
-                    Regenereaza API Key
+                    Regenerează API Key
                   </a>
                 )}
               </div>

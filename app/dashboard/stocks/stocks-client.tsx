@@ -116,18 +116,6 @@ function formatPrice(n: number) {
   return n >= 1000 ? `$${n.toLocaleString("en-US", { maximumFractionDigits: 2 })}` : `$${n.toFixed(2)}`;
 }
 
-function getPricePosition(current: number, low: number, high: number) {
-  const range = high - low;
-  if (range <= 0) return 50;
-  return Math.max(1, Math.min(99, ((current - low) / range) * 100));
-}
-
-function getZonePosition(value: number, low: number, high: number) {
-  const range = high - low;
-  if (range <= 0) return 50;
-  return Math.max(0, Math.min(100, ((value - low) / range) * 100));
-}
-
 // Skeleton loading row
 function SkeletonRow() {
   return (
@@ -135,12 +123,8 @@ function SkeletonRow() {
       <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
       <td className="px-4 py-3"><div className="skeleton h-4 w-16" /></td>
       <td className="px-4 py-3"><div className="skeleton h-4 w-14" /></td>
-      <td className="px-4 py-3"><div className="skeleton h-4 w-16" /></td>
-      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
-      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
-      <td className="px-4 py-3"><div className="skeleton h-4 w-12" /></td>
-      <td className="px-4 py-3"><div className="skeleton h-4 w-10" /></td>
-      <td className="px-4 py-3"><div className="skeleton h-2.5 w-24" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-4 w-14" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-2.5 w-40" /></td>
       <td className="px-4 py-3"><div className="skeleton h-5 w-16 rounded-full" /></td>
     </tr>
   );
@@ -187,6 +171,72 @@ function getNearestZone(price: number, zones: StockZones): { label: string; pct:
     return { label: `${toB1.toFixed(0)}% > B1`, pct: toB1, direction: "buy" };
   }
   return { label: `${toS1.toFixed(0)}% → S1`, pct: toS1, direction: "sell" };
+}
+
+function ZoneLadder({
+  buy2,
+  buy1,
+  sell1,
+  sell2,
+  current,
+  hits,
+  width = "w-44",
+}: {
+  buy2: number;
+  buy1: number;
+  sell1: number;
+  sell2: number;
+  current: number;
+  hits?: Record<string, ZoneHit>;
+  width?: string;
+}) {
+  const lo = buy2;
+  const hi = sell2;
+  const range = hi - lo;
+  if (range <= 0) return null;
+  const pct = (v: number) => Math.max(0, Math.min(100, ((v - lo) / range) * 100));
+  const buy1Pct = pct(buy1);
+  const sell1Pct = pct(sell1);
+  const currentPct = pct(current);
+  const inRange = current >= lo && current <= hi;
+  const hitB1 = hits?.["Buy 1"]?.hit;
+  const hitB2 = hits?.["Buy 2"]?.hit;
+  const hitS1 = hits?.["Sell 1"]?.hit;
+  const hitS2 = hits?.["Sell 2"]?.hit;
+  return (
+    <div className={width}>
+      <div className="relative h-2 overflow-hidden rounded-full bg-white/[0.04]">
+        <div className="absolute top-0 h-full bg-emerald-400/25" style={{ left: 0, width: `${buy1Pct}%` }} />
+        <div className="absolute top-0 h-full bg-orange-400/25" style={{ left: `${sell1Pct}%`, width: `${100 - sell1Pct}%` }} />
+        {inRange && (
+          <div
+            className="absolute top-1/2 h-3.5 w-1 -translate-y-1/2 -translate-x-1/2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.7)]"
+            style={{ left: `${currentPct}%` }}
+          />
+        )}
+        {!inRange && current < lo && (
+          <span className="absolute left-0.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-emerald-300">‹</span>
+        )}
+        {!inRange && current > hi && (
+          <span className="absolute right-0.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-orange-300">›</span>
+        )}
+      </div>
+      <div className="relative mt-1 flex h-3 text-[9px] tabular-nums">
+        <span className={`absolute left-0 ${hitB2 ? "text-emerald-300" : "text-emerald-400/60"}`}>
+          {hitB2 ? "✓" : ""}{formatPrice(buy2)}
+        </span>
+        <span className={`absolute -translate-x-1/2 ${hitB1 ? "text-emerald-300" : "text-emerald-400/60"}`} style={{ left: `${buy1Pct}%` }}>
+          {hitB1 ? "✓" : ""}{formatPrice(buy1)}
+        </span>
+        <span className={`absolute -translate-x-1/2 ${hitS1 ? "text-orange-300" : "text-orange-400/60"}`} style={{ left: `${sell1Pct}%` }}>
+          {hitS1 ? "✓" : ""}{formatPrice(sell1)}
+        </span>
+        <span className={`absolute right-0 ${hitS2 ? "text-orange-300" : "text-orange-400/60"}`}>
+          {hitS2 ? "✓" : ""}{formatPrice(sell2)}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 function LiveCountdown({ updatedAt }: { updatedAt: string }) {
@@ -411,11 +461,7 @@ export function StocksClient() {
                     <th className="px-4 py-3">Preț</th>
                     <th className="px-4 py-3">% Azi</th>
                     <th className="px-4 py-3">Zonă</th>
-                    <th className="px-4 py-3">Buy 1</th>
-                    <th className="px-4 py-3">Buy 2</th>
-                    <th className="px-4 py-3">Sell 1</th>
-                    <th className="px-4 py-3">Sell 2</th>
-                    <th className="px-4 py-3">Poziție</th>
+                    <th className="px-4 py-3">Zone Ladder</th>
                     <th className="px-4 py-3">Semnal</th>
                   </tr>
                 </thead>
@@ -451,10 +497,7 @@ export function StocksClient() {
                     <th className="px-4 py-3">Vol</th>
                     <th className="px-4 py-3">P/E</th>
                     <th className="px-4 py-3">Zonă</th>
-                    <th className="px-4 py-3">Buy 1</th>
-                    <th className="px-4 py-3">Buy 2</th>
-                    <th className="px-4 py-3">Sell 1</th>
-                    <th className="px-4 py-3">Sell 2</th>
+                    <th className="px-4 py-3">Zone Ladder</th>
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromATH")}>
                       % ATH {sortBy === "pctFromATH" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
@@ -471,25 +514,6 @@ export function StocksClient() {
                     const zh = zoneHistory[stock.ticker];
                     const zoneHitMap: Record<string, ZoneHit> = {};
                     if (zh?.zones) for (const z of zh.zones) zoneHitMap[z.zone] = z;
-
-                    function zoneCell(zone: string, price: number, baseColor: string, dimColor: string) {
-                      const hit = zoneHitMap[zone];
-                      const hitDate = hit?.hit && hit.date
-                        ? new Date(hit.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })
-                        : null;
-                      return (
-                        <td className={`px-3 py-3 ${hit?.hit ? (zone.startsWith("Buy") ? "bg-emerald-400/[0.06]" : "bg-orange-400/[0.06]") : ""}`}>
-                          <div className={`font-data tabular-nums font-semibold ${hit?.hit ? baseColor : dimColor}`}>
-                            {formatPrice(price)}
-                          </div>
-                          {hit?.hit && hitDate && (
-                            <div className={`text-[9px] mt-0.5 ${zone.startsWith("Buy") ? "text-emerald-400/60" : "text-orange-400/60"}`}>
-                              ✓ {hitDate}
-                            </div>
-                          )}
-                        </td>
-                      );
-                    }
 
                     return (
                       <tr
@@ -554,14 +578,22 @@ export function StocksClient() {
                             {nearest.label}
                           </span>
                         </td>
-                        {blur ? (
-                          <td colSpan={4} className="px-4 py-3"><BlurGuard label="Zone Elite Only"><span className="text-slate-600">$--- / $--- / $--- / $---</span></BlurGuard></td>
-                        ) : (
-                          <>{zoneCell("Buy 1", stock.buy1, "text-emerald-400", "text-emerald-400/40")}
-                          {zoneCell("Buy 2", stock.buy2, "text-emerald-400", "text-emerald-400/30")}
-                          {zoneCell("Sell 1", stock.sell1, "text-orange-400", "text-orange-400/40")}
-                          {zoneCell("Sell 2", stock.sell2, "text-orange-400", "text-orange-400/30")}</>
-                        )}
+                        <td className="px-4 py-3">
+                          {blur ? (
+                            <BlurGuard label="Zone Elite Only">
+                              <div className="h-2 w-44 rounded-full bg-white/5" />
+                            </BlurGuard>
+                          ) : (
+                            <ZoneLadder
+                              buy2={stock.buy2}
+                              buy1={stock.buy1}
+                              sell1={stock.sell1}
+                              sell2={stock.sell2}
+                              current={stock.price}
+                              hits={zoneHitMap}
+                            />
+                          )}
+                        </td>
                         <td className="px-4 py-3">
                           <span className={(stock.pctFromATH ?? 0) > -20 ? "text-amber-400" : "text-red-400"}>
                             {(stock.pctFromATH ?? 0).toFixed(1)}%
@@ -589,11 +621,11 @@ export function StocksClient() {
           <div className="space-y-3 md:hidden">
             {sorted.map((stock) => {
               const style = getSignalStyle(stock.signal);
-              const pos = getPricePosition(stock.price, stock.buy2, stock.sell2);
-              const buy1Pos = getZonePosition(stock.buy1, stock.buy2, stock.sell2);
-              const sell1Pos = getZonePosition(stock.sell1, stock.buy2, stock.sell2);
               const flash = flashMap[stock.ticker];
               const nearest = getNearestZone(stock.price, stock);
+              const zhMobile = zoneHistory[stock.ticker];
+              const zoneHitMobile: Record<string, ZoneHit> = {};
+              if (zhMobile?.zones) for (const z of zhMobile.zones) zoneHitMobile[z.zone] = z;
 
               return (
                 <div
@@ -614,10 +646,14 @@ export function StocksClient() {
                         <span className="text-xs text-slate-600">{stock.marketCap}</span>
                       )}
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                      {stock.signal}
-                    </span>
+                    {blur ? (
+                      <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
+                    ) : (
+                      <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
+                        <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                        {stock.signal}
+                      </span>
+                    )}
                   </div>
 
                   <div className="mt-3 flex items-baseline gap-3">
@@ -634,42 +670,23 @@ export function StocksClient() {
                     ATH: {(stock.pctFromATH ?? 0).toFixed(1)}%
                   </div>
 
-                  {/* Range bar */}
-                  <div className="mt-3 relative h-3 overflow-hidden rounded-full bg-white/5">
-                    <div className="absolute top-0 h-full bg-emerald-500/20 rounded-l-full" style={{ left: 0, width: `${buy1Pos}%` }} />
-                    <div className="absolute top-0 h-full bg-orange-500/20 rounded-r-full" style={{ left: `${sell1Pos}%`, width: `${100 - sell1Pos}%` }} />
-                    <div
-                      className="absolute top-0 h-full w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]"
-                      style={{ left: `${pos}%` }}
-                    />
+                  <div className="mt-3">
+                    {blur ? (
+                      <BlurGuard label="Zone Elite Only">
+                        <div className="h-2 w-full rounded-full bg-white/5" />
+                      </BlurGuard>
+                    ) : (
+                      <ZoneLadder
+                        buy2={stock.buy2}
+                        buy1={stock.buy1}
+                        sell1={stock.sell1}
+                        sell2={stock.sell2}
+                        current={stock.price}
+                        hits={zoneHitMobile}
+                        width="w-full"
+                      />
+                    )}
                   </div>
-                  <div className="mt-1 flex justify-between text-[10px] text-slate-600">
-                    <span>B2: {formatPrice(stock.buy2)}</span>
-                    <span>B1: {formatPrice(stock.buy1)}</span>
-                    <span>S1: {formatPrice(stock.sell1)}</span>
-                    <span>S2: {formatPrice(stock.sell2)}</span>
-                  </div>
-
-                  {/* Zone hits - 3 months */}
-                  {zoneHistory[stock.ticker]?.zones && (
-                    <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/5 pt-3">
-                      {zoneHistory[stock.ticker].zones.map((z) => (
-                        <div key={z.zone} className="flex items-center gap-1.5 text-[11px]">
-                          <span className={z.hit ? "text-emerald-400" : "text-slate-600"}>
-                            {z.hit ? "✅" : "⬜"}
-                          </span>
-                          <span className={z.hit ? "text-slate-300" : "text-slate-600"}>
-                            {z.zone} ({formatPrice(z.price)})
-                          </span>
-                          {z.hit && z.date && (
-                            <span className="text-[10px] text-slate-600">
-                              {new Date(z.date).toLocaleDateString("ro-RO", { day: "numeric", month: "short" })}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               );
             })}

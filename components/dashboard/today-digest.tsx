@@ -113,7 +113,7 @@ export function TodayDigest({ whale }: { whale: WhaleDigest }) {
         <AlertCard
           icon="🐋"
           title="Whale Sentiment"
-          value={whale ? whale.sentiment_label : "—"}
+          value={whale ? whale.sentiment_label : "-"}
           sub={
             whale
               ? `${whale.wallet_count} portofele · Long ${formatUsd(whale.smart_long_usd)} / Short ${formatUsd(whale.smart_short_usd)}`
@@ -194,7 +194,7 @@ export function TodayDigest({ whale }: { whale: WhaleDigest }) {
           <div className="glass-card rounded-2xl border border-white/10 p-4">
             <div className="mb-3 flex items-center justify-between">
               <div>
-                <p className="section-label mb-0.5">Calendar — Azi</p>
+                <p className="section-label mb-0.5">Calendar · Azi</p>
                 <p className="text-xs text-slate-500">Evenimente programate</p>
               </div>
               <Link

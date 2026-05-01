@@ -45,7 +45,7 @@ function colorFor(v: number): string {
 }
 
 function formatPrice(p: number): string {
-  if (!Number.isFinite(p)) return "—";
+  if (!Number.isFinite(p)) return "-";
   if (p >= 1000) return `$${(p / 1000).toFixed(1)}k`;
   return `$${p.toFixed(0)}`;
 }
@@ -56,7 +56,7 @@ function formatTimeLabel(ms: number): string {
 }
 
 function formatUsd(n: number | null): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "-";
   if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
   if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
   return `$${n.toFixed(0)}`;
@@ -201,12 +201,12 @@ function HeatmapChart({ data }: { data: HeatmapResponse }) {
           <Stat label="OI total" value={formatUsd(data.total_oi_usd)} />
           <Stat
             label="Funding"
-            value={data.funding_pct != null ? `${data.funding_pct.toFixed(4)}%` : "—"}
+            value={data.funding_pct != null ? `${data.funding_pct.toFixed(4)}%` : "-"}
             tone={data.funding_pct != null ? (data.funding_pct > 0 ? "long" : "short") : "neutral"}
           />
           <Stat
             label="L/S"
-            value={data.ls_ratio != null ? data.ls_ratio.toFixed(2) : "—"}
+            value={data.ls_ratio != null ? data.ls_ratio.toFixed(2) : "-"}
             tone={data.ls_ratio != null ? (data.ls_ratio > 1 ? "long" : "short") : "neutral"}
           />
         </div>

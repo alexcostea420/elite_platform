@@ -69,10 +69,10 @@ export function HoldingsTable({
                     {fmtUsd(h.avgCostUsd)}
                   </td>
                   <td className="py-3 text-right font-data tabular-nums text-slate-300">
-                    {h.currentPriceUsd != null ? fmtUsd(h.currentPriceUsd) : "—"}
+                    {h.currentPriceUsd != null ? fmtUsd(h.currentPriceUsd) : "-"}
                   </td>
                   <td className="py-3 text-right font-data tabular-nums text-white">
-                    {h.currentValueUsd != null ? fmtUsd(h.currentValueUsd) : "—"}
+                    {h.currentValueUsd != null ? fmtUsd(h.currentValueUsd) : "-"}
                   </td>
                   <td className={`py-3 text-right font-data tabular-nums ${pnlColor}`}>
                     {h.pnlUsd != null && h.pnlPct != null ? (
@@ -81,7 +81,7 @@ export function HoldingsTable({
                         <span className="text-[11px] opacity-80">{fmtPct(h.pnlPct)}</span>
                       </div>
                     ) : (
-                      "—"
+                      "-"
                     )}
                   </td>
                   <td className="px-5 py-3 text-right">

@@ -47,7 +47,7 @@ const EX_COLOR: Record<string, string> = {
 };
 
 function fmtUsd(n: number | null | undefined, digits = 1): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "-";
   const abs = Math.abs(n);
   if (abs >= 1e9) return `$${(n / 1e9).toFixed(digits)}B`;
   if (abs >= 1e6) return `$${(n / 1e6).toFixed(digits)}M`;
@@ -56,7 +56,7 @@ function fmtUsd(n: number | null | undefined, digits = 1): string {
 }
 
 function fmtPct(n: number | null | undefined): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "-";
   const sign = n >= 0 ? "+" : "";
   return `${sign}${n.toFixed(4)}%`;
 }
@@ -186,7 +186,7 @@ export function ExchangeFlowsPanel() {
           </h3>
           <p className="mt-1 text-xs text-slate-400">
             Ce vezi pe un singur exchange = doar o felie. Aici ai volumul, OI și funding-ul cumulate
-            din 5 burse — exact ce nu-ți arată TradingView.
+            din 5 burse, exact ce nu-ți arată TradingView.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-xs">
@@ -238,7 +238,7 @@ export function ExchangeFlowsPanel() {
               labelFormatter={(value) => fmtHour(value as string)}
               formatter={(value, name) => {
                 const num = typeof value === "number" ? value : Number(value);
-                if (!Number.isFinite(num)) return ["—", String(name)];
+                if (!Number.isFinite(num)) return ["-", String(name)];
                 if (name === "price") return [`$${Math.round(num).toLocaleString("en-US")}`, "BTC"];
                 if (name === "total") return [fmtUsd(num, 1), "Total"];
                 return [fmtUsd(num, 1), EX_LABEL[String(name)] ?? String(name)];
