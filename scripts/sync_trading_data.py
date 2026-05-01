@@ -13,6 +13,7 @@ Env vars required:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import sys
@@ -37,6 +38,22 @@ DATA_FILES = {
     "fleet_status": TRADING_BOT_DIR / "data" / "fleet_status.json",
     "dynamic_limits": TRADING_BOT_DIR / "data" / "dynamic_limits.json",
 }
+
+HASH_CACHE_DIR = Path.home() / ".cache" / "elite_platform_sync"
+HASH_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def _hash_payload(data: dict) -> str:
+    return hashlib.sha256(json.dumps(data, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def _read_last_hash(data_type: str) -> Optional[str]:
+    p = HASH_CACHE_DIR / f"{data_type}.sha256"
+    return p.read_text().strip() if p.exists() else None
+
+
+def _write_last_hash(data_type: str, h: str) -> None:
+    (HASH_CACHE_DIR / f"{data_type}.sha256").write_text(h)
 
 
 def load_json(path: Path) -> Optional[dict]:
@@ -74,16 +91,23 @@ def main():
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Syncing trading data to Supabase...")
 
     synced = 0
+    skipped = 0
     for data_type, file_path in DATA_FILES.items():
         data = load_json(file_path)
         if data is None:
             continue
 
+        new_hash = _hash_payload(data)
+        if _read_last_hash(data_type) == new_hash:
+            skipped += 1
+            continue
+
         if sync_to_supabase(supabase, data_type, data):
+            _write_last_hash(data_type, new_hash)
             print(f"  ✓ {data_type} synced")
             synced += 1
 
-    print(f"  Done: {synced}/{len(DATA_FILES)} synced")
+    print(f"  Done: {synced} synced, {skipped} unchanged")
     return synced
 
 

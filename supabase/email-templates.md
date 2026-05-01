@@ -16,7 +16,7 @@ Variabile Supabase disponibile:
 
 ## 1. Confirm Signup
 
-**Subject:** `Confirmă contul tău — Armata de Traderi`
+**Subject:** `Confirmă contul tău · Armata de Traderi`
 
 **Body (HTML):**
 
@@ -74,7 +74,7 @@ Variabile Supabase disponibile:
             <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#5A7168;text-align:center;">
                 Dacă nu ai cerut acest email, ignoră-l.<br>
-                &copy; Armata de Traderi — armatadetraderi.com
+                &copy; Armata de Traderi · armatadetraderi.com
               </p>
             </td>
           </tr>
@@ -90,7 +90,7 @@ Variabile Supabase disponibile:
 
 ## 2. Reset Password
 
-**Subject:** `Resetare parolă — Armata de Traderi`
+**Subject:** `Resetare parolă · Armata de Traderi`
 
 **Body (HTML):**
 
@@ -151,7 +151,7 @@ Variabile Supabase disponibile:
             <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#5A7168;text-align:center;">
                 Dacă nu ai cerut acest email, ignoră-l.<br>
-                &copy; Armata de Traderi — armatadetraderi.com
+                &copy; Armata de Traderi · armatadetraderi.com
               </p>
             </td>
           </tr>
@@ -167,7 +167,7 @@ Variabile Supabase disponibile:
 
 ## 3. Magic Link
 
-**Subject:** `Link de acces — Armata de Traderi`
+**Subject:** `Link de acces · Armata de Traderi`
 
 **Body (HTML):**
 
@@ -225,7 +225,7 @@ Variabile Supabase disponibile:
             <td style="padding:24px 32px;border-top:1px solid rgba(11,102,35,0.15);">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#5A7168;text-align:center;">
                 Dacă nu ai cerut acest email, ignoră-l.<br>
-                &copy; Armata de Traderi — armatadetraderi.com
+                &copy; Armata de Traderi · armatadetraderi.com
               </p>
             </td>
           </tr>
