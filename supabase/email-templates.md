@@ -35,9 +35,14 @@ Variabile Supabase disponibile:
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);overflow:hidden;">
           <!-- Header -->
           <tr>
-            <td align="center" style="padding:40px 32px 24px;">
-              <div style="font-size:28px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
-                ⚔️ Armata de Traderi
+            <td align="center" style="padding:32px 32px 0;">
+              <img src="https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/email/armata-mascot.gif" alt="Armata de Traderi" width="160" style="display:block;border-radius:12px;margin:0 auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:16px 32px 24px;">
+              <div style="font-size:24px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
+                🪖 Armata de Traderi
               </div>
             </td>
           </tr>
@@ -104,9 +109,14 @@ Variabile Supabase disponibile:
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);overflow:hidden;">
           <!-- Header -->
           <tr>
-            <td align="center" style="padding:40px 32px 24px;">
-              <div style="font-size:28px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
-                ⚔️ Armata de Traderi
+            <td align="center" style="padding:32px 32px 0;">
+              <img src="https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/email/armata-mascot.gif" alt="Armata de Traderi" width="160" style="display:block;border-radius:12px;margin:0 auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:16px 32px 24px;">
+              <div style="font-size:24px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
+                🪖 Armata de Traderi
               </div>
             </td>
           </tr>
@@ -176,9 +186,14 @@ Variabile Supabase disponibile:
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#0D1F18;border-radius:16px;border:1px solid rgba(11,102,35,0.25);overflow:hidden;">
           <!-- Header -->
           <tr>
-            <td align="center" style="padding:40px 32px 24px;">
-              <div style="font-size:28px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
-                ⚔️ Armata de Traderi
+            <td align="center" style="padding:32px 32px 0;">
+              <img src="https://pub-36a9a370a5804b06b1f9c6ab94b83f65.r2.dev/email/armata-mascot.gif" alt="Armata de Traderi" width="160" style="display:block;border-radius:12px;margin:0 auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:16px 32px 24px;">
+              <div style="font-size:24px;font-weight:800;color:#0B6623;letter-spacing:-0.5px;">
+                🪖 Armata de Traderi
               </div>
             </td>
           </tr>

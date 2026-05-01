@@ -62,31 +62,47 @@ export default async function HomePage() {
   const fearGreed = rs?.fear_greed?.value ?? 0;
   const pctAth = rs?.pct_from_ath ?? 0;
 
-  const features = [
+  const features: { label: string; title: string; desc: string[] }[] = [
     {
       label: "ANALIZĂ SĂPTĂMÂNALĂ",
       title: "Știi exact când să cumperi",
-      desc: "Pe 5-6 februarie 2026, când BTC era la 60.000$, scorul a fost 86. Semnal clar de cumpărare. Bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri. Actualizat săptămânal.",
+      desc: [
+        "Un scor de la 0 la 100 care îți arată unde stă piața.",
+        "Bazat pe Fear & Greed, distanța de ATH, sentiment și cicluri.",
+        "Actualizat săptămânal.",
+      ],
     },
     {
       label: "16 ACȚIUNI MONITORIZATE",
       title: "Zone clare de Buy și Sell",
-      desc: "Fiecare acțiune cu 2 zone de cumpărare și 2 zone de vânzare. Știi exact unde intri și unde ieși.",
+      desc: [
+        "Fiecare acțiune cu 2 zone de cumpărare și 2 zone de vânzare.",
+        "Știi exact unde intri și unde ieși.",
+      ],
     },
     {
       label: "TIMING RESEARCH",
       title: "9 metode. Un singur calendar.",
-      desc: "Eclipse, Fibonacci, Gann, Halving, Blood Moon - toate analizate și combinate într-un scor de convergență.",
+      desc: [
+        "Eclipse, Fibonacci, Gann, Halving, Blood Moon.",
+        "Toate analizate și combinate într-un scor de convergență.",
+      ],
     },
     {
       label: "55+ VIDEO-URI",
       title: "De la zero la execuție",
-      desc: "Fiecare video te duce cu un pas mai aproape de consistență. Analiză tehnică, risk management, psihologie.",
+      desc: [
+        "Fiecare video te duce cu un pas mai aproape de consistență.",
+        "Analiză tehnică, risk management, psihologie.",
+      ],
     },
     {
       label: "350+ TRADERI",
       title: "Nu mai tranzacționezi singur",
-      desc: "Întreabă orice, primești răspuns. Discuții zilnice, analize și sesiuni live săptămânale cu Alex.",
+      desc: [
+        "Întreabă orice, primești răspuns.",
+        "Discuții zilnice, analize și sesiuni live săptămânale cu Alex.",
+      ],
     },
   ];
 
@@ -144,7 +160,9 @@ export default async function HomePage() {
                 <div className="flex-1 space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[0].label}</p>
                   <h3 className="text-2xl font-bold text-white md:text-3xl">{features[0].title}</h3>
-                  <p className="text-slate-400">{features[0].desc}</p>
+                  <div className="space-y-2 text-slate-400">
+                    {features[0].desc.map((line, i) => <p key={i}>{line}</p>)}
+                  </div>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card flex h-48 w-48 flex-col items-center justify-center rounded-full border border-accent-emerald/30">
@@ -185,7 +203,9 @@ export default async function HomePage() {
                 <div className="flex-1 space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[1].label}</p>
                   <h3 className="text-2xl font-bold text-white md:text-3xl">{features[1].title}</h3>
-                  <p className="text-slate-400">{features[1].desc}</p>
+                  <div className="space-y-2 text-slate-400">
+                    {features[1].desc.map((line, i) => <p key={i}>{line}</p>)}
+                  </div>
                 </div>
               </div>
 
@@ -194,7 +214,9 @@ export default async function HomePage() {
                 <div className="flex-1 space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[2].label}</p>
                   <h3 className="text-2xl font-bold text-white md:text-3xl">{features[2].title}</h3>
-                  <p className="text-slate-400">{features[2].desc}</p>
+                  <div className="space-y-2 text-slate-400">
+                    {features[2].desc.map((line, i) => <p key={i}>{line}</p>)}
+                  </div>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
                   <div className="glass-card w-full max-w-sm space-y-4 rounded-2xl p-6">
@@ -239,7 +261,9 @@ export default async function HomePage() {
                 <div className="flex-1 space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">{features[3].label}</p>
                   <h3 className="text-2xl font-bold text-white md:text-3xl">{features[3].title}</h3>
-                  <p className="text-slate-400">{features[3].desc}</p>
+                  <div className="space-y-2 text-slate-400">
+                    {features[3].desc.map((line, i) => <p key={i}>{line}</p>)}
+                  </div>
                 </div>
               </div>
 
