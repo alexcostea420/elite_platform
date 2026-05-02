@@ -47,7 +47,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
   const [{ data: profile }, { data: videos }] = await Promise.all([
     supabase
       .from("profiles")
-      .select("full_name, subscription_tier, discord_user_id, discord_role_synced_at")
+      .select("full_name, subscription_tier, discord_user_id, discord_role_synced_at, role")
       .eq("id", user.id)
       .maybeSingle(),
     supabase
@@ -107,6 +107,7 @@ export default async function DashboardVideosPage({ searchParams }: DashboardVid
             videos={allVideos}
             selectedVideoId={searchParams?.video ?? null}
             userTier={userTier}
+            isAdmin={profile?.role === "admin"}
           />
         </Container>
       </main>

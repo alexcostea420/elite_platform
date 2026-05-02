@@ -47,6 +47,65 @@ function formatDuration(seconds: number): string {
   return `${m}m`;
 }
 
+function renderInlineBold(text: string, keyPrefix: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={`${keyPrefix}-${i}`} className="font-semibold text-slate-200">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <span key={`${keyPrefix}-${i}`}>{part}</span>;
+  });
+}
+
+function SummaryContent({ text }: { text: string }) {
+  const lines = text.split(/\r?\n/);
+  const blocks: Array<{ type: "p" | "ul"; items: string[] }> = [];
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) continue;
+    const bullet = line.match(/^(?:\*\s+|-\s+|•\s+)(.+)$/);
+    if (bullet) {
+      const last = blocks[blocks.length - 1];
+      if (last && last.type === "ul") last.items.push(bullet[1]);
+      else blocks.push({ type: "ul", items: [bullet[1]] });
+    } else {
+      blocks.push({ type: "p", items: [line] });
+    }
+  }
+  return (
+    <div className="max-w-3xl space-y-3 text-sm leading-relaxed text-slate-400">
+      {blocks.map((block, idx) => {
+        if (block.type === "ul") {
+          return (
+            <ul key={idx} className="space-y-1.5 pl-1">
+              {block.items.map((item, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="mt-1 inline-block h-1 w-1 shrink-0 rounded-full bg-accent-emerald" />
+                  <span>{renderInlineBold(item, `b-${idx}-${i}`)}</span>
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        return <p key={idx}>{renderInlineBold(block.items[0], `p-${idx}`)}</p>;
+      })}
+    </div>
+  );
+}
+
+function summaryFirstLine(text: string): string {
+  const stripped = text
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .find((l) => l && !l.match(/^(\*\s+|-\s+|•\s+)/));
+  if (!stripped) return text.split("\n")[0];
+  return stripped.replace(/\*\*/g, "");
+}
+
 function isNew(uploadDate: string): boolean {
   const diff = Date.now() - new Date(uploadDate).getTime();
   return diff < 7 * 24 * 60 * 60 * 1000;
@@ -56,10 +115,12 @@ export function VideoLibraryClient({
   videos,
   selectedVideoId,
   userTier,
+  isAdmin = false,
 }: {
   videos: VideoRow[];
   selectedVideoId: string | null;
   userTier: "free" | "elite" | null;
+  isAdmin?: boolean;
 }) {
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -67,6 +128,28 @@ export function VideoLibraryClient({
   const [showUnwatchedOnly, setShowUnwatchedOnly] = useState(false);
   const [showOldVideos, setShowOldVideos] = useState(false);
   const [viewedIds, setViewedIds] = useState<Set<string>>(new Set());
+  const [thumbPrompt, setThumbPrompt] = useState<{ title: string; prompt: string } | null>(null);
+  const [thumbLoading, setThumbLoading] = useState<string | null>(null);
+  const [thumbError, setThumbError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  async function generateThumbPrompt(videoId: string) {
+    setThumbLoading(videoId);
+    setThumbError(null);
+    try {
+      const res = await fetch(`/api/admin/videos/${videoId}/thumbnail-prompt`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        setThumbError(data?.error ?? "Eroare la generare.");
+        return;
+      }
+      setThumbPrompt({ title: data.title, prompt: data.prompt });
+    } catch (err) {
+      setThumbError(err instanceof Error ? err.message : "Eroare necunoscută.");
+    } finally {
+      setThumbLoading(null);
+    }
+  }
 
   useEffect(() => {
     setViewedIds(readViewed());
@@ -124,6 +207,69 @@ export function VideoLibraryClient({
 
   return (
     <>
+      {/* ADMIN: Thumbnail prompt modal */}
+      {thumbPrompt && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-crypto-dark/80 p-4 backdrop-blur-sm"
+          onClick={() => {
+            setThumbPrompt(null);
+            setCopied(false);
+          }}
+        >
+          <div
+            className="glass-card relative w-full max-w-2xl p-5 md:p-7"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-amber-400">
+                  Admin · Prompt Thumbnail
+                </p>
+                <h3 className="mt-1 text-lg font-bold text-white">{thumbPrompt.title}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setThumbPrompt(null);
+                  setCopied(false);
+                }}
+                className="text-slate-500 transition hover:text-slate-200"
+                aria-label="Închide"
+              >
+                ×
+              </button>
+            </div>
+            <textarea
+              readOnly
+              value={thumbPrompt.prompt}
+              className="mt-4 h-72 w-full rounded-lg border border-white/10 bg-black/30 p-3 font-mono text-xs text-slate-300"
+            />
+            <div className="mt-3 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(thumbPrompt.prompt).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  });
+                }}
+                className="rounded-md border border-accent-emerald/40 bg-accent-emerald/10 px-3 py-1.5 text-xs font-semibold text-accent-emerald transition hover:bg-accent-emerald/20"
+              >
+                {copied ? "Copiat ✓" : "Copiază"}
+              </button>
+              <a
+                href="https://gemini.google.com/app"
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs text-slate-400 hover:text-slate-200"
+              >
+                Deschide Gemini ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* VIDEO PLAYER */}
       {selectedVideo && (
         <section className="glass-card mb-10 overflow-hidden p-4 md:p-6">
@@ -165,8 +311,19 @@ export function VideoLibraryClient({
           </div>
           <div className="mt-5 space-y-3">
             <h2 className="text-2xl font-bold text-white">{selectedVideo.title}</h2>
-            {selectedVideo.summary && (
-              <div className="max-w-3xl whitespace-pre-line text-sm leading-relaxed text-slate-400">{selectedVideo.summary}</div>
+            {selectedVideo.summary && <SummaryContent text={selectedVideo.summary} />}
+            {isAdmin && (
+              <div className="flex flex-wrap gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => generateThumbPrompt(selectedVideo.id)}
+                  disabled={thumbLoading === selectedVideo.id}
+                  className="inline-flex items-center gap-2 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300 transition hover:bg-amber-500/20 disabled:opacity-50"
+                >
+                  {thumbLoading === selectedVideo.id ? "Generez..." : "Prompt thumbnail (admin)"}
+                </button>
+                {thumbError && <span className="text-xs text-red-400">{thumbError}</span>}
+              </div>
             )}
             {selectedVideo.tags && selectedVideo.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -218,7 +375,7 @@ export function VideoLibraryClient({
             <div className="flex flex-col justify-center p-5 md:w-1/2 md:p-8">
               <h2 className="text-xl font-bold text-white md:text-2xl">{videos[0].title}</h2>
               {videos[0].summary && (
-                <p className="mt-3 line-clamp-3 text-sm text-slate-400">{videos[0].summary}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-slate-400">{summaryFirstLine(videos[0].summary)}</p>
               )}
               <div className="mt-4">
                 <span className="inline-flex items-center gap-2 rounded-xl bg-accent-emerald/10 px-4 py-2 text-sm font-semibold text-accent-emerald group-hover:bg-accent-emerald/20">
@@ -387,7 +544,7 @@ export function VideoLibraryClient({
                     </div>
                     <div className="p-5">
                       <h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3>
-                      {video.summary && <p className="mt-2 line-clamp-2 text-sm text-slate-400">{video.summary.split("\n")[0]}</p>}
+                      {video.summary && <p className="mt-2 line-clamp-2 text-sm text-slate-400">{summaryFirstLine(video.summary)}</p>}
                       {video.tags && video.tags.length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-1.5">{video.tags.map(tag => <span key={tag} className="rounded-full border border-accent-emerald/20 bg-accent-emerald/10 px-2.5 py-0.5 text-xs text-accent-emerald">{tag}</span>)}</div>
                       )}
@@ -442,7 +599,7 @@ export function VideoLibraryClient({
                   <div className="p-5">
                     <h3 className="line-clamp-2 text-lg font-bold text-white">{video.title}</h3>
                     {video.summary && (
-                      <p className="mt-2 line-clamp-2 text-sm text-slate-500">{video.summary?.split('\n')[0]}</p>
+                      <p className="mt-2 line-clamp-2 text-sm text-slate-500">{summaryFirstLine(video.summary)}</p>
                     )}
                     <div className="mt-4">
                       <Link className="ghost-button text-sm" href="/upgrade">
@@ -500,7 +657,7 @@ export function VideoLibraryClient({
                     {video.title}
                   </h3>
                   {video.summary && (
-                    <p className="mt-2 line-clamp-2 text-sm text-slate-400">{video.summary?.split('\n')[0]}</p>
+                    <p className="mt-2 line-clamp-2 text-sm text-slate-400">{summaryFirstLine(video.summary)}</p>
                   )}
                   {video.tags && video.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1.5">

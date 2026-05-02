@@ -10,3 +10,6 @@ data/
 .env.vercel.local
 .playwright-mcp/
 .claude/
+
+# PFA bookkeeping (personal financial data, never push to GitHub)
+accounting/
