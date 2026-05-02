@@ -14,6 +14,7 @@ Requires: ANTHROPIC_API_KEY in .env or environment
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.request
@@ -40,17 +41,46 @@ for env_path in [SCRIPT_DIR / ".env", SCRIPT_DIR.parent.parent / ".env.local"]:
                     _env[k] = v
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or _env.get("ANTHROPIC_API_KEY", "")
-if not ANTHROPIC_API_KEY:
-    print("ERROR: ANTHROPIC_API_KEY not set")
-    sys.exit(1)
+USE_CLI = False  # set by --cli flag in main()
 
 
 def log(msg):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
 
 
+def call_claude_cli(system_prompt, user_prompt):
+    """Call `claude -p` (Claude Code CLI) — works on Max plan, no API key needed.
+    Pipes the prompt via stdin to avoid OS arg-list limits on large inputs."""
+    full_prompt = f"{system_prompt}\n\n---\n\n{user_prompt}"
+    try:
+        result = subprocess.run(
+            ["claude", "-p"],
+            input=full_prompt,
+            capture_output=True,
+            text=True,
+            timeout=900,
+        )
+        if result.returncode != 0:
+            log(f"  CLI exit {result.returncode}: {result.stderr[:300]}")
+            return None
+        return result.stdout.strip()
+    except subprocess.TimeoutExpired:
+        log("  CLI timeout (900s)")
+        return None
+    except Exception as e:
+        log(f"  CLI error: {e}")
+        return None
+
+
 def call_claude(system_prompt, user_prompt, max_tokens=4000):
-    """Call Claude API with retries."""
+    """Call Claude API with retries (or CLI if --cli flag set)."""
+    if USE_CLI:
+        return call_claude_cli(system_prompt, user_prompt)
+
+    if not ANTHROPIC_API_KEY:
+        log("  ERROR: ANTHROPIC_API_KEY not set (use --cli to fall back to Claude Code CLI)")
+        return None
+
     body = json.dumps({
         "model": "claude-sonnet-4-20250514",
         "max_tokens": max_tokens,
@@ -201,7 +231,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", help="Analyze specific date (YYYY-MM-DD)")
     parser.add_argument("--backfill", type=int, help="Analyze last N days")
+    parser.add_argument("--cli", action="store_true", help="Use `claude -p` (Max plan) instead of API key")
     args = parser.parse_args()
+
+    global USE_CLI
+    USE_CLI = args.cli
+    if USE_CLI:
+        log("Using Claude Code CLI (Max plan) — no API key required")
+    elif not ANTHROPIC_API_KEY:
+        log("ERROR: ANTHROPIC_API_KEY not set. Use --cli for Max-plan fallback.")
+        sys.exit(1)
 
     if args.backfill:
         log(f"Backfilling {args.backfill} days...")

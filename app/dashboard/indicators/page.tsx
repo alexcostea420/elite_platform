@@ -60,6 +60,34 @@ const indicators: Indicator[] = [
     icon: "🔮",
     url: "https://www.tradingview.com/script/FCvrNntd-Elite-Fib-Zones/",
   },
+  {
+    name: "Alex Costea Indicator",
+    description:
+      "Indicatorul principal Alex Costea: semnale buy/sell pe confluențe price action, structură și momentum. Folosit în sesiunile Live Elite.",
+    icon: "🛡️",
+    url: "https://www.tradingview.com/script/6Q8frYtq-Alex-Costea-Indicator/",
+  },
+  {
+    name: "Alex Costea Indicator PRECAUT",
+    description:
+      "Versiunea precaută a indicatorului principal: filtre suplimentare pentru a reduce semnalele false în piețe choppy. Mai puține trade-uri, calitate mai mare.",
+    icon: "🧭",
+    url: "https://www.tradingview.com/script/fjdizZf8-Alex-Costea-Indicator-PRECAUT/",
+  },
+  {
+    name: "AC BTC Buy The Dip",
+    description:
+      "Detectează zone de acumulare pentru Bitcoin în corecții. Optimizat pentru DCA pe scăderi semnificative în trend bullish primar.",
+    icon: "🟢",
+    url: "https://www.tradingview.com/script/0HWaPWFY-AC-BTC-Buy-The-Dip/",
+  },
+  {
+    name: "AC Sell Indicator",
+    description:
+      "Indicator dedicat pentru ieșiri: identifică zone de distribuție și exhaustion la vârfuri locale, cu accent pe protecția profitului.",
+    icon: "🔴",
+    url: "https://www.tradingview.com/script/w8JfieVT-AC-Sell-Indicator/",
+  },
 ];
 
 export default async function IndicatorsPage() {
@@ -155,17 +183,28 @@ export default async function IndicatorsPage() {
                 ))}
               </section>
 
-              {/* Video Tutorial */}
-              <section className="panel mb-8 p-6 md:p-8">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="mb-1 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Video Tutorial</p>
-                    <h2 className="text-xl font-bold text-white">Cum să folosești indicatorii Elite</h2>
-                    <p className="mt-2 text-sm text-slate-400">Tutorial complet: instalare, configurare și interpretare semnale.</p>
-                  </div>
+              {/* Video Tutorials */}
+              <section className="mb-8 grid gap-4 md:grid-cols-2">
+                <div className="panel p-6 md:p-8">
+                  <p className="mb-1 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Video Tutorial</p>
+                  <h2 className="text-xl font-bold text-white">Indicatorii Elite</h2>
+                  <p className="mt-2 text-sm text-slate-400">Tutorial complet: instalare, configurare și interpretare semnale.</p>
                   <a
-                    className="accent-button shrink-0 text-center text-sm"
+                    className="accent-button mt-5 inline-flex text-center text-sm"
                     href="https://youtu.be/Gpz_TpMLu2I"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Vezi tutorial-ul
+                  </a>
+                </div>
+                <div className="panel p-6 md:p-8">
+                  <p className="mb-1 text-sm font-semibold uppercase tracking-[0.3em] text-accent-emerald">Video Tutorial</p>
+                  <h2 className="text-xl font-bold text-white">Indicator ELITE</h2>
+                  <p className="mt-2 text-sm text-slate-400">Walkthrough Alex Costea: cum să citești semnalele și să integrezi indicatorul în setup-ul tău.</p>
+                  <a
+                    className="accent-button mt-5 inline-flex text-center text-sm"
+                    href="https://youtu.be/ATYp4v9cz0w"
                     rel="noreferrer"
                     target="_blank"
                   >
