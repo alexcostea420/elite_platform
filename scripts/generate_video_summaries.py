@@ -122,22 +122,37 @@ def transcribe(wav: Path) -> str:
     return text
 
 
-SUMMARY_PROMPT = """Ești editor pentru o platformă de trading românească. Ai mai jos transcrierea unui video lung. Scrie un rezumat curat, simplu, în română cu diacritice (ă, â, î, ș, ț) care să arate frumos formatat în descrierea videoului.
+SUMMARY_PROMPT = """Ești editor pentru platforma românească de trading "Armata de Traderi". Ai mai jos transcrierea unui video. Scrie un rezumat util, concret, în română cu diacritice corecte (ă, â, î, ș, ț).
+
+CONTEXT important (memorează):
+- Alex și Cristian sunt cei doi traderi care țin video-urile. NU le inventa alte nume.
+- "JDL" = "Jocul de Lichiditate" (cealaltă comunitate în care Alex apare, NU este a lui). Niciodată "Jurnalul de Lider".
+- "Elite" / "Live Elite" = comunitatea proprie Armata de Traderi.
+- Membrii sunt români, mulți începători. Scrie pentru ei: explică termenii când ai loc.
 
 Reguli stricte:
-- Maxim 5-7 propoziții scurte SAU 5-7 bullet points - alege ce se potrivește mai bine conținutului.
-- Limbaj clar, fără englezisme inutile (folosește "trend" în loc de "trending", "indicator" în loc de "metric", etc.).
-- Fără em dash (—). Folosește punct, virgulă sau două puncte.
-- Fără hype. Fără "ULTIMATE", "INCREDIBIL", "INSANE". Doar fapte din video.
-- Fără promisiuni de profit, fără disclaimer (e gestionat separat).
-- Concentrează-te pe IDEILE PRINCIPALE: ce a discutat Alex/Cristian, ce concluzii a tras, ce setup-uri a arătat.
-- Începe direct cu conținutul, nu cu "Acest video discută...".
+- Fără em dash (—). NU folosi niciodată acest caracter. Înlocuiește cu punct, virgulă, două puncte sau cratimă scurtă (-).
+- Fără hype: fără "ULTIMATE", "INCREDIBIL", "INSANE". Doar fapte din video.
+- Fără promisiuni de profit, fără disclaimer.
+- Începe direct cu conținutul. NU cu "Acest video discută...", "În acest live...", "Discuția s-a axat pe...".
+- Limbaj clar, fără englezisme inutile.
 
-Format de output (foarte important):
-- Pentru bullet-uri folosește exact "- " la început de linie (cratimă + spațiu). NU folosi "*", "•" sau alte simboluri.
-- Pentru cuvinte cheie scoase în evidență folosește **text** (markdown bold). Site-ul îl interpretează corect. Nu pune prea multe bold-uri (max 1-2 per bullet).
-- Format ideal: 1 propoziție de intro (fără bullet) + linie goală + 4-5 bullet-uri "- " + (opțional) linie goală + 1 linie de takeaway.
-- NU folosi titluri (##), tabele, sau cod. Doar paragraf + bullet-uri.
+Conținut (foarte important):
+- Rezumatul TREBUIE să fie SPECIFIC, nu generic. Dacă în video se discută:
+  - niveluri concrete (ex. BTC suport 70.000) → menționează-le
+  - indicatori (RSI weekly, EMA 50, MACD) și valorile lor → menționează-le
+  - setup-uri concrete (long pe ETH dacă rupe X, stop la Y) → descrie-le
+  - evenimente macro (FOMC, CPI, NFP) → cum sunt așteptate să influențeze
+- Dacă video-ul nu are conținut concret (e doar discuție generală), scrie un rezumat scurt și onest, fără să umfli.
+
+Format output:
+- 1 propoziție intro fără bullet (max 20 cuvinte).
+- Linie goală.
+- 3-5 bullet-uri "- " (cratimă + spațiu). Fiecare bullet: 1-2 propoziții, factual.
+- Pentru highlight-uri folosește **text** (markdown bold). Maxim 1 bold/bullet, doar pentru ce e cu adevărat important.
+- NU folosi *, •, titluri (##), tabele, cod.
+
+TITLU video: {title}
 
 Transcriere:
 ---
@@ -147,14 +162,17 @@ Transcriere:
 Rezumat:"""
 
 
-def gemini_summarize(transcript: str) -> str:
+def gemini_summarize(transcript: str, title: str = "") -> str:
     import google.generativeai as genai  # type: ignore
     genai.configure(api_key=GEMINI_API_KEY)
     model = genai.GenerativeModel("gemini-2.5-flash")
     # Truncate very long transcripts to ~50k chars (~12k tokens) - more than enough.
     safe = transcript[:50000]
-    resp = model.generate_content(SUMMARY_PROMPT.format(transcript=safe))
-    return resp.text.strip()
+    resp = model.generate_content(SUMMARY_PROMPT.format(transcript=safe, title=title))
+    out = resp.text.strip()
+    # Hard belt-and-suspenders: strip any em-dash that slipped through.
+    out = out.replace("—", "-").replace("–", "-")
+    return out
 
 
 def update_summary(video_id: str, summary: str) -> None:
@@ -216,7 +234,7 @@ def main() -> int:
             wav = extract_audio(mp4)
             transcript = transcribe(wav)
             print(f"    transcript: {len(transcript)} chars")
-            summary = gemini_summarize(transcript)
+            summary = gemini_summarize(transcript, title=v["title"])
             print(f"    summary preview:\n      {summary[:200]}...")
             if not args.dry_run:
                 update_summary(v["id"], summary)

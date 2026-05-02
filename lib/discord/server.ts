@@ -241,28 +241,28 @@ export async function syncDiscordRole({
   userAccessToken,
 }: SyncDiscordRoleInput) {
   const { eliteRoleId, soldatRoleId } = getDiscordGuildConfig();
-  const desiredRoleId = subscriptionTier === "elite" ? eliteRoleId : soldatRoleId;
-  const roleToRemove = subscriptionTier === "elite" ? soldatRoleId : eliteRoleId;
 
   if (userAccessToken) {
     await joinDiscordGuild(discordUserId, userAccessToken);
   }
 
-  // Add the desired role first — if this fails, we throw and the caller knows
-  // sync did not complete. Only AFTER the new role is in place do we attempt
-  // to remove the old one. A failure to remove the previous role is logged
-  // but does not fail the whole sync (the user still has correct access).
-  await addDiscordRole(discordUserId, desiredRoleId);
+  // Soldat is the baseline role for every member (gates free chat).
+  // Elite is additive on top of Soldat — Elite members keep Soldat so they
+  // retain access to free channels alongside Elite-only ones.
+  await addDiscordRole(discordUserId, soldatRoleId);
 
-  try {
-    await removeDiscordRole(discordUserId, roleToRemove);
-  } catch (error) {
-    console.error("[discord] failed to remove previous role", {
-      profileId,
-      discordUserId,
-      roleToRemove,
-      error: error instanceof Error ? error.message : String(error),
-    });
+  if (subscriptionTier === "elite") {
+    await addDiscordRole(discordUserId, eliteRoleId);
+  } else {
+    try {
+      await removeDiscordRole(discordUserId, eliteRoleId);
+    } catch (error) {
+      console.error("[discord] failed to remove Elite role", {
+        profileId,
+        discordUserId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
   }
 
   await markDiscordRoleSynced(profileId);
