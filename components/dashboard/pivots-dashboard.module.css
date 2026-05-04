@@ -371,11 +371,18 @@
   display: flex;
   gap: 2px;
   padding: 0 24px;
-  overflow-x: auto;
+  flex-wrap: wrap;
   scrollbar-width: none;
 }
 
 .subnav::-webkit-scrollbar { display: none; }
+
+@media (max-width: 900px) {
+  .subnav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
 
 .subnavLink {
   padding: 14px 16px;

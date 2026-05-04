@@ -1159,9 +1159,17 @@ function Subnav() {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             setActiveId(e.target.id);
-            // Scroll subnav link into view
-            const link = navRef.current?.querySelector(`[href="#${e.target.id}"]`);
-            if (link) link.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+            const nav = navRef.current;
+            if (!nav) return;
+            // Only scroll subnav horizontally if it actually overflows (mobile only).
+            // On desktop the subnav wraps and scrollIntoView would scroll-jack the window.
+            if (nav.scrollWidth <= nav.clientWidth) return;
+            const link = nav.querySelector<HTMLElement>(`[href="#${e.target.id}"]`);
+            if (link) {
+              const linkLeft = link.offsetLeft;
+              const target = linkLeft - nav.clientWidth / 2 + link.offsetWidth / 2;
+              nav.scrollTo({ left: Math.max(0, target), behavior: "auto" });
+            }
           }
         });
       },

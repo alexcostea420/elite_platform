@@ -54,7 +54,7 @@ export default async function PivotsPage() {
   return (
     <>
       <Navbar mode="dashboard" userIdentity={identity} />
-      <main className="pb-16 pt-20">
+      <main className="min-h-screen bg-surface-night pb-16 pt-20">
         <PivotsDashboard />
       </main>
       <Footer compact />
