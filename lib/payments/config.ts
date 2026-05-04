@@ -2,7 +2,7 @@ import "server-only";
 
 export type PaymentChain = "TRC-20" | "ARB" | "SOL" | "ERC-20";
 export type PaymentCurrency = "USDT";
-export type PaymentStatus = "pending" | "confirmed" | "expired" | "failed";
+export type PaymentStatus = "pending" | "confirmed" | "expired" | "failed" | "refunded";
 
 export type PlanDuration = "30_days" | "90_days" | "365_days" | "bot_monthly" | "bot_monthly_elite";
 

@@ -33,6 +33,7 @@ const statusLabels: Record<string, string> = {
   confirmed: "Confirmată",
   expired: "Expirată",
   failed: "Eșuată",
+  refunded: "Refundată",
 };
 
 const statusColors: Record<string, string> = {
@@ -40,6 +41,7 @@ const statusColors: Record<string, string> = {
   confirmed: "bg-crypto-green/10 text-crypto-green",
   expired: "bg-slate-500/10 text-slate-400",
   failed: "bg-red-500/10 text-red-300",
+  refunded: "bg-purple-500/10 text-purple-300",
 };
 
 export default async function AdminPaymentsPage({ searchParams }: AdminPaymentsPageProps) {
@@ -120,7 +122,7 @@ export default async function AdminPaymentsPage({ searchParams }: AdminPaymentsP
               >
                 Toate
               </Link>
-              {(["pending", "confirmed", "expired", "failed"] as const).map((s) => (
+              {(["pending", "confirmed", "refunded", "expired", "failed"] as const).map((s) => (
                 <Link
                   key={s}
                   className={`rounded-xl px-4 py-2 text-sm font-semibold ${statusFilter === s ? "bg-accent-emerald text-crypto-dark" : "bg-white/5 text-slate-300 hover:bg-white/10"}`}
@@ -176,8 +178,25 @@ export default async function AdminPaymentsPage({ searchParams }: AdminPaymentsP
                         {p.expires_at ? (
                           <p>Expiră: {new Date(p.expires_at as string).toLocaleDateString("ro-RO")}</p>
                         ) : null}
-                        {p.status === "pending" ? (
-                          <AdminPaymentActions paymentId={p.id as string} />
+                        {(p.status === "pending" || p.status === "confirmed") ? (
+                          <AdminPaymentActions
+                            paymentId={p.id as string}
+                            status={p.status as string}
+                            amountReceived={p.amount_received as number | null}
+                          />
+                        ) : null}
+                        {p.status === "refunded" ? (
+                          <div className="mt-2 rounded-lg bg-purple-500/10 px-3 py-1.5 text-left text-[10px] text-purple-300">
+                            <p className="font-semibold">
+                              Refundat: {p.refunded_amount as number} {p.currency as string}
+                            </p>
+                            {p.refunded_at ? (
+                              <p>{new Date(p.refunded_at as string).toLocaleString("ro-RO")}</p>
+                            ) : null}
+                            {p.refund_reason ? (
+                              <p className="mt-0.5 text-purple-200/70">{p.refund_reason as string}</p>
+                            ) : null}
+                          </div>
                         ) : null}
                       </div>
                     </div>
