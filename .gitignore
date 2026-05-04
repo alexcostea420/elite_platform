@@ -11,6 +11,9 @@ data/
 .playwright-mcp/
 .claude/
 
+# TypeScript incremental cache (per-machine, mutates on every tsc run)
+tsconfig.tsbuildinfo
+
 # PFA bookkeeping (personal financial data, never push to GitHub)
 accounting/
 
