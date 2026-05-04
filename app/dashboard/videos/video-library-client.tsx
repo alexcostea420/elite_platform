@@ -164,6 +164,13 @@ export function VideoLibraryClient({
       writeViewed(next);
       return next;
     });
+    // Server-side tracking — best-effort, never blocks UI.
+    fetch("/api/videos/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ video_id: selectedVideoId }),
+      keepalive: true,
+    }).catch(() => {});
   }, [selectedVideoId]);
 
   const allTags = useMemo(() => {
