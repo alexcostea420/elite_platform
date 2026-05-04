@@ -255,7 +255,7 @@ export const faqs = [
   },
   {
     question: "Ce este botul de copytrade?",
-    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul execută tranzacții automat pe contul tău. Disponibil în curând - $45/lună pentru membrii Elite."
+    answer: "Un serviciu separat, disponibil ca addon pentru membrii Elite. Botul execută tranzacții automat pe contul tău. Disponibil în curând: €45/lună pentru membrii Elite."
   },
   {
     question: "Pot pierde bani?",

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Container } from "@/components/ui/container";
 import { LeadMagnetForm } from "@/components/ui/lead-magnet-form";
 import { StripePayButton } from "@/components/upgrade/stripe-pay-button";
+import { FaqSection } from "@/components/marketing/faq-section";
 import { pricingPlans } from "@/lib/constants/site";
 import { isStripeEnabled } from "@/lib/payments/stripe";
 import { buildPageMetadata, getUpgradeOfferSchema } from "@/lib/seo";
@@ -25,7 +26,7 @@ const comparisonRows: { label: string; free: boolean; elite: boolean }[] = [
   { label: "Resurse complete (ghiduri, watchlist)", free: false, elite: true },
   { label: "Risk Score BTC live", free: false, elite: true },
   { label: "Should I Trade? - decizia zilei", free: false, elite: true },
-  { label: "Bot AI Trading (discount $45 vs $98)", free: false, elite: true },
+  { label: "Bot AI Trading (discount €45 vs €98)", free: false, elite: true },
   { label: "Suport prioritar", free: false, elite: true },
 ];
 
@@ -445,6 +446,8 @@ export default async function UpgradePage() {
               </div>
             </div>
           </section>
+
+          <FaqSection />
 
           <section className="panel px-6 py-8 md:px-8">
             <div className="mx-auto max-w-2xl text-center">
