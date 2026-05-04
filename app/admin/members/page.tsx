@@ -226,13 +226,13 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                         : null;
                       const expired = days !== null && days <= 0;
                       const urgent = days !== null && days > 0 && days <= 7;
-                      const display = m.full_name || m.discord_username || m.email?.split("@")[0] || "—";
+                      const display = m.full_name || m.discord_username || m.email?.split("@")[0] || "-";
                       return (
                         <tr className="border-b border-white/5 transition-colors hover:bg-white/[0.02]" key={m.id}>
                           <td className="px-4 py-3">
                             <Link className="block" href={`/admin/members/${m.id}`}>
                               <div className="font-semibold text-white">{display}</div>
-                              <div className="text-xs text-slate-500">{m.email ?? "—"}</div>
+                              <div className="text-xs text-slate-500">{m.email ?? "-"}</div>
                             </Link>
                           </td>
                           <td className="px-4 py-3">

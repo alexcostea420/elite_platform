@@ -241,7 +241,7 @@ export default async function AdminFunnelPage() {
                           <td className="py-3 pr-4 text-right font-data tabular-nums text-emerald-400">{c.elite}</td>
                           <td className="py-3 pr-4 text-right font-data tabular-nums text-yellow-400">{c.paid}</td>
                           <td className="py-3 text-right font-data font-bold tabular-nums text-slate-300">
-                            {c.signups > 0 ? `${trialPct}%` : "—"}
+                            {c.signups > 0 ? `${trialPct}%` : "-"}
                           </td>
                         </tr>
                       );

@@ -58,7 +58,7 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" onClick={onClose}>
       <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
-        <button className="absolute -top-10 right-0 text-sm text-white/50 hover:text-white" onClick={onClose} type="button">Inchide</button>
+        <button className="absolute -top-10 right-0 text-sm text-white/50 hover:text-white" onClick={onClose} type="button">Închide</button>
         <Image alt="Screenshot Discord" className="w-full rounded-xl border border-white/10" height={800} src={src} width={700} />
         <p className="mt-3 text-center text-xs text-slate-600">Screenshot real din Discord, timestamp imuabil</p>
       </div>

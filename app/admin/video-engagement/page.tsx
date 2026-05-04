@@ -20,7 +20,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 function fmtRoDateTime(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleString("ro-RO", {
     day: "2-digit",
     month: "short",
@@ -171,7 +171,7 @@ export default async function AdminVideoEngagementPage() {
                           {row.total_views}
                         </td>
                         <td className="py-2.5 text-right font-data tabular-nums text-slate-500">
-                          {row.last_view_at ? relTime(row.last_view_at) : "—"}
+                          {row.last_view_at ? relTime(row.last_view_at) : "-"}
                         </td>
                       </tr>
                     ))}
@@ -196,7 +196,7 @@ export default async function AdminVideoEngagementPage() {
               ) : (
                 <div className="space-y-2">
                   {dashboard.topViewers.map((v) => {
-                    const display = v.full_name || v.discord_username || v.email || "—";
+                    const display = v.full_name || v.discord_username || v.email || "-";
                     return (
                       <Link
                         className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 transition-colors hover:bg-white/[0.04]"
@@ -238,7 +238,7 @@ export default async function AdminVideoEngagementPage() {
               ) : (
                 <div className="space-y-2">
                   {dashboard.recent.map((r, idx) => {
-                    const display = r.full_name || r.discord_username || "—";
+                    const display = r.full_name || r.discord_username || "-";
                     return (
                       <div
                         className="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2"

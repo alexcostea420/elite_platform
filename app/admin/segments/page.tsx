@@ -37,12 +37,12 @@ const TAG_ORDER: ProfileLifecycleTag[] = [
 ];
 
 function fmtRoDate(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleDateString("ro-RO", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 function fmtMoney(v: number) {
-  if (v === 0) return "—";
+  if (v === 0) return "-";
   return `${v.toFixed(2)} €`;
 }
 
@@ -111,7 +111,7 @@ export default async function AdminSegmentsPage({
   }
 
   function ProfileLine({ p }: { p: ProfileWithTags }) {
-    const display = p.full_name || p.discord_username || p.email || "—";
+    const display = p.full_name || p.discord_username || p.email || "-";
     return (
       <Link
         className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 transition-colors hover:bg-white/[0.04]"

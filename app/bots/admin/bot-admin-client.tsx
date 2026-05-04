@@ -32,7 +32,7 @@ export function BotAdminClient({ subscribers }: { subscribers: Subscriber[] }) {
   const [loading, setLoading] = useState<string | null>(null);
 
   async function handleExtend(userId: string) {
-    const days = prompt("Cate zile sa adaugi?", "30");
+    const days = prompt("Câte zile să adaugi?", "30");
     if (!days) return;
     setLoading(userId);
     const ok = await adminAction("extend", userId, parseInt(days));
@@ -43,7 +43,7 @@ export function BotAdminClient({ subscribers }: { subscribers: Subscriber[] }) {
   }
 
   async function handleDisable(userId: string) {
-    if (!confirm("Sigur vrei sa dezactivezi acest subscriber?")) return;
+    if (!confirm("Sigur vrei să dezactivezi acest subscriber?")) return;
     setLoading(userId);
     const ok = await adminAction("disable", userId);
     if (ok) {
@@ -63,14 +63,14 @@ export function BotAdminClient({ subscribers }: { subscribers: Subscriber[] }) {
               <th className="pb-3 pr-4">Risk</th>
               <th className="pb-3 pr-4">Status</th>
               <th className="pb-3 pr-4">Zile</th>
-              <th className="pb-3 pr-4">Expira</th>
-              <th className="pb-3">Actiuni</th>
+              <th className="pb-3 pr-4">Expiră</th>
+              <th className="pb-3">Acțiuni</th>
             </tr>
           </thead>
           <tbody>
             {subs.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-slate-500">Niciun subscriber inca</td>
+                <td colSpan={7} className="py-8 text-center text-slate-500">Niciun subscriber încă</td>
               </tr>
             ) : (
               subs.map((s) => (

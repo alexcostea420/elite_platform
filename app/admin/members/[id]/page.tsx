@@ -34,12 +34,12 @@ type TimelineEvent = {
 };
 
 function fmtRoDate(iso: string | null | undefined) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleDateString("ro-RO", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 function fmtRoDateTime(iso: string | null | undefined) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleString("ro-RO", {
     day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
   });
@@ -106,7 +106,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
     email = null;
   }
 
-  const display = target.full_name || target.discord_username || email?.split("@")[0] || "—";
+  const display = target.full_name || target.discord_username || email?.split("@")[0] || "-";
   const targetIdentity = getDisplayIdentity(target.full_name ?? null, email);
 
   const now = Date.now();
@@ -279,7 +279,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
               <div className="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Discord</p>
                 <p className="mt-0.5 truncate text-sm font-bold text-slate-200">
-                  {target.discord_username ? `@${target.discord_username}` : "—"}
+                  {target.discord_username ? `@${target.discord_username}` : "-"}
                 </p>
               </div>
             </div>
@@ -399,7 +399,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
                   </div>
                   <div className="flex justify-between gap-2">
                     <dt className="text-slate-500">Discord ID</dt>
-                    <dd className="font-mono text-slate-400">{target.discord_user_id ?? "—"}</dd>
+                    <dd className="font-mono text-slate-400">{target.discord_user_id ?? "-"}</dd>
                   </div>
                   <div className="flex justify-between gap-2">
                     <dt className="text-slate-500">Plăți</dt>

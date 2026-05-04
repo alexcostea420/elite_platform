@@ -84,7 +84,7 @@ function actionBadge(action: string) {
 }
 
 function shortId(id: string | null) {
-  if (!id) return "—";
+  if (!id) return "-";
   return id.length > 8 ? `${id.slice(0, 8)}…` : id;
 }
 

@@ -31,7 +31,7 @@ type ProfileRow = {
 };
 
 function fmtRoDate(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleDateString("ro-RO", { day: "2-digit", month: "short", year: "numeric" });
 }
 
@@ -105,7 +105,7 @@ export default async function AdminRetentionPage() {
     const days = p.subscription_expires_at
       ? Math.ceil((new Date(p.subscription_expires_at).getTime() - now) / dayMs)
       : 0;
-    const display = p.full_name || p.discord_username || "—";
+    const display = p.full_name || p.discord_username || "-";
     return (
       <Link
         className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 transition-colors hover:bg-white/[0.04]"

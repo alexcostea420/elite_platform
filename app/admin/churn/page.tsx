@@ -32,7 +32,7 @@ const BAND_LABEL: Record<ChurnRiskRow["band"], string> = {
 };
 
 function fmtDays(n: number | null) {
-  if (n === null) return "—";
+  if (n === null) return "-";
   if (n === 0) return "azi";
   if (n < 0) return `${Math.abs(n)}z trecut`;
   return `${n}z`;
@@ -178,7 +178,7 @@ export default async function AdminChurnPage({
             ) : (
               <div className="mt-5 space-y-2">
                 {rows.map((r) => {
-                  const display = r.full_name || r.discord_username || r.email || "—";
+                  const display = r.full_name || r.discord_username || r.email || "-";
                   return (
                     <Link
                       className="block rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.04]"

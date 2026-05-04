@@ -225,8 +225,8 @@ export default async function BotDashboardPage() {
               </div>
             ) : (
               <div className="rounded-xl bg-white/5 px-6 py-8 text-center">
-                <p className="text-slate-400">Niciun trade inca.</p>
-                <p className="mt-1 text-sm text-slate-600">Botul va incepe sa copieze trade-urile automat dupa verificarea API.</p>
+                <p className="text-slate-400">Niciun trade încă.</p>
+                <p className="mt-1 text-sm text-slate-600">Botul va începe să copieze trade-urile automat după verificarea API.</p>
               </div>
             )}
           </section>
