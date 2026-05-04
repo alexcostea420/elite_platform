@@ -149,6 +149,13 @@ export function ProfileMenu({
               </Link>
               <Link
                 className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/segments"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Segmente
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/audit"
                 onClick={() => setIsOpen(false)}
               >
