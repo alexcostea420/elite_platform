@@ -19,9 +19,9 @@ import { RiskScoreHistoryChart } from "@/components/dashboard/risk-score-history
    ──────────────────────────────────────────────────────────── */
 
 function getDecisionLabel(decision: string) {
-  if (decision === "BUY") return "CUMPARA";
+  if (decision === "BUY") return "CUMPĂRĂ";
   if (decision === "SELL") return "VINDE";
-  return "ASTEAPTA";
+  return "AȘTEAPTĂ";
 }
 
 function scoreColor(score: number): { hex: string; glow: string } {

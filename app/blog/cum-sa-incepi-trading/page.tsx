@@ -7,9 +7,9 @@ import { Container } from "@/components/ui/container";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Cum sa Incepi in Trading Crypto - Ghid Complet | Armata de Traderi",
+  title: "Cum să Începi în Trading Crypto - Ghid Complet | Armata de Traderi",
   description:
-    "Ghid complet pentru incepatori: ce trebuie sa inveti, cum sa-ti deschizi primul cont, cum sa-ti alegi strategia si cum sa gestionezi riscul in trading crypto.",
+    "Ghid complet pentru începători: ce trebuie să înveți, cum să-ți deschizi primul cont, cum să-ți alegi strategia și cum să gestionezi riscul în trading crypto.",
   keywords: [
     "cum sa incepi trading crypto",
     "ghid trading incepatori",

@@ -214,10 +214,10 @@ export function MexcConnectForm({ isElite }: { isElite: boolean }) {
           {status === "connecting" ? (
             <span className="flex items-center justify-center gap-2">
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-crypto-dark border-t-transparent" />
-              Se conecteaza...
+              Se conectează...
             </span>
           ) : (
-            "Conecteaza si Activeaza"
+            "Conectează și Activează"
           )}
         </button>
       </form>

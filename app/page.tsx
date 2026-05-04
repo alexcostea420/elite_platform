@@ -57,7 +57,7 @@ export default async function HomePage() {
     .maybeSingle();
   const rs = riskRow?.data as { score?: number; decision?: string; btc_price_live?: number; btc_price?: number; fear_greed?: { value?: number }; pct_from_ath?: number } | null;
   const riskScore = rs?.score ?? 67;
-  const riskDecision = rs?.decision === "BUY" ? "CUMPARA" : rs?.decision === "SELL" ? "VINDE" : "ASTEAPTA";
+  const riskDecision = rs?.decision === "BUY" ? "CUMPĂRĂ" : rs?.decision === "SELL" ? "VINDE" : "AȘTEAPTĂ";
   const btcPrice = rs?.btc_price_live ?? rs?.btc_price ?? 0;
   const fearGreed = rs?.fear_greed?.value ?? 0;
   const pctAth = rs?.pct_from_ath ?? 0;

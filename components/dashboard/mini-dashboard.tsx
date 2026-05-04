@@ -34,7 +34,7 @@ export async function MiniDashboard() {
   const fgLabel = riskScore?.fear_greed?.label ?? "Neutral";
   const change24h = riskScore?.btc_24h_change ?? 0;
 
-  const decisionLabel = decision === "BUY" ? "CUMPARA" : decision === "SELL" ? "VINDE" : "ASTEAPTA";
+  const decisionLabel = decision === "BUY" ? "CUMPĂRĂ" : decision === "SELL" ? "VINDE" : "AȘTEAPTĂ";
   const decisionColor = decision === "BUY" ? "text-emerald-400" : decision === "SELL" ? "text-red-400" : "text-amber-400";
   const scoreColor = score >= 51 ? "text-emerald-400" : score >= 31 ? "text-amber-400" : "text-red-400";
   const fgColor = fgValue <= 25 ? "text-red-400" : fgValue <= 50 ? "text-amber-400" : "text-emerald-400";
