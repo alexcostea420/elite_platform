@@ -32,8 +32,6 @@ export async function POST(request: Request) {
       // Still return success - don't expose DB errors
     }
 
-    // TODO: Send email with PDF via Supabase Edge Function or email provider
-
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });

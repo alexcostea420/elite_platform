@@ -7,6 +7,10 @@
 set -e
 cd "$(dirname "$0")"
 
+# cron's PATH doesn't include ~/.local/bin where claude lives
+CLAUDE_BIN="/Users/server/.local/bin/claude"
+export PATH="/Users/server/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
 DATE=$(date -u +%Y-%m-%d)
 LOG="logs/daily_${DATE}.log"
 mkdir -p logs
@@ -27,7 +31,9 @@ python3 accuracy_tracker.py >> "$LOG" 2>&1 || true
 TRANSCRIPT_FILE="transcripts/weekly_${DATE}.json"
 if [ -f "$TRANSCRIPT_FILE" ]; then
   echo "[$(date)] Running Claude analysis..." >> "$LOG"
-  claude -p "Read the file $(pwd)/${TRANSCRIPT_FILE} and the prompts in $(pwd)/prompts.py. Analyze the YouTube transcripts following the 4-phase process in the SYSTEM_PROMPT. Save the report to $(pwd)/reports/report_${DATE}.txt. Then update the sentiment_history.json using sentiment_tracker.py record with the per-channel scores. Also append the signal to signal_log.jsonl. Be concise." --allowedTools Read,Write,Bash >> "$LOG" 2>&1
+  # Don't kill the pipeline if claude fails - downstream steps (signal_flip)
+  # still need to run on yesterday's data
+  "$CLAUDE_BIN" -p "Read the file $(pwd)/${TRANSCRIPT_FILE} and the prompts in $(pwd)/prompts.py. Analyze the YouTube transcripts following the 4-phase process in the SYSTEM_PROMPT. Save the report to $(pwd)/reports/report_${DATE}.txt. Then update the sentiment_history.json using sentiment_tracker.py record with the per-channel scores. Also append the signal to signal_log.jsonl. Be concise." --allowedTools Read,Write,Bash >> "$LOG" 2>&1 || echo "[$(date)] Claude analysis failed, continuing pipeline." >> "$LOG"
 else
   echo "[$(date)] No transcript file for today, skipping analysis." >> "$LOG"
 fi
