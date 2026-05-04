@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LiquidationHeatmap } from "@/components/dashboard/liquidation-heatmap";
+import { LiquidationHeatmapV2 } from "@/components/dashboard/liquidation-heatmap-v2";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
@@ -159,14 +159,14 @@ export default async function LiquidationMapPage() {
       <Navbar mode="dashboard" userIdentity={identity} />
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 md:pt-28">
         <div className="mb-8">
-          <p className="section-label mb-2">Liquidation Pressure · BTC</p>
+          <p className="section-label mb-2">Liquidation Pressure · Multi-asset</p>
           <h1 className="text-2xl font-bold text-white sm:text-3xl">Liquidation Map</h1>
           <p className="mt-2 max-w-3xl text-sm text-slate-400">
-            Hartă de presiune pe BTC: unde s-au acumulat pozițiile cu leverage în ultima săptămână (Open Interest istoric × volum). Zonele luminoase sunt clusters dense, ținte naturale pentru cascade de lichidări.
+            Hartă orară de presiune pe BTC, ETH, SOL, XRP și DOGE. Date reale OKX (OI, L/S, funding) + Binance top trader L/S, suprapuse cu pozițiile reale ale top 20 whales de pe Hyperliquid. Zonele luminoase = magneți pentru cascade de lichidări.
           </p>
         </div>
 
-        <LiquidationHeatmap />
+        <LiquidationHeatmapV2 />
 
         <div className="mt-10 mb-6">
           <p className="section-label mb-2">Smart Money · Hyperliquid</p>
