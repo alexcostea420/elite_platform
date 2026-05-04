@@ -73,48 +73,55 @@ def notify_telegram(msg, env):
 
 
 def get_token_transfers(wallet, token_contract, start_block=0, api_key=""):
-    """Get ERC-20 token transfers TO wallet from Arbiscan."""
+    """Get ERC-20 token transfers TO wallet from Arbiscan. Retries on timeout."""
     transfers = []
-    try:
-        params = {
-            "module": "account",
-            "action": "tokentx",
-            "contractaddress": token_contract,
-            "address": wallet,
-            "startblock": start_block,
-            "endblock": 99999999,
-            "sort": "desc",
-            "page": 1,
-            "offset": 50,
-        }
-        params["chainid"] = ARBISCAN_CHAIN_ID
-        if api_key:
-            params["apikey"] = api_key
+    params = {
+        "module": "account",
+        "action": "tokentx",
+        "contractaddress": token_contract,
+        "address": wallet,
+        "startblock": start_block,
+        "endblock": 99999999,
+        "sort": "desc",
+        "page": 1,
+        "offset": 50,
+        "chainid": ARBISCAN_CHAIN_ID,
+    }
+    if api_key:
+        params["apikey"] = api_key
 
-        url = f"{ARBISCAN_API}?{urllib.parse.urlencode(params)}"
-        req = urllib.request.Request(url, headers={"accept": "application/json"})
-        resp = urllib.request.urlopen(req, timeout=15)
-        data = json.loads(resp.read())
+    url = f"{ARBISCAN_API}?{urllib.parse.urlencode(params)}"
 
-        if data.get("status") != "1":
+    last_err = None
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url, headers={"accept": "application/json"})
+            resp = urllib.request.urlopen(req, timeout=30)
+            data = json.loads(resp.read())
+
+            if data.get("status") != "1":
+                return transfers
+
+            for tx in data.get("result", []):
+                if tx.get("to", "").lower() == wallet.lower():
+                    decimals = int(tx.get("tokenDecimal", 6))
+                    amount = float(tx.get("value", 0)) / (10 ** decimals)
+                    token_name = tx.get("tokenSymbol", "?")
+                    transfers.append({
+                        "tx_hash": tx.get("hash", ""),
+                        "from": tx.get("from", ""),
+                        "amount": amount,
+                        "token": token_name,
+                        "block": int(tx.get("blockNumber", 0)),
+                        "timestamp": int(tx.get("timeStamp", 0)),
+                    })
             return transfers
+        except Exception as e:
+            last_err = e
+            if attempt < 2:
+                time.sleep(2 ** attempt)  # 1s, 2s
 
-        for tx in data.get("result", []):
-            if tx.get("to", "").lower() == wallet.lower():
-                decimals = int(tx.get("tokenDecimal", 6))
-                amount = float(tx.get("value", 0)) / (10 ** decimals)
-                token_name = tx.get("tokenSymbol", "?")
-                transfers.append({
-                    "tx_hash": tx.get("hash", ""),
-                    "from": tx.get("from", ""),
-                    "amount": amount,
-                    "token": token_name,
-                    "block": int(tx.get("blockNumber", 0)),
-                    "timestamp": int(tx.get("timeStamp", 0)),
-                })
-    except Exception as e:
-        log(f"Arbiscan API error: {e}", "ERROR")
-
+    log(f"Arbiscan API error after 3 attempts: {last_err}", "ERROR")
     return transfers
 
 
@@ -151,7 +158,7 @@ def confirm_payment(payment_id, tx_hash, amount_received, token, env):
             "tx_hash": tx_hash,
             "amount_received": amount_received,
             "currency": token,
-            "chain": "arbitrum",
+            "chain": "ARB",
             "confirmed_at": datetime.now(timezone.utc).isoformat(),
         }).encode()
         req = urllib.request.Request(url, data=data, headers={
@@ -353,8 +360,20 @@ def main():
                                     f"TX: {transfer['tx_hash'][:16]}...",
                                     env
                                 )
-                            state["confirmed_tx_hashes"].append(transfer["tx_hash"])
-                            matched = True
+                                state["confirmed_tx_hashes"].append(transfer["tx_hash"])
+                                matched = True
+                                break
+                            # If confirm failed, retry next iteration (don't mark processed)
+                            log(f"Confirm FAILED for payment {payment['id'][:8]} (tx {transfer['tx_hash'][:12]}). Will retry next cycle.", "ERROR")
+                            notify_telegram(
+                                f"⚠️ <b>Payment confirm FAILED</b>\n"
+                                f"${transfer['amount']:.2f} {transfer['token']}\n"
+                                f"Payment {payment['id'][:8]}\n"
+                                f"TX {transfer['tx_hash'][:16]}...\n"
+                                f"Will retry. Check logs.",
+                                env
+                            )
+                            matched = True  # don't double-warn as unmatched
                             break
 
                     if not matched and transfer["amount"] > 5:
