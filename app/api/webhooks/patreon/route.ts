@@ -85,13 +85,8 @@ export async function POST(request: NextRequest) {
           .eq("id", user.id)
           .maybeSingle();
 
-        const hasActive =
-          profile?.subscription_status === "active" &&
-          profile?.subscription_expires_at &&
-          new Date(profile.subscription_expires_at) > now;
-
-        const startFrom = hasActive ? new Date(profile.subscription_expires_at) : now;
-        const finalExpiry = new Date(startFrom.getTime() + 30 * 24 * 60 * 60 * 1000);
+        // Each detected charge = 30 days from now. Don't stack.
+        const finalExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
         await supabase.from("profiles").update({
           subscription_tier: "elite",
@@ -183,11 +178,8 @@ export async function POST(request: NextRequest) {
             .maybeSingle();
 
           const now = new Date();
-          const currentExpiry = profile?.subscription_expires_at
-            ? new Date(profile.subscription_expires_at)
-            : now;
-          const startFrom = currentExpiry > now ? currentExpiry : now;
-          const expiresAt = new Date(startFrom.getTime() + 30 * 24 * 60 * 60 * 1000);
+          // Each detected charge = 30 days from now. Don't stack.
+          const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
           const wasNotElite = profile?.subscription_status !== "active";
 
