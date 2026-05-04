@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
 
+type ClaimResult =
+  | { ok: true; expires_at: string }
+  | { ok: false; reason: "already_used" | "already_elite" | "no_profile" }
+  | { ok: false; reason: "taken"; next_reset: string };
+
 export async function POST() {
   try {
     const supabase = createServerSupabaseClient();
@@ -12,45 +17,31 @@ export async function POST() {
       return NextResponse.json({ error: "Neautentificat." }, { status: 401 });
     }
 
-    // Rate limit: 1 trial attempt per user per 24h
-    const { allowed } = await checkRateLimit(`trial:${user.id}`, 1, 24 * 60 * 60 * 1000);
+    // Rate limit: 3 trial attempts per user per 24h (was 1 — too strict if first attempt errored)
+    const { allowed } = await checkRateLimit(`trial:${user.id}`, 3, 24 * 60 * 60 * 1000);
     if (!allowed) {
-      return NextResponse.json({ error: "Prea multe incercari. Incearca maine." }, { status: 429 });
+      return NextResponse.json({ error: "Prea multe încercări. Încearcă mâine." }, { status: 429 });
     }
 
-    // Require email verification
     if (!user.email_confirmed_at) {
-      return NextResponse.json({ error: "Verifica email-ul inainte de a activa trial-ul." }, { status: 400 });
+      return NextResponse.json({ error: "Verifică email-ul înainte de a activa trial-ul." }, { status: 400 });
     }
 
     const serviceSupabase = createServiceRoleSupabaseClient();
 
-    const { data: profile } = await serviceSupabase
+    // Discord username uniqueness check (cross-account abuse guard)
+    // Done outside the RPC because it queries other rows.
+    const { data: meRow } = await serviceSupabase
       .from("profiles")
-      .select("subscription_status, subscription_tier, discord_username, trial_used_at")
+      .select("discord_username")
       .eq("id", user.id)
       .maybeSingle();
 
-    if (!profile) {
-      return NextResponse.json({ error: "Profil inexistent." }, { status: 404 });
-    }
-
-    // CRITICAL: Check if trial was EVER used (not just current status)
-    if (profile.trial_used_at) {
-      return NextResponse.json({ error: "Ai folosit deja perioada de proba." }, { status: 400 });
-    }
-
-    // Don't allow trial if they already have elite access
-    if (profile.subscription_tier === "elite") {
-      return NextResponse.json({ error: "Ai deja acces Elite." }, { status: 400 });
-    }
-
-    // Check Discord username uniqueness across all accounts that ever had a subscription
-    if (profile.discord_username) {
+    if (meRow?.discord_username) {
       const { data: existing } = await serviceSupabase
         .from("profiles")
         .select("id")
-        .eq("discord_username", profile.discord_username)
+        .eq("discord_username", meRow.discord_username)
         .neq("id", user.id)
         .not("trial_used_at", "is", null)
         .maybeSingle();
@@ -60,47 +51,55 @@ export async function POST() {
       }
     }
 
-    // Atomic global daily trial claim (race-safe via SELECT FOR UPDATE inside RPC)
-    const { data: claimResult, error: claimError } = await serviceSupabase
-      .rpc("try_claim_daily_trial", { p_user_id: user.id });
+    // Atomic claim + activate (single transaction; rolls back on any failure)
+    const { data: rpcData, error: rpcError } = await serviceSupabase
+      .rpc("claim_and_activate_trial", { p_user_id: user.id });
 
-    if (claimError) {
-      console.error("Trial claim RPC failed:", claimError);
-      return NextResponse.json({ error: "Eroare internă. Încearcă din nou." }, { status: 500 });
+    if (rpcError) {
+      console.error("claim_and_activate_trial RPC failed:", rpcError);
+      return NextResponse.json({ error: "Eroare internă. Încearcă din nou peste un minut." }, { status: 500 });
     }
 
-    const claimed = (claimResult as { claimed?: boolean } | null)?.claimed === true;
-    if (!claimed) {
-      return NextResponse.json({ error: "Trial-ul de azi a fost deja luat. Revino mâine la 08:00." }, { status: 429 });
+    const result = rpcData as ClaimResult | null;
+    if (!result || result.ok === false) {
+      const reason = result?.reason ?? "unknown";
+      const status = reason === "taken" ? 429 : 400;
+      const message = (() => {
+        switch (reason) {
+          case "already_used": return "Ai folosit deja perioada de probă.";
+          case "already_elite": return "Ai deja acces Elite.";
+          case "no_profile": return "Profil inexistent.";
+          case "taken": return "Trial-ul de azi a fost deja luat. Revino mâine la 08:00.";
+          default: return "Activarea trial-ului a eșuat.";
+        }
+      })();
+      const next_reset = result && result.ok === false && "next_reset" in result ? result.next_reset : undefined;
+      return NextResponse.json({ error: message, reason, next_reset }, { status });
     }
 
-    // Activate 7-day trial with trial_used_at timestamp
+    // Queue email drip (idempotent: skip if already queued for this user)
     const now = new Date();
-    const trialExpires = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    const { error: updateError } = await serviceSupabase.from("profiles").update({
-      subscription_tier: "elite",
-      subscription_status: "trial",
-      subscription_expires_at: trialExpires.toISOString(),
-      elite_since: now.toISOString(),
-      trial_used_at: now.toISOString(),
-    }).eq("id", user.id);
+    const h = 60 * 60 * 1000;
+    const { data: existingDrip } = await serviceSupabase
+      .from("email_drip_queue")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("template", "welcome")
+      .limit(1);
 
-    if (updateError) {
-      console.error("Trial activation failed:", updateError);
-      return NextResponse.json({ error: "Activarea trial-ului a eșuat. Încearcă din nou." }, { status: 500 });
+    if (!existingDrip || existingDrip.length === 0) {
+      const { error: dripError } = await serviceSupabase.from("email_drip_queue").insert([
+        { user_id: user.id, email: user.email, template: "welcome", subject: "Contul tău Elite e activ - uite ce să faci prima dată", scheduled_at: now.toISOString() },
+        { user_id: user.id, email: user.email, template: "value_day1", subject: "Greșeala #1 care costă bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 48 * h).toISOString() },
+        { user_id: user.id, email: user.email, template: "social_proof", subject: "\"De când am intrat în Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 120 * h).toISOString() },
+        { user_id: user.id, email: user.email, template: "trial_expiry", subject: "Accesul tău Elite se închide mâine", scheduled_at: new Date(now.getTime() + 144 * h).toISOString() },
+      ]);
+      if (dripError) console.error("Trial drip enqueue failed:", dripError);
     }
 
-    // Queue email drip sequence (timed for 7-day trial)
-    const h = 60 * 60 * 1000;
-    await serviceSupabase.from("email_drip_queue").insert([
-      { user_id: user.id, email: user.email, template: "welcome", subject: "Contul tău Elite e activ - uite ce să faci prima dată", scheduled_at: now.toISOString() },
-      { user_id: user.id, email: user.email, template: "value_day1", subject: "Greșeala #1 care costă bani pe 90% din traderi", scheduled_at: new Date(now.getTime() + 48 * h).toISOString() },
-      { user_id: user.id, email: user.email, template: "social_proof", subject: "\"De când am intrat în Elite, sunt pe plus\" - Daniel", scheduled_at: new Date(now.getTime() + 120 * h).toISOString() },
-      { user_id: user.id, email: user.email, template: "trial_expiry", subject: "Accesul tău Elite se închide mâine", scheduled_at: new Date(now.getTime() + 144 * h).toISOString() },
-    ]);
-
-    return NextResponse.json({ ok: true, expires_at: trialExpires.toISOString() });
-  } catch {
-    return NextResponse.json({ error: "Eroare interna." }, { status: 500 });
+    return NextResponse.json({ ok: true, expires_at: result.expires_at });
+  } catch (err) {
+    console.error("Trial route exception:", err);
+    return NextResponse.json({ error: "Eroare internă." }, { status: 500 });
   }
 }

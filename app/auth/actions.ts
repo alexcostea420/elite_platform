@@ -26,40 +26,6 @@ async function upsertProfile(userId: string, fullName: string, discordUsername: 
   return error;
 }
 
-async function grantTrial(userId: string) {
-  const supabase = createServiceRoleSupabaseClient();
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-
-  // Retry up to 3 times to handle auth trigger race condition
-  // (Supabase Auth trigger may overwrite profile to defaults after signup)
-  const delays = [500, 1000, 1500];
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        subscription_tier: "elite",
-        subscription_status: "trial",
-        subscription_expires_at: expiresAt,
-        elite_since: new Date().toISOString(),
-        trial_used_at: new Date().toISOString(),
-      })
-      .eq("id", userId);
-
-    if (error) continue;
-
-    // Verify it stuck (auth trigger may have reset it)
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("subscription_tier")
-      .eq("id", userId)
-      .single();
-
-    if (profile?.subscription_tier === "elite") return;
-
-    await new Promise((r) => setTimeout(r, delays[attempt]));
-  }
-}
-
 export async function loginAction(formData: FormData) {
   const email = getTrimmedValue(formData, "email");
   const password = getTrimmedValue(formData, "password");

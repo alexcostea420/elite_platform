@@ -25,9 +25,18 @@ export function TrialActivateButton() {
       if (res.ok) {
         router.push("/dashboard");
         router.refresh();
-      } else {
-        setError(data.error ?? "Eroare la activare.");
-        if (res.status === 429) setAvailable(false);
+        return;
+      }
+      setError(data.error ?? "Eroare la activare.");
+      if (data.reason === "taken" || res.status === 429) {
+        setAvailable(false);
+      } else if (res.status >= 500) {
+        try {
+          const s = await fetch("/api/trial/status").then((r) => r.json());
+          setAvailable(s.available);
+        } catch {
+          // ignore
+        }
       }
     } catch {
       setError("Eroare de conexiune.");

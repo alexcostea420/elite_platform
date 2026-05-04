@@ -47,15 +47,26 @@ export function TrialButton() {
 
       if (res.ok) {
         router.refresh();
-      } else {
-        setError(data.error ?? "Eroare la activare.");
-        // Refresh availability
-        if (res.status === 429) {
-          setAvailable(false);
+        return;
+      }
+
+      setError(data.error ?? "Eroare la activare.");
+
+      if (data.reason === "taken" || res.status === 429) {
+        setAvailable(false);
+        if (data.next_reset) setNextReset(data.next_reset);
+      } else if (res.status >= 500) {
+        // Server error: re-sync the global slot state so the UI is honest
+        try {
+          const s = await fetch("/api/trial/status").then((r) => r.json());
+          setAvailable(s.available);
+          if (s.next_reset) setNextReset(s.next_reset);
+        } catch {
+          // ignore
         }
       }
     } catch {
-      setError("Eroare de rețea. Încearcă din nou.");
+      setError("Eroare de rețea. Verifică conexiunea și încearcă din nou.");
     } finally {
       setLoading(false);
     }
