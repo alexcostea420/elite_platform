@@ -241,7 +241,7 @@ function PayPageInner() {
         <div className={`panel max-w-md px-6 py-8 text-center md:px-8 ${isAuthError ? "border-accent-emerald/30" : "border-red-500/30"}`}>
           <div className="text-5xl">{isAuthError ? "🔒" : "⚠️"}</div>
           <h2 className="mt-4 text-2xl font-bold text-white">
-            {isAuthError ? "Ai nevoie de un cont" : "Eroare la plata"}
+            {isAuthError ? "Ai nevoie de un cont" : "Eroare la plată"}
           </h2>
           <p className="mt-3 text-slate-300">
             {isAuthError
