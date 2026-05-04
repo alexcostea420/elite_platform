@@ -57,6 +57,13 @@ def main():
     # Sort by date
     all_events.sort(key=lambda x: x["date"])
 
+    # Safety: never overwrite a populated file with zero events.
+    # Trading Economics guest API was deprecated (HTTP 410) — without this guard,
+    # a failed fetch silently wipes the historical cache.
+    if not all_events:
+        print(f"\n⚠ Refusing to overwrite {OUTPUT_FILE}: fetched 0 events (API likely down).")
+        return
+
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, "w") as f:
         json.dump({"fetched_at": now.isoformat(), "events": all_events}, f, indent=2)
