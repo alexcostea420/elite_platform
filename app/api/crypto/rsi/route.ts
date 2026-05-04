@@ -11,6 +11,7 @@ const YAHOO_SYMBOLS: Record<string, string> = {
   INJ: "INJ-USD", HYPE: "HYPE-USD", CRV: "CRV-USD", CVX: "CVX-USD",
   SEI: "SEI-USD", ALGO: "ALGO-USD", ENA: "ENA-USD", FIL: "FIL-USD",
   IOTA: "IOTA-USD",
+  ZEC: "ZEC-USD", XMR: "XMR-USD", HBAR: "HBAR-USD",
 };
 
 function calcRSI(closes: (number | null)[], period = 14): number | null {

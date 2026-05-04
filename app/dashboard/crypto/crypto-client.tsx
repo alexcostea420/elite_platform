@@ -54,6 +54,9 @@ const CYCLE_DATA: Record<string, { peak: number; low: number }> = {
   ENA:    { peak: 1.52,   low: 0.26 },
   FIL:    { peak: 11.48,  low: 3.10 },
   IOTA:   { peak: 0.62,   low: 0.14 },
+  ZEC:    { peak: 700,    low: 22 },
+  XMR:    { peak: 481,    low: 108 },
+  HBAR:   { peak: 0.42,   low: 0.045 },
 };
 
 function altZone(symbol: string): CryptoZones {
@@ -94,6 +97,9 @@ const ZONES: Record<string, CryptoZones> = {
   ENA: altZone("ENA"),
   FIL: altZone("FIL"),
   IOTA: altZone("IOTA"),
+  ZEC: altZone("ZEC"),
+  XMR: altZone("XMR"),
+  HBAR: altZone("HBAR"),
 };
 
 function getRSIColor(rsi: number): string {
@@ -116,16 +122,16 @@ function getNearestZone(price: number, zones: CryptoZones | undefined): { label:
   if (!zones) return { label: "-", direction: "in" };
   if (price <= zones.buy1) {
     const pct = zones.buy2 > 0 ? Math.abs(((price - zones.buy2) / zones.buy2) * 100) : 0;
-    return { label: `🛒 -${pct.toFixed(0)}% până Cumpără 2`, direction: "buy" };
+    return { label: `🛒 -${pct.toFixed(0)}% până Cumpără 2 · ${formatPrice(zones.buy2)}`, direction: "buy" };
   }
   if (price >= zones.sell1) {
     const pct = zones.sell2 > 0 ? Math.abs(((zones.sell2 - price) / price) * 100) : 0;
-    return { label: `💰 +${pct.toFixed(0)}% până Vinde 2`, direction: "sell" };
+    return { label: `💰 +${pct.toFixed(0)}% până Vinde 2 · ${formatPrice(zones.sell2)}`, direction: "sell" };
   }
   const toB1 = Math.abs(((price - zones.buy1) / price) * 100);
   const toS1 = Math.abs(((zones.sell1 - price) / price) * 100);
-  if (toB1 < toS1) return { label: `🛒 -${toB1.toFixed(0)}% până Cumpără 1`, direction: "buy" };
-  return { label: `💰 +${toS1.toFixed(0)}% până Vinde 1`, direction: "sell" };
+  if (toB1 < toS1) return { label: `🛒 -${toB1.toFixed(0)}% până Cumpără 1 · ${formatPrice(zones.buy1)}`, direction: "buy" };
+  return { label: `💰 +${toS1.toFixed(0)}% până Vinde 1 · ${formatPrice(zones.sell1)}`, direction: "sell" };
 }
 
 function LiveCountdown({ updatedAt }: { updatedAt: string }) {

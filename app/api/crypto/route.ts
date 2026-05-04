@@ -10,6 +10,7 @@ const COIN_IDS = [
   "injective-protocol", "hyperliquid",
   "curve-dao-token", "convex-finance", "sei-network",
   "algorand", "ethena", "filecoin", "iota",
+  "zcash", "monero", "hedera-hashgraph",
 ];
 
 type CryptoData = {
@@ -56,6 +57,9 @@ const CYCLE_PEAKS: Record<string, number> = {
   ethena: 1.52,
   filecoin: 11.48,
   iota: 0.62,
+  zcash: 700,
+  monero: 481,
+  "hedera-hashgraph": 0.42,
 };
 
 export async function GET() {
