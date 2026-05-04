@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { redeemInvite, validateInviteToken } from "@/lib/invites/server";
+import { isDisposableEmail, normalizeEmail } from "@/lib/security/email-guard";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
 
@@ -10,7 +11,7 @@ function getTrimmedValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
 
-async function upsertProfile(userId: string, fullName: string, discordUsername: string) {
+async function upsertProfile(userId: string, fullName: string, discordUsername: string, email: string) {
   const supabase = createServiceRoleSupabaseClient();
   const { error } = await supabase
     .from("profiles")
@@ -19,6 +20,7 @@ async function upsertProfile(userId: string, fullName: string, discordUsername: 
         id: userId,
         full_name: fullName,
         discord_username: discordUsername,
+        email_normalized: normalizeEmail(email),
       },
       { onConflict: "id" },
     );
@@ -90,6 +92,10 @@ export async function signupAction(formData: FormData) {
     redirect(`/signup?error=${encodeURIComponent("Username-ul Discord este prea lung (maxim 50 caractere).")}`);
   }
 
+  if (isDisposableEmail(email)) {
+    redirect(`/signup?error=${encodeURIComponent("Folosește o adresă de email reală. Email-urile temporare nu sunt acceptate.")}`);
+  }
+
   const supabase = createServerSupabaseClient();
   const { error, data } = await supabase.auth.signUp({
     email,
@@ -101,7 +107,7 @@ export async function signupAction(formData: FormData) {
   }
 
   if (data.user) {
-    const profileError = await upsertProfile(data.user.id, fullName, discordUsername);
+    const profileError = await upsertProfile(data.user.id, fullName, discordUsername, email);
 
     if (profileError) {
       redirect(
@@ -168,6 +174,10 @@ export async function signupWithInviteAction(formData: FormData) {
     redirect(`/invite/${inviteToken}?error=${encodeURIComponent("Parola trebuie să aibă minim 8 caractere.")}`);
   }
 
+  if (isDisposableEmail(email)) {
+    redirect(`/invite/${inviteToken}?error=${encodeURIComponent("Folosește o adresă de email reală. Email-urile temporare nu sunt acceptate.")}`);
+  }
+
   const supabase = createServerSupabaseClient();
   const { error, data } = await supabase.auth.signUp({ email, password });
 
@@ -178,7 +188,7 @@ export async function signupWithInviteAction(formData: FormData) {
   }
 
   if (data.user) {
-    await upsertProfile(data.user.id, fullName, discordUsername);
+    await upsertProfile(data.user.id, fullName, discordUsername, email);
 
     // Wait for Supabase Auth trigger to create profile before redeeming
     await new Promise((resolve) => setTimeout(resolve, 1000));

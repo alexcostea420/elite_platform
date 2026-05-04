@@ -5,7 +5,7 @@ import { checkRateLimit } from "@/lib/utils/rate-limit";
 
 type ClaimResult =
   | { ok: true; expires_at: string }
-  | { ok: false; reason: "already_used" | "already_elite" | "no_profile" }
+  | { ok: false; reason: "already_used" | "already_elite" | "no_profile" | "discord_required" | "email_duplicate" }
   | { ok: false; reason: "taken"; next_reset: string };
 
 export async function POST() {
@@ -69,6 +69,8 @@ export async function POST() {
           case "already_used": return "Ai folosit deja perioada de probă.";
           case "already_elite": return "Ai deja acces Elite.";
           case "no_profile": return "Profil inexistent.";
+          case "discord_required": return "Conectează contul de Discord înainte să activezi trial-ul.";
+          case "email_duplicate": return "Acest email a fost deja folosit pentru trial pe alt cont.";
           case "taken": return "Trial-ul de azi a fost deja luat. Revino mâine la 08:00.";
           default: return "Activarea trial-ului a eșuat.";
         }
