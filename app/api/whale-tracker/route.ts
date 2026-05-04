@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 export const revalidate = 60; // Cache 1 minute
@@ -13,13 +14,13 @@ export async function GET() {
 
     const { data: profile } = await authSupabase
       .from("profiles")
-      .select("subscription_tier, subscription_status, role")
+      .select(ELITE_PROFILE_COLUMNS)
       .eq("id", user.id)
       .maybeSingle();
 
-    const isElite = profile?.role === "admin" ||
-      (profile?.subscription_tier === "elite" && profile?.subscription_status === "active");
-    if (!isElite) return NextResponse.json({ error: "Elite required" }, { status: 403 });
+    if (!hasEliteAccess(profile)) {
+      return NextResponse.json({ error: "Elite required" }, { status: 403 });
+    }
 
     const supabase = createServiceRoleSupabaseClient();
 

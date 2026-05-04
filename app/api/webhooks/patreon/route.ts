@@ -11,7 +11,12 @@ function verifySignature(rawBody: string, signature: string): boolean {
   const hmac = crypto.createHmac("md5", WEBHOOK_SECRET);
   hmac.update(rawBody);
   const digest = hmac.digest("hex");
-  return digest === signature;
+  if (digest.length !== signature.length) return false;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(digest, "hex"), Buffer.from(signature, "hex"));
+  } catch {
+    return false;
+  }
 }
 
 /** Find a user by email using admin API (paginated) */
