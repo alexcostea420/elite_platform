@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 /**
@@ -48,15 +49,10 @@ export async function POST(request: NextRequest) {
   if (video.tier_required === "elite") {
     const { data: profile } = await service
       .from("profiles")
-      .select("subscription_tier, subscription_status, subscription_expires_at")
+      .select(ELITE_PROFILE_COLUMNS)
       .eq("id", user.id)
       .maybeSingle();
-    const isActiveElite =
-      profile?.subscription_tier === "elite" &&
-      profile?.subscription_status === "active" &&
-      profile?.subscription_expires_at !== null &&
-      new Date(profile.subscription_expires_at).getTime() > Date.now();
-    if (!isActiveElite) {
+    if (!hasEliteAccess(profile)) {
       return NextResponse.json({ error: "forbidden" }, { status: 403 });
     }
   }

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600; // Cache 1 hour
+import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const TICKERS = [
   "TSLA", "COIN", "HOOD", "MSTR", "MARA", "CRCL",
@@ -77,6 +81,18 @@ async function fetchYahooHistory(ticker: string): Promise<{ date: string; low: n
 
 export async function GET() {
   try {
+    const auth = createServerSupabaseClient();
+    const { data: { user } } = await auth.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { data: profile } = await auth
+      .from("profiles")
+      .select(ELITE_PROFILE_COLUMNS)
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!hasEliteAccess(profile)) {
+      return NextResponse.json({ error: "Elite required" }, { status: 403 });
+    }
+
     const results: TickerHistory[] = [];
 
     // Process in batches of 4

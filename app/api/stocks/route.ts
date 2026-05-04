@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
+import { ELITE_PROFILE_COLUMNS, hasEliteAccess } from "@/lib/auth/elite-gate";
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
-export const revalidate = 300; // Cache 5 minutes
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const TICKERS = [
   "TSLA", "COIN", "HOOD", "MSTR", "MARA", "CRCL",
@@ -165,6 +167,19 @@ async function fetchScores(): Promise<Record<string, ScoreData>> {
 
 export async function GET() {
   try {
+    // Elite-only: zones + proprietary scoring are members-only data.
+    const auth = createServerSupabaseClient();
+    const { data: { user } } = await auth.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { data: profile } = await auth
+      .from("profiles")
+      .select(ELITE_PROFILE_COLUMNS)
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!hasEliteAccess(profile)) {
+      return NextResponse.json({ error: "Elite required" }, { status: 403 });
+    }
+
     // Fetch in batches of 4 with delays to avoid rate limiting
     const results: (StockData | null)[] = [];
 
