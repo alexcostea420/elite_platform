@@ -8,12 +8,42 @@ Replaces the need for better-sqlite3 in the Next.js API route.
 import json
 import os
 import sqlite3
-from datetime import datetime
+import sys
+from datetime import datetime, timezone
 
 TRADES_DB = os.path.expanduser("~/trading-bot/data/trades.db")
 LIMITS_FILE = os.path.expanduser("~/trading-bot/data/dynamic_limits.json")
 OUTPUT = os.path.expanduser("~/elite_platform/data/track_record_cache.json")
 STARTING_EQUITY = 1000
+
+SUPABASE_URL = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+
+
+def push_to_supabase(payload):
+    """Mirror cache to Supabase trading_data so the Vercel API route can read it."""
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        print("  ⚠ Skipping Supabase push: SUPABASE_URL/SUPABASE_SERVICE_KEY not set")
+        return False
+    try:
+        from supabase import create_client
+    except ImportError:
+        print("  ⚠ Skipping Supabase push: supabase-py not installed")
+        return False
+    try:
+        sb = create_client(SUPABASE_URL, SUPABASE_KEY)
+        sb.table("trading_data").upsert(
+            {
+                "data_type": "track_record_cache",
+                "data": payload,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            },
+            on_conflict="data_type",
+        ).execute()
+        return True
+    except Exception as e:
+        print(f"  ✗ Supabase push failed: {e}")
+        return False
 
 def main():
     # Read limits
@@ -114,11 +144,12 @@ def main():
     with open(OUTPUT, "w") as f:
         json.dump(result, f)
 
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] track_record synced: {len(pnls)} trades, PnL=${total_pnl:.2f}")
+    pushed = push_to_supabase(result)
+    suffix = " · pushed to Supabase" if pushed else ""
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] track_record synced: {len(pnls)} trades, PnL=${total_pnl:.2f}{suffix}")
 
 
 if __name__ == "__main__":
-    import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from common.lockfile import acquire_lock_or_exit
     acquire_lock_or_exit("sync_track_record")
