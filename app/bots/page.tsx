@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { ComingSoon } from "@/components/ui/coming-soon";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { buildPageMetadata } from "@/lib/seo";
@@ -83,27 +83,17 @@ export default function BotsPage() {
     <>
       <Navbar mode="marketing" />
       <main className="pb-16 pt-24 md:pt-28">
-        <Container>
-          <section className="panel mx-auto max-w-2xl p-8 text-center md:p-12">
-            <div className="mb-4 text-5xl">🤖</div>
-            <h1 className="text-3xl font-bold text-white">Bot Trading Automat</h1>
-            <h2 className="mt-2 text-xl font-semibold text-accent-emerald">Coming Soon</h2>
-            <p className="mx-auto mt-4 max-w-lg text-slate-400">
-              Un bot care tranzacționează pentru tine, non-stop. Tu setezi riscul, el execută.
-            </p>
-            <p className="mt-4 text-sm font-semibold text-accent-emerald">
-              Membrii Elite vor primi acces prioritar și preț redus.
-            </p>
-            <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link className="accent-button px-6 py-3" href="/upgrade">
-                Intră în Elite
-              </Link>
-              <Link className="ghost-button px-6 py-3" href="/">
-                Înapoi acasă
-              </Link>
-            </div>
-          </section>
-        </Container>
+        <ComingSoon
+          icon="🤖"
+          title="Bot Trading Automat"
+          subtitle="Coming Soon"
+          description="Un bot care tranzacționează pentru tine, non-stop. Tu setezi riscul, el execută."
+          highlight="Membrii Elite vor primi acces prioritar și preț redus."
+          backHref="/upgrade"
+          backLabel="Intră în Elite"
+          secondaryHref="/"
+          secondaryLabel="Înapoi acasă"
+        />
       </main>
       <Footer />
     </>
