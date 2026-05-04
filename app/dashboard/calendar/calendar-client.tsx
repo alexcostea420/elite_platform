@@ -316,7 +316,7 @@ function WeekView({
     return (
       <div className="glass-card p-8 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-bold tracking-wider text-slate-400">
-          —
+          0
         </div>
         <h2 className="mt-4 text-xl font-bold text-white">Niciun eveniment săptămâna asta</h2>
         <p className="mt-2 text-slate-400">Verifică din nou luni pentru evenimentele săptămânii.</p>

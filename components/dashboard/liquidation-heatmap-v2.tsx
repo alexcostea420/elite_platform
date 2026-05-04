@@ -543,7 +543,7 @@ function PressurePanel({ pressure }: { pressure: Pressure }) {
       ? { text: "Long-uri vulnerabile la cascadă", tone: "short" as const }
       : longPct5 < 35
         ? { text: "Short-uri vulnerabile la squeeze", tone: "long" as const }
-        : { text: "Echilibrat — fără clusterizare clară", tone: "neutral" as const };
+        : { text: "Echilibrat, fără clusterizare clară", tone: "neutral" as const };
 
   return (
     <div className="rounded-xl border border-white/5 bg-white/[0.015] p-4">

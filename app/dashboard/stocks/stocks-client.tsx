@@ -105,7 +105,7 @@ function scoreColor(score: number): { ring: string; text: string; bg: string; la
 }
 
 function ScoreBadge({ data }: { data?: ScoreData }) {
-  if (!data) return <span className="text-xs text-slate-700">—</span>;
+  if (!data) return <span className="text-xs text-slate-700">-</span>;
   if (data.isBtcDriven) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-400/5 px-2 py-0.5 text-[10px] font-bold text-amber-300">
@@ -113,7 +113,7 @@ function ScoreBadge({ data }: { data?: ScoreData }) {
       </span>
     );
   }
-  if (data.score === null) return <span className="text-xs text-slate-700">—</span>;
+  if (data.score === null) return <span className="text-xs text-slate-700">-</span>;
   const c = scoreColor(data.score);
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold tabular-nums ${c.ring} ${c.bg} ${c.text}`}>
@@ -124,12 +124,12 @@ function ScoreBadge({ data }: { data?: ScoreData }) {
 }
 
 function fmtPct(v: number | null, digits = 1): string {
-  if (v === null || v === undefined) return "—";
+  if (v === null || v === undefined) return "-";
   return `${(v * 100).toFixed(digits)}%`;
 }
 
 function fmtNum(v: number | null, digits = 1): string {
-  if (v === null || v === undefined) return "—";
+  if (v === null || v === undefined) return "-";
   return v.toFixed(digits);
 }
 
