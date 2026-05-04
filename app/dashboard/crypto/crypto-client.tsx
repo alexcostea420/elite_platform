@@ -224,9 +224,12 @@ function SkeletonCard() {
   );
 }
 
-type SortKey = "rank" | "price" | "change24h" | "change7d" | "pctFromCyclePeak" | "signal";
+type SortKey = "rank" | "price" | "change24h" | "change7d" | "pctFromCyclePeak" | "signal" | "rsi" | "marketCap";
 type Filter = "all" | "buy" | "sell" | "hold";
 type Tab = "all" | "gainers" | "losers";
+type QuickFilter = "watchlist" | "rsi_low" | "near_sell" | "near_low";
+
+const WATCHLIST_KEY = "crypto_watchlist";
 
 export function CryptoClient() {
   const blur = useBlurMode();
@@ -241,11 +244,36 @@ export function CryptoClient() {
   const [updatedAt, setUpdatedAt] = useState("");
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
   const [rsiData, setRsiData] = useState<Record<string, number | null>>({});
+  const [watchlist, setWatchlist] = useState<Set<string>>(new Set());
+  const [quickFilters, setQuickFilters] = useState<Set<QuickFilter>>(new Set());
   const prevPrices = useRef<Record<string, number>>({});
 
   useEffect(() => {
     const stored = sessionStorage.getItem("crypto_disclaimer_accepted");
     if (stored === "true") setAccepted(true);
+    try {
+      const wl = localStorage.getItem(WATCHLIST_KEY);
+      if (wl) setWatchlist(new Set(JSON.parse(wl)));
+    } catch {}
+  }, []);
+
+  const toggleWatch = useCallback((symbol: string) => {
+    setWatchlist((prev) => {
+      const next = new Set(prev);
+      if (next.has(symbol)) next.delete(symbol);
+      else next.add(symbol);
+      try { localStorage.setItem(WATCHLIST_KEY, JSON.stringify([...next])); } catch {}
+      return next;
+    });
+  }, []);
+
+  const toggleQuickFilter = useCallback((qf: QuickFilter) => {
+    setQuickFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(qf)) next.delete(qf);
+      else next.add(qf);
+      return next;
+    });
   }, []);
 
   const fetchData = useCallback(() => {
@@ -332,9 +360,17 @@ export function CryptoClient() {
   const withSignals = coins.map((c, i) => {
     const zones = ZONES[c.symbol];
     const signal = getSignal(zones, c.price);
-    // Weekly RSI from API (Yahoo Finance, 14-period on weekly closes)
     const rsi = rsiData[c.symbol] ?? null;
-    return { ...c, signal, zones, rank: i + 1, rsi };
+    // Hot: 24h ago signal was WAIT, now is BUY/SELL → just entered a zone
+    let hot = false;
+    if (zones && signal !== "WAIT" && c.change24h !== 0) {
+      const prevPrice = c.price / (1 + c.change24h / 100);
+      if (prevPrice > 0) {
+        const prevSignal = getSignal(zones, prevPrice);
+        hot = prevSignal === "WAIT";
+      }
+    }
+    return { ...c, signal, zones, rank: i + 1, rsi, hot };
   });
 
   // Global stats
@@ -357,18 +393,38 @@ export function CryptoClient() {
     tabFiltered = [...withSignals].sort((a, b) => a.change24h - b.change24h).slice(0, 10);
   }
 
-  // Then apply signal + search filter
+  // Then apply signal + search + quick filters
   const filtered = tabFiltered.filter((s) => {
-    if (search && !s.symbol.toLowerCase().includes(search.toLowerCase()) && !s.name.toLowerCase().includes(search.toLowerCase())) return false;
-    if (filter === "buy") return s.signal.includes("BUY");
-    if (filter === "sell") return s.signal.includes("SELL");
-    if (filter === "hold") return s.signal === "WAIT";
+    if (search) {
+      const q = search.toLowerCase();
+      if (!s.symbol.toLowerCase().includes(q) && !s.name.toLowerCase().includes(q)) return false;
+    }
+    if (filter === "buy" && !s.signal.includes("BUY")) return false;
+    if (filter === "sell" && !s.signal.includes("SELL")) return false;
+    if (filter === "hold" && s.signal !== "WAIT") return false;
+
+    if (quickFilters.has("watchlist") && !watchlist.has(s.symbol)) return false;
+    if (quickFilters.has("rsi_low") && (s.rsi === null || s.rsi > 30)) return false;
+    if (quickFilters.has("near_sell")) {
+      if (!s.zones) return false;
+      const distPct = ((s.zones.sell1 - s.price) / s.price) * 100;
+      if (distPct < 0 || distPct > 10) return false;
+    }
+    if (quickFilters.has("near_low")) {
+      const cd = CYCLE_DATA[s.symbol];
+      if (!cd) return false;
+      const distPct = ((s.price - cd.low) / cd.low) * 100;
+      if (distPct < 0 || distPct > 20) return false;
+    }
     return true;
   });
 
-  // Sort
+  // Sort (watchlist always pinned on top)
   const sorted = [...filtered].sort((a, b) => {
-    if (tab !== "all") return 0; // Tab already sorted
+    const aS = watchlist.has(a.symbol) ? 1 : 0;
+    const bS = watchlist.has(b.symbol) ? 1 : 0;
+    if (aS !== bS) return bS - aS;
+    if (tab !== "all") return 0;
     let cmp = 0;
     switch (sortBy) {
       case "rank": cmp = a.rank - b.rank; break;
@@ -376,6 +432,8 @@ export function CryptoClient() {
       case "change24h": cmp = a.change24h - b.change24h; break;
       case "change7d": cmp = a.change7d - b.change7d; break;
       case "pctFromCyclePeak": cmp = a.pctFromCyclePeak - b.pctFromCyclePeak; break;
+      case "rsi": cmp = (a.rsi ?? 50) - (b.rsi ?? 50); break;
+      case "marketCap": cmp = a.marketCap - b.marketCap; break;
       case "signal": {
         const order = (s: string) => s.includes("BUY") ? 0 : s.includes("SELL") ? 2 : 1;
         cmp = order(a.signal) - order(b.signal);
@@ -387,7 +445,11 @@ export function CryptoClient() {
 
   const handleSort = (key: SortKey) => {
     if (sortBy === key) setSortDir(sortDir === "asc" ? "desc" : "asc");
-    else { setSortBy(key); setSortDir(key === "change24h" || key === "change7d" ? "desc" : "asc"); }
+    else {
+      setSortBy(key);
+      const desc = key === "change24h" || key === "change7d" || key === "marketCap" || key === "price";
+      setSortDir(desc ? "desc" : "asc");
+    }
   };
 
   if (loading) {
@@ -542,12 +604,49 @@ export function CryptoClient() {
         )}
       </div>
 
+      {/* Quick filters */}
+      <div className="flex flex-wrap gap-1.5">
+        {([
+          { key: "watchlist" as QuickFilter, label: `⭐ Watchlist${watchlist.size > 0 ? ` (${watchlist.size})` : ""}` },
+          { key: "rsi_low" as QuickFilter, label: "RSI < 30" },
+          { key: "near_sell" as QuickFilter, label: "Aproape de Vinde" },
+          { key: "near_low" as QuickFilter, label: "Aproape de minim" },
+        ]).map(({ key, label }) => {
+          const active = quickFilters.has(key);
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => toggleQuickFilter(key)}
+              className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                active
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                  : "border-white/10 bg-white/[0.02] text-slate-400 hover:bg-white/[0.04]"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
+        {quickFilters.size > 0 && (
+          <button
+            type="button"
+            onClick={() => setQuickFilters(new Set())}
+            className="rounded-full px-3 py-1 text-xs text-slate-500 hover:text-white"
+          >
+            Resetează
+          </button>
+        )}
+      </div>
+
       {/* Mobile sort */}
       <div className="flex flex-wrap gap-2 md:hidden">
         {([
           { key: "rank" as SortKey, label: "#" },
           { key: "change24h" as SortKey, label: "24h" },
           { key: "change7d" as SortKey, label: "7d" },
+          { key: "rsi" as SortKey, label: "RSI" },
+          { key: "marketCap" as SortKey, label: "Cap" },
           { key: "pctFromCyclePeak" as SortKey, label: "Ciclu" },
           { key: "signal" as SortKey, label: "Semnal" },
         ]).map(({ key, label }) => (
@@ -563,13 +662,14 @@ export function CryptoClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/5 text-left text-xs uppercase tracking-wider text-slate-500">
+                <th className="px-3 py-3" />
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("rank")}># {sortBy === "rank" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3">Monedă</th>
-                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("price")}>Preț</th>
+                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("price")}>Preț {sortBy === "price" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change24h")}>24h {sortBy === "change24h" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("change7d")}>7d {sortBy === "change7d" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
-                <th className="px-4 py-3" title="Relative Strength Index pe săptămânal. ≤30 = supravândut (bun de cumpărat), ≥70 = supracumpărat (atenție la corecție).">RSI <span className="text-slate-600">ⓘ</span></th>
-                <th className="px-4 py-3">Market Cap</th>
+                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("rsi")} title="Relative Strength Index pe săptămânal. ≤30 = supravândut, ≥70 = supracumpărat.">RSI <span className="text-slate-600">ⓘ</span> {sortBy === "rsi" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
+                <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("marketCap")}>Market Cap {sortBy === "marketCap" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3" title="Cât de aproape e prețul de cea mai apropiată zonă de Cumpără sau Vinde.">Zonă <span className="text-slate-600">ⓘ</span></th>
                 <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromCyclePeak")} title="Cât de departe e prețul actual de vârful ciclului. -80% înseamnă scăzut foarte mult de la maxim.">% Vârf <span className="text-slate-600">ⓘ</span> {sortBy === "pctFromCyclePeak" ? (sortDir === "asc" ? "↑" : "↓") : ""}</th>
                 <th className="px-4 py-3" title="Poziția prețului între zona Cumpără 2 (stânga) și Vinde 2 (dreapta).">Range <span className="text-slate-600">ⓘ</span></th>
@@ -588,14 +688,31 @@ export function CryptoClient() {
                 const rsiLabel = coin.rsi !== null ? getRSILabel(coin.rsi) : "";
                 const sigDisplay = getSignalDisplay(coin.signal);
 
+                const starred = watchlist.has(coin.symbol);
                 return (
                   <tr key={coin.id} className={`border-b border-white/5 transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
+                    <td className="px-3 py-3">
+                      <button
+                        type="button"
+                        onClick={() => toggleWatch(coin.symbol)}
+                        className={`text-base leading-none transition ${starred ? "text-amber-400" : "text-slate-700 hover:text-slate-400"}`}
+                        title={starred ? "Scoate din Watchlist" : "Adaugă la Watchlist"}
+                        aria-label={starred ? "Remove from watchlist" : "Add to watchlist"}
+                      >
+                        {starred ? "★" : "☆"}
+                      </button>
+                    </td>
                     <td className="px-4 py-3 text-slate-600">{coin.rank}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={coin.image} alt={coin.symbol} width={20} height={20} className="rounded-full" />
                         <span className="font-bold text-white">{coin.symbol}</span>
+                        {coin.hot && !blur && (
+                          <span className="inline-flex items-center rounded-md border border-amber-400/40 bg-amber-400/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-400" title="A intrat în zonă în ultimele 24h">
+                            🔥 HOT
+                          </span>
+                        )}
                         <span className="text-xs text-slate-600">{coin.name}</span>
                       </div>
                     </td>
@@ -687,13 +804,27 @@ export function CryptoClient() {
           const rsiColor = coin.rsi !== null ? getRSIColor(coin.rsi) : "";
           const sigDisplay = getSignalDisplay(coin.signal);
 
+          const starred = watchlist.has(coin.symbol);
           return (
             <div key={coin.id} className={`glass-card px-4 py-4 ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleWatch(coin.symbol)}
+                    className={`text-lg leading-none transition ${starred ? "text-amber-400" : "text-slate-700"}`}
+                    aria-label={starred ? "Remove from watchlist" : "Add to watchlist"}
+                  >
+                    {starred ? "★" : "☆"}
+                  </button>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={coin.image} alt={coin.symbol} width={24} height={24} className="rounded-full" />
                   <span className="text-lg font-bold text-white">{coin.symbol}</span>
+                  {coin.hot && (
+                    <span className="inline-flex items-center rounded-md border border-amber-400/40 bg-amber-400/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-400">
+                      🔥
+                    </span>
+                  )}
                   <span className="text-xs text-slate-600">{coin.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
