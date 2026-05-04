@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { logAdminAction } from "@/lib/admin/audit";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 async function requireAdmin() {
@@ -47,7 +48,15 @@ export async function extendEliteAction(formData: FormData) {
     })
     .eq("id", userId);
 
-  console.log(`[admin ${adminId}] extended elite for ${userId} by ${days}d → ${next.toISOString()}`);
+  await logAdminAction({
+    adminId,
+    actionType: "subscription_extend",
+    targetType: "profile",
+    targetId: userId,
+    before: { subscription_expires_at: current?.subscription_expires_at ?? null },
+    after: { subscription_expires_at: next.toISOString(), days_added: days },
+  });
+
   revalidatePath(`/admin/members/${userId}`);
 }
 
@@ -58,8 +67,24 @@ export async function setVeteranAction(formData: FormData) {
   if (!userId) return;
 
   const service = createServiceRoleSupabaseClient();
+  const { data: before } = await service
+    .from("profiles")
+    .select("is_veteran")
+    .eq("id", userId)
+    .maybeSingle();
+
   await service.from("profiles").update({ is_veteran: value }).eq("id", userId);
-  console.log(`[admin ${adminId}] set veteran=${value} for ${userId}`);
+
+  await logAdminAction({
+    adminId,
+    actionType: "profile_tier_change",
+    targetType: "profile",
+    targetId: userId,
+    before: { is_veteran: before?.is_veteran ?? null },
+    after: { is_veteran: value },
+    reason: "veteran flag toggle",
+  });
+
   revalidatePath(`/admin/members/${userId}`);
 }
 
@@ -69,8 +94,24 @@ export async function resetTrialAction(formData: FormData) {
   if (!userId) return;
 
   const service = createServiceRoleSupabaseClient();
+  const { data: before } = await service
+    .from("profiles")
+    .select("trial_used_at")
+    .eq("id", userId)
+    .maybeSingle();
+
   await service.from("profiles").update({ trial_used_at: null }).eq("id", userId);
-  console.log(`[admin ${adminId}] reset trial for ${userId}`);
+
+  await logAdminAction({
+    adminId,
+    actionType: "profile_tier_change",
+    targetType: "profile",
+    targetId: userId,
+    before: { trial_used_at: before?.trial_used_at ?? null },
+    after: { trial_used_at: null },
+    reason: "trial reset",
+  });
+
   revalidatePath(`/admin/members/${userId}`);
 }
 
@@ -80,6 +121,12 @@ export async function downgradeToFreeAction(formData: FormData) {
   if (!userId) return;
 
   const service = createServiceRoleSupabaseClient();
+  const { data: before } = await service
+    .from("profiles")
+    .select("subscription_tier, subscription_status, subscription_expires_at")
+    .eq("id", userId)
+    .maybeSingle();
+
   await service
     .from("profiles")
     .update({
@@ -88,6 +135,16 @@ export async function downgradeToFreeAction(formData: FormData) {
       subscription_expires_at: null,
     })
     .eq("id", userId);
-  console.log(`[admin ${adminId}] downgraded ${userId} to free`);
+
+  await logAdminAction({
+    adminId,
+    actionType: "subscription_cancel",
+    targetType: "profile",
+    targetId: userId,
+    before: before ?? null,
+    after: { subscription_tier: "free", subscription_status: "expired", subscription_expires_at: null },
+    reason: "manual downgrade to free",
+  });
+
   revalidatePath(`/admin/members/${userId}`);
 }

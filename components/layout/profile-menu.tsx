@@ -133,6 +133,13 @@ export function ProfileMenu({
               >
                 ⚙️ Payments
               </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/audit"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Audit Log
+              </Link>
               <div className="my-1 border-t border-white/5" />
             </>
           ) : null}

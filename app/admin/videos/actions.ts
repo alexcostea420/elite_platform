@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { logAdminAction } from "@/lib/admin/audit";
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from "@/lib/supabase/server";
 
 type AdminProfile = {
@@ -101,7 +102,7 @@ function getVideoPayload(formData: FormData): VideoPayload {
 }
 
 export async function createVideoAction(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   const payload = getVideoPayload(formData);
   const validationError = validateVideoPayload(payload);
@@ -111,19 +112,31 @@ export async function createVideoAction(formData: FormData) {
 
   const supabase = createServiceRoleSupabaseClient();
 
-  const { error } = await supabase.from("videos").insert(payload);
+  const { data: created, error } = await supabase
+    .from("videos")
+    .insert(payload)
+    .select("id")
+    .single();
 
   if (error) {
     console.error("Video create error:", error);
     redirect(`/admin/videos?error=${encodeURIComponent("Nu s-a putut adăuga video-ul. Verifică datele și încearcă din nou.")}`);
   }
 
+  await logAdminAction({
+    adminId: admin.id,
+    actionType: "video_create",
+    targetType: "video",
+    targetId: created?.id ?? null,
+    after: payload as unknown as Record<string, unknown>,
+  });
+
   revalidatePath("/admin/videos");
   redirect("/admin/videos?message=" + encodeURIComponent("Video-ul a fost adăugat."));
 }
 
 export async function updateVideoAction(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   const videoId = getTrimmedValue(formData, "id");
 
@@ -138,6 +151,12 @@ export async function updateVideoAction(formData: FormData) {
   }
 
   const supabase = createServiceRoleSupabaseClient();
+
+  const { data: before } = await supabase
+    .from("videos")
+    .select("youtube_id, title, description, category, tier_required, duration_seconds, thumbnail_url, is_published")
+    .eq("id", videoId)
+    .maybeSingle();
 
   const { error } = await supabase.from("videos").update(payload).eq("id", videoId);
 
@@ -146,12 +165,21 @@ export async function updateVideoAction(formData: FormData) {
     redirect(`/admin/videos?error=${encodeURIComponent("Nu s-a putut actualiza video-ul. Încearcă din nou.")}`);
   }
 
+  await logAdminAction({
+    adminId: admin.id,
+    actionType: "video_update",
+    targetType: "video",
+    targetId: videoId,
+    before: before ?? null,
+    after: payload as unknown as Record<string, unknown>,
+  });
+
   revalidatePath("/admin/videos");
   redirect("/admin/videos?message=" + encodeURIComponent("Video-ul a fost actualizat."));
 }
 
 export async function deleteVideoAction(formData: FormData) {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   const videoId = getTrimmedValue(formData, "id");
 
@@ -160,12 +188,27 @@ export async function deleteVideoAction(formData: FormData) {
   }
 
   const supabase = createServiceRoleSupabaseClient();
+
+  const { data: before } = await supabase
+    .from("videos")
+    .select("youtube_id, title, category, tier_required, is_published")
+    .eq("id", videoId)
+    .maybeSingle();
+
   const { error } = await supabase.from("videos").delete().eq("id", videoId);
 
   if (error) {
     console.error("Video delete error:", error);
     redirect(`/admin/videos?error=${encodeURIComponent("Nu s-a putut șterge video-ul. Încearcă din nou.")}`);
   }
+
+  await logAdminAction({
+    adminId: admin.id,
+    actionType: "video_delete",
+    targetType: "video",
+    targetId: videoId,
+    before: before ?? null,
+  });
 
   revalidatePath("/admin/videos");
   redirect("/admin/videos?message=" + encodeURIComponent("Video-ul a fost șters."));

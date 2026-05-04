@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { logAdminAction } from "@/lib/admin/audit";
 import { confirmPayment } from "@/lib/payments/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
@@ -45,6 +46,14 @@ export async function POST(request: NextRequest) {
     if (!success) {
       return NextResponse.json({ error }, { status: 400 });
     }
+
+    await logAdminAction({
+      adminId: user.id,
+      actionType: "payment_confirm_manual",
+      targetType: "payment",
+      targetId: paymentId,
+      after: { tx_hash: txHash, amount_received: amountReceived },
+    });
 
     return NextResponse.json({ success: true, message: "Plata a fost confirmată manual." });
   } catch {
