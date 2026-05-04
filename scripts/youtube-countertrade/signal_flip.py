@@ -8,11 +8,12 @@ Usage: python signal_flip.py
 
 import json
 from pathlib import Path
+from typing import Optional, Tuple
 
 SIGNAL_LOG = Path("signal_log.jsonl")
 
 
-def get_last_two_signals() -> tuple[dict | None, dict | None]:
+def get_last_two_signals() -> Tuple[Optional[dict], Optional[dict]]:
     """Return (previous, latest) signal entries, skipping title-only entries."""
     if not SIGNAL_LOG.exists():
         return None, None

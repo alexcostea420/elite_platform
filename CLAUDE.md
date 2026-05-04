@@ -165,8 +165,11 @@ You are the Elite Platform agent for app.armatadetraderi.com — the "Armata de 
 
 ## LAUNCHD DAEMONS (always running)
 - arb_payment_monitor.py — Arbitrum USDT/USDC detection
-- discord_role_bot.py — Elite role sync
-- discord_drip_sender.py — Welcome DMs (launchd only, NOT crontab)
+- discord_role_bot.py — Elite role sync + drip queue (welcome DMs, payment reminders)
+- alexs_brain_bot.py — daily 10am BTC brief, T-15 macro alerts (lives in scripts/, runs every 60s)
+
+Note: discord_drip_sender.py exists as a script but its launchd plist is
+disabled — drip processing was merged into discord_role_bot.py.
 
 ## KEY FEATURES
 - **Presentation Mode**: ?blur=1 on Stocks/Crypto pages blurs zones+signals for YouTube recordings

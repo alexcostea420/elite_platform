@@ -296,5 +296,16 @@
       "StoicaVlad": 25,
       "CryptoVineri": 20
     }
+  },
+  {
+    "date": "2026-05-04",
+    "btc_price": 80000,
+    "eth_price": 2300,
+    "scores": {
+      "DanielMihaiCrypto": 38,
+      "MrCrypto5": 32,
+      "AltcoinBro": 45,
+      "BlockchainRomania": 25
+    }
   }
 ]
