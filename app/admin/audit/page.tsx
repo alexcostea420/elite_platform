@@ -54,9 +54,10 @@ const ACTION_OPTIONS = [
   "profile_discord_link",
   "subscription_extend",
   "subscription_cancel",
+  "feedback_status_change",
 ];
 
-const TARGET_OPTIONS = ["invite", "video", "payment", "profile", "subscription"];
+const TARGET_OPTIONS = ["invite", "video", "payment", "profile", "subscription", "feedback"];
 
 function fmtRoDateTime(iso: string) {
   const d = new Date(iso);
