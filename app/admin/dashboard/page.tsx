@@ -86,6 +86,34 @@ export default async function AdminDashboardPage() {
             <p className="mt-2 text-slate-400">Statistici si membrii platitori</p>
           </div>
 
+          {/* CRM Quick Links */}
+          <div className="mb-8 grid gap-3 sm:grid-cols-3">
+            <a className="glass-card flex items-center justify-between p-4 transition-colors hover:bg-white/[0.04]" href="/admin/members">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-emerald-400">Customer 360</p>
+                <p className="mt-1 text-base font-bold text-white">Membri</p>
+                <p className="text-xs text-slate-500">Listă cu căutare + filtre</p>
+              </div>
+              <span className="text-2xl">→</span>
+            </a>
+            <a className="glass-card flex items-center justify-between p-4 transition-colors hover:bg-white/[0.04]" href="/admin/retention">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-400">Retenție</p>
+                <p className="mt-1 text-base font-bold text-white">Cine expiră</p>
+                <p className="text-xs text-slate-500">7/14/30 zile + cohorte</p>
+              </div>
+              <span className="text-2xl">→</span>
+            </a>
+            <a className="glass-card flex items-center justify-between p-4 transition-colors hover:bg-white/[0.04]" href="/admin/funnel">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-purple-400">Funnel</p>
+                <p className="mt-1 text-base font-bold text-white">Conversie</p>
+                <p className="text-xs text-slate-500">Signup → Trial → Plătit</p>
+              </div>
+              <span className="text-2xl">→</span>
+            </a>
+          </div>
+
           {/* Stats Cards */}
           <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/5 p-5">

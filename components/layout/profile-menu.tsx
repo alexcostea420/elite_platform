@@ -93,6 +93,27 @@ export function ProfileMenu({
               </Link>
               <Link
                 className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/members"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Membri
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/retention"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Retenție
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/funnel"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Funnel
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/invites"
                 onClick={() => setIsOpen(false)}
               >
