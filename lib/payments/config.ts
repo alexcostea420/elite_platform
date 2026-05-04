@@ -68,8 +68,8 @@ export const planDurations: Record<PlanDuration, { days: number; label: string }
   "30_days": { days: 30, label: "30 Zile" },
   "90_days": { days: 90, label: "3 Luni" },
   "365_days": { days: 365, label: "12 Luni" },
-  "bot_monthly": { days: 30, label: "Bot AI Trading — 30 Zile" },
-  "bot_monthly_elite": { days: 30, label: "Bot AI Trading (Elite) — 30 Zile" },
+  "bot_monthly": { days: 30, label: "Bot AI Trading · 30 Zile" },
+  "bot_monthly_elite": { days: 30, label: "Bot AI Trading (Elite) · 30 Zile" },
 };
 
 /**

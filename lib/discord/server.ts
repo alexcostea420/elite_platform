@@ -309,7 +309,7 @@ export async function sendDiscordDm(discordUserId: string, content: string) {
  * Queue Discord DM drip messages for a newly connected user.
  * Messages are sent by a cron/script that processes the queue.
  */
-const ANTI_SCAM_FOOTER = "\n\n—\n\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP).\n\nBotul NU cere bani și NU procesează plăți. Toate plățile se fac DOAR pe website:\n<https://app.armatadetraderi.com/upgrade>\n\nNu trimite niciodată parole, crypto sau date personale nimănui pe Discord.\nDacă primești DM-uri suspecte de la conturi similare, raportează-le lui Alex.";
+const ANTI_SCAM_FOOTER = "\n\n──────\n\n🔒 Acest mesaj vine de la botul OFICIAL al Armata de Traderi (badge APP).\n\nBotul NU cere bani și NU procesează plăți. Toate plățile se fac DOAR pe website:\n<https://app.armatadetraderi.com/upgrade>\n\nNu trimite niciodată parole, crypto sau date personale nimănui pe Discord.\nDacă primești DM-uri suspecte de la conturi similare, raportează-le lui Alex.";
 
 export async function queueDiscordDripMessages(userId: string, discordUserId: string, isElite: boolean) {
   const supabase = createServiceRoleSupabaseClient();

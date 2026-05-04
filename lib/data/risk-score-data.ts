@@ -139,7 +139,7 @@ export const INDICATOR_INFO: IndicatorInfo[] = [
   {
     key: "pi_cycle_top",
     label: "Pi Cycle Top",
-    short: "Niciodată greșit — semnalul definitiv de top.",
+    short: "Niciodată greșit. Semnalul definitiv de top.",
     full: "Cross între MA111 zile și MA350×2 zile. A prins fiecare top de ciclu BTC din 2013, 2017 și 2021 cu precizie de zile.",
     howToRead: "Cross = TOP de ciclu. Fără cross = încă siguranță.",
     group: "Tehnic",
@@ -220,18 +220,18 @@ export function getVerdictCopy(decision: string, score: number): VerdictCopy {
       short: "Condițiile sunt favorabile pentru cumpărare graduală pe termen lung.",
       long:
         "Indicatorii on-chain și de ciclu arată zonă de acumulare. " +
-        "Asta NU înseamnă „cumpără tot acum” — înseamnă că riscul de a cumpăra aici este sub media istorică.",
+        "Asta NU înseamnă „cumpără tot acum”. Înseamnă că riscul de a cumpăra aici este sub media istorică.",
       doNow: [
-        "DCA gradual — împarte capitalul în 4-8 tranșe lunare.",
+        "DCA gradual. Împarte capitalul în 4-8 tranșe lunare.",
         "Cumpără la dipuri (-5% într-o zi) cu sume mai mari.",
         "Setează stop mental sub bottom-ul cel mai recent.",
-        "Ține minim 12 luni — bottom-urile crypto durează săptămâni, nu zile.",
+        "Ține minim 12 luni. Bottom-urile crypto durează săptămâni, nu zile.",
       ],
       dontDo: [
-        "NU folosi leverage — bear market = lichidare instant.",
-        "NU cumpăra altcoin-uri „ieftine” — BTC bate 90% din alts în bear.",
-        "NU urmări zilnic prețul — anxietate inutilă.",
-        "NU intra cu tot capitalul deodată — DCA, nu lump sum.",
+        "NU folosi leverage. Bear market = lichidare instant.",
+        "NU cumpăra altcoin-uri „ieftine”. BTC bate 90% din alts în bear.",
+        "NU urmări zilnic prețul. Anxietate inutilă.",
+        "NU intra cu tot capitalul deodată. DCA, nu lump sum.",
       ],
       color: "#10B981",
     };
@@ -240,13 +240,13 @@ export function getVerdictCopy(decision: string, score: number): VerdictCopy {
   if (decision === "SELL") {
     return {
       emoji: "🚨",
-      title: score <= 15 ? "ZONĂ DE EUFORIE — VINDE" : "PRUDENȚĂ — REDU EXPUNEREA",
+      title: score <= 15 ? "ZONĂ DE EUFORIE · VINDE" : "PRUDENȚĂ · REDU EXPUNEREA",
       short: "Piața arată semne de supraîncălzire. Prudență la achiziții noi.",
       long:
         "Indicatorii sugerează că riscul de a cumpăra aici este peste media istorică. " +
-        "Tops-urile durează săptămâni — nu trebuie să vinzi tot azi, dar nu mai cumpăra agresiv.",
+        "Tops-urile durează săptămâni. Nu trebuie să vinzi tot azi, dar nu mai cumpăra agresiv.",
       doNow: [
-        "Ia profit pe trepte — 25% la fiecare +20%.",
+        "Ia profit pe trepte: 25% la fiecare +20%.",
         "Mută gain-uri în stable-coins (USDC, USDT).",
         "Setează stop-loss tehnic sub support-ul recent.",
         "Menține DCA-ul de bază (10-20% din rata normală).",
@@ -255,7 +255,7 @@ export function getVerdictCopy(decision: string, score: number): VerdictCopy {
         "NU cumpăra în lump-sum acum.",
         "NU folosi leverage long.",
         "NU intra în altcoin-uri micuțe (sezon de pump = sezon de rug).",
-        "NU presupune că ATH-ul actual e final — poate mai urcă, dar riscul/recompensa s-a inversat.",
+        "NU presupune că ATH-ul actual e final. Poate mai urcă, dar riscul/recompensa s-a inversat.",
       ],
       color: "#EF4444",
     };
@@ -263,11 +263,11 @@ export function getVerdictCopy(decision: string, score: number): VerdictCopy {
 
   return {
     emoji: "⏳",
-    title: "ZONĂ NEUTRĂ — AȘTEAPTĂ",
+    title: "ZONĂ NEUTRĂ · AȘTEAPTĂ",
     short: "Nu există un semnal clar. Piața e în zona neutră.",
     long:
-      "Indicatorii sunt mixați. În astfel de perioade, cea mai bună strategie e să nu acționezi impulsiv — " +
-      "păstrează planul de DCA dacă ai unul, dar nu intra cu poziții mari.",
+      "Indicatorii sunt mixați. În astfel de perioade, cea mai bună strategie e să nu acționezi impulsiv. " +
+      "Păstrează planul de DCA dacă ai unul, dar nu intra cu poziții mari.",
     doNow: [
       "Continuă DCA-ul de bază (dacă deja faci).",
       "Pregătește lista cu zonele tale de cumpărare agresivă.",
@@ -276,7 +276,7 @@ export function getVerdictCopy(decision: string, score: number): VerdictCopy {
     ],
     dontDo: [
       "NU intra în trade-uri cu leverage.",
-      "NU urmări CT/influencerii — nu știu mai mult decât tine.",
+      "NU urmări CT/influencerii. Nu știu mai mult decât tine.",
       "NU schimba strategia după fiecare tweet.",
       "NU cumpăra altcoin-uri pe FOMO.",
     ],
@@ -298,7 +298,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     term: "Risk Score",
     short: "Scor agregat 0-100 al riscului crypto.",
-    full: "Risk Score combină 9-14 indicatori on-chain, tehnici, macro și derivative într-un singur scor. Sub 30 = vinde, 30-50 = neutru, peste 50 = cumpără. Nu e crystal ball — e o agregare statistică.",
+    full: "Risk Score combină 9-14 indicatori on-chain, tehnici, macro și derivative într-un singur scor. Sub 30 = vinde, 30-50 = neutru, peste 50 = cumpără. Nu e crystal ball, e o agregare statistică.",
   },
   {
     term: "On-Chain",
@@ -307,12 +307,12 @@ export const GLOSSARY: GlossaryEntry[] = [
   },
   {
     term: "ATH",
-    short: "All-Time High — cel mai mare preț atins.",
+    short: "All-Time High · cel mai mare preț atins.",
     full: "ATH = cel mai mare preț la care BTC a tranzacționat vreodată. Distance from ATH (drawdown) e un indicator simplu și puternic.",
   },
   {
     term: "DCA",
-    short: "Dollar Cost Averaging — cumpără fix la intervale.",
+    short: "Dollar Cost Averaging · cumpără fix la intervale.",
     full: "Strategia de a cumpăra o sumă fixă la intervale regulate (ex: $50 pe săptămână), indiferent de preț. Reduce riscul de a cumpăra la top și mediază prețul de intrare.",
   },
   {

@@ -466,7 +466,7 @@ export async function expireOverdueProfiles(): Promise<number> {
   }
 
   const expiryDmContent =
-    "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.\n\n—\n\n🔒 Acest bot NU cere bani și NU procesează plăți.\nToate plățile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\nFii atent la DM-uri suspecte — raportează-le lui Alex.";
+    "⏰ Abonamentul tău Elite a expirat.\nReînnoiește pe https://app.armatadetraderi.com/upgrade pentru a păstra accesul.\n\n──────\n\n🔒 Acest bot NU cere bani și NU procesează plăți.\nToate plățile se fac DOAR pe website: https://app.armatadetraderi.com/upgrade\nFii atent la DM-uri suspecte. Raportează-le lui Alex.";
 
   for (const profile of expired) {
     await supabase
