@@ -19,14 +19,16 @@ export type AdminActionType =
   | "profile_role_change"
   | "profile_discord_link"
   | "subscription_extend"
-  | "subscription_cancel";
+  | "subscription_cancel"
+  | "feedback_status_change";
 
 export type AdminTargetType =
   | "invite"
   | "video"
   | "payment"
   | "profile"
-  | "subscription";
+  | "subscription"
+  | "feedback";
 
 type LogAdminActionInput = {
   adminId: string;
