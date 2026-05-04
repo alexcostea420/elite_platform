@@ -33,21 +33,21 @@ export async function POST(request: NextRequest) {
 
     if (!apiKey || apiKey.length < 10) {
       return NextResponse.json(
-        { error: "API Key invalid. Verifica cheia si incearca din nou." },
+        { error: "API Key invalid. Verifică cheia și încearcă din nou." },
         { status: 400 },
       );
     }
 
     if (!apiSecret || apiSecret.length < 10) {
       return NextResponse.json(
-        { error: "Secret Key invalid. Verifica cheia si incearca din nou." },
+        { error: "Secret Key invalid. Verifică cheia și încearcă din nou." },
         { status: 400 },
       );
     }
 
     if (isNaN(riskLevel) || riskLevel < 0.5 || riskLevel > 5.0) {
       return NextResponse.json(
-        { error: "Nivelul de risc trebuie sa fie intre 0.5% si 5.0%." },
+        { error: "Nivelul de risc trebuie să fie între 0.5% și 5.0%." },
         { status: 400 },
       );
     }
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     console.error("POST /api/bots/connect error:", err);
     return NextResponse.json(
-      { error: "Eroare interna." },
+      { error: "Eroare internă." },
       { status: 500 },
     );
   }

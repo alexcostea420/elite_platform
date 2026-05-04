@@ -147,7 +147,7 @@ export function SubscribeFlow({
           >
             <input type="hidden" name="user_id" value={userId} />
             <button type="submit" className="accent-button w-full py-3 font-bold">
-              Continua la plata &mdash; ${botPrice}/luna
+              Continuă la plată · ${botPrice}/lună
             </button>
           </form>
         </div>
@@ -156,15 +156,15 @@ export function SubscribeFlow({
       {/* Step 2: Payment */}
       {step === 2 && (
         <div className="panel p-8">
-          <h3 className="mb-2 text-lg font-bold text-white">Plata Crypto</h3>
+          <h3 className="mb-2 text-lg font-bold text-white">Plată Crypto</h3>
           <p className="mb-6 text-slate-300">
-            Trimite suma exacta la adresa de mai jos (USDC/USDT pe Arbitrum):
+            Trimite suma exactă la adresa de mai jos (USDC/USDT pe Arbitrum):
           </p>
 
           <div className="space-y-5 rounded-xl border border-white/10 bg-white/5 p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Suma de plata
+                Suma de plată
               </p>
               <p className="mt-1 text-3xl font-bold text-accent-emerald">
                 ${botPrice}.00
@@ -186,13 +186,13 @@ export function SubscribeFlow({
 
           <div className="mt-6 flex items-center gap-3 text-slate-400">
             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent-emerald" />
-            <span className="text-sm">Asteptam confirmarea platii...</span>
+            <span className="text-sm">Așteptăm confirmarea plății...</span>
           </div>
 
           <div className="mt-6 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4">
             <p className="text-sm text-yellow-200">
               <span className="font-semibold">Important:</span> Trimite suma
-              exacta. Plata va fi confirmata automat de monitorul blockchain.
+              exactă. Plata va fi confirmată automat de monitorul blockchain.
             </p>
           </div>
 
@@ -201,7 +201,7 @@ export function SubscribeFlow({
             onClick={() => setStep(3)}
             className="ghost-button mt-6 w-full py-3 text-sm"
           >
-            Am platit, continua
+            Am plătit, continuă
           </button>
         </div>
       )}
@@ -210,7 +210,7 @@ export function SubscribeFlow({
       {step === 3 && (
         <div className="panel p-8">
           <h3 className="mb-2 text-lg font-bold text-white">
-            Conecteaza contul MEXC
+            Conectează contul MEXC
           </h3>
           <p className="mb-6 text-slate-300">
             Introdu datele API de pe MEXC pentru a permite botului să execute
@@ -267,15 +267,15 @@ export function SubscribeFlow({
                 <span className="font-semibold text-accent-emerald">
                   Securitate:
                 </span>{" "}
-                Folosim API-ul DOAR pentru a plasa tranzactii. NU avem acces la
-                fondurile tale. Cheia API trebuie sa aiba permisiuni{" "}
+                Folosim API-ul DOAR pentru a plasa tranzacții. NU avem acces la
+                fondurile tale. Cheia API trebuie să aibă permisiuni{" "}
                 <span className="font-semibold text-white">read + trade</span>{" "}
-                (fara withdraw).
+                (fără withdraw).
               </p>
             </div>
 
             <button type="submit" className="accent-button w-full py-3 font-bold">
-              Conecteaza Wallet
+              Conectează Wallet
             </button>
           </form>
         </div>
@@ -285,10 +285,10 @@ export function SubscribeFlow({
       {step === 4 && (
         <div className="panel p-8">
           <h3 className="mb-2 text-lg font-bold text-white">
-            Configureaza Botul
+            Configurează Botul
           </h3>
           <p className="mb-6 text-slate-300">
-            Alege setarile de risc pentru tranzactiile automate.
+            Alege setările de risc pentru tranzacțiile automate.
           </p>
 
           <form
@@ -303,7 +303,7 @@ export function SubscribeFlow({
               <div>
                 <p className="font-semibold text-white">Auto-sizing</p>
                 <p className="mt-1 text-sm text-slate-400">
-                  Marimea pozitiilor se calculeaza automat pe baza capitalului tau
+                  Mărimea pozițiilor se calculează automat pe baza capitalului tău
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -320,7 +320,7 @@ export function SubscribeFlow({
             {/* Max risk */}
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.3em] text-accent-emerald">
-                Risc Maxim per Tranzactie (%)
+                Risc Maxim per Tranzacție (%)
               </label>
               <input
                 name="max_risk_pct"
@@ -333,13 +333,13 @@ export function SubscribeFlow({
                 className="w-full rounded-xl border border-white/10 bg-surface-graphite px-4 py-3 text-white outline-none transition focus:border-accent-emerald"
               />
               <p className="mt-2 text-sm text-slate-400">
-                Recomandat: 1-2% din capital per tranzactie. Valoare implicita:
+                Recomandat: 1-2% din capital per tranzacție. Valoare implicită:
                 2%.
               </p>
             </div>
 
             <button type="submit" className="accent-button w-full py-3 font-bold">
-              Activeaza Botul
+              Activează Botul
             </button>
           </form>
         </div>

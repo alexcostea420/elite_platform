@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     const ip = request.headers.get("x-forwarded-for") ?? "unknown";
     const { allowed } = await checkRateLimit(`lead:${ip}`, 5, 60_000);
     if (!allowed) {
-      return NextResponse.json({ error: "Prea multe incercari. Asteapta un minut." }, { status: 429 });
+      return NextResponse.json({ error: "Prea multe încercări. Așteaptă un minut." }, { status: 429 });
     }
 
     const { email } = await request.json();

@@ -10,7 +10,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   title: "Blog - Armata de Traderi",
   description:
-    "Articole despre trading crypto, educatie financiara si strategii de investitii. Ghiduri pentru incepatori si traderi avansati.",
+    "Articole despre trading crypto, educație financiară și strategii de investiții. Ghiduri pentru începători și traderi avansați.",
   keywords: [
     "blog trading crypto",
     "educatie trading romania",

@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     const pageUrl = body?.page_url || "";
 
     if (!message || message.length < 5) {
-      return NextResponse.json({ error: "Mesajul trebuie sa aiba minim 5 caractere." }, { status: 400 });
+      return NextResponse.json({ error: "Mesajul trebuie să aibă minim 5 caractere." }, { status: 400 });
     }
 
     // 24h cooldown check
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (recent) {
-      return NextResponse.json({ error: "Ai trimis deja feedback in ultimele 24 ore." }, { status: 429 });
+      return NextResponse.json({ error: "Ai trimis deja feedback în ultimele 24 ore." }, { status: 429 });
     }
 
     const { error } = await serviceSupabase.from("feedback").insert({
@@ -49,6 +49,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ error: "Eroare interna." }, { status: 500 });
+    return NextResponse.json({ error: "Eroare internă." }, { status: 500 });
   }
 }

@@ -50,7 +50,7 @@ export function MexcConnectForm({ isElite }: { isElite: boolean }) {
       setStatus("success");
       setTimeout(() => router.push("/bots/dashboard"), 2500);
     } catch {
-      setError("Eroare de retea. Incearca din nou.");
+      setError("Eroare de rețea. Încearcă din nou.");
       setStatus("error");
     }
   }
@@ -99,7 +99,7 @@ export function MexcConnectForm({ isElite }: { isElite: boolean }) {
           </li>
           <li className="flex gap-3">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-emerald/20 text-xs font-bold text-accent-emerald">3</span>
-            <span>Activeaza permisiunile: <span className="font-semibold text-accent-emerald">Read</span> + <span className="font-semibold text-accent-emerald">Trade</span></span>
+            <span>Activează permisiunile: <span className="font-semibold text-accent-emerald">Read</span> + <span className="font-semibold text-accent-emerald">Trade</span></span>
           </li>
           <li className="flex gap-3">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-xs font-bold text-red-400">!</span>
@@ -114,7 +114,7 @@ export function MexcConnectForm({ isElite }: { isElite: boolean }) {
 
       {/* Connect Form */}
       <form onSubmit={handleSubmit} className="panel p-6 md:p-8">
-        <h2 className="mb-6 text-xl font-bold text-white">Conecteaza contul MEXC</h2>
+        <h2 className="mb-6 text-xl font-bold text-white">Conectează contul MEXC</h2>
 
         {error && (
           <div className="mb-5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">

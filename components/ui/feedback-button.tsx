@@ -74,15 +74,15 @@ export function FeedbackButton() {
             </button>
 
             <h3 className="text-lg font-bold text-white">Feedback / Bug Report</h3>
-            <p className="mt-1 text-sm text-slate-400">Trimite-ne un mesaj. Alex il va vedea.</p>
+            <p className="mt-1 text-sm text-slate-400">Trimite-ne un mesaj. Alex îl va vedea.</p>
 
             {status === "sent" ? (
               <div className="mt-4 rounded-xl border border-green-400/30 bg-green-400/10 p-4 text-center text-green-400">
-                Multumim! Feedback-ul a fost trimis. ✅
+                Mulțumim! Feedback-ul a fost trimis. ✅
               </div>
             ) : status === "cooldown" ? (
               <div className="mt-4 rounded-xl border border-yellow-400/30 bg-yellow-400/10 p-4 text-center text-yellow-400">
-                Ai trimis deja feedback in ultimele 24 ore. Revino maine!
+                Ai trimis deja feedback în ultimele 24 ore. Revino mâine!
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-4 space-y-4">
@@ -114,7 +114,7 @@ export function FeedbackButton() {
                   {status === "sending" ? "Se trimite..." : "Trimite Feedback"}
                 </button>
                 {status === "error" && (
-                  <p className="text-center text-sm text-red-400">Eroare. Incearca din nou.</p>
+                  <p className="text-center text-sm text-red-400">Eroare. Încearcă din nou.</p>
                 )}
               </form>
             )}
