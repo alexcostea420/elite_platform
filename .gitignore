@@ -13,3 +13,6 @@ data/
 
 # PFA bookkeeping (personal financial data, never push to GitHub)
 accounting/
+
+# Stocks score research cache (yfinance dumps, regenerable)
+scripts/stocks_score_research/cache/

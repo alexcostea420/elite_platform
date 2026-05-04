@@ -12,6 +12,22 @@ type StockZones = {
   signal: string;
 };
 
+type ScoreData = {
+  score: number | null;
+  scoreQuality: number | null;
+  scoreValue: number | null;
+  scoreBalance: number | null;
+  isBtcDriven: boolean;
+  grossMargin: number | null;
+  fcfMargin: number | null;
+  roe: number | null;
+  fcfYield: number | null;
+  pFcf: number | null;
+  evEbit: number | null;
+  netDebtToMarketCap: number | null;
+  asOf: string | null;
+};
+
 type LiveData = {
   ticker: string;
   price: number;
@@ -26,6 +42,7 @@ type LiveData = {
   w52Low: number;
   pctFromATH: number;
   sparkline?: number[];
+  scoreData?: ScoreData;
 };
 
 const SECTORS: Record<string, string> = {
@@ -79,6 +96,108 @@ type TickerHistory = {
 
 type MergedStock = StockZones & Partial<LiveData> & { price: number };
 
+function scoreColor(score: number): { ring: string; text: string; bg: string; label: string } {
+  if (score >= 80) return { ring: "border-emerald-400/60", text: "text-emerald-300", bg: "bg-emerald-400/10", label: "SOLID" };
+  if (score >= 60) return { ring: "border-emerald-500/40", text: "text-emerald-400", bg: "bg-emerald-500/5", label: "BUN" };
+  if (score >= 40) return { ring: "border-amber-400/40", text: "text-amber-300", bg: "bg-amber-400/5", label: "NEUTRU" };
+  if (score >= 20) return { ring: "border-orange-400/40", text: "text-orange-300", bg: "bg-orange-400/5", label: "SLAB" };
+  return { ring: "border-red-400/50", text: "text-red-300", bg: "bg-red-400/5", label: "PERICOL" };
+}
+
+function ScoreBadge({ data }: { data?: ScoreData }) {
+  if (!data) return <span className="text-xs text-slate-700">—</span>;
+  if (data.isBtcDriven) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-400/5 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+        ⚡ BTC
+      </span>
+    );
+  }
+  if (data.score === null) return <span className="text-xs text-slate-700">—</span>;
+  const c = scoreColor(data.score);
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold tabular-nums ${c.ring} ${c.bg} ${c.text}`}>
+      <span className="font-data">{data.score.toFixed(0)}</span>
+      <span className="text-[9px] font-semibold opacity-70">{c.label}</span>
+    </span>
+  );
+}
+
+function fmtPct(v: number | null, digits = 1): string {
+  if (v === null || v === undefined) return "—";
+  return `${(v * 100).toFixed(digits)}%`;
+}
+
+function fmtNum(v: number | null, digits = 1): string {
+  if (v === null || v === undefined) return "—";
+  return v.toFixed(digits);
+}
+
+function ScoreBreakdown({ data, ticker }: { data: ScoreData; ticker: string }) {
+  if (data.isBtcDriven) {
+    return (
+      <div className="space-y-2 rounded-xl border border-amber-400/20 bg-amber-400/[0.03] p-4 text-xs">
+        <p className="font-semibold text-amber-300">⚡ Acțiune BTC-driven</p>
+        <p className="text-slate-400">
+          Pentru {ticker}, fundamentele (FCF, ROE) sunt distorsionate de evaluarea
+          rezervelor BTC sau de operațiuni miniere. Scorul standard nu se aplică - urmărește direct prețul BTC și zonele tehnice.
+        </p>
+      </div>
+    );
+  }
+  const q = data.scoreQuality ?? 0;
+  const v = data.scoreValue ?? 0;
+  const b = data.scoreBalance ?? 0;
+  const sub = (label: string, val: number, weight: string) => {
+    const c = scoreColor(val);
+    return (
+      <div className="flex items-center justify-between gap-3 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2">
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-slate-500">{label}</p>
+          <p className="text-[9px] text-slate-600">{weight}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-1.5 w-16 overflow-hidden rounded-full bg-white/5">
+            <div className={`h-full ${c.text.replace("text", "bg")}`} style={{ width: `${val}%` }} />
+          </div>
+          <span className={`font-data text-xs font-bold tabular-nums ${c.text}`}>{val.toFixed(0)}</span>
+        </div>
+      </div>
+    );
+  };
+  const metric = (label: string, value: string, hint?: string) => (
+    <div className="flex items-baseline justify-between border-b border-white/5 py-1">
+      <span className="text-[10px] uppercase tracking-wider text-slate-500">{label}</span>
+      <span className="font-data text-xs tabular-nums text-slate-300">
+        {value}
+        {hint && <span className="ml-1 text-[9px] text-slate-600">{hint}</span>}
+      </span>
+    </div>
+  );
+  return (
+    <div className="space-y-3 rounded-xl border border-white/10 bg-white/[0.02] p-4 text-xs">
+      <div className="space-y-2">
+        {sub("Quality", q, "50% pondere · margini, FCF, ROE")}
+        {sub("Value", v, "30% pondere · FCF yield, EV/EBIT")}
+        {sub("Balance", b, "20% pondere · datorie netă")}
+      </div>
+      <div>
+        <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Metrici cheie</p>
+        {metric("Gross margin", fmtPct(data.grossMargin), "(target ≥60%)")}
+        {metric("FCF margin", fmtPct(data.fcfMargin), "(target ≥30%)")}
+        {metric("ROE", fmtPct(data.roe), "(target ≥30%)")}
+        {metric("FCF yield", fmtPct(data.fcfYield), "(target ≥8%)")}
+        {metric("P/FCF", fmtNum(data.pFcf), "(sub 30 = ieftin)")}
+        {metric("EV/EBIT", fmtNum(data.evEbit), "(sub 20 = ieftin)")}
+        {metric("Datorie netă/Mcap", fmtPct(data.netDebtToMarketCap), "(0 sau negativ = bine)")}
+      </div>
+      {data.asOf && (
+        <p className="text-[9px] text-slate-600">Date raport: {data.asOf}</p>
+      )}
+    </div>
+  );
+}
+
 const ZONES: StockZones[] = [
   { ticker: "TSLA", buy1: 350, buy2: 280, sell1: 580, sell2: 677, signal: "HOLD" },
   { ticker: "COIN", buy1: 118, buy2: 86, sell1: 450, sell2: 690, signal: "HOLD" },
@@ -125,6 +244,7 @@ function SkeletonRow() {
       <td className="px-4 py-3"><div className="skeleton h-4 w-14" /></td>
       <td className="px-4 py-3"><div className="skeleton h-4 w-14" /></td>
       <td className="px-4 py-3"><div className="skeleton h-2.5 w-40" /></td>
+      <td className="px-4 py-3"><div className="skeleton h-5 w-16 rounded-full" /></td>
       <td className="px-4 py-3"><div className="skeleton h-5 w-16 rounded-full" /></td>
     </tr>
   );
@@ -250,7 +370,7 @@ function LiveCountdown({ updatedAt }: { updatedAt: string }) {
   return <span className="text-slate-600 tabular-nums">{label}</span>;
 }
 
-type SortKey = "ticker" | "price" | "changePct" | "pctFromATH" | "signal";
+type SortKey = "ticker" | "price" | "changePct" | "pctFromATH" | "signal" | "score";
 type Filter = "all" | "buy" | "sell" | "hold";
 
 export function StocksClient() {
@@ -264,6 +384,7 @@ export function StocksClient() {
   const [search, setSearch] = useState("");
   const [updatedAt, setUpdatedAt] = useState<string>("");
   const [flashMap, setFlashMap] = useState<Record<string, "up" | "down">>({});
+  const [expandedScore, setExpandedScore] = useState<string | null>(null);
   const prevPrices = useRef<Record<string, number>>({});
 
   const fetchData = useCallback(() => {
@@ -338,6 +459,15 @@ export function StocksClient() {
       case "signal": {
         const order = (s: string) => s.includes("BUY") ? 0 : s.includes("SELL") ? 2 : 1;
         cmp = order(a.signal) - order(b.signal);
+        break;
+      }
+      case "score": {
+        // Sort: BTC-driven last, missing scores last, otherwise by score
+        const score = (s: MergedStock) => {
+          if (!s.scoreData || s.scoreData.score === null) return -1;
+          return s.scoreData.score;
+        };
+        cmp = score(a) - score(b);
         break;
       }
     }
@@ -434,6 +564,7 @@ export function StocksClient() {
           { key: "ticker" as SortKey, label: "Nume" },
           { key: "changePct" as SortKey, label: "% Azi" },
           { key: "pctFromATH" as SortKey, label: "% ATH" },
+          { key: "score" as SortKey, label: "Scor" },
           { key: "signal" as SortKey, label: "Semnal" },
         ].map(({ key, label }) => (
           <button
@@ -462,6 +593,7 @@ export function StocksClient() {
                     <th className="px-4 py-3">% Azi</th>
                     <th className="px-4 py-3">Zonă</th>
                     <th className="px-4 py-3">Zone Ladder</th>
+                    <th className="px-4 py-3">Scor</th>
                     <th className="px-4 py-3">Semnal</th>
                   </tr>
                 </thead>
@@ -501,6 +633,9 @@ export function StocksClient() {
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("pctFromATH")}>
                       % ATH {sortBy === "pctFromATH" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
+                    <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("score")}>
+                      Scor {sortBy === "score" ? (sortDir === "asc" ? "↑" : "↓") : ""}
+                    </th>
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("signal")}>
                       Semnal {sortBy === "signal" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
@@ -515,9 +650,10 @@ export function StocksClient() {
                     const zoneHitMap: Record<string, ZoneHit> = {};
                     if (zh?.zones) for (const z of zh.zones) zoneHitMap[z.zone] = z;
 
+                    const scoreOpen = expandedScore === stock.ticker;
                     return (
+                      <React.Fragment key={stock.ticker}>
                       <tr
-                        key={stock.ticker}
                         className={`border-b border-white/5 transition hover:bg-white/[0.02] ${flash ? (flash === "up" ? "price-flash-up" : "price-flash-down") : ""}`}
                       >
                         <td className="px-4 py-3">
@@ -600,6 +736,20 @@ export function StocksClient() {
                           </span>
                         </td>
                         <td className="px-4 py-3">
+                          {stock.scoreData ? (
+                            <button
+                              onClick={() => setExpandedScore(scoreOpen ? null : stock.ticker)}
+                              type="button"
+                              className="cursor-pointer transition hover:opacity-80"
+                              aria-label={`Detalii scor ${stock.ticker}`}
+                            >
+                              <ScoreBadge data={stock.scoreData} />
+                            </button>
+                          ) : (
+                            <ScoreBadge data={stock.scoreData} />
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
                           {blur ? (
                             <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
                           ) : (
@@ -610,6 +760,16 @@ export function StocksClient() {
                           )}
                         </td>
                       </tr>
+                      {scoreOpen && stock.scoreData && (
+                        <tr className="bg-white/[0.015]">
+                          <td colSpan={11} className="px-4 py-4">
+                            <div className="max-w-xl">
+                              <ScoreBreakdown data={stock.scoreData} ticker={stock.ticker} />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                      </React.Fragment>
                     );
                   })}
                 </tbody>
@@ -627,6 +787,7 @@ export function StocksClient() {
               const zoneHitMobile: Record<string, ZoneHit> = {};
               if (zhMobile?.zones) for (const z of zhMobile.zones) zoneHitMobile[z.zone] = z;
 
+              const scoreOpenMobile = expandedScore === stock.ticker;
               return (
                 <div
                   key={stock.ticker}
@@ -646,14 +807,26 @@ export function StocksClient() {
                         <span className="text-xs text-slate-600">{stock.marketCap}</span>
                       )}
                     </div>
-                    {blur ? (
-                      <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
-                    ) : (
-                      <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
-                        <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-                        {stock.signal}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {stock.scoreData ? (
+                        <button
+                          onClick={() => setExpandedScore(scoreOpenMobile ? null : stock.ticker)}
+                          type="button"
+                          className="cursor-pointer transition active:opacity-70"
+                          aria-label={`Detalii scor ${stock.ticker}`}
+                        >
+                          <ScoreBadge data={stock.scoreData} />
+                        </button>
+                      ) : null}
+                      {blur ? (
+                        <BlurGuard label="Semnal Elite"><span className="text-slate-600">---</span></BlurGuard>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.bg} ${style.color}`}>
+                          <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                          {stock.signal}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mt-3 flex items-baseline gap-3">
@@ -687,6 +860,12 @@ export function StocksClient() {
                       />
                     )}
                   </div>
+
+                  {scoreOpenMobile && stock.scoreData && (
+                    <div className="mt-3">
+                      <ScoreBreakdown data={stock.scoreData} ticker={stock.ticker} />
+                    </div>
+                  )}
                 </div>
               );
             })}

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { createServiceRoleSupabaseClient } from "@/lib/supabase/server";
+
 export const revalidate = 300; // Cache 5 minutes
 
 const TICKERS = [
@@ -7,6 +9,22 @@ const TICKERS = [
   "GOOG", "META", "NVDA", "AAPL", "MSFT", "AMZN",
   "PYPL", "SHOP", "PLTR", "ORCL",
 ];
+
+type ScoreData = {
+  score: number | null;
+  scoreQuality: number | null;
+  scoreValue: number | null;
+  scoreBalance: number | null;
+  isBtcDriven: boolean;
+  grossMargin: number | null;
+  fcfMargin: number | null;
+  roe: number | null;
+  fcfYield: number | null;
+  pFcf: number | null;
+  evEbit: number | null;
+  netDebtToMarketCap: number | null;
+  asOf: string | null;
+};
 
 type StockData = {
   ticker: string;
@@ -22,6 +40,7 @@ type StockData = {
   w52Low: number;
   pctFromATH: number;
   sparkline: number[];
+  scoreData?: ScoreData;
 };
 
 async function fetchFinviz(ticker: string): Promise<StockData | null> {
@@ -111,6 +130,39 @@ async function fetchSparklines(tickers: string[]): Promise<Record<string, number
   return result;
 }
 
+async function fetchScores(): Promise<Record<string, ScoreData>> {
+  try {
+    const supabase = createServiceRoleSupabaseClient();
+    const { data } = await supabase
+      .from("stocks_fundamentals")
+      .select(
+        "ticker, score, score_quality, score_value, score_balance, is_btc_driven, gross_margin, fcf_margin, roe, fcf_yield, p_fcf, ev_ebit, net_debt_to_market_cap, as_of",
+      );
+    const map: Record<string, ScoreData> = {};
+    for (const r of data ?? []) {
+      map[r.ticker as string] = {
+        score: r.score === null ? null : Number(r.score),
+        scoreQuality: r.score_quality === null ? null : Number(r.score_quality),
+        scoreValue: r.score_value === null ? null : Number(r.score_value),
+        scoreBalance: r.score_balance === null ? null : Number(r.score_balance),
+        isBtcDriven: Boolean(r.is_btc_driven),
+        grossMargin: r.gross_margin === null ? null : Number(r.gross_margin),
+        fcfMargin: r.fcf_margin === null ? null : Number(r.fcf_margin),
+        roe: r.roe === null ? null : Number(r.roe),
+        fcfYield: r.fcf_yield === null ? null : Number(r.fcf_yield),
+        pFcf: r.p_fcf === null ? null : Number(r.p_fcf),
+        evEbit: r.ev_ebit === null ? null : Number(r.ev_ebit),
+        netDebtToMarketCap: r.net_debt_to_market_cap === null ? null : Number(r.net_debt_to_market_cap),
+        asOf: (r.as_of as string | null) ?? null,
+      };
+    }
+    return map;
+  } catch (error) {
+    console.error("Stocks score fetch error:", error);
+    return {};
+  }
+}
+
 export async function GET() {
   try {
     // Fetch in batches of 4 with delays to avoid rate limiting
@@ -129,10 +181,14 @@ export async function GET() {
 
     const stocks = results.filter(Boolean) as StockData[];
 
-    // Fetch sparklines in parallel
-    const sparklines = await fetchSparklines(TICKERS);
+    // Fetch sparklines + scores in parallel
+    const [sparklines, scores] = await Promise.all([
+      fetchSparklines(TICKERS),
+      fetchScores(),
+    ]);
     for (const stock of stocks) {
       stock.sparkline = sparklines[stock.ticker] ?? [];
+      stock.scoreData = scores[stock.ticker];
     }
 
     return NextResponse.json({ stocks, updated_at: new Date().toISOString() });
