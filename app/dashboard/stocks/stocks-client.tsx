@@ -612,10 +612,10 @@ export function StocksClient() {
         <>
           {/* Desktop table */}
           <div className="hidden md:block">
-            <div className="panel overflow-x-auto p-0">
+            <div className="panel overflow-x-clip p-0">
               <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/5 text-left text-xs uppercase tracking-wider text-slate-500">
+                <thead className="sticky top-24 z-10 md:top-28 [&>tr>th]:bg-surface-graphite">
+                  <tr className="border-b border-white/5 text-left text-xs uppercase tracking-wider text-slate-500 [&>th]:shadow-[0_1px_0_0_rgba(255,255,255,0.05)]">
                     <th className="cursor-pointer px-4 py-3 hover:text-white" onClick={() => handleSort("ticker")}>
                       Ticker {sortBy === "ticker" ? (sortDir === "asc" ? "↑" : "↓") : ""}
                     </th>
