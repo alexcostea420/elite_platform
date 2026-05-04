@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { MexcConnectForm } from "@/components/bots/mexc-connect-form";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { ComingSoon } from "@/components/ui/coming-soon";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { buildPageMetadata } from "@/lib/seo";
@@ -44,16 +45,11 @@ export default async function BotSubscribePage() {
       <>
         <Navbar mode="dashboard" userIdentity={{ displayName: identity.displayName, initials: identity.initials }} />
         <main className="pb-16 pt-24 md:pt-28">
-          <Container>
-            <div className="mx-auto max-w-lg py-20 text-center">
-              <div className="text-5xl">🤖</div>
-              <h1 className="mt-6 text-3xl font-bold text-white">Bot Trading - Coming Soon</h1>
-              <p className="mt-4 text-slate-400">Botul de copytrade este în dezvoltare. Vei primi o notificare când va fi disponibil.</p>
-              <a className="mt-8 inline-block rounded-xl bg-accent-emerald px-6 py-3 font-semibold text-crypto-dark hover:bg-accent-soft" href="/dashboard">
-                Înapoi la Dashboard
-              </a>
-            </div>
-          </Container>
+          <ComingSoon
+            icon="🤖"
+            title="Bot Trading · Coming Soon"
+            description="Botul de copytrade este în dezvoltare. Vei primi o notificare când va fi disponibil."
+          />
         </main>
         <Footer compact />
       </>
