@@ -45,6 +45,15 @@ function pct(num: number, den: number) {
   return Math.round((num / den) * 100);
 }
 
+// Free trial real a fost lansat pe 1 mai 2026. Înainte, trial_used_at a fost setat
+// pe migrări Patreon și veterani — acelea nu sunt trial-uri reale.
+const TRIAL_LAUNCH_DATE = "2026-05-01T00:00:00Z";
+
+function isRealTrial(trialIso: string | null): trialIso is string {
+  if (!trialIso) return false;
+  return trialIso >= TRIAL_LAUNCH_DATE;
+}
+
 export default async function AdminFunnelPage() {
   const supabase = createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -77,10 +86,10 @@ export default async function AdminFunnelPage() {
   );
 
   const totalSignups = profiles.length;
-  const trialActivated = profiles.filter((p) => p.trial_used_at).length;
+  const trialActivated = profiles.filter((p) => isRealTrial(p.trial_used_at)).length;
   const becameElite = profiles.filter((p) => p.subscription_tier === "elite").length;
   const paidViaCrypto = paidUserIds.size;
-  const trialAndPaid = profiles.filter((p) => p.trial_used_at && paidUserIds.has(p.id)).length;
+  const trialAndPaid = profiles.filter((p) => isRealTrial(p.trial_used_at) && paidUserIds.has(p.id)).length;
   const eliteNoPayment = profiles.filter(
     (p) => p.subscription_tier === "elite" && !paidUserIds.has(p.id),
   ).length;
@@ -94,7 +103,7 @@ export default async function AdminFunnelPage() {
     const key = monthKey(p.created_at);
     const cur = monthly.get(key) ?? { signups: 0, trials: 0, elite: 0, paid: 0 };
     cur.signups += 1;
-    if (p.trial_used_at && monthKey(p.trial_used_at) === key) cur.trials += 1;
+    if (isRealTrial(p.trial_used_at) && monthKey(p.trial_used_at) === key) cur.trials += 1;
     if (p.elite_since && monthKey(p.elite_since) === key) cur.elite += 1;
     monthly.set(key, cur);
   }
@@ -131,6 +140,10 @@ export default async function AdminFunnelPage() {
             </h1>
             <p className="mt-2 text-sm text-slate-400">
               De la înregistrare la plată. Tot drumul pe etape, lună de lună.
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              Trial-urile sunt numărate doar de la 1 mai 2026 (lansare reală).
+              Migrările de la Patreon și veterani din aprilie sunt excluse.
             </p>
           </header>
 
