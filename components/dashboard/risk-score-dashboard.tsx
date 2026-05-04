@@ -920,8 +920,8 @@ export default function RiskScoreDashboard({ riskScore }: { riskScore: RiskScore
                           <div key={key} className="rounded-xl bg-white/[0.02] px-3 py-3 md:px-4">
                             <div className="flex items-center justify-between md:grid md:grid-cols-[1fr_80px_50px_60px] md:gap-3">
                               <div className="min-w-0">
-                                <p className="flex items-center truncate text-sm font-medium text-slate-300">
-                                  {label}
+                                <p className="flex items-center text-sm font-medium text-slate-300">
+                                  <span className="truncate">{label}</span>
                                   {info && <InfoTooltip text={info.full} label={label} />}
                                 </p>
                                 <p className="mt-0.5 text-xs text-slate-600 md:hidden">{why}</p>
