@@ -102,16 +102,19 @@ export async function GET(request: NextRequest) {
       const html = templateHtml.replace("</table></td></tr></table></body></html>", `${unsubFooter}</table></td></tr></table></body></html>`);
 
       try {
-        await resend.emails.send({
+        const sendResult = await resend.emails.send({
           from: "Alex Costea - Armata de Traderi <noreply@armatadetraderi.com>",
           to: email.email,
           subject: email.subject,
           html,
         });
 
+        const messageId = sendResult?.data?.id ?? null;
+
         await supabase.from("email_drip_queue").update({
           status: "sent",
           sent_at: new Date().toISOString(),
+          message_id: messageId,
         }).eq("id", email.id);
 
         sent++;
