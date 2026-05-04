@@ -84,104 +84,129 @@ export function ProfileMenu({
               <p className="px-4 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-400/70">
                 Admin
               </p>
+
+              <p className="px-4 pb-0.5 pt-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+                Pulse
+              </p>
               <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/dashboard"
                 onClick={() => setIsOpen(false)}
               >
-                ⚙️ Admin
+                ⚙️ Dashboard
               </Link>
               <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/funnel"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Funnel
+              </Link>
+
+              <p className="px-4 pb-0.5 pt-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+                Membri
+              </p>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/members"
                 onClick={() => setIsOpen(false)}
               >
                 ⚙️ Membri
               </Link>
               <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/retention"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Retenție
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/churn"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Churn risk
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/inbox"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Inbox
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/funnel"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Funnel
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/invites"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Invites
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/videos"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Videos
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/payments"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Payments
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/revenue"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Revenue
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
-                href="/admin/email-analytics"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚙️ Email Analytics
-              </Link>
-              <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/segments"
                 onClick={() => setIsOpen(false)}
               >
                 ⚙️ Segmente
               </Link>
               <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/retention"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Retenție
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/churn"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Churn risk
+              </Link>
+
+              <p className="px-4 pb-0.5 pt-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+                Conținut
+              </p>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/videos"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Videos
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/video-engagement"
                 onClick={() => setIsOpen(false)}
               >
                 ⚙️ Video Engagement
               </Link>
               <Link
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/invites"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Invites
+              </Link>
+
+              <p className="px-4 pb-0.5 pt-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+                Bani
+              </p>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/payments"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Payments
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/revenue"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Revenue
+              </Link>
+
+              <p className="px-4 pb-0.5 pt-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+                Comunicare
+              </p>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/inbox"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Inbox
+              </Link>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
+                href="/admin/email-analytics"
+                onClick={() => setIsOpen(false)}
+              >
+                ⚙️ Email Analytics
+              </Link>
+
+              <p className="px-4 pb-0.5 pt-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+                Sistem
+              </p>
+              <Link
+                className="block rounded-xl px-4 py-2 text-sm font-medium text-amber-300 transition-colors hover:bg-white/5 hover:text-amber-200"
                 href="/admin/audit"
                 onClick={() => setIsOpen(false)}
               >
                 ⚙️ Audit Log
               </Link>
+
               <div className="my-1 border-t border-white/5" />
             </>
           ) : null}
