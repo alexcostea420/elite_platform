@@ -200,6 +200,41 @@ export function LivePerformanceSection() {
             <span className="flex items-center gap-1.5"><span className="h-0.5 w-3 border-t border-dashed border-amber-400" /> Peak (high-water mark)</span>
             <span className="flex items-center gap-1.5"><span className="h-0.5 w-3 border-t border-dashed border-slate-500" /> Start</span>
           </div>
+
+          {/* Drawdown sub-chart */}
+          <div className="mt-5 border-t border-white/5 pt-4">
+            <div className="mb-2 flex items-baseline justify-between">
+              <h4 className="text-xs font-semibold text-slate-400">Drawdown</h4>
+              <span className="text-[10px] text-slate-600">% sub peak</span>
+            </div>
+            <ResponsiveContainer width="100%" height={90}>
+              <AreaChart data={chartData} margin={{ top: 2, right: 5, bottom: 0, left: 5 }}>
+                <defs>
+                  <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F87171" stopOpacity={0.05} />
+                    <stop offset="100%" stopColor="#F87171" stopOpacity={0.35} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="date" tick={{ fill: "#5A7168", fontSize: 9 }} axisLine={false} tickLine={false} interval="preserveStartEnd" minTickGap={28} />
+                <YAxis
+                  tick={{ fill: "#5A7168", fontSize: 9 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(v: number) => `${v.toFixed(0)}%`}
+                  width={36}
+                  domain={[(dataMin: number) => Math.min(dataMin, -1), 0]}
+                />
+                <ReferenceLine y={0} stroke="#475569" strokeOpacity={0.4} />
+                <Tooltip
+                  contentStyle={{ background: "#0D1F18", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8, fontSize: 12 }}
+                  labelStyle={{ color: "#fff", fontWeight: 600 }}
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  formatter={(value: any) => [`${Number(value).toFixed(2)}%`, "Drawdown"]}
+                />
+                <Area type="monotone" dataKey="drawdown" stroke="#F87171" strokeWidth={1.5} fill="url(#ddGrad)" isAnimationActive={false} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       )}
 
