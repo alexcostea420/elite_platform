@@ -5,8 +5,7 @@ import { checkRateLimit } from "@/lib/utils/rate-limit";
 
 type ClaimResult =
   | { ok: true; expires_at: string }
-  | { ok: false; reason: "already_used" | "already_elite" | "no_profile" | "discord_required" | "email_duplicate" }
-  | { ok: false; reason: "taken"; next_reset: string };
+  | { ok: false; reason: "already_used" | "already_elite" | "no_profile" | "discord_required" | "email_duplicate" };
 
 export async function POST() {
   try {
@@ -63,7 +62,6 @@ export async function POST() {
     const result = rpcData as ClaimResult | null;
     if (!result || result.ok === false) {
       const reason = result?.reason ?? "unknown";
-      const status = reason === "taken" ? 429 : 400;
       const message = (() => {
         switch (reason) {
           case "already_used": return "Ai folosit deja perioada de probă.";
@@ -71,12 +69,10 @@ export async function POST() {
           case "no_profile": return "Profil inexistent.";
           case "discord_required": return "Conectează contul de Discord înainte să activezi trial-ul.";
           case "email_duplicate": return "Acest email a fost deja folosit pentru trial pe alt cont.";
-          case "taken": return "Trial-ul de azi a fost deja luat. Revino mâine la 08:00.";
           default: return "Activarea trial-ului a eșuat.";
         }
       })();
-      const next_reset = result && result.ok === false && "next_reset" in result ? result.next_reset : undefined;
-      return NextResponse.json({ error: message, reason, next_reset }, { status });
+      return NextResponse.json({ error: message, reason }, { status: 400 });
     }
 
     // Queue email drip (idempotent: skip if already queued for this user)
