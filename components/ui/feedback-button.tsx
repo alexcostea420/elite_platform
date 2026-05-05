@@ -55,9 +55,10 @@ export function FeedbackButton() {
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-surface-graphite shadow-lg transition hover:border-accent-emerald hover:shadow-glow"
         title="Feedback"
+        aria-label="Trimite feedback"
         type="button"
       >
-        <span className="text-lg">💬</span>
+        <span className="text-lg" aria-hidden="true">💬</span>
       </button>
 
       {/* Modal */}

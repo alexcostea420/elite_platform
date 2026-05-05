@@ -978,7 +978,7 @@ function Section({
         {subtitle && <span className={s.stSub}>- {subtitle}</span>}
         {hasInfo && <InfoTooltip id={id} label={title} />}
         {nextEvent && <span className={s.nextBadgeInline}>{nextEvent.text}</span>}
-        <button className={s.sectionToggle} onClick={() => setOpen(!open)} title="Ascunde/arată secțiunea">
+        <button className={s.sectionToggle} onClick={() => setOpen(!open)} title="Ascunde/arată secțiunea" aria-label={open ? `Ascunde secțiunea ${title}` : `Arată secțiunea ${title}`} aria-expanded={open}>
           {open ? "\u2212" : "+"}
         </button>
       </div>
