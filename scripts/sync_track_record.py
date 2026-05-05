@@ -9,7 +9,10 @@ import json
 import os
 import sqlite3
 import sys
+import warnings
 from datetime import datetime, timezone
+
+warnings.filterwarnings("ignore")
 
 TRADES_DB = os.path.expanduser("~/trading-bot/data/trades.db")
 LIMITS_FILE = os.path.expanduser("~/trading-bot/data/dynamic_limits.json")
