@@ -439,9 +439,9 @@ export function VideoLibraryClient({
               <path d="m21 21-4.3-4.3" />
             </svg>
             <input
-              aria-label="Cauta video dupa titlu"
+              aria-label="Caută video după titlu"
               type="text"
-              placeholder="Cauta video..."
+              placeholder="Caută video..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 outline-none transition focus:border-accent-emerald/50 focus:ring-1 focus:ring-accent-emerald/30"

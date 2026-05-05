@@ -1,35 +1,35 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-29T20:35:08.339421+00:00",
-  "btc_price": 75663.78,
-  "btc_change_24h": -0.992,
-  "btc_high_24h": 77904.93,
-  "btc_low_24h": 74937.52,
-  "btc_volume_24h_usd": 1372378619.883031,
-  "score": 44,
+  "timestamp": "2026-05-05T04:45:08.790754+00:00",
+  "btc_price": 80769.3,
+  "btc_change_24h": 0.521,
+  "btc_high_24h": 81083.98,
+  "btc_low_24h": 78202.0,
+  "btc_volume_24h_usd": 1809907368.1362736,
+  "score": 57,
   "bias": "NEUTRU",
   "bias_text": "F\u0103r\u0103 edge clar \u2014 a\u0219teapt\u0103 setup mai curat",
   "conviction": "LOW",
   "components": {
     "rsi_multi_tf": {
-      "raw": 0.029,
+      "raw": -0.108,
       "weight": 0.18,
-      "contribution": 0.005
+      "contribution": -0.019
     },
     "macd_1h": {
-      "raw": -0.2,
+      "raw": 1.0,
       "weight": 0.1,
-      "contribution": -0.02
+      "contribution": 0.1
     },
     "vwap": {
-      "raw": -1.0,
+      "raw": 0.279,
       "weight": 0.1,
-      "contribution": -0.1
+      "contribution": 0.028
     },
     "pivots": {
-      "raw": -0.323,
+      "raw": 0.33,
       "weight": 0.07,
-      "contribution": -0.023
+      "contribution": 0.023
     },
     "funding": {
       "raw": 0.0,
@@ -42,9 +42,9 @@
       "contribution": 0.0
     },
     "ls_divergence": {
-      "raw": 0.014,
+      "raw": 0.037,
       "weight": 0.08,
-      "contribution": 0.001
+      "contribution": 0.003
     },
     "taker": {
       "raw": -0.4,
@@ -63,63 +63,63 @@
     }
   },
   "indicators": {
-    "rsi_15m": 43.6,
-    "rsi_1h": 36.4,
-    "rsi_4h": 39.4,
-    "rsi_1d": 55.8,
+    "rsi_15m": 61.9,
+    "rsi_1h": 63.5,
+    "rsi_4h": 66.1,
+    "rsi_1d": 70.3,
     "macd_1h": {
-      "macd": -280.1796406902722,
-      "signal": -110.02639295113127,
-      "hist": -170.15324773914094,
-      "hist_prev": -181.179424711924
+      "macd": 353.2117732360057,
+      "signal": 297.48844182105427,
+      "hist": 55.72333141495142,
+      "hist_prev": 51.19909956905349
     },
-    "atr_1h": 526.778571428571,
+    "atr_1h": 496.8785714285706,
     "bb_1h": {
-      "upper": 78013.80974901459,
-      "lower": 75286.46025098543,
-      "sma": 76650.13500000001,
-      "width_pct": 3.5581796405566113
+      "upper": 81121.74859637869,
+      "lower": 78683.6814036213,
+      "sma": 79902.715,
+      "width_pct": 3.051294555832534
     },
-    "vwap": 76477.7364385674,
+    "vwap": 80544.36443242118,
     "pivots": {
-      "pivot": 76461.23333333334,
-      "r1": 77286.86666666667,
-      "r2": 78275.63333333333,
-      "s1": 75472.46666666667,
-      "s2": 74646.83333333334,
-      "y_high": 77450.0,
-      "y_low": 75635.6,
-      "y_close": 76298.1
+      "pivot": 79575.36666666667,
+      "r1": 81022.43333333333,
+      "r2": 82218.76666666666,
+      "s1": 78379.03333333334,
+      "s2": 76931.96666666667,
+      "y_high": 80771.7,
+      "y_low": 78128.3,
+      "y_close": 79826.1
     }
   },
   "crowd": {
-    "funding_pct": 0.0035710000000000004,
-    "funding_8h_avg": 0.00068,
-    "oi_value_usd": 7188966080.438609,
-    "oi_delta_pct_12h": -4.78,
+    "funding_pct": -0.000383,
+    "funding_8h_avg": -0.00123,
+    "oi_value_usd": 9010395422.088,
+    "oi_delta_pct_12h": 4.21,
     "global_ls": {
-      "long_pct": 50.92,
-      "short_pct": 49.08,
-      "ratio": 1.0375
+      "long_pct": 33.87,
+      "short_pct": 66.13,
+      "ratio": 0.5122
     },
     "top_trader_ls": {
-      "long_pct": 51.21,
-      "short_pct": 48.79,
-      "ratio": 1.0496
+      "long_pct": 34.62,
+      "short_pct": 65.38000000000001,
+      "ratio": 0.5295
     },
     "taker_ratio": {
-      "buy_vol": 3240.075,
-      "sell_vol": 3759.5009999999997,
-      "ratio": 0.8618364511673224
+      "buy_vol": 2264.224,
+      "sell_vol": 2644.8059999999996,
+      "ratio": 0.8561021110811154
     }
   },
   "whale_flow_6h": {
-    "long_usd": 62851559.21,
-    "short_usd": 11346150.0,
-    "net_usd": 51505409.21,
+    "long_usd": 11754927.84,
+    "short_usd": 20212500.0,
+    "net_usd": -8457572.16,
     "fill_count": 0,
-    "smart_long_pct": 84.7,
-    "signal": "BULLISH"
+    "smart_long_pct": 36.8,
+    "signal": "NEUTRAL"
   },
   "macro_context": {
     "risk_v2_score": 64,
@@ -128,13 +128,13 @@
   },
   "volatility": {
     "label": "normal\u0103",
-    "atr_pct": 0.6962096942930568,
+    "atr_pct": 0.6151824658980214,
     "level": "normal"
   },
   "session": {
-    "active": "US",
-    "next": "Asia",
-    "minutes_to_next": 205
+    "active": "Asia",
+    "next": "EU",
+    "minutes_to_next": 135
   },
   "setups": {
     "long": {
@@ -149,7 +149,7 @@
         },
         {
           "text": "Pre\u021b peste VWAP zilnic",
-          "met": false
+          "met": true
         },
         {
           "text": "Funding nu e extrem long",
@@ -157,7 +157,7 @@
         },
         {
           "text": "Whale flow 6h NET pozitiv sau neutru",
-          "met": true
+          "met": false
         }
       ],
       "met": 4,
@@ -171,11 +171,11 @@
         },
         {
           "text": "RSI 1h peste 60 (overbought)",
-          "met": false
+          "met": true
         },
         {
           "text": "Pre\u021b sub VWAP zilnic",
-          "met": true
+          "met": false
         },
         {
           "text": "Funding extrem long (long squeeze setup)",
@@ -183,10 +183,10 @@
         },
         {
           "text": "Whale flow 6h NET negativ",
-          "met": false
+          "met": true
         }
       ],
-      "met": 1,
+      "met": 2,
       "total": 5
     },
     "squeeze": {
@@ -201,10 +201,10 @@
         },
         {
           "text": "OI \u00een cre\u0219tere (>3% \u00een 12h)",
-          "met": false
+          "met": true
         }
       ],
-      "met": 0,
+      "met": 1,
       "total": 3
     }
   },

@@ -320,10 +320,10 @@ function PayPageInner() {
       <div className="flex min-h-screen items-center justify-center bg-crypto-dark px-4">
         <div className="panel max-w-md border-accent-emerald/30 px-6 py-8 text-center md:px-8">
           <div className="text-5xl">✅</div>
-          <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">Plata confirmată!</h2>
+          <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">Plată confirmată!</h2>
           <p className="mt-3 text-slate-300">
-            Accesul tau a fost activat{expiresAt
-              ? ` pana pe ${new Date(expiresAt).toLocaleDateString("ro-RO")}`
+            Accesul tău a fost activat{expiresAt
+              ? ` până pe ${new Date(expiresAt).toLocaleDateString("ro-RO")}`
               : ""}.
           </p>
           <p className="mt-2 text-sm font-semibold text-accent-emerald">{planInfo.label}</p>

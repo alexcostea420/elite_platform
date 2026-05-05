@@ -145,10 +145,10 @@ export function PaymentFlow() {
     return (
       <section className="panel border-accent-emerald/30 px-6 py-8 text-center md:px-8">
         <div className="text-5xl">✅</div>
-        <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">Plata confirmata!</h2>
+        <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">Plată confirmată!</h2>
         <p className="mt-3 text-slate-300">
-          Accesul tau Elite a fost activat{paymentStatus?.expires_at
-            ? ` pana pe ${new Date(paymentStatus.expires_at).toLocaleDateString("ro-RO")}`
+          Accesul tău Elite a fost activat{paymentStatus?.expires_at
+            ? ` până pe ${new Date(paymentStatus.expires_at).toLocaleDateString("ro-RO")}`
             : ""}.
         </p>
         {paymentStatus?.tx_hash ? (
