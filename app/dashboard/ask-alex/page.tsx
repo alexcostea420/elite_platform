@@ -13,8 +13,8 @@ import { getDisplayIdentity } from "@/lib/utils/identity";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Alex's Brain | Asistent AI Trading",
-  description: "Asistentul tau AI de trading antrenat pe metodologia lui Alex. Analiza chart-uri, validare trade-uri, quiz-uri practice.",
-  keywords: ["alex brain", "asistent ai trading", "analiza chart", "validare trade"],
+  description: "Asistentul tău AI de trading antrenat pe metodologia lui Alex. Analiză chart-uri, validare trade-uri, quiz-uri practice.",
+  keywords: ["alex brain", "asistent ai trading", "analiză chart", "validare trade"],
   path: "/dashboard/ask-alex",
   host: "app",
   index: false,
@@ -116,7 +116,7 @@ export default async function AskAlexPage() {
               Deschide Discord
             </a>
             <p className="mt-4 text-[10px] text-slate-600">
-              Alex&apos;s Brain este un asistent AI. Nu da sfaturi financiare. Foloseste-l ca pe un coleg de trading care stie metodologia pe de rost.
+              Alex&apos;s Brain este un asistent AI. Nu dă sfaturi financiare. Folosește-l ca pe un coleg de trading care știe metodologia pe de rost.
             </p>
           </div>
         </Container>
