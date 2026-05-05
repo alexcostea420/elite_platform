@@ -4,10 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { useBlurMode } from "@/components/ui/blur-guard";
 
-// TODO v2: Discord daily digest (webhook post with top whale moves)
-// TODO v2: Member favorites table (user_id, address) + star UI
-// TODO v2: Asset heatmap (7-day position change by asset)
-// TODO v2: Whale-vs-thesis match (cross-reference Risk Score V2 with consensus)
+// Discord daily digest: scripts/whale_tracker/daily_digest.py (cron 9:05 EEST)
 
 // ─── Types ─────────────────────────────────────────────────────
 type Wallet = {
@@ -60,6 +57,32 @@ type Consensus = {
 };
 
 type PnlDay = { date: string; cumulative_pnl: number; daily_pnl: number };
+
+type FlowRow = {
+  asset: string;
+  open_long_usd: number;
+  open_short_usd: number;
+  net_open_usd: number;
+  total_open_usd: number;
+};
+
+type ThesisData = {
+  available: boolean;
+  risk_score?: {
+    score: number | null;
+    decision: "BUY" | "SELL" | "HOLD";
+    decision_text: string;
+    conviction: string | null;
+  };
+  matches?: Array<{
+    asset: string;
+    long_pct: number;
+    short_pct: number;
+    dominant_side: string;
+    total_whales: number;
+    alignment: "ALIGN" | "DIVERGE" | "MIXT";
+  }>;
+};
 
 // ─── Helpers ───────────────────────────────────────────────────
 function formatUsd(n: number): string {
@@ -221,6 +244,117 @@ function ConsensusPanel({ data }: { data: Consensus[] }) {
   );
 }
 
+// ─── 7-day Flow Heatmap ───────────────────────────────────────
+function FlowHeatmap({ data }: { data: FlowRow[] }) {
+  if (!data.length) return null;
+  const maxTotal = Math.max(...data.map((r) => r.total_open_usd));
+
+  return (
+    <div className="glass-card p-5 md:p-7">
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 sm:text-xs">
+            7 zile · flux deschideri
+          </p>
+          <h3 className="mt-1 text-lg font-bold text-white sm:text-xl">Heatmap pe asset</h3>
+        </div>
+        <span className="text-[10px] text-slate-600">notional OPEN long minus short</span>
+      </div>
+      <div className="space-y-1.5">
+        {data.map((r) => {
+          const longPct = r.total_open_usd > 0 ? (r.open_long_usd / r.total_open_usd) * 100 : 50;
+          const widthPct = (r.total_open_usd / maxTotal) * 100;
+          const netColor = r.net_open_usd >= 0 ? "text-emerald-400" : "text-red-400";
+          return (
+            <div key={r.asset} className="flex items-center gap-3 text-xs">
+              <span className="w-12 shrink-0 font-bold text-white">{r.asset}</span>
+              <div className="relative h-5 flex-1 overflow-hidden rounded-md bg-white/[0.02]">
+                <div
+                  className="h-full"
+                  style={{
+                    width: `${widthPct}%`,
+                    background: `linear-gradient(90deg, rgba(16,185,129,0.5) 0%, rgba(16,185,129,0.5) ${longPct}%, rgba(248,113,113,0.5) ${longPct}%, rgba(248,113,113,0.5) 100%)`,
+                  }}
+                />
+                <div className="absolute inset-0 flex items-center justify-between px-2 text-[10px] font-data tabular-nums">
+                  <span className="text-emerald-200">{formatUsd(r.open_long_usd)}</span>
+                  <span className="text-red-200">{formatUsd(r.open_short_usd)}</span>
+                </div>
+              </div>
+              <span className={`w-20 shrink-0 text-right font-data font-semibold tabular-nums ${netColor}`}>
+                {r.net_open_usd >= 0 ? "+" : ""}{formatUsd(r.net_open_usd)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Thesis Match Panel ───────────────────────────────────────
+function ThesisMatch({ data }: { data: ThesisData }) {
+  if (!data.available || !data.risk_score) return null;
+  const { decision, score, decision_text } = data.risk_score;
+  const decisionColor =
+    decision === "BUY" ? "text-emerald-400 border-emerald-400/30 bg-emerald-400/10"
+    : decision === "SELL" ? "text-red-400 border-red-400/30 bg-red-400/10"
+    : "text-amber-400 border-amber-400/30 bg-amber-400/10";
+
+  return (
+    <div className="glass-card p-5 md:p-7">
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 sm:text-xs">
+            Confluență · risk score vs whales
+          </p>
+          <h3 className="mt-1 text-lg font-bold text-white sm:text-xl">Validare Teză</h3>
+        </div>
+        <div className={`rounded-lg border px-3 py-1.5 text-xs font-bold ${decisionColor}`}>
+          {decision}
+          {score !== null ? ` · ${score}` : ""}
+        </div>
+      </div>
+      {decision_text && (
+        <p className="mb-3 text-xs text-slate-400">{decision_text}</p>
+      )}
+      <div className="grid gap-2 sm:grid-cols-3">
+        {(data.matches ?? []).map((m) => {
+          const pillColor =
+            m.alignment === "ALIGN" ? "bg-emerald-400/10 text-emerald-400 border-emerald-400/30"
+            : m.alignment === "DIVERGE" ? "bg-red-400/10 text-red-400 border-red-400/30"
+            : "bg-amber-400/10 text-amber-400 border-amber-400/30";
+          const label =
+            m.alignment === "ALIGN" ? "Confluență"
+            : m.alignment === "DIVERGE" ? "Divergență"
+            : "Mixt";
+          return (
+            <div key={m.asset} className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-white">{m.asset}</span>
+                <span className={`rounded-md border px-2 py-0.5 text-[10px] font-bold ${pillColor}`}>{label}</span>
+              </div>
+              <div className="mt-2 flex items-center gap-2 text-[10px] tabular-nums">
+                <span className="text-emerald-400">{m.long_pct}%L</span>
+                <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-red-400/20">
+                  <div className="absolute top-0 left-0 h-full bg-emerald-400" style={{ width: `${m.long_pct}%` }} />
+                </div>
+                <span className="text-red-400">{m.short_pct}%S</span>
+              </div>
+              <p className="mt-1 text-[10px] text-slate-600">{m.total_whales} whales pe {m.asset}</p>
+            </div>
+          );
+        })}
+        {!(data.matches ?? []).length && (
+          <p className="col-span-full text-center text-xs text-slate-500 py-4">
+            Aștept date consensus pentru BTC/ETH/SOL.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Aggregate partial fills from the same wallet+asset+direction within 1 hour
 function aggregateFills(fills: Fill[]): (Fill & { count: number })[] {
   const groups: Map<string, Fill & { count: number }> = new Map();
@@ -307,6 +441,21 @@ function ActivityFeed({ fills, wallets, onSelectWallet }: { fills: Fill[]; walle
   );
 }
 
+// ─── Star Button ───────────────────────────────────────────────
+function StarButton({ address, isFav, onToggle }: { address: string; isFav: boolean; onToggle: (addr: string, fav: boolean) => void }) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onToggle(address, !isFav); }}
+      className={`text-xs transition ${isFav ? "text-amber-400" : "text-slate-700 hover:text-amber-400"}`}
+      title={isFav ? "Șterge din favorite" : "Adaugă la favorite"}
+      aria-label={isFav ? "Șterge din favorite" : "Adaugă la favorite"}
+      type="button"
+    >
+      {isFav ? "★" : "☆"}
+    </button>
+  );
+}
+
 // ─── Whale Table ───────────────────────────────────────────────
 function WhaleTable({
   wallets,
@@ -314,12 +463,16 @@ function WhaleTable({
   fills,
   onSelectWallet,
   selectedWallet,
+  favorites,
+  onToggleFavorite,
 }: {
   wallets: Wallet[];
   positions: Position[];
   fills: Fill[];
   onSelectWallet: (addr: string | null) => void;
   selectedWallet: string | null;
+  favorites: Set<string>;
+  onToggleFavorite: (addr: string, fav: boolean) => void;
 }) {
   const positionsByAddr = positions.reduce((acc, p) => {
     (acc[p.address] ??= []).push(p);
@@ -360,6 +513,7 @@ function WhaleTable({
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
+                          <StarButton address={w.address} isFav={favorites.has(w.address)} onToggle={onToggleFavorite} />
                           <span className="font-data text-white">{shortAddr(w.address)}</span>
                           <CopyButton text={w.address} />
                           <a
@@ -421,6 +575,7 @@ function WhaleTable({
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
+                    <StarButton address={w.address} isFav={favorites.has(w.address)} onToggle={onToggleFavorite} />
                     <span className="font-data text-lg font-bold text-white">#{w.rank}</span>
                     {rankChange(w.rank, w.previous_rank)}
                     <span className="font-data text-sm text-slate-400">{shortAddr(w.address)}</span>
@@ -626,12 +781,15 @@ export function WhaleTrackerClient() {
   const [activityFills, setActivityFills] = useState<Fill[]>([]);
   const [allFills, setAllFills] = useState<Fill[]>([]);
   const [consensus, setConsensus] = useState<Consensus[]>([]);
+  const [flow7d, setFlow7d] = useState<FlowRow[]>([]);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [thesis, setThesis] = useState<ThesisData>({ available: false });
   const [loading, setLoading] = useState(true);
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState("");
   const [sortBy, setSortBy] = useState<"rank" | "pnl" | "value" | "activity">("rank");
-  const [filterAsset, setFilterAsset] = useState<string>("all");
   const [filterDir, setFilterDir] = useState<"all" | "long" | "short">("all");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const fetchData = useCallback(() => {
     fetch("/api/whale-tracker")
@@ -642,10 +800,16 @@ export function WhaleTrackerClient() {
         setActivityFills(d.activity_fills ?? []);
         setAllFills(d.all_fills ?? []);
         setConsensus(d.consensus ?? []);
+        setFlow7d(d.flow_7d ?? []);
+        setFavorites(new Set<string>(d.favorites ?? []));
         setUpdatedAt(d.updated_at ?? "");
       })
       .catch(() => {})
       .finally(() => setLoading(false));
+    fetch("/api/whale-tracker/thesis")
+      .then((r) => r.json())
+      .then((d) => setThesis(d))
+      .catch(() => setThesis({ available: false }));
   }, []);
 
   useEffect(() => {
@@ -653,6 +817,33 @@ export function WhaleTrackerClient() {
     const interval = setInterval(fetchData, 120_000); // Refresh every 2 min
     return () => clearInterval(interval);
   }, [fetchData]);
+
+  const toggleFavorite = useCallback(async (address: string, fav: boolean) => {
+    // Optimistic update
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (fav) next.add(address); else next.delete(address);
+      return next;
+    });
+    try {
+      if (fav) {
+        await fetch("/api/whale-tracker/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ address }),
+        });
+      } else {
+        await fetch(`/api/whale-tracker/favorites?address=${encodeURIComponent(address)}`, { method: "DELETE" });
+      }
+    } catch {
+      // Revert on failure
+      setFavorites((prev) => {
+        const next = new Set(prev);
+        if (fav) next.delete(address); else next.add(address);
+        return next;
+      });
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -684,11 +875,17 @@ export function WhaleTrackerClient() {
       {/* KPI strip */}
       <KpiStrip wallets={wallets} positions={positions} consensus={consensus} />
 
+      {/* Thesis match (Risk Score V2 vs whale consensus) */}
+      <ThesisMatch data={thesis} />
+
       {/* Consensus strip */}
       <div>
         <h2 className="section-label mb-3">Consens per asset</h2>
         <ConsensusPanel data={consensus} />
       </div>
+
+      {/* 7-day flow heatmap */}
+      <FlowHeatmap data={flow7d} />
 
       {/* Activity feed */}
       <ActivityFeed fills={activityFills} wallets={wallets} onSelectWallet={setSelectedWallet} />
@@ -697,6 +894,16 @@ export function WhaleTrackerClient() {
       <div className="flex flex-wrap items-center gap-3">
         <h2 className="section-label">Top 20 Portofele</h2>
         <div className="ml-auto flex flex-wrap gap-2">
+          {/* Favorites toggle */}
+          <button
+            className={`rounded-lg px-3 py-1 text-xs font-semibold transition ${showFavoritesOnly ? "bg-amber-400/20 text-amber-400" : "bg-white/5 text-slate-500 hover:text-amber-400"}`}
+            onClick={() => setShowFavoritesOnly((v) => !v)}
+            disabled={favorites.size === 0}
+            title={favorites.size === 0 ? "Adaugă favorite cu ★" : "Doar favorite"}
+            type="button"
+          >
+            ★ Favorite ({favorites.size})
+          </button>
           {/* Sort */}
           {([
             { key: "rank" as const, label: "Rank" },
@@ -731,6 +938,7 @@ export function WhaleTrackerClient() {
         <WhaleTable
           wallets={(() => {
             let sorted = [...wallets];
+            if (showFavoritesOnly && favorites.size > 0) sorted = sorted.filter((w) => favorites.has(w.address));
             switch (sortBy) {
               case "pnl": sorted.sort((a, b) => b.pnl_90d - a.pnl_90d); break;
               case "value": sorted.sort((a, b) => b.account_value - a.account_value); break;
@@ -747,6 +955,8 @@ export function WhaleTrackerClient() {
           fills={allFills}
           onSelectWallet={setSelectedWallet}
           selectedWallet={selectedWallet}
+          favorites={favorites}
+          onToggleFavorite={toggleFavorite}
         />
       </div>
 
