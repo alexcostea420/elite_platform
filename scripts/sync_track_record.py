@@ -16,6 +16,29 @@ LIMITS_FILE = os.path.expanduser("~/trading-bot/data/dynamic_limits.json")
 OUTPUT = os.path.expanduser("~/elite_platform/data/track_record_cache.json")
 STARTING_EQUITY = 1000
 
+def _load_dotenv(path: str) -> None:
+    """Load KEY=value lines from a .env file into os.environ if not already set.
+    Cron runs without inheriting shell env, so the script reads .env.local directly.
+    """
+    if not os.path.exists(path):
+        return
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, val = line.partition("=")
+                key = key.strip()
+                val = val.strip().strip('"').strip("'")
+                if key and key not in os.environ:
+                    os.environ[key] = val
+    except Exception as e:
+        print(f"  ⚠ Could not read {path}: {e}")
+
+
+_load_dotenv(os.path.expanduser("~/elite_platform/.env.local"))
+
 SUPABASE_URL = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 
