@@ -600,7 +600,7 @@ export function CryptoClient() {
           onChange={(e) => setSearch(e.target.value)}
         />
         {search && (
-          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-600 hover:text-white" onClick={() => setSearch("")} type="button">✕</button>
+          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-600 hover:text-white" onClick={() => setSearch("")} type="button" aria-label="Șterge căutare"><span aria-hidden="true">✕</span></button>
         )}
       </div>
 
