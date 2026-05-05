@@ -52,7 +52,7 @@ export function LeadMagnetForm({ source = "payment_help" }: { source?: string })
         disabled={status === "loading"}
         type="submit"
       >
-        {status === "loading" ? "Se trimite..." : "Contacteaza-ma"}
+        {status === "loading" ? "Se trimite..." : "Contactează-mă"}
       </button>
       {status === "error" && (
         <p className="text-xs text-red-400">Eroare. Încearcă din nou.</p>
