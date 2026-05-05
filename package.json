@@ -16,7 +16,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.38.0",
-    "next": "14.2.32",
+    "next": "14.2.35",
     "qrcode.react": "^4.2.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
