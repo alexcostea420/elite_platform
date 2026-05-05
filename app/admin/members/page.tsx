@@ -269,7 +269,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                                 </div>
                               </div>
                             ) : (
-                              <span className="text-xs text-slate-600">—</span>
+                              <span className="text-xs text-slate-600">-</span>
                             )}
                           </td>
                           <td className="px-4 py-3 text-right text-xs text-slate-400">
@@ -279,7 +279,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                             {m.discord_username ? (
                               <span className="text-xs text-slate-300">@{m.discord_username}</span>
                             ) : (
-                              <span className="text-xs text-slate-600">—</span>
+                              <span className="text-xs text-slate-600">-</span>
                             )}
                           </td>
                         </tr>
