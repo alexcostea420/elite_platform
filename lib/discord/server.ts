@@ -392,7 +392,7 @@ export async function queueDiscordExpiryReminders(
       message_type: "expiry_1d",
       message_text:
         `🚨 **Abonamentul tău Elite expiră MÂINE.**\n\n` +
-        `Dacă vrei să continui, plătește astăzi — altfel rolul Elite va fi scos automat.\n\n` +
+        `Dacă vrei să continui, plătește astăzi. Altfel rolul Elite va fi scos automat.\n\n` +
         `👉 https://app.armatadetraderi.com/upgrade` +
         ANTI_SCAM_FOOTER,
       send_at: new Date(expiresAt.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
