@@ -1,35 +1,35 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-05T04:45:08.790754+00:00",
-  "btc_price": 80769.3,
-  "btc_change_24h": 0.521,
-  "btc_high_24h": 81083.98,
+  "timestamp": "2026-05-05T06:10:08.920563+00:00",
+  "btc_price": 80910.67,
+  "btc_change_24h": 1.218,
+  "btc_high_24h": 81323.52,
   "btc_low_24h": 78202.0,
-  "btc_volume_24h_usd": 1809907368.1362736,
-  "score": 57,
+  "btc_volume_24h_usd": 1815611927.6138475,
+  "score": 56,
   "bias": "NEUTRU",
   "bias_text": "F\u0103r\u0103 edge clar \u2014 a\u0219teapt\u0103 setup mai curat",
   "conviction": "LOW",
   "components": {
     "rsi_multi_tf": {
-      "raw": -0.108,
+      "raw": -0.135,
       "weight": 0.18,
-      "contribution": -0.019
+      "contribution": -0.024
     },
     "macd_1h": {
-      "raw": 1.0,
+      "raw": 0.2,
       "weight": 0.1,
-      "contribution": 0.1
+      "contribution": 0.02
     },
     "vwap": {
-      "raw": 0.279,
+      "raw": 0.253,
       "weight": 0.1,
-      "contribution": 0.028
+      "contribution": 0.025
     },
     "pivots": {
-      "raw": 0.33,
+      "raw": 0.369,
       "weight": 0.07,
-      "contribution": 0.023
+      "contribution": 0.026
     },
     "funding": {
       "raw": 0.0,
@@ -42,14 +42,14 @@
       "contribution": 0.0
     },
     "ls_divergence": {
-      "raw": 0.037,
+      "raw": 0.032,
       "weight": 0.08,
       "contribution": 0.003
     },
     "taker": {
-      "raw": -0.4,
+      "raw": 0.4,
       "weight": 0.08,
-      "contribution": -0.032
+      "contribution": 0.032
     },
     "whale_flow": {
       "raw": 0.0,
@@ -57,30 +57,30 @@
       "contribution": 0.0
     },
     "macro_context": {
-      "raw": 0.467,
+      "raw": 0.4,
       "weight": 0.1,
-      "contribution": 0.047
+      "contribution": 0.04
     }
   },
   "indicators": {
-    "rsi_15m": 61.9,
-    "rsi_1h": 63.5,
-    "rsi_4h": 66.1,
-    "rsi_1d": 70.3,
+    "rsi_15m": 62.2,
+    "rsi_1h": 65.8,
+    "rsi_4h": 67.6,
+    "rsi_1d": 70.6,
     "macd_1h": {
-      "macd": 353.2117732360057,
-      "signal": 297.48844182105427,
-      "hist": 55.72333141495142,
-      "hist_prev": 51.19909956905349
+      "macd": 399.319854641697,
+      "signal": 333.6890885722094,
+      "hist": 65.6307660694876,
+      "hist_prev": 70.7865355728793
     },
-    "atr_1h": 496.8785714285706,
+    "atr_1h": 407.5071428571412,
     "bb_1h": {
-      "upper": 81121.74859637869,
-      "lower": 78683.6814036213,
-      "sma": 79902.715,
-      "width_pct": 3.051294555832534
+      "upper": 81338.45170843214,
+      "lower": 78791.15829156787,
+      "sma": 80064.80500000001,
+      "width_pct": 3.181539525218687
     },
-    "vwap": 80544.36443242118,
+    "vwap": 80706.12207440393,
     "pivots": {
       "pivot": 79575.36666666667,
       "r1": 81022.43333333333,
@@ -95,46 +95,46 @@
   "crowd": {
     "funding_pct": -0.000383,
     "funding_8h_avg": -0.00123,
-    "oi_value_usd": 9010395422.088,
-    "oi_delta_pct_12h": 4.21,
+    "oi_value_usd": 8999810187.6522,
+    "oi_delta_pct_12h": 2.69,
     "global_ls": {
-      "long_pct": 33.87,
-      "short_pct": 66.13,
-      "ratio": 0.5122
+      "long_pct": 33.29,
+      "short_pct": 66.71000000000001,
+      "ratio": 0.499
     },
     "top_trader_ls": {
-      "long_pct": 34.62,
-      "short_pct": 65.38000000000001,
-      "ratio": 0.5295
+      "long_pct": 33.92,
+      "short_pct": 66.08000000000001,
+      "ratio": 0.5133
     },
     "taker_ratio": {
-      "buy_vol": 2264.224,
-      "sell_vol": 2644.8059999999996,
-      "ratio": 0.8561021110811154
+      "buy_vol": 8538.300000000001,
+      "sell_vol": 5088.87,
+      "ratio": 1.677838105512619
     }
   },
   "whale_flow_6h": {
-    "long_usd": 11754927.84,
-    "short_usd": 20212500.0,
-    "net_usd": -8457572.16,
+    "long_usd": 11766559.18,
+    "short_usd": 20232500.0,
+    "net_usd": -8465940.82,
     "fill_count": 0,
     "smart_long_pct": 36.8,
     "signal": "NEUTRAL"
   },
   "macro_context": {
-    "risk_v2_score": 64,
+    "risk_v2_score": 62,
     "risk_v2_decision": "HOLD",
     "risk_v2_conviction": "LOW"
   },
   "volatility": {
-    "label": "normal\u0103",
-    "atr_pct": 0.6151824658980214,
-    "level": "normal"
+    "label": "sc\u0103zut\u0103",
+    "atr_pct": 0.5036506839668257,
+    "level": "low"
   },
   "session": {
     "active": "Asia",
     "next": "EU",
-    "minutes_to_next": 135
+    "minutes_to_next": 50
   },
   "setups": {
     "long": {
@@ -145,7 +145,7 @@
         },
         {
           "text": "RSI 1h sub 65 (nu overbought)",
-          "met": true
+          "met": false
         },
         {
           "text": "Pre\u021b peste VWAP zilnic",
@@ -160,7 +160,7 @@
           "met": false
         }
       ],
-      "met": 4,
+      "met": 3,
       "total": 5
     },
     "short": {
@@ -201,10 +201,10 @@
         },
         {
           "text": "OI \u00een cre\u0219tere (>3% \u00een 12h)",
-          "met": true
+          "met": false
         }
       ],
-      "met": 1,
+      "met": 0,
       "total": 3
     }
   },
